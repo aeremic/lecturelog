@@ -3,12 +3,15 @@ import { User } from '../models/user.model';
 export class UserMapper {
     
     public static ToEntity(userModel: User): UserEntity {
-        let user: User = {
+        let userEntity: UserEntity = {
             id: userModel?.id,
-            firstname: userModel?.firstname
+            firstname: userModel?.firstname,
+            lastname: userModel?.lastname,
+            email: userModel?.email,
+            userType: userModel?.userType
         };
 
-        return user;
+        return userEntity;
     }
 
     //.toDomain(); map UserModel to UserEntity and return it

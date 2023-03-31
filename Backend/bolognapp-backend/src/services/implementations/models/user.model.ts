@@ -8,4 +8,19 @@ export class User {
 
   @Column({ type: 'varchar', length: 120 })
   public firstname: string;
+
+  @Column({ type: 'varchar', length: 120 })
+  public lastname: string;
+
+  @Column({ type: 'varchar', length: 120 })
+  public email: string;
+
+  @Column({ type: 'varchar', length: 120 })
+  public hash: string;
+
+  @Column({ type: 'varchar', length: 120 })
+  public salt: string;
+
+  @Column({type: 'smallint'})
+  public userType: number
 }

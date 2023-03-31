@@ -1,4 +1,4 @@
-import { UserRepositoryAbstract } from "src/core/abstracts/repositories/repository-user.abstract";
+import { UserRepositoryAbstract } from "src/core/abstracts/repositories/user.repository.abstract";
 import { UserEntity } from "src/core/entities";
 import { Repository } from "typeorm";
 import { UserMapper } from "../mappers/user.mapper";
