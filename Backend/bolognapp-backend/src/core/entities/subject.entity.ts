@@ -1,5 +1,7 @@
 export class SubjectEntity {
-  id: number;
-  name: string;
-  pointsPerPresence: number;
+  public id: number;
+  
+  public name: string;
+  
+  public pointsPerPresence: number;
 }

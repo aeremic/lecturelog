@@ -20,15 +20,15 @@ export class User {
   @Column({ type: 'varchar', length: 120 })
   public hash: string;
 
-  @Column({ type: 'varchar', length: 120 }) 
+  @Column({ type: 'varchar', length: 120 })
   public salt: string;
 
-  @Column({type: 'smallint'})
+  @Column({ type: 'smallint' })
   public userType: number
 
-  @OneToMany(() => StudentsSubjects, studentsSubjects => studentsSubjects.student)
+  @OneToMany(() => StudentsSubjects, studentsSubjects => studentsSubjects.student, { nullable: true })
   public studentsSubjects!: StudentsSubjects[];
 
-  @OneToMany(() => ProfessorsSubjects, professorsSubjects => professorsSubjects.professor)
+  @OneToMany(() => ProfessorsSubjects, professorsSubjects => professorsSubjects.professor, { nullable: true })
   public professorsSubjects!: ProfessorsSubjects[];
 }

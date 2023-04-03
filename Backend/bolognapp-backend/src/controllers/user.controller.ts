@@ -1,4 +1,4 @@
-import { Controller, Get, Inject, Param, ParseIntPipe } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Param, ParseIntPipe, Post } from '@nestjs/common';
 import { UserUseCases } from 'src/use-cases';
 import { UserEntity } from '../core/entities/user.entity';
 
@@ -8,14 +8,19 @@ export class UserController {
     private readonly userUseCases: UserUseCases
 
     @Get()
-    getAll(){
+    get(){
         return this.userUseCases.get();
     }
 
     @Get(':id')
-    getUserById(@Param('id', ParseIntPipe) id: number): Promise<UserEntity> {
-        return this.userUseCases.getUserById(id);
+    getById(@Param('id', ParseIntPipe) id: number): Promise<UserEntity> {
+        return this.userUseCases.getById(id);
     } 
+
+    @Post()
+    create(@Body() userEntity: any): Promise<UserEntity> {
+        return this.userUseCases.create(userEntity)
+    }
 
     // @Get(':firstname')
     // getUserByFirstname(@Param('firstname') firstname: any){

@@ -1,5 +1,7 @@
 export class ProfessorsSubjectsEntity {
-    id: number;
-    professorId: number;
-    subjectId: number;
+    public id: number;
+    
+    public professorId: number;
+    
+    public subjectId: number;
 }

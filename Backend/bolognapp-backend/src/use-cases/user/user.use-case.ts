@@ -7,12 +7,16 @@ export class UserUseCases {
     @Inject(UserRepositoryAbstract)
     private userRepository: UserRepositoryAbstract
 
-    get(): UserEntity[] {
+    get(): Promise<UserEntity[]> {
         return this.userRepository.get();
     }
 
-    getUserById(id: number): Promise<UserEntity> {
-        return this.userRepository.getUserById(id);
+    getById(id: number): Promise<UserEntity> {
+        return this.userRepository.getById(id);
+    }
+
+    create(userEntity: UserEntity): Promise<UserEntity> {
+        return this.userRepository.create(userEntity);
     }
 
     // getUserByFirstname(firstname: string): Promise<UserEntity> {

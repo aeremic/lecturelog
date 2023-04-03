@@ -1,6 +1,9 @@
 export class StudentsSubjectsEntity {
-    id: number;
-    studentId: number;
-    subjectId: number;
-    sumOfPresencePoints: number;
+    public id: number;
+    
+    public studentId: number;
+    
+    public subjectId: number;
+    
+    public sumOfPresencePoints: number;
 }

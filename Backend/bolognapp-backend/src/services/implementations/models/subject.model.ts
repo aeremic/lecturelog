@@ -13,9 +13,9 @@ export class Subject {
     @Column({type: 'decimal'})
     public pointsPerPresence: number;
  
-    @OneToMany(() => StudentsSubjects, studentsSubjects => studentsSubjects.subject)
+    @OneToMany(() => StudentsSubjects, studentsSubjects => studentsSubjects.subject, { nullable: true })
     public studentsSubjects!: StudentsSubjects[];
     
-    @OneToMany(() => ProfessorsSubjects, professorsSubjects => professorsSubjects.subject)
+    @OneToMany(() => ProfessorsSubjects, professorsSubjects => professorsSubjects.subject, { nullable: true })
     public professorsSubjects!: ProfessorsSubjects[];
 }

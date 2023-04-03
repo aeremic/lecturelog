@@ -11,32 +11,29 @@ import { InjectRepository } from "@nestjs/typeorm";
 export class UserRepository implements UserRepositoryAbstract {
     @InjectRepository(User)
     private readonly userModelRepository: Repository<User>
-    // db implementation calls
 
-    // getUserByFirstname(firstname: string): Promise<UserEntity> {
-    //     return this.userModelRepository.
-    // }
-
-    get(): UserEntity[] {
-        // new Promise<User[]>((resolve, reject) => {
-        //     this.userModelRepository.find()
-        //         .then((res) => {
-        //             resolve(res);
-        //         })
-        //         .catch(err => reject(err));
-        // })
-        //     .then((res) => { return UserMapper.ToEntities(res); })
-        //     .catch((err) => {
-        //         throw new BadGatewayException(err);
-        //     });
-
-        return null;
+    async getUserByFirstname(firstname: string): Promise<UserEntity> {
+        let result = await this.userModelRepository.findOneBy({ firstname: firstname });
+        
+        return UserMapper.ToEntity(result);
     }
 
-    getUserById(id: number): Promise<UserEntity> {
-        return this.userModelRepository.findOneById(id)
-            .then(res => {
-                return UserMapper.ToEntity(res);
-            });
+    async get(): Promise<UserEntity[]> {
+        let result = await this.userModelRepository.find();
+
+        return UserMapper.ToEntities(result);
+    }
+
+    async getById(id: number): Promise<UserEntity> {
+        let result = await this.userModelRepository.findOneBy({ id: id })
+
+        return UserMapper.ToEntity(result);
+    }
+
+    async create(userEntity: UserEntity): Promise<UserEntity> {
+        let userModel: User = UserMapper.ToModel(userEntity);
+        let result = await this.userModelRepository.save(userModel);
+
+        return UserMapper.ToEntity(result);
     }
 }

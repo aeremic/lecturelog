@@ -3,9 +3,11 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export abstract class UserRepositoryAbstract {
-    // abstract getUserByFirstname(firstname: string): Promise<UserEntity>;
+    abstract getUserByFirstname(firstname: string): Promise<UserEntity>;
     
-    abstract get(): UserEntity[];
+    abstract get(): Promise<UserEntity[]>;
 
-    abstract getUserById(id: number): Promise<UserEntity>;
+    abstract getById(id: number): Promise<UserEntity>;
+
+    abstract create(userEntity: UserEntity): Promise<UserEntity>;
 }

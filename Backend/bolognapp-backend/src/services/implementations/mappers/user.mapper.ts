@@ -20,6 +20,18 @@ export class UserMapper {
     }
 
     public static ToModel(userEntity: UserEntity): User {
-        return new User();
+        let userModel: User = {
+            id: userEntity?.id,
+            firstname: userEntity?.firstname,
+            lastname: userEntity?.lastname,
+            email: userEntity?.email,
+            hash: userEntity?.hash,
+            salt: userEntity?.salt,
+            userType: userEntity?.userType,
+            studentsSubjects: null,
+            professorsSubjects: null
+        };
+
+        return userModel;
     }
 }

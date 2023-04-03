@@ -1,9 +1,19 @@
 export class UserEntity {
-  id: number;
-  firstname: string;
-  lastname: string;
-  email: string;
-  hash?: string;
-  salt?: string;
-  userType: number
+  public id: number;
+
+  public firstname: string;
+  
+  public lastname: string;
+  
+  public email: string;
+  
+  public hash?: string;
+  
+  public salt?: string;
+  
+  public userType: number
+
+  constructor(o: Object) {
+    Object.assign(this, o);
+  }
 }
