@@ -3,5 +3,4 @@ export class StudentsSubjectsEntity {
     studentId: number;
     subjectId: number;
     sumOfPresencePoints: number;
-  }
-  
+}

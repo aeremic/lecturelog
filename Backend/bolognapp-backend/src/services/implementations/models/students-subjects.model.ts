@@ -3,7 +3,7 @@ import { User } from "./user.model";
 import { Subject } from "./subject.model";
 
 @Entity()
-export class StudentsSubjects{
+export class StudentsSubjects {
     @PrimaryGeneratedColumn()
     public id: number;
 
@@ -13,12 +13,12 @@ export class StudentsSubjects{
     @Column()
     public subjectId: number;
 
-    @Column({type: 'decimal'})
+    @Column({ type: 'decimal' })
     public sumOfPresencePoints: number;
 
-    @ManyToOne(() => User, student => student.studentsSubjects)
+    @ManyToOne(() => User, student => student.studentsSubjects, { cascade: true })
     public student: User;
 
-    @ManyToOne(() => Subject, subject => subject.studentsSubjects)
+    @ManyToOne(() => Subject, subject => subject.studentsSubjects, { cascade: true })
     public subject: Subject;
 }

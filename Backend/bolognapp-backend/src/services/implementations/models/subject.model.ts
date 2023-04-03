@@ -1,5 +1,6 @@
 import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { StudentsSubjects } from './students-subjects.model';
+import { ProfessorsSubjects } from './professors-subjects.model';
 
 @Entity()
 export class Subject {
@@ -14,4 +15,7 @@ export class Subject {
  
     @OneToMany(() => StudentsSubjects, studentsSubjects => studentsSubjects.subject)
     public studentsSubjects!: StudentsSubjects[];
+    
+    @OneToMany(() => ProfessorsSubjects, professorsSubjects => professorsSubjects.subject)
+    public professorsSubjects!: ProfessorsSubjects[];
 }
