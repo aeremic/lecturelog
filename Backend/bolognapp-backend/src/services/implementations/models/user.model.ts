@@ -1,5 +1,6 @@
 import { IsString, MaxLength, MinLength } from '@nestjs/class-validator';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { StudentsSubjects } from './students-subjects.model';
 
 @Entity()
 export class User {
@@ -23,4 +24,7 @@ export class User {
 
   @Column({type: 'smallint'})
   public userType: number
+
+  @OneToMany(() => StudentsSubjects, studentsSubjects => studentsSubjects.student)
+  public studentsSubjects!: StudentsSubjects[];
 }

@@ -1,4 +1,5 @@
-import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { StudentsSubjects } from './students-subjects.model';
 
 @Entity()
 export class Subject {
@@ -11,11 +12,6 @@ export class Subject {
     @Column({type: 'decimal'})
     public pointsPerPresence: number;
  
-    // @ManyToMany(() => User)
-    // @JoinTable()
-    // public professors: User[]
-
-    // @ManyToMany(() => User)
-    // @JoinTable()
-    // public students: User[]
+    @OneToMany(() => StudentsSubjects, studentsSubjects => studentsSubjects.subject)
+    public studentsSubjects!: StudentsSubjects[];
 }
