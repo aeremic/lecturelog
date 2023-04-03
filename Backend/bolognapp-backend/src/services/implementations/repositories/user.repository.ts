@@ -12,6 +12,8 @@ export class UserRepository implements UserRepositoryAbstract {
     @InjectRepository(User)
     private readonly userModelRepository: Repository<User>
 
+    //#region Implementation of Base repository   
+    
     async get(): Promise<UserEntity[]> {
         let result = await this.userModelRepository.find();
 
@@ -36,6 +38,8 @@ export class UserRepository implements UserRepositoryAbstract {
 
         return result.affected;
     }
+
+    //#endregion
 
     async getUserByFirstname(firstname: string): Promise<UserEntity> {
         let result = await this.userModelRepository.findOneBy({ firstname: firstname });

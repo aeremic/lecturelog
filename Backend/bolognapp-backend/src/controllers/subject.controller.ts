@@ -18,13 +18,13 @@ export class SubjectController {
     } 
 
     @Post()
-    create(@Body() SubjectEntity: any): Promise<SubjectEntity> {
-        return this.subjectUseCases.create(SubjectEntity)
+    create(@Body() subjectEntity: any): Promise<SubjectEntity> {
+        return this.subjectUseCases.create(subjectEntity)
     }
     
     @Put()
-    update(@Body() SubjectEntity: any): Promise<SubjectEntity> {
-        return this.subjectUseCases.update(SubjectEntity)
+    update(@Body() subjectEntity: any): Promise<SubjectEntity> {
+        return this.subjectUseCases.update(subjectEntity)
     }
 
     @Delete(':id')
