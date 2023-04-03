@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Inject, Param, ParseIntPipe, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Inject, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
 import { UserUseCases } from 'src/use-cases';
 import { UserEntity } from '../core/entities/user.entity';
 
@@ -21,9 +21,20 @@ export class UserController {
     create(@Body() userEntity: any): Promise<UserEntity> {
         return this.userUseCases.create(userEntity)
     }
+    
+    @Put()
+    update(@Body() userEntity: any): Promise<UserEntity> {
+        return this.userUseCases.update(userEntity)
+    }
 
-    // @Get(':firstname')
-    // getUserByFirstname(@Param('firstname') firstname: any){
-    //     return this.userUseCases.getUserByFirstname(firstname);
-    // }
+    @Delete(':id')
+    delete(@Param('id', ParseIntPipe) id: number): Promise<number> {
+        return this.userUseCases.delete(id)
+    }
+
+    @Get(':firstname')
+    getUserByFirstname(@Param('firstname') firstname: any){
+        return this.userUseCases.getUserByFirstname(firstname);
+    }
+
 }

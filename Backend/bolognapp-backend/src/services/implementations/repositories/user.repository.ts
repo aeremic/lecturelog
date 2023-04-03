@@ -12,12 +12,6 @@ export class UserRepository implements UserRepositoryAbstract {
     @InjectRepository(User)
     private readonly userModelRepository: Repository<User>
 
-    async getUserByFirstname(firstname: string): Promise<UserEntity> {
-        let result = await this.userModelRepository.findOneBy({ firstname: firstname });
-        
-        return UserMapper.ToEntity(result);
-    }
-
     async get(): Promise<UserEntity[]> {
         let result = await this.userModelRepository.find();
 
@@ -30,10 +24,22 @@ export class UserRepository implements UserRepositoryAbstract {
         return UserMapper.ToEntity(result);
     }
 
-    async create(userEntity: UserEntity): Promise<UserEntity> {
+    async createOrUpdate(userEntity: UserEntity): Promise<UserEntity> {
         let userModel: User = UserMapper.ToModel(userEntity);
         let result = await this.userModelRepository.save(userModel);
 
+        return UserMapper.ToEntity(result);
+    }
+
+    async delete(id: number): Promise<number> {
+        let result = await this.userModelRepository.delete({ id: id });
+
+        return result.affected;
+    }
+
+    async getUserByFirstname(firstname: string): Promise<UserEntity> {
+        let result = await this.userModelRepository.findOneBy({ firstname: firstname });
+        
         return UserMapper.ToEntity(result);
     }
 }

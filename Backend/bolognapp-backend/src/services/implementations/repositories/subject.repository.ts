@@ -12,13 +12,28 @@ export class SubjectRepository implements SubjectRepositoryAbstract {
     @InjectRepository(Subject)
     private readonly subjectModelRepository: Repository<Subject>
 
-    get(): SubjectEntity[] {
-        throw new Error("Method not implemented.");
+    async get(): Promise<SubjectEntity[]> {
+        let result = await this.subjectModelRepository.find();
+
+        return SubjectMapper.ToEntities(result);
     }
-    getSubjectById(id: number): Promise<SubjectEntity> {
-        return this.subjectModelRepository.findOneById(id)
-        .then(res => {
-            return SubjectMapper.ToEntity(res);
-        });
+
+    async getById(id: number): Promise<SubjectEntity> {
+        let result = await this.subjectModelRepository.findOneBy({ id: id })
+
+        return SubjectMapper.ToEntity(result);
+    }
+
+    async createOrUpdate(subjectEntity: SubjectEntity): Promise<SubjectEntity> {
+        let subjectModel: Subject = SubjectMapper.ToModel(subjectEntity);
+        let result = await this.subjectModelRepository.save(subjectModel);
+
+        return SubjectMapper.ToEntity(result);
+    }
+
+    async delete(id: number): Promise<number> {
+        let result = await this.subjectModelRepository.delete({ id: id });
+
+        return result.affected;
     }
 }

@@ -1,4 +1,4 @@
-import { Controller, Get, Inject, Param, ParseIntPipe } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Param, ParseIntPipe, Post, Put, Delete } from '@nestjs/common';
 import { SubjectEntity } from 'src/core/entities';
 import { SubjectUseCases } from 'src/use-cases';
 
@@ -8,12 +8,28 @@ export class SubjectController {
     private readonly subjectUseCases: SubjectUseCases
 
     @Get()
-    getAll(){
+    get(){
         return this.subjectUseCases.get();
     }
 
     @Get(':id')
-    getSubjectById(@Param('id', ParseIntPipe) id: number): Promise<SubjectEntity> {
-        return this.subjectUseCases.getSubjectById(id);
+    getById(@Param('id', ParseIntPipe) id: number): Promise<SubjectEntity> {
+        return this.subjectUseCases.getById(id);
     } 
+
+    @Post()
+    create(@Body() SubjectEntity: any): Promise<SubjectEntity> {
+        return this.subjectUseCases.create(SubjectEntity)
+    }
+    
+    @Put()
+    update(@Body() SubjectEntity: any): Promise<SubjectEntity> {
+        return this.subjectUseCases.update(SubjectEntity)
+    }
+
+    @Delete(':id')
+    delete(@Param('id', ParseIntPipe) id: number): Promise<number> {
+        return this.subjectUseCases.delete(id)
+    }
+
 }

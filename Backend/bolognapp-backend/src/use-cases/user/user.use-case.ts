@@ -16,10 +16,18 @@ export class UserUseCases {
     }
 
     create(userEntity: UserEntity): Promise<UserEntity> {
-        return this.userRepository.create(userEntity);
+        return this.userRepository.createOrUpdate(userEntity);
     }
 
-    // getUserByFirstname(firstname: string): Promise<UserEntity> {
-    //     return this.dataServiceUser.getUserByFirstname(firstname);
-    // }
+    update(userEntity: UserEntity): Promise<UserEntity> {
+        return this.userRepository.createOrUpdate(userEntity);
+    }
+
+    delete(id: number): Promise<number> {
+        return this.userRepository.delete(id);
+    }
+
+    getUserByFirstname(firstname: string): Promise<UserEntity> {
+        return this.userRepository.getUserByFirstname(firstname);
+    }
 }

@@ -3,7 +3,11 @@ import { SubjectEntity } from 'src/core/entities';
 
 @Injectable()
 export abstract class SubjectRepositoryAbstract {    
-    abstract get(): SubjectEntity[];
+    abstract get(): Promise<SubjectEntity[]>;
 
-    abstract getSubjectById(id: number): Promise<SubjectEntity>;
+    abstract getById(id: number): Promise<SubjectEntity>;
+
+    abstract createOrUpdate(subjectEntity: SubjectEntity): Promise<SubjectEntity>;
+
+    abstract delete(id: number): Promise<number>;
 }

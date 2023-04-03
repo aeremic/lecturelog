@@ -7,11 +7,23 @@ export class SubjectUseCases {
     @Inject(SubjectRepositoryAbstract)
     private subjectRepository: SubjectRepositoryAbstract
 
-    get(): SubjectEntity[] {
+    get(): Promise<SubjectEntity[]> {
         return this.subjectRepository.get();
     }
 
-    getSubjectById(id: number): Promise<SubjectEntity> {
-        return this.subjectRepository.getSubjectById(id);
+    getById(id: number): Promise<SubjectEntity> {
+        return this.subjectRepository.getById(id);
+    }
+
+    create(subjectEntity: SubjectEntity): Promise<SubjectEntity> {
+        return this.subjectRepository.createOrUpdate(subjectEntity);
+    }
+
+    update(subjectEntity: SubjectEntity): Promise<SubjectEntity> {
+        return this.subjectRepository.createOrUpdate(subjectEntity);
+    }
+
+    delete(id: number): Promise<number> {
+        return this.subjectRepository.delete(id);
     }
 }
