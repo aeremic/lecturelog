@@ -5,15 +5,15 @@ import { SubjectUseCases } from 'src/use-cases';
 @Controller('api/subject')
 export class SubjectController {
     @Inject(SubjectUseCases)
-    private readonly SubjectUseCases: SubjectUseCases
+    private readonly subjectUseCases: SubjectUseCases
 
     @Get()
     getAll(){
-        return this.SubjectUseCases.get();
+        return this.subjectUseCases.get();
     }
 
     @Get(':id')
     getSubjectById(@Param('id', ParseIntPipe) id: number): Promise<SubjectEntity> {
-        return this.SubjectUseCases.getSubjectById(id);
+        return this.subjectUseCases.getSubjectById(id);
     } 
 }
