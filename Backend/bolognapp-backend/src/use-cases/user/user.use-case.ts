@@ -57,16 +57,8 @@ export class UserUseCases {
     }
 
     async login(loginDto: LoginDto): Promise<any> {
-        // let user = await this.getUserByEmail(loginDto?.email);
-
-        // return await this.authService.login(loginDto, user);
-
         this.getUserByEmail(loginDto?.email).then((res) => {
-            this.authService.login(loginDto, res).then((match) => {
-                if(match){
-                this.authService.generateJwt(res);
-            }
-            });
+            return this.authService.login(loginDto, res);
         });
     }
 }
