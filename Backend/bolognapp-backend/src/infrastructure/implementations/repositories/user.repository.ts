@@ -46,4 +46,10 @@ export class UserRepository implements UserRepositoryAbstract {
         
         return UserMapper.ToEntity(result);
     }
+ 
+    async getUserByEmail(email: string): Promise<UserEntity> {
+        let result = await this.userModelRepository.findOneBy({ email: email });
+        
+        return UserMapper.ToEntity(result);
+    }
 }

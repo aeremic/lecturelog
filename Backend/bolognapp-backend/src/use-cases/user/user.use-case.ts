@@ -1,33 +1,72 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { UserRepositoryAbstract } from 'src/core/abstracts/repositories/user.repository.abstract';
+import { LoginDto } from 'src/core/dtos';
 import { UserEntity } from 'src/core/entities/user.entity';
+import { AuthService } from 'src/services';
 
 @Injectable()
 export class UserUseCases {
     @Inject(UserRepositoryAbstract)
     private userRepository: UserRepositoryAbstract
 
-    get(): Promise<UserEntity[]> {
-        return this.userRepository.get();
+    @Inject(AuthService)
+    private authService: AuthService;
+
+    async get(): Promise<UserEntity[]> {
+        return await this.userRepository.get();
     }
 
-    getById(id: number): Promise<UserEntity> {
-        return this.userRepository.getById(id);
+    async getById(id: number): Promise<UserEntity> {
+        return await this.userRepository.getById(id);
     }
 
-    create(userEntity: UserEntity): Promise<UserEntity> {
-        return this.userRepository.createOrUpdate(userEntity);
+    async create(userEntity: UserEntity): Promise<UserEntity> {
+        if (userEntity) {
+            return await this.userRepository.createOrUpdate(userEntity);
+        }
+
+        return null;
     }
 
-    update(userEntity: UserEntity): Promise<UserEntity> {
-        return this.userRepository.createOrUpdate(userEntity);
+    async update(userEntity: UserEntity): Promise<UserEntity> {
+        if (userEntity) {
+            return await this.userRepository.createOrUpdate(userEntity);
+        }
+
+        return null;
     }
 
-    delete(id: number): Promise<number> {
-        return this.userRepository.delete(id);
+    async delete(id: number): Promise<number> {
+        return await this.userRepository.delete(id);
     }
 
-    getUserByFirstname(firstname: string): Promise<UserEntity> {
-        return this.userRepository.getUserByFirstname(firstname);
+    async getUserByFirstname(firstname: string): Promise<UserEntity> {
+        if (firstname) {
+            return await this.userRepository.getUserByFirstname(firstname);
+        }
+
+        return null;
+    }
+
+    async getUserByEmail(email: string): Promise<UserEntity> {
+        if (email) {
+            return await this.userRepository.getUserByEmail(email);
+        }
+
+        return null;
+    }
+
+    async login(loginDto: LoginDto): Promise<any> {
+        // let user = await this.getUserByEmail(loginDto?.email);
+
+        // return await this.authService.login(loginDto, user);
+
+        this.getUserByEmail(loginDto?.email).then((res) => {
+            this.authService.login(loginDto, res).then((match) => {
+                if(match){
+                this.authService.generateJwt(res);
+            }
+            });
+        });
     }
 }

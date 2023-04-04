@@ -3,8 +3,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './use-cases/user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { getEnvPath } from './utils/helpers/env.helper';
-import { TypeOrmConfigService } from './services/typeorm.service';
 import { SubjectModule } from './use-cases/subject/subject.module';
+import { TypeOrmConfigService } from './infrastructure/typeorm.service';
 
 // const settings = require("../ormconfig.json");
 const envFilePath: string = getEnvPath(`${__dirname}/utils/envs`);

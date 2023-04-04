@@ -37,4 +37,8 @@ export class UserController {
         return this.userUseCases.getUserByFirstname(firstname);
     }
 
+    @Post('login')
+    login(@Body() loginDto: any): Promise<any>{
+        return this.userUseCases.login(loginDto);
+    }
 }

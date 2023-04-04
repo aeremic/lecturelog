@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ProfessorsSubjects, StudentsSubjects, User } from 'src/services/implementations/models';
+import { ProfessorsSubjects, StudentsSubjects, User } from 'src/infrastructure/implementations/models';
 import { UserUseCases } from './user.use-case';
-import { UserRepository } from 'src/services/implementations/repositories/user.repository';
+import { UserRepository } from 'src/infrastructure/implementations/repositories/user.repository';
 import { UserRepositoryAbstract } from 'src/core/abstracts/repositories/user.repository.abstract';
 import { UserController } from 'src/controllers/user.controller';
+import { AuthService } from 'src/services';
 
 @Module({
     imports: [TypeOrmModule.forFeature([User, StudentsSubjects, ProfessorsSubjects])],
@@ -13,7 +14,8 @@ import { UserController } from 'src/controllers/user.controller';
         {
             provide: UserRepositoryAbstract,
             useClass: UserRepository
-        }
+        },
+        AuthService
     ],
     controllers: [UserController]
 })

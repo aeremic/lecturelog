@@ -8,12 +8,6 @@ export class UserEntity {
   public email: string;
   
   public hash?: string;
-  
-  public salt?: string;
-  
+    
   public userType: number
-
-  constructor(o: Object) {
-    Object.assign(this, o);
-  }
 }
