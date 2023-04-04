@@ -55,10 +55,4 @@ export class UserUseCases {
 
         return null;
     }
-
-    async login(loginDto: LoginDto): Promise<any> {
-        this.getUserByEmail(loginDto?.email).then((res) => {
-            return this.authService.login(loginDto, res);
-        });
-    }
 }
