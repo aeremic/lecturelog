@@ -1,16 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { UserRepositoryAbstract } from 'src/core/abstracts/repositories/user.repository.abstract';
-import { LoginDto } from 'src/core/dtos';
 import { UserEntity } from 'src/core/entities/user.entity';
-import { AuthService } from 'src/services';
 
 @Injectable()
 export class UserUseCases {
     @Inject(UserRepositoryAbstract)
     private userRepository: UserRepositoryAbstract
-
-    @Inject(AuthService)
-    private authService: AuthService;
 
     async get(): Promise<UserEntity[]> {
         return await this.userRepository.get();
@@ -55,4 +50,5 @@ export class UserUseCases {
 
         return null;
     }
+    
 }

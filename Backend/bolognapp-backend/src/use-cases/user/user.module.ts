@@ -14,9 +14,9 @@ import { AuthService } from 'src/services';
         {
             provide: UserRepositoryAbstract,
             useClass: UserRepository
-        },
-        AuthService
+        }
     ],
-    controllers: [UserController]
+    controllers: [UserController],
+    exports: [UserUseCases]
 })
 export class UserModule { }

@@ -26,7 +26,6 @@ export class UserMapper {
             lastname: userEntity?.lastname,
             email: userEntity?.email,
             hash: userEntity?.hash,
-            salt: userEntity?.salt,
             userType: userEntity?.userType,
             studentsSubjects: null,
             professorsSubjects: null

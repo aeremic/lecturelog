@@ -5,7 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { getEnvPath } from './utils/helpers/env.helper';
 import { SubjectModule } from './use-cases/subject/subject.module';
 import { TypeOrmConfigService } from './infrastructure/typeorm.service';
-import { AuthModule } from './use-cases/auth/auth.module';
+import { AuthModule } from './services/auth.module';
 
 // const settings = require("../ormconfig.json");
 const envFilePath: string = getEnvPath(`${__dirname}/utils/envs`);
