@@ -5,7 +5,6 @@ import { UserUseCases } from './user.use-case';
 import { UserRepository } from 'src/infrastructure/implementations/repositories/user.repository';
 import { UserRepositoryAbstract } from 'src/core/abstracts/repositories/user.repository.abstract';
 import { UserController } from 'src/controllers/user.controller';
-import { AuthService } from 'src/services';
 
 @Module({
     imports: [TypeOrmModule.forFeature([User, StudentsSubjects, ProfessorsSubjects])],

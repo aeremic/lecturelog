@@ -1,7 +1,6 @@
-import { Body, Controller, Delete, Get, Inject, Param, ParseIntPipe, Post, Put, UseGuards } from '@nestjs/common';
+import { Controller, Inject, Post, Request, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { AuthService } from 'src/services';
-import { UserUseCases } from 'src/use-cases';
+import { AuthService } from 'src/auth';
 
 @Controller('api/auth')
 export class AuthController {
@@ -10,7 +9,7 @@ export class AuthController {
 
     @UseGuards(AuthGuard('local'))
     @Post('login')
-    login(@Body() loginDto: any): Promise<any>{
+    login(@Request() loginDto: any): Promise<any>{
         return this.authService.login(loginDto);
     }
 }
