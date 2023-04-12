@@ -39,11 +39,14 @@ export class AuthService {
     async login(req: any): Promise<any> {
         let result = new Promise((resolve, reject) => {
             if (req && req.body && req.body.email) {
-                let payload = { email: req.body.email }
+                this.userUseCases.getByEmail(req.body.email).then((user) => {
+                    if (this.userUseCases.isFound(user)) {
+                        let payload = { id: user.id }
 
-                resolve({
-                    //id: userEntity.id,
-                    accessToken: this.jwtService.sign(payload)
+                        resolve({
+                            accessToken: this.jwtService.sign(payload)
+                        });
+                    }
                 });
             } else {
                 reject();
