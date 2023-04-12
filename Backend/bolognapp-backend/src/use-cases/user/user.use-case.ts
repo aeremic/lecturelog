@@ -1,69 +1,31 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { UserRepositoryAbstract } from 'src/core/abstracts/repositories/user.repository.abstract';
 import { UserEntity } from 'src/core/entities/user.entity';
+import { GenericUseCases } from '../generic.use-case';
 
 @Injectable()
-export class UserUseCases {
+export class UserUseCases extends GenericUseCases<UserEntity>{
     @Inject(UserRepositoryAbstract)
     private userRepository: UserRepositoryAbstract
 
     async get(): Promise<UserEntity[]> {
-        let result: UserEntity[] | PromiseLike<UserEntity[]>;
-        try {
-            result = await this.userRepository.get();
-        } catch (error) {
-            // log error
-        }
-
-        return result;
+        return super.get(this.userRepository);
     }
 
     async getById(id: number): Promise<UserEntity> {
-        let result: UserEntity | PromiseLike<UserEntity>;
-        try {
-            result = await this.userRepository.getById(id);
-        } catch (error) {
-            // log error
-        }
-
-        return result;
+        return super.getById(this.userRepository, id);
     }
 
     async create(userEntity: UserEntity): Promise<UserEntity> {
-        let result: UserEntity | PromiseLike<UserEntity>;
-        try {
-            if (userEntity) {
-                result = await this.userRepository.createOrUpdate(userEntity);
-            }
-        } catch (error) {
-            // log error
-        }
-
-        return result;
+        return super.create(this.userRepository, userEntity);  
     }
 
     async update(userEntity: UserEntity): Promise<UserEntity> {
-        let result: UserEntity | PromiseLike<UserEntity>;
-        try {
-            if (userEntity) {
-                result = await this.userRepository.createOrUpdate(userEntity);
-            }
-        } catch (error) {
-            // log error
-        }
-
-        return result;
+        return super.update(this.userRepository, userEntity);
     }
 
     async delete(id: number): Promise<number> {
-        let result: number;
-        try {
-            result = await this.userRepository.delete(id);
-        } catch (error) {
-            // log error
-        }
-
-        return result;
+        return super.delete(this.userRepository, id);
     }
 
     async getByFirstname(firstname: string): Promise<UserEntity> {
@@ -90,9 +52,5 @@ export class UserUseCases {
         }
 
         return result;
-    }
-
-    isFound(userEntity: UserEntity): Boolean{
-        return userEntity && userEntity.id != undefined;
     }
 }

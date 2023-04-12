@@ -18,6 +18,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
             this.authService.validateUserCredentials(email, password).then((res) => {
                 resolve(res);
             }).catch((err) => {
+                // log error
                 reject();
             });
         })

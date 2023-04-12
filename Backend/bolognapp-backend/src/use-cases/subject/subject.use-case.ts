@@ -1,29 +1,30 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { SubjectRepositoryAbstract } from 'src/core/abstracts/repositories/subject.repository.abstract';
 import { SubjectEntity } from 'src/core/entities';
+import { GenericUseCases } from '../generic.use-case';
 
 @Injectable()
-export class SubjectUseCases {
+export class SubjectUseCases extends GenericUseCases<SubjectEntity>{
     @Inject(SubjectRepositoryAbstract)
     private subjectRepository: SubjectRepositoryAbstract
 
-    get(): Promise<SubjectEntity[]> {
-        return this.subjectRepository.get();
+    async get(): Promise<SubjectEntity[]> {
+        return super.get(this.subjectRepository);
     }
 
-    getById(id: number): Promise<SubjectEntity> {
-        return this.subjectRepository.getById(id);
+    async getById(id: number): Promise<SubjectEntity> {
+        return super.getById(this.subjectRepository, id);
     }
 
-    create(subjectEntity: SubjectEntity): Promise<SubjectEntity> {
-        return this.subjectRepository.createOrUpdate(subjectEntity);
+    async create(subjectEntity: SubjectEntity): Promise<SubjectEntity> {
+        return super.create(this.subjectRepository, subjectEntity);  
     }
 
-    update(subjectEntity: SubjectEntity): Promise<SubjectEntity> {
-        return this.subjectRepository.createOrUpdate(subjectEntity);
+    async update(subjectEntity: SubjectEntity): Promise<SubjectEntity> {
+        return super.update(this.subjectRepository, subjectEntity);
     }
 
-    delete(id: number): Promise<number> {
-        return this.subjectRepository.delete(id);
+    async delete(id: number): Promise<number> {
+        return super.delete(this.subjectRepository, id);
     }
 }
