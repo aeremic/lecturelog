@@ -8,7 +8,7 @@ export class UserMapper {
             firstname: userModel?.firstname,
             lastname: userModel?.lastname,
             email: userModel?.email,
-            hash: userModel.hash,
+            hash: userModel?.hash,
             userType: userModel?.userType
         };
 

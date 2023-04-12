@@ -1,4 +1,4 @@
-import { Inject, Injectable, NotAcceptableException } from "@nestjs/common";
+import { Inject, Injectable, NotAcceptableException, Body } from '@nestjs/common';
 import { UserEntity } from '../core/entities/user.entity';
 import { LoginDto, RegisterDto } from "src/core/dtos";
 import { JwtService } from "@nestjs/jwt";
@@ -16,58 +16,88 @@ export class AuthService {
 
     //#region Login implementation
 
-    validateUserCredentials(email: string, password: string): Promise<UserEntity> {
-        let user = new Promise<UserEntity>((resolve, reject) =>{
-            this.userUseCases.getUserByEmail(email).then((user) => {                
-                this.checkPasswordHash(password, user?.hash).then((res) => {
-                    if(res){
-                        resolve(user);
-                    } 
-                    
-                    reject(null);
-                })
-            });
+    async validateUserCredentials(email: string, password: string): Promise<UserEntity> {
+        let user = new Promise<UserEntity>((resolve, reject) => {
+            if (email && password) {
+                this.userUseCases.getByEmail(email).then((user) => {
+                    if (this.userUseCases.isFound(user)) {
+                        this.checkPasswordHash(password, user.hash).then((res) => {
+                            resolve(res);
+                        });
+                    } else {
+                        reject();
+                    }
+                });
+            } else {
+                reject();
+            }
         });
 
         return user;
     }
 
-    login(userEntity: any): Promise<any> {
+    async login(req: any): Promise<any> {
         let result = new Promise((resolve, reject) => {
-            let payload = { email: userEntity.email }
+            if (req && req.body && req.body.email) {
+                let payload = { email: req.body.email }
 
-            resolve({
-                id: userEntity.id,
-                accessToken: this.jwtService.sign(payload)
-            });
+                resolve({
+                    //id: userEntity.id,
+                    accessToken: this.jwtService.sign(payload)
+                });
+            } else {
+                reject();
+            }
         });
 
         return result;
     }
 
     //#endregion
-    
+
     //#region Registration implementation
 
-    register(registerDto: RegisterDto): Promise<string> {
-        return this.hashPassword(registerDto.password);
+    async register(registerDto: RegisterDto): Promise<boolean> {
+        let result: boolean = false;
+
+        if (registerDto && registerDto.password) {
+            let userInDb = await this.userUseCases.getByEmail(registerDto.email);
+
+            if (!this.userUseCases.isFound(userInDb)) {
+                let hashedPassword = await this.hashPassword(registerDto.password);
+
+                let userEntity: UserEntity = {
+                    firstname: registerDto.firstname,
+                    lastname: registerDto.lastname,
+                    email: registerDto.email,
+                    hash: hashedPassword,
+                    userType: registerDto.userType
+                };
+
+                if (await this.userUseCases.create(userEntity)) {
+                    result = true;
+                }
+            }
+        }
+
+        return result;
     }
 
     //#endregion
 
     //#region Private implementation
 
-    private async checkPasswordHash(password: string, hash: string): Promise<any>{
-        bcrypt.compare(password, hash, function (err, res) {
-            return res;
-        });
+    private async checkPasswordHash(password: string, hash: string): Promise<any> {
+        let res = await bcrypt.compare(password, hash);
+
+        return res;
     }
-    
-    private async hashPassword(password: string): Promise<any> {
-        bcrypt.hash(password, saltRounds, function (err, result) {
-            return result
-        });
+
+    private async hashPassword(password: string): Promise<string> {
+        let res = await bcrypt.hash(password, saltRounds);
+
+        return res;
     }
-    
+
     //#endregion
 }

@@ -32,8 +32,8 @@ export class UserController {
         return this.userUseCases.delete(id)
     }
 
-    @Get(':firstname')
-    getUserByFirstname(@Param('firstname') firstname: any){
-        return this.userUseCases.getUserByFirstname(firstname);
+    @Get('/getbyfirstname/:firstname')
+    getByFirstname(@Param('firstname') firstname: any){
+        return this.userUseCases.getByFirstname(firstname);
     }
 }

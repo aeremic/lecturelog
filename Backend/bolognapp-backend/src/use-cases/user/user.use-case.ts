@@ -8,47 +8,91 @@ export class UserUseCases {
     private userRepository: UserRepositoryAbstract
 
     async get(): Promise<UserEntity[]> {
-        return await this.userRepository.get();
+        let result: UserEntity[] | PromiseLike<UserEntity[]>;
+        try {
+            result = await this.userRepository.get();
+        } catch (error) {
+            // log error
+        }
+
+        return result;
     }
 
     async getById(id: number): Promise<UserEntity> {
-        return await this.userRepository.getById(id);
+        let result: UserEntity | PromiseLike<UserEntity>;
+        try {
+            result = await this.userRepository.getById(id);
+        } catch (error) {
+            // log error
+        }
+
+        return result;
     }
 
     async create(userEntity: UserEntity): Promise<UserEntity> {
-        if (userEntity) {
-            return await this.userRepository.createOrUpdate(userEntity);
+        let result: UserEntity | PromiseLike<UserEntity>;
+        try {
+            if (userEntity) {
+                result = await this.userRepository.createOrUpdate(userEntity);
+            }
+        } catch (error) {
+            // log error
         }
 
-        return null;
+        return result;
     }
 
     async update(userEntity: UserEntity): Promise<UserEntity> {
-        if (userEntity) {
-            return await this.userRepository.createOrUpdate(userEntity);
+        let result: UserEntity | PromiseLike<UserEntity>;
+        try {
+            if (userEntity) {
+                result = await this.userRepository.createOrUpdate(userEntity);
+            }
+        } catch (error) {
+            // log error
         }
 
-        return null;
+        return result;
     }
 
     async delete(id: number): Promise<number> {
-        return await this.userRepository.delete(id);
-    }
-
-    async getUserByFirstname(firstname: string): Promise<UserEntity> {
-        if (firstname) {
-            return await this.userRepository.getUserByFirstname(firstname);
+        let result: number;
+        try {
+            result = await this.userRepository.delete(id);
+        } catch (error) {
+            // log error
         }
 
-        return null;
+        return result;
     }
 
-    async getUserByEmail(email: string): Promise<UserEntity> {
-        if (email) {
-            return await this.userRepository.getUserByEmail(email);
+    async getByFirstname(firstname: string): Promise<UserEntity> {
+        let result: UserEntity | PromiseLike<UserEntity>;
+        try {
+            if (firstname) {
+                result = await this.userRepository.getByFirstname(firstname);
+            }
+        } catch (error) {
+            // log error
         }
 
-        return null;
+        return result;
     }
-    
+
+    async getByEmail(email: string): Promise<UserEntity> {
+        let result: UserEntity | PromiseLike<UserEntity>;
+        try {
+            if (email) {
+                result = await this.userRepository.getByEmail(email);
+            }
+        } catch (error) {
+            // log error
+        }
+
+        return result;
+    }
+
+    isFound(userEntity: UserEntity): Boolean{
+        return userEntity && userEntity.id != undefined;
+    }
 }

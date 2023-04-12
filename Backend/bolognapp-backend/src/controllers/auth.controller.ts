@@ -1,4 +1,4 @@
-import { Controller, Inject, Post, Request, UseGuards } from '@nestjs/common';
+import { BadGatewayException, BadRequestException, Body, Controller, Inject, Post, Request, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from 'src/auth';
 
@@ -11,5 +11,14 @@ export class AuthController {
     @Post('login')
     login(@Request() loginDto: any): Promise<any>{
         return this.authService.login(loginDto);
+    }
+
+    @Post('register')
+    register(@Body() registerDto: any): Promise<any>{
+        return this.authService.register(registerDto).then((res) => {
+            if(!res){
+                throw new BadRequestException("User not registered!");
+            }
+        });
     }
 }

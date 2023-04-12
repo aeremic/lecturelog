@@ -1,6 +1,4 @@
-export class RegisterDto {
-    public id: number;
-  
+export class RegisterDto {  
     public firstname: string;
     
     public lastname: string;

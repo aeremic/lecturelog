@@ -1,5 +1,5 @@
 export class UserEntity {
-  public id: number;
+  public id?: number;
 
   public firstname: string;
   

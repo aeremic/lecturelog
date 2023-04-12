@@ -15,7 +15,7 @@ export abstract class UserRepositoryAbstract {
 
     //#endregion
 
-    abstract getUserByFirstname(firstname: string): Promise<UserEntity>;
+    abstract getByFirstname(firstname: string): Promise<UserEntity>;
 
-    abstract getUserByEmail(email: string): Promise<UserEntity>;
+    abstract getByEmail(email: string): Promise<UserEntity>;
 }

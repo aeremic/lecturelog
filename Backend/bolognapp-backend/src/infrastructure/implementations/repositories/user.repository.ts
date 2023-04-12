@@ -41,13 +41,13 @@ export class UserRepository implements UserRepositoryAbstract {
 
     //#endregion
 
-    async getUserByFirstname(firstname: string): Promise<UserEntity> {
+    async getByFirstname(firstname: string): Promise<UserEntity> {
         let result = await this.userModelRepository.findOneBy({ firstname: firstname });
         
         return UserMapper.ToEntity(result);
     }
  
-    async getUserByEmail(email: string): Promise<UserEntity> {
+    async getByEmail(email: string): Promise<UserEntity> {
         let result = await this.userModelRepository.findOneBy({ email: email });
         
         return UserMapper.ToEntity(result);

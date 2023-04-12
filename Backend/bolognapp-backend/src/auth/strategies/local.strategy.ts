@@ -10,13 +10,15 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     private readonly authService: AuthService
 
     constructor() {
-        super({usernameField: 'email', passwordField: 'password'});
+        super({ usernameField: 'email', passwordField: 'password' });
     }
 
     validate(email: any, password: any): Promise<any> {
         let result = new Promise<any>((resolve, reject) => {
             this.authService.validateUserCredentials(email, password).then((res) => {
                 resolve(res);
+            }).catch((err) => {
+                reject();
             });
         })
 
