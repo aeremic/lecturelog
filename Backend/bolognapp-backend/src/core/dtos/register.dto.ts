@@ -1,4 +1,5 @@
 import { IsEmail, IsNotEmpty, IsNumber, IsString } from "class-validator";
+import { Roles } from "../common/enums/roles.enum";
 
 export class RegisterDto {  
     @IsString()
@@ -17,8 +18,8 @@ export class RegisterDto {
     @IsNotEmpty()
     public password: string;
 
-    @IsNumber()
+    @IsString()
     @IsNotEmpty()
-    public userType: number
+    public role: Roles
   }
   

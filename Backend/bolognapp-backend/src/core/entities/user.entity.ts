@@ -1,3 +1,5 @@
+import { Roles } from "../common/enums/roles.enum";
+
 export class UserEntity {
   public id?: number;
 
@@ -9,5 +11,5 @@ export class UserEntity {
   
   public hash?: string;
     
-  public userType: number
+  public role?: Roles
 }

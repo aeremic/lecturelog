@@ -13,12 +13,27 @@ export class SubjectMapper {
         return subjectEntity;
     }
 
-    //.toDomain(); map UserModel to UserEntity and return it
     public static ToEntities(subjectModels: Subject[]): SubjectEntity[] {
-        return null;
+        let subjectEntities: any[];
+        if(subjectModels && subjectModels.length > 0){
+            subjectEntities = subjectModels.map(subjectModel => {
+                return this.ToEntity(subjectModel);
+            });
+        }
+
+        return subjectEntities;
     }
 
     public static ToModel(subjectEntity: SubjectEntity): Subject {
-        return new Subject();
+        let subjectModel: Subject = {
+            id: subjectEntity?.id,
+            name: subjectEntity?.name,
+            pointsPerPresence: subjectEntity?.pointsPerPresence,
+            
+            studentsSubjects: null,
+            professorsSubjects: null
+        };
+
+        return subjectModel;
     }
 }

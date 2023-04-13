@@ -41,7 +41,7 @@ export class AuthService {
             if (req && req.body && req.body.email) {
                 this.userUseCases.getByEmail(req.body.email).then((user) => {
                     if (this.userUseCases.isFound(user)) {
-                        let payload = { id: user.id }
+                        let payload = { id: user.id, role: user.role }
 
                         resolve({
                             accessToken: this.jwtService.sign(payload)
@@ -74,7 +74,7 @@ export class AuthService {
                     lastname: registerDto.lastname,
                     email: registerDto.email,
                     hash: hashedPassword,
-                    userType: registerDto.userType
+                    role: registerDto.role
                 };
 
                 if (await this.userUseCases.create(userEntity)) {
