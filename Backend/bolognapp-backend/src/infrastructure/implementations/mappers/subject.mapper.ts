@@ -14,7 +14,7 @@ export class SubjectMapper {
     }
 
     public static ToEntities(subjectModels: Subject[]): SubjectEntity[] {
-        let subjectEntities: any[];
+        let subjectEntities: SubjectEntity[];
         if(subjectModels && subjectModels.length > 0){
             subjectEntities = subjectModels.map(subjectModel => {
                 return this.ToEntity(subjectModel);
@@ -29,7 +29,7 @@ export class SubjectMapper {
             id: subjectEntity?.id,
             name: subjectEntity?.name,
             pointsPerPresence: subjectEntity?.pointsPerPresence,
-            
+
             studentsSubjects: null,
             professorsSubjects: null
         };

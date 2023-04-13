@@ -1,4 +1,4 @@
-import { Roles } from 'src/core/common/enums/roles.enum';
+import { RoleEnum } from 'src/core/common/enums/role.enum';
 import { UserEntity } from '../../../core/entities/user.entity';
 import { User } from '../models/user.model';
 
@@ -13,29 +13,14 @@ export class UserMapper {
             hash: userModel?.hash
         };
 
-        if (userModel?.userType) {
-            switch (userModel.userType) {
-                case 0:
-                    userEntity.role = Roles.admin
-                    break;
-                case 1:
-                    userEntity.role = Roles.professor
-                    break;
-                case 2:
-                    userEntity.role = Roles.student
-                    break;
-                default:
-                    userEntity.role = Roles.student
-                    break;
-            }
-        }
+        userEntity.role = this.getRoleEnum(userModel?.userType);
 
         return userEntity;
     }
 
     public static ToEntities(userModels: User[]): UserEntity[] {
-        let userEntities: any[];
-        if(userModels && userModels.length > 0){
+        let userEntities: UserEntity[];
+        if (userModels && userModels.length > 0) {
             userEntities = userModels.map(userModel => {
                 return this.ToEntity(userModel);
             });
@@ -46,23 +31,8 @@ export class UserMapper {
 
     public static ToModel(userEntity: UserEntity): User {
         let userType: number = 0;
-        
-        if (userEntity?.role) {
-            switch (userEntity.role) {
-                case Roles.admin:
-                    userType = 0
-                    break;
-                case Roles.professor:
-                    userType = 1
-                    break;
-                case Roles.student:
-                    userType = 3
-                    break;
-                default:
-                    userType = 3
-                    break;
-            }
-        }
+
+        userType = this.getType(userEntity?.role);
 
         let userModel: User = {
             id: userEntity?.id,
@@ -77,5 +47,29 @@ export class UserMapper {
         };
 
         return userModel;
+    }
+
+    private static getRoleEnum(type: number | null): RoleEnum {
+        switch (type) {
+            case 0:
+                return RoleEnum.admin;
+            case 1:
+                return RoleEnum.professor;
+            case 2:
+            default:
+                return RoleEnum.student;
+        }
+    }
+
+    private static getType(role: RoleEnum | null): number {
+        switch (role) {
+            case RoleEnum.admin:
+                return 0;
+            case RoleEnum.professor:
+                return 1;
+            case RoleEnum.student:
+            default:
+                return 3;
+        }
     }
 }
