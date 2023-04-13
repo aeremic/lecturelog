@@ -6,9 +6,9 @@ export class LoggerMapper {
     public static ToEntity(loggerModel: Logger): LoggerEntity {
         let loggerEntity: LoggerEntity = {
             id: loggerModel?.id,
-            title: loggerModel?.title,
             code: loggerModel?.code,
             description: loggerModel?.description,
+            stackTrace: loggerModel?.stackTrace,
             dateLogged: loggerModel?.dateLogged
         };
 
@@ -18,9 +18,9 @@ export class LoggerMapper {
     public static ToModel(loggerEntity: LoggerEntity): Logger {
         let loggerModel: Logger = {
             id: loggerEntity?.id,
-            title: loggerEntity?.title,
             code: loggerEntity?.code,
             description: loggerEntity?.description,
+            stackTrace: loggerEntity?.stackTrace,
             dateLogged: loggerEntity?.dateLogged,
         };
 

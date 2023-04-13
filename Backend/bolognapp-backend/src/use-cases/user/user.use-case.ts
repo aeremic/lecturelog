@@ -2,11 +2,16 @@ import { Inject, Injectable } from '@nestjs/common';
 import { UserRepositoryAbstract } from 'src/core/abstracts/repositories/user.repository.abstract';
 import { UserEntity } from 'src/core/entities/user.entity';
 import { GenericUseCases } from '../generic.use-case';
+import { LoggerUseCases } from '../logger/logger.use-case';
+import { ErrorConstants } from 'src/core/common/constants/error.constant';
 
 @Injectable()
 export class UserUseCases extends GenericUseCases<UserEntity>{
     @Inject(UserRepositoryAbstract)
     private userRepository: UserRepositoryAbstract
+
+    @Inject(LoggerUseCases)
+    private loggerUseCases: LoggerUseCases;
 
     async get(): Promise<UserEntity[]> {
         return super.get(this.userRepository);
@@ -35,7 +40,7 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
                 result = await this.userRepository.getByFirstname(firstname);
             }
         } catch (error) {
-            // log error
+            this.loggerUseCases.log(ErrorConstants.GetMethodError, error?.message, error?.stack);
         }
 
         return result;

@@ -17,7 +17,7 @@ export class LoggerUseCases extends GenericUseCases<LoggerEntity>{
     }
 
     async create(loggerEntity: LoggerEntity): Promise<LoggerEntity> {
-        return super.create(this.loggerRepository, loggerEntity);  
+        return super.create(this.loggerRepository, loggerEntity);
     }
 
     async update(loggerEntity: LoggerEntity): Promise<LoggerEntity> {
@@ -26,5 +26,17 @@ export class LoggerUseCases extends GenericUseCases<LoggerEntity>{
 
     async delete(id: number): Promise<number> {
         return super.delete(this.loggerRepository, id);
+    }
+
+    async log(code?: number, description?: string, stackTrace?: string) {
+        try {
+            let loggerEntity: LoggerEntity = {
+                code: code,
+                description: description,
+                stackTrace: stackTrace
+            };
+
+            this.create(loggerEntity);
+        } catch { }
     }
 }

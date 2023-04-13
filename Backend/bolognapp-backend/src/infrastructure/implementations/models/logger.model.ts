@@ -2,18 +2,18 @@ import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } f
 
 @Entity()
 export class Logger {
-  @PrimaryGeneratedColumn()
-  public id: number;
+    @PrimaryGeneratedColumn()
+    public id: number;
 
-  @Column({ type: 'varchar', length: 120 })
-  public title: string;
+    @Column({ type: 'int' })
+    public code: number
 
-  @Column({ type: 'int' })
-  public code?: number
+    @Column({ type: 'varchar', length: 380, nullable: true })
+    public description?: string;
 
-  @Column({ type: 'varchar', length: 380 })
-  public description?: string;
+    @Column({ type: 'text', nullable: true })
+    public stackTrace?: string;
 
-  @CreateDateColumn()
-  public dateLogged: Date
+    @CreateDateColumn()
+    public dateLogged: Date
 }

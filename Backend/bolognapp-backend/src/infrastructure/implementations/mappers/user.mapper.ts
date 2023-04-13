@@ -13,7 +13,7 @@ export class UserMapper {
             hash: userModel?.hash
         };
 
-        userEntity.role = this.getRoleEnum(userModel?.userType);
+        userEntity.role = userEntity.id ? this.getRoleEnum(userModel?.userType) : undefined;
 
         return userEntity;
     }
