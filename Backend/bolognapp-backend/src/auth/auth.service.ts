@@ -63,7 +63,7 @@ export class AuthService {
     async register(registerDto: RegisterDto): Promise<boolean> {
         let result: boolean = false;
 
-        if (registerDto && registerDto.password) {
+        if (registerDto && registerDto.email && registerDto.password) {
             let userInDb = await this.userUseCases.getByEmail(registerDto.email);
 
             if (!this.userUseCases.isFound(userInDb)) {
