@@ -14,23 +14,23 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
     private loggerUseCases: LoggerUseCases;
 
     async get(): Promise<UserEntity[]> {
-        return super.get(this.userRepository);
+        return super.get(this.userRepository, this.loggerUseCases);
     }
 
     async getById(id: number): Promise<UserEntity> {
-        return super.getById(this.userRepository, id);
+        return super.getById(this.userRepository, this.loggerUseCases, id);
     }
 
     async create(userEntity: UserEntity): Promise<UserEntity> {
-        return super.create(this.userRepository, userEntity);  
+        return super.create(this.userRepository, this.loggerUseCases, userEntity);  
     }
 
     async update(userEntity: UserEntity): Promise<UserEntity> {
-        return super.update(this.userRepository, userEntity);
+        return super.update(this.userRepository, this.loggerUseCases, userEntity);
     }
 
     async delete(id: number): Promise<number> {
-        return super.delete(this.userRepository, id);
+        return super.delete(this.userRepository, this.loggerUseCases, id);
     }
 
     async getByFirstname(firstname: string): Promise<UserEntity> {
@@ -53,7 +53,7 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
                 result = await this.userRepository.getByEmail(email);
             }
         } catch (error) {
-            // log error
+            this.loggerUseCases.log(ErrorConstants.GetMethodError, error?.message, error?.stack);
         }
 
         return result;

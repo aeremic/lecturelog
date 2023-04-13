@@ -10,14 +10,6 @@ export class LoggerRepository implements LoggerRepositoryAbstract {
     private readonly loggerModelRepository: Repository<Logger>
 
     //#region Implementation of Base repository   
-    
-    get(): Promise<LoggerEntity[]> {
-        throw new Error("Method not implemented.");
-    }
-
-    async getById(id: number): Promise<LoggerEntity> {
-        throw new Error("Method not implemented.");
-    }
 
     async createOrUpdate(loggerEntity: LoggerEntity): Promise<LoggerEntity> {
         let loggerModel: Logger = LoggerMapper.ToModel(loggerEntity);
@@ -25,10 +17,6 @@ export class LoggerRepository implements LoggerRepositoryAbstract {
 
         return LoggerMapper.ToEntity(result);
     }
-
-    async delete(id: number): Promise<number> {
-        throw new Error("Method not implemented.");
-    }
-
+    
     //#endregion
 }
