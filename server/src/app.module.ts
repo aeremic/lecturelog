@@ -4,7 +4,7 @@ import { UserModule } from './use-cases/user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { getEnvPath } from './utils/helpers/env.helper';
 import { SubjectModule } from './use-cases/subject/subject.module';
-import { TypeOrmConfigService } from './infrastructure/typeorm.service';
+import { TypeOrmConfigService } from './infrastructure/data/typeorm.service';
 import { AuthModule } from './auth/auth.module';
 import { LoggerModule } from './use-cases/logger/logger.module';
 

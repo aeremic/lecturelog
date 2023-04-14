@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Logger } from 'src/infrastructure/implementations/models';
+import { Logger } from 'src/infrastructure/data/models';
 import { LoggerUseCases } from './logger.use-case';
 import { LoggerRepositoryAbstract } from 'src/core/abstracts/repositories/logger.repository.abstract';
-import { LoggerRepository } from 'src/infrastructure/implementations/repositories/logger.repository';
+import { LoggerRepository } from 'src/infrastructure/data/repositories/logger.repository';
 
 @Module({
     imports: [TypeOrmModule.forFeature([Logger])],

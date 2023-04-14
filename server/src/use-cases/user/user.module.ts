@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ProfessorsSubjects, StudentsSubjects, User } from 'src/infrastructure/implementations/models';
+import { ProfessorsSubjects, StudentsSubjects, User } from 'src/infrastructure/data/models';
 import { UserUseCases } from './user.use-case';
-import { UserRepository } from 'src/infrastructure/implementations/repositories/user.repository';
+import { UserRepository } from 'src/infrastructure/data/repositories/user.repository';
 import { UserRepositoryAbstract } from 'src/core/abstracts/repositories/user.repository.abstract';
 import { UserController } from 'src/controllers/user.controller';
 import { LoggerModule } from '../logger/logger.module';
