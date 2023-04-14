@@ -41,7 +41,7 @@ export class AuthService {
             if (req && req.body && req.body.email) {
                 this.userUseCases.getByEmail(req.body.email).then((user) => {
                     if (this.userUseCases.isFound(user)) {
-                        let payload = { id: user.id, role: user.role }
+                        let payload = { id: user.id }
 
                         resolve({
                             accessToken: this.jwtService.sign(payload)

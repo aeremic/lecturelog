@@ -6,9 +6,10 @@ import { SubjectController } from 'src/controllers/subject.controller';
 import { SubjectRepositoryAbstract } from 'src/core/abstracts/repositories/subject.repository.abstract';
 import { SubjectRepository } from 'src/infrastructure/data/repositories/subject.repository';
 import { LoggerModule } from '../logger/logger.module';
+import { UserModule } from '../user/user.module';
 
 @Module({
-    imports: [LoggerModule, TypeOrmModule.forFeature([Subject, StudentsSubjects, ProfessorsSubjects])],
+    imports: [UserModule, LoggerModule, TypeOrmModule.forFeature([Subject, StudentsSubjects, ProfessorsSubjects])],
     providers: [
         SubjectUseCases,
         {
