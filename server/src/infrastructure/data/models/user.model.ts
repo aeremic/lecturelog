@@ -19,9 +19,9 @@ export class User {
 
   @Column({ type: 'varchar', length: 120 })
   public hash: string;
-  
+
   @Column({ type: 'smallint' })
-  public userType: number
+  public role: number
 
   @OneToMany(() => StudentsSubjects, studentsSubjects => studentsSubjects.student, { nullable: true })
   public studentsSubjects!: StudentsSubjects[];

@@ -13,7 +13,7 @@ export class UserMapper {
             hash: userModel?.hash
         };
 
-        userEntity.role = userEntity.id ? this.getRoleEnum(userModel?.userType) : undefined;
+        userEntity.role = userEntity.id ? this.getRoleEnum(userModel?.role) : undefined;
 
         return userEntity;
     }
@@ -40,7 +40,7 @@ export class UserMapper {
             lastname: userEntity?.lastname,
             email: userEntity?.email,
             hash: userEntity?.hash,
-            userType: userType,
+            role: userType,
 
             studentsSubjects: null,
             professorsSubjects: null
