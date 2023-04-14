@@ -11,10 +11,10 @@ export class SubjectController {
     @Inject(SubjectUseCases)
     private readonly subjectUseCases: SubjectUseCases
 
-    @Roles('admin', 'professor')
+    @Roles('admin')
     @UseGuards(RoleGuard)
     @Get()
-    get(){
+    get() {
         return this.subjectUseCases.get();
     }
 
@@ -23,7 +23,7 @@ export class SubjectController {
     @Get(':id')
     getById(@Param('id', ParseIntPipe) id: number): Promise<SubjectEntity> {
         return this.subjectUseCases.getById(id);
-    } 
+    }
 
     @Roles('admin')
     @UseGuards(RoleGuard)
@@ -31,7 +31,7 @@ export class SubjectController {
     create(@Body() subjectEntity: any): Promise<SubjectEntity> {
         return this.subjectUseCases.create(subjectEntity)
     }
-    
+
     @Roles('admin')
     @UseGuards(RoleGuard)
     @Put()

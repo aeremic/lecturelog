@@ -11,19 +11,19 @@ export class UserController {
     @Inject(UserUseCases)
     private readonly userUseCases: UserUseCases
 
-    @Roles('admin', 'professor')
+    @Roles('admin')
     @UseGuards(RoleGuard)
     @Get()
-    get(){
+    get() {
         return this.userUseCases.get();
     }
 
-    @Roles('admin', 'professor')
+    @Roles('admin')
     @UseGuards(RoleGuard)
     @Get(':id')
     getById(@Param('id', ParseIntPipe) id: number): Promise<UserEntity> {
         return this.userUseCases.getById(id);
-    } 
+    }
 
     @Roles('admin')
     @UseGuards(RoleGuard)
@@ -49,7 +49,7 @@ export class UserController {
     @Roles('admin')
     @UseGuards(RoleGuard)
     @Get('/getbyfirstname/:firstname')
-    getByFirstname(@Param('firstname') firstname: any){
+    getByFirstname(@Param('firstname') firstname: any) {
         return this.userUseCases.getByFirstname(firstname);
     }
 }
