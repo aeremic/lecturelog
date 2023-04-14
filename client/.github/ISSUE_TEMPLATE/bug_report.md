@@ -1,20 +1,40 @@
 ---
 name: Bug report
-about: Tell us about a bug you may have identified in CoreUI Free React Admin Template.
+about: Create a report to help us improve
 title: ''
 labels: ''
 assignees: ''
-
 ---
 
-Before opening:
+**Describe the bug**
+A clear and concise description of what the bug is.
 
-- [Search for duplicate or closed issues](https://github.com/coreui/coreui-free-react-admin-template/issues?utf8=%E2%9C%93&q=is%3Aissue)
-- [Validate](https://html5.validator.nu/) any HTML to avoid common problems
-- Read the [contributing guidelines](https://github.com/coreui/coreui-free-react-admin-template/blob/v4-dev/.github/CONTRIBUTING.md)
+**To Reproduce**
+Steps to reproduce the behavior:
 
-Bug reports must include:
+1. Go to '...'
+2. Click on '....'
+3. Scroll down to '....'
+4. See error
 
-- Operating system and version (Windows, macOS, Android, iOS)
-- Browser and version (Chrome, Firefox, Safari, Microsoft Edge, Opera, Android Browser)
-- A [reduced test case](https://css-tricks.com/reduced-test-cases/) or suggested fix using [CodePen](https://codepen.io/) or [JS Bin](https://jsbin.com/)
+**Expected behavior**
+A clear and concise description of what you expected to happen.
+
+**Screenshots**
+If applicable, add screenshots to help explain your problem.
+
+**Desktop (please complete the following information):**
+
+-   OS: [e.g. iOS]
+-   Browser [e.g. chrome, safari]
+-   Version [e.g. 22]
+
+**Smartphone (please complete the following information):**
+
+-   Device: [e.g. iPhone6]
+-   OS: [e.g. iOS8.1]
+-   Browser [e.g. stock browser, safari]
+-   Version [e.g. 22]
+
+**Additional context**
+Add any other context about the problem here.
