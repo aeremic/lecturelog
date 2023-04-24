@@ -1,7 +1,4 @@
 import { auth } from './auth/reducers'
-// import { show } from 'store/show/reducers'
-// import { tasks } from 'store/tasks/reducers'
-// import { teams } from 'store/teams/reducers'
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
 const reducer = combineReducers({

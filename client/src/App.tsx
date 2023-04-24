@@ -1,8 +1,12 @@
 import React from "react";
-import "./App.css";
-import Loader from "./Components/Common/Loader";
 import { BrowserRouter, Routes } from "react-router-dom";
-import PrivateRoute from "./Components/Common/PrivateRoute";
+
+import "./App.css";
+
+import Loader from "./components/Common/Loader";
+import PrivateRoute from "./components/Common/PrivateRoute";
+
+const Main = React.lazy(() => import("./components/Main"));
 
 const App = () => {
   return (
