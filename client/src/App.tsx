@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import "./App.css";
 
@@ -13,9 +13,10 @@ const App = () => {
     <React.Suspense fallback={<Loader />}>
       <BrowserRouter>
         <Routes>
-          <PrivateRoute path="/">
+          <Route path="/" element={<Main />} />
+          {/* <PrivateRoute path="/">
             <Main />
-          </PrivateRoute>
+          </PrivateRoute> */}
         </Routes>
       </BrowserRouter>
     </React.Suspense>

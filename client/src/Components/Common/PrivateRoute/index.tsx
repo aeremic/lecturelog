@@ -19,7 +19,7 @@ const PrivateRoute = ({
     <Route
       {...rest}
       path={path}
-      element={auth ? children : <Navigate to="/login" />}
+      element={/*auth*/ true ? children : <Navigate to="/login" />}
     />
   );
 };
