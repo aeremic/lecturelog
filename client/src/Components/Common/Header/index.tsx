@@ -1,13 +1,9 @@
-import {
-  AppBar,
-  Box,
-  Button,
-  IconButton,
-  Toolbar,
-  Typography,
-} from "@mui/material";
+import { AppBar, Box, IconButton, Toolbar, Typography } from "@mui/material";
+import Button from "@mui/material/Button";
+
 import Logo from "../Logo";
 import TemporaryDrawer from "../TemporaryDrawer";
+import { Logout } from "../../../resources/Typography/index";
 
 const Header = () => {
   return (
@@ -25,7 +21,7 @@ const Header = () => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             <Logo />
           </Typography>
-          <Button color="inherit">Logout</Button>
+          <Button color="inherit">{Logout}</Button>
         </Toolbar>
       </AppBar>
     </Box>

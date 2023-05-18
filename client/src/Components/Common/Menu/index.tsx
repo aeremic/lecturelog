@@ -6,27 +6,29 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
+import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
+import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
+import { Subjects, Users } from "../../../resources/Typography";
+import { Link } from "react-router-dom";
 
 const Menu = () => {
   return (
     <Box role="presentation">
       <List>
         <ListItem>
-          <ListItemButton>
+          <ListItemButton component={Link} to="/users">
             <ListItemIcon>
-              <InboxIcon />
+              <PeopleAltIcon />
             </ListItemIcon>
-            <ListItemText primary={"Temporary Button 1"} />
+            <ListItemText primary={Users} />
           </ListItemButton>
         </ListItem>
         <ListItem>
-          <ListItemButton>
+          <ListItemButton component={Link} to="/subjects">
             <ListItemIcon>
-              <MailIcon />
+              <LibraryBooksIcon />
             </ListItemIcon>
-            <ListItemText primary={"Temporary Button 2"} />
+            <ListItemText primary={Subjects} />
           </ListItemButton>
         </ListItem>
       </List>

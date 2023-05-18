@@ -4,11 +4,12 @@ import Header from "../Common/Header";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorComponent from "../Common/ErrorComponent";
 
-const Main = () => {
+const Users = () => {
   return (
     <>
       <Header />
       <ErrorBoundary fallback={<ErrorComponent />}>
+        <p>Users!</p>
         {/* <Wrapper>
         <Sidebar />
         <ErrorBoundary>
@@ -22,4 +23,4 @@ const Main = () => {
   );
 };
 
-export default Main;
+export default Users;
