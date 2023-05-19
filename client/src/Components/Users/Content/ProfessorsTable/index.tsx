@@ -1,0 +1,89 @@
+import {
+  Box,
+  Button,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TextField,
+} from "@mui/material";
+import PaginationComponent from "../../../Common/PaginationComponent";
+
+function createData(
+  email: string,
+  firstname: string,
+  lastname: string,
+  carbs: number,
+  protein: number
+) {
+  return { email, firstname, lastname, carbs, protein };
+}
+
+const rows = [
+  createData("milos@gmail.com", "Milos", "Jankovic", 24, 4.0),
+  createData("milos2@gmail.com", "Milos", "Jankovic", 24, 4.0),
+  createData("petarpetarpetar@gmail.com", "Petar", "Jankovic", 24, 4.0),
+];
+
+const ProfessorsTable = () => {
+  return (
+    <>
+      <TextField
+        id="outlined-basic"
+        label="Search"
+        variant="outlined"
+        size="small"
+        sx={{ mb: 1, width: 1 }}
+      />
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 290 }} aria-label="simple table">
+          <TableHead>
+            <TableRow
+              sx={{
+                "& th": {
+                  backgroundColor: "primary.light",
+                  color: "primary.contrastText",
+                },
+              }}
+            >
+              <TableCell>Email</TableCell>
+              <TableCell align="center">First name</TableCell>
+              <TableCell align="center">Last name</TableCell>
+              <TableCell align="center" colSpan={2}>
+                Action
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((row) => (
+              <TableRow
+                key={row.email}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  {row.email}
+                </TableCell>
+                <TableCell align="center">{row.firstname}</TableCell>
+                <TableCell align="center">{row.lastname}</TableCell>
+                <TableCell align="center">
+                  <Button>Edit</Button>
+                </TableCell>
+                <TableCell align="center">
+                  <Button>Remove</Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>{" "}
+      <Box sx={{ m: 1 }}>
+        <PaginationComponent />
+      </Box>
+    </>
+  );
+};
+
+export default ProfessorsTable;
