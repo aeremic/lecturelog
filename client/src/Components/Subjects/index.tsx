@@ -4,7 +4,7 @@ import Header from "../Common/Header";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorComponent from "../Common/ErrorComponent";
 import { ThemeProvider } from "@mui/material";
-import theme from "../../styles/Common";
+import theme from "../../styles";
 
 const Subjects = () => {
   return (

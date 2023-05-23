@@ -5,7 +5,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import ErrorComponent from "../Common/ErrorComponent";
 import Content from "./Content";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import theme from "../../styles/Common";
+import theme from "../../styles";
 
 const Users = () => {
   return (

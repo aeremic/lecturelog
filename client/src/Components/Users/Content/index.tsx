@@ -7,7 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import ProfessorsTable from "./ProfessorsTable";
-import { Professors, Students } from "../../../resources/Typography";
+import { Professors, Students, Users } from "../../../resources/Typography";
 import StudentsTable from "./StudentsTable";
 
 const Content = () => {
@@ -23,7 +23,7 @@ const Content = () => {
           <Grid item xs={1}></Grid>
           <Grid item xs={10}>
             <Box sx={{ mt: 2 }}>
-              <Typography variant="h5">Users</Typography>
+              <Typography variant="h5">{Users}</Typography>
             </Box>
           </Grid>
           <Grid item xs={1}></Grid>

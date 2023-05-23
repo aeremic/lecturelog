@@ -43,7 +43,7 @@ const StudentsTable = () => {
         label="Search"
         variant="outlined"
         size="small"
-        sx={{ mb: 1, wiwdth: 1 }}
+        sx={{ mb: 1, width: 1 }}
       />
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 290 }} aria-label="simple table">

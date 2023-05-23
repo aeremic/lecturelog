@@ -3,7 +3,7 @@ import Loader from "../Common/Loader";
 import Header from "../Common/Header";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorComponent from "../Common/ErrorComponent";
-import theme from "../../styles/Common";
+import theme from "../../styles";
 import { ThemeProvider } from "@mui/material";
 
 const Main = () => {
