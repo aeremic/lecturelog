@@ -2,9 +2,9 @@ import { UserEntity } from "src/core/entities";
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export abstract class UserRepositoryAbstract { 
+export abstract class UserRepositoryAbstract {
     //#region Base repository   
-    
+
     abstract get(): Promise<UserEntity[]>;
 
     abstract getById(id: number): Promise<UserEntity>;
@@ -18,4 +18,8 @@ export abstract class UserRepositoryAbstract {
     abstract getByFirstname(firstname: string): Promise<UserEntity>;
 
     abstract getByEmail(email: string): Promise<UserEntity>;
+
+    abstract getProfessors(): Promise<UserEntity[]>;
+
+    abstract getStudents(): Promise<UserEntity[]>;
 }

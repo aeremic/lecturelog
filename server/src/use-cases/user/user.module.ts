@@ -6,6 +6,8 @@ import { UserRepository } from 'src/infrastructure/data/repositories/user.reposi
 import { UserRepositoryAbstract } from 'src/core/abstracts/repositories/user.repository.abstract';
 import { UserController } from 'src/controllers/user.controller';
 import { LoggerModule } from '../logger/logger.module';
+import { ProfessorController } from 'src/controllers/professor.controller';
+import { StudentController } from 'src/controllers/student.controller';
 
 @Module({
     imports: [LoggerModule, TypeOrmModule.forFeature([User, StudentsSubjects, ProfessorsSubjects])],
@@ -16,7 +18,7 @@ import { LoggerModule } from '../logger/logger.module';
             useClass: UserRepository
         },
     ],
-    controllers: [UserController],
+    controllers: [UserController, ProfessorController, StudentController],
     exports: [UserUseCases]
 })
 export class UserModule { }

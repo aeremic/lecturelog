@@ -49,7 +49,7 @@ export class UserMapper {
         return userModel;
     }
 
-    private static getRoleEnum(type: number | null): RoleEnum {
+    public static getRoleEnum(type: number | null): RoleEnum {
         switch (type) {
             case 0:
                 return RoleEnum.admin;
@@ -61,7 +61,7 @@ export class UserMapper {
         }
     }
 
-    private static getType(role: RoleEnum | null): number {
+    public static getType(role: RoleEnum | null): number {
         switch (role) {
             case RoleEnum.admin:
                 return 0;

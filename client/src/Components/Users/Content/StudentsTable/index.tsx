@@ -11,31 +11,36 @@ import {
   TextField,
 } from "@mui/material";
 import PaginationComponent from "../../../Common/PaginationComponent";
+import { getStudents } from "../../../../services/StudentsService";
+import { useEffect, useState } from "react";
 
-function createData(
-  index: string,
-  email: string,
-  firstname: string,
-  lastname: string,
-  carbs: number,
-  protein: number
-) {
-  return { index, email, firstname, lastname, carbs, protein };
+interface IStudent {
+  index: string;
+  email: string;
+  firstname: string;
+  lastname: string;
 }
 
-const rows = [
-  createData("114/2020", "milos@gmail.com", "Milos", "Jankovic", 24, 4.0),
-  createData(
-    "134/2020",
-    "petarpetarpetar@gmail.com",
-    "Petar",
-    "Jankovic",
-    24,
-    4.0
-  ),
-];
-
 const StudentsTable = () => {
+  const initialState: IStudent[] = [
+    {
+      index: "",
+      email: "",
+      firstname: "",
+      lastname: "",
+    },
+  ];
+
+  const [students, setStudents] = useState(initialState);
+
+  useEffect(() => {
+    getStudents().then((response) => {
+      if (response && response.data) {
+        setStudents(response.data);
+      }
+    });
+  }, []);
+
   return (
     <>
       <TextField
@@ -66,17 +71,17 @@ const StudentsTable = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
+            {students.map((student, index) => (
               <TableRow
-                key={row.index}
+                key={index}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
-                  {row.index}
+                  {student.index}
                 </TableCell>
-                <TableCell>{row.email}</TableCell>
-                <TableCell align="center">{row.firstname}</TableCell>
-                <TableCell align="center">{row.lastname}</TableCell>
+                <TableCell>{student.email}</TableCell>
+                <TableCell align="center">{student.firstname}</TableCell>
+                <TableCell align="center">{student.lastname}</TableCell>
                 <TableCell align="center">
                   <Button>Edit</Button>
                 </TableCell>

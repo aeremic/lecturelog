@@ -11,7 +11,6 @@ interface ILogin {
 export const login = async (data: ILogin) => {
   let email: string = data?.email;
   let password: string = data?.password;
-
   try {
     const res = await axios.post(URL + "/login", {
       email,

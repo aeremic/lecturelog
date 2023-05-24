@@ -6,7 +6,6 @@ const URL: string = API + "/user";
 
 export const getUsers = async () => {
   let result: any = null;
-
   try {
     result = await axios.get(URL + "", { headers: AuthHeader() });
   } catch (err) {
@@ -18,7 +17,6 @@ export const getUsers = async () => {
 
 export const getUser = async (id: number) => {
   let result: any = null;
-
   try {
     result = await axios.get(URL + "/" + id, { headers: AuthHeader() });
   } catch (err) {

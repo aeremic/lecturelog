@@ -22,7 +22,7 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
     }
 
     async create(userEntity: UserEntity): Promise<UserEntity> {
-        return super.create(this.userRepository, this.loggerUseCases, userEntity);  
+        return super.create(this.userRepository, this.loggerUseCases, userEntity);
     }
 
     async update(userEntity: UserEntity): Promise<UserEntity> {
@@ -52,6 +52,28 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
             if (email) {
                 result = await this.userRepository.getByEmail(email);
             }
+        } catch (error) {
+            this.loggerUseCases.log(ErrorConstants.GetMethodError, error?.message, error?.stack);
+        }
+
+        return result;
+    }
+
+    async getProfessors(): Promise<UserEntity[]> {
+        let result: UserEntity[] | PromiseLike<UserEntity[]>;
+        try {
+            result = await this.userRepository.getProfessors();
+        } catch (error) {
+            this.loggerUseCases.log(ErrorConstants.GetMethodError, error?.message, error?.stack);
+        }
+
+        return result;
+    }
+
+    async getStudents(): Promise<UserEntity[]> {
+        let result: UserEntity[] | PromiseLike<UserEntity[]>;
+        try {
+            result = await this.userRepository.getStudents();
         } catch (error) {
             this.loggerUseCases.log(ErrorConstants.GetMethodError, error?.message, error?.stack);
         }

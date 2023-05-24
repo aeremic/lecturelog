@@ -3,17 +3,15 @@ import { UserEntity } from "src/core/entities";
 import { Repository } from "typeorm";
 import { UserMapper } from "../mappers/user.mapper";
 import { User } from '../models/user.model';
-import { BadGatewayException } from '@nestjs/common';
-import { rejects } from "assert";
-import { resolve } from "path";
 import { InjectRepository } from "@nestjs/typeorm";
+import { RoleEnum } from "src/core/common/enums/role.enum";
 
 export class UserRepository implements UserRepositoryAbstract {
     @InjectRepository(User)
     private readonly userModelRepository: Repository<User>
 
     //#region Implementation of Base repository   
-    
+
     async get(): Promise<UserEntity[]> {
         let result = await this.userModelRepository.find();
 
@@ -43,13 +41,25 @@ export class UserRepository implements UserRepositoryAbstract {
 
     async getByFirstname(firstname: string): Promise<UserEntity> {
         let result = await this.userModelRepository.findOneBy({ firstname: firstname });
-        
+
         return UserMapper.ToEntity(result);
     }
- 
+
     async getByEmail(email: string): Promise<UserEntity> {
         let result = await this.userModelRepository.findOneBy({ email: email });
-        
+
         return UserMapper.ToEntity(result);
+    }
+
+    async getProfessors(): Promise<UserEntity[]> {
+        let result = await this.userModelRepository.findBy({ role: UserMapper.getType(RoleEnum.professor) });
+
+        return UserMapper.ToEntities(result);
+    }
+
+    async getStudents(): Promise<UserEntity[]> {
+        let result = await this.userModelRepository.findBy({ role: UserMapper.getType(RoleEnum.student) });
+
+        return UserMapper.ToEntities(result);
     }
 }

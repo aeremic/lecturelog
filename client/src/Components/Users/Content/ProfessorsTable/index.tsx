@@ -12,17 +12,7 @@ import {
 } from "@mui/material";
 import PaginationComponent from "../../../Common/PaginationComponent";
 import { useEffect, useState } from "react";
-import { getUsers } from "../../../../services/UsersService";
-
-function createData(email: string, firstname: string, lastname: string) {
-  return { email, firstname, lastname };
-}
-
-const rows = [
-  createData("milos@gmail.com", "Milos", "Jankovic"),
-  createData("milos2@gmail.com", "Milos", "Jankovic"),
-  createData("petarpetarpetar@gmail.com", "Petar", "Jankovic"),
-];
+import { getProfessors } from "../../../../services/ProfessorsService";
 
 interface IProfessor {
   email: string;
@@ -42,8 +32,10 @@ const ProfessorsTable = () => {
   const [professors, setProfessors] = useState(initialState);
 
   useEffect(() => {
-    getUsers().then((response) => {
-      setProfessors(response.data);
+    getProfessors().then((response) => {
+      if (response && response.data) {
+        setProfessors(response.data);
+      }
     });
   }, []);
 
