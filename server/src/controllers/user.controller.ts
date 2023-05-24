@@ -11,8 +11,8 @@ export class UserController {
     @Inject(UserUseCases)
     private readonly userUseCases: UserUseCases
 
-    // @Roles('admin')
-    // @UseGuards(RoleGuard)
+    @Roles('admin')
+    @UseGuards(RoleGuard)
     @Get()
     get() {
         return this.userUseCases.get();

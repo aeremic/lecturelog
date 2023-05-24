@@ -30,8 +30,8 @@ const Content = () => {
     formState: { errors },
   } = useForm<ILoginFormInput>();
 
-  const onSubmit = (data: ILoginFormInput) => {
-    login(data);
+  const onSubmit = async (data: ILoginFormInput) => {
+    let res: any = await login(data);
   };
 
   return (

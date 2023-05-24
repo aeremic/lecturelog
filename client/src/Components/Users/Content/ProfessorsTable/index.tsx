@@ -11,24 +11,42 @@ import {
   TextField,
 } from "@mui/material";
 import PaginationComponent from "../../../Common/PaginationComponent";
+import { useEffect, useState } from "react";
+import { getUsers } from "../../../../services/UsersService";
 
-function createData(
-  email: string,
-  firstname: string,
-  lastname: string,
-  carbs: number,
-  protein: number
-) {
-  return { email, firstname, lastname, carbs, protein };
+function createData(email: string, firstname: string, lastname: string) {
+  return { email, firstname, lastname };
 }
 
 const rows = [
-  createData("milos@gmail.com", "Milos", "Jankovic", 24, 4.0),
-  createData("milos2@gmail.com", "Milos", "Jankovic", 24, 4.0),
-  createData("petarpetarpetar@gmail.com", "Petar", "Jankovic", 24, 4.0),
+  createData("milos@gmail.com", "Milos", "Jankovic"),
+  createData("milos2@gmail.com", "Milos", "Jankovic"),
+  createData("petarpetarpetar@gmail.com", "Petar", "Jankovic"),
 ];
 
+interface IProfessor {
+  email: string;
+  firstname: string;
+  lastname: string;
+}
+
 const ProfessorsTable = () => {
+  const initialState: IProfessor[] = [
+    {
+      email: "",
+      firstname: "",
+      lastname: "",
+    },
+  ];
+
+  const [professors, setProfessors] = useState(initialState);
+
+  useEffect(() => {
+    getUsers().then((response) => {
+      setProfessors(response.data);
+    });
+  }, []);
+
   return (
     <>
       <TextField
@@ -58,16 +76,16 @@ const ProfessorsTable = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
+            {professors.map((professor, index) => (
               <TableRow
-                key={row.email}
+                key={index}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
-                  {row.email}
+                  {professor.email}
                 </TableCell>
-                <TableCell align="center">{row.firstname}</TableCell>
-                <TableCell align="center">{row.lastname}</TableCell>
+                <TableCell align="center">{professor.firstname}</TableCell>
+                <TableCell align="center">{professor.lastname}</TableCell>
                 <TableCell align="center">
                   <Button>Edit</Button>
                 </TableCell>

@@ -8,23 +8,24 @@ interface ILogin {
   password: string;
 }
 
-export const login = (data: ILogin) => {
+export const login = async (data: ILogin) => {
   let email: string = data?.email;
   let password: string = data?.password;
 
-  return axios
-    .post(URL + "/login", {
+  try {
+    const res = await axios.post(URL + "/login", {
       email,
       password,
-    })
-    .then((res: any) => {
-      if (res && res.accessToken) {
-        // TODO: Implemend Redux possibly
-        localStorage.setItem("accessToken", JSON.stringify(res.accessToken));
-      }
-
-      return res;
     });
+
+    if (res && res.data && res.data.accessToken) {
+      localStorage.setItem("accessToken", JSON.stringify(res.data.accessToken));
+    }
+
+    return res;
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 export const logout = () => {
