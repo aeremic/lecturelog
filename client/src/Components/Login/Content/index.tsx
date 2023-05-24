@@ -15,6 +15,7 @@ import {
   PleaseEnterYourPassword,
 } from "../../../resources/Typography";
 import { useForm } from "react-hook-form";
+import { login } from "../../../services/Common/Auth";
 
 interface ILoginFormInput {
   email: string;
@@ -30,7 +31,7 @@ const Content = () => {
   } = useForm<ILoginFormInput>();
 
   const onSubmit = (data: ILoginFormInput) => {
-    console.log(data);
+    login(data);
   };
 
   return (

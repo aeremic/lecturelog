@@ -3,7 +3,15 @@ import { API } from "..";
 
 const URL: string = API + "/auth";
 
-export const login = (email: string, password: string) => {
+interface ILogin {
+  email: string;
+  password: string;
+}
+
+export const login = (data: ILogin) => {
+  let email: string = data?.email;
+  let password: string = data?.password;
+
   return axios
     .post(URL + "/login", {
       email,
