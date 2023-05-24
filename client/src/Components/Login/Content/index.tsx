@@ -1,6 +1,6 @@
 import {
-  Box,
   Button,
+  Container,
   FormControl,
   FormGroup,
   FormLabel,
@@ -14,30 +14,63 @@ import {
   PleaseEnterYourEmail,
   PleaseEnterYourPassword,
 } from "../../../resources/Typography";
+import useForm from "../../../hooks/UseForm";
 
 const Content = () => {
+  const initialState = {
+    email: "",
+    password: "",
+  };
+
+  const loginCallback = async () => {
+    // send call
+    console.log(values);
+  };
+
+  const { onChange, onSubmit, values } = useForm(loginCallback, initialState);
+
   return (
-    <Box>
-      <Typography variant="h3">Logo</Typography>
+    <Container component="main">
+      <Typography textAlign="center" variant="h3">
+        Logo
+      </Typography>
+      <Typography component="h1" variant="h5">
+        {LogIn}
+      </Typography>
       <FormControl sx={{ minWidth: "300px" }}>
-        <FormGroup sx={{ mt: 2 }}>
-          <FormLabel>{Email}</FormLabel>
-          <TextField
-            label={PleaseEnterYourEmail}
-            variant="outlined"
-          ></TextField>
-        </FormGroup>
-        <FormGroup sx={{ mt: 2 }}>
-          <FormLabel>{Password}</FormLabel>
-          <TextField label={PleaseEnterYourPassword} type="password" />
-        </FormGroup>
-        <FormGroup sx={{ mt: 2 }}>
-          <Button variant="contained" size="large">
-            {LogIn}
-          </Button>
-        </FormGroup>
+        <form onSubmit={onSubmit}>
+          <FormGroup sx={{ mt: 2 }}>
+            <FormLabel>{Email}</FormLabel>
+            <TextField
+              label={PleaseEnterYourEmail}
+              variant="outlined"
+              required
+              name="email"
+              id="email"
+              type="email"
+              onChange={onChange}
+            ></TextField>
+          </FormGroup>
+          <FormGroup sx={{ mt: 2 }}>
+            <FormLabel>{Password}</FormLabel>
+            <TextField
+              label={PleaseEnterYourPassword}
+              variant="outlined"
+              name="password"
+              id="password"
+              type="password"
+              required
+              onChange={onChange}
+            />
+          </FormGroup>
+          <FormGroup sx={{ mt: 2 }}>
+            <Button variant="contained" size="large" type="submit">
+              {LogIn}
+            </Button>
+          </FormGroup>
+        </form>
       </FormControl>
-    </Box>
+    </Container>
   );
 };
 
