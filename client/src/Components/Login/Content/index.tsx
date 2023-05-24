@@ -14,20 +14,24 @@ import {
   PleaseEnterYourEmail,
   PleaseEnterYourPassword,
 } from "../../../resources/Typography";
-import useForm from "../../../hooks/UseForm";
+import { useForm } from "react-hook-form";
+
+interface ILoginFormInput {
+  email: string;
+  password: string;
+}
 
 const Content = () => {
-  const initialState = {
-    email: "",
-    password: "",
-  };
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<ILoginFormInput>();
 
-  const loginCallback = async () => {
-    // send call
-    console.log(values);
+  const onSubmit = (data: ILoginFormInput) => {
+    console.log(data);
   };
-
-  const { onChange, onSubmit, values } = useForm(loginCallback, initialState);
 
   return (
     <Container component="main">
@@ -38,30 +42,32 @@ const Content = () => {
         {LogIn}
       </Typography>
       <FormControl sx={{ minWidth: "300px" }}>
-        <form onSubmit={onSubmit}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <FormGroup sx={{ mt: 2 }}>
             <FormLabel>{Email}</FormLabel>
             <TextField
               label={PleaseEnterYourEmail}
               variant="outlined"
-              required
-              name="email"
-              id="email"
               type="email"
-              onChange={onChange}
-            ></TextField>
+              {...register("email", { required: true })}
+            >
+              {errors?.email?.type === "required" && (
+                <Typography>This field is required</Typography>
+              )}
+            </TextField>
           </FormGroup>
           <FormGroup sx={{ mt: 2 }}>
             <FormLabel>{Password}</FormLabel>
             <TextField
               label={PleaseEnterYourPassword}
               variant="outlined"
-              name="password"
-              id="password"
               type="password"
-              required
-              onChange={onChange}
-            />
+              {...register("password", { required: true })}
+            >
+              {errors?.email?.type === "required" && (
+                <Typography>This field is required</Typography>
+              )}
+            </TextField>
           </FormGroup>
           <FormGroup sx={{ mt: 2 }}>
             <Button variant="contained" size="large" type="submit">
