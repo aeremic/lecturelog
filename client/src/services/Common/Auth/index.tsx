@@ -1,7 +1,6 @@
-import axios from "axios";
-import { API } from "..";
+import { post } from "../ServiceBase";
 
-const URL: string = API + "/auth";
+const URL: string = "/auth";
 
 interface ILogin {
   email: string;
@@ -12,7 +11,7 @@ export const login = async (data: ILogin) => {
   let email: string = data?.email;
   let password: string = data?.password;
   try {
-    const res = await axios.post(URL + "/login", {
+    const res = await post(`${URL}/login`, {
       email,
       password,
     });
@@ -23,7 +22,7 @@ export const login = async (data: ILogin) => {
 
     return res;
   } catch (err) {
-    console.log(err);
+    console.log(err); // TODO: Fix for PROD
   }
 };
 

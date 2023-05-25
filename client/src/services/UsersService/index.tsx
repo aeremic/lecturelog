@@ -1,27 +1,31 @@
-import axios from "axios";
-import { API } from "../Common";
 import { AuthHeader } from "../Common/Auth/AuthHeader";
+import { get, getById } from "../Common/ServiceBase";
 
-const URL: string = API + "/user";
+const URL: string = "/user";
 
-export const getUsers = async () => {
-  let result: any = null;
-  try {
-    result = await axios.get(URL + "", { headers: AuthHeader() });
-  } catch (err) {
-    console.log(err);
-  }
+export const getUsers = async () => await get(URL, AuthHeader());
 
-  return result;
-};
+export const getUser = async (id: number) =>
+  await getById(URL, id, AuthHeader());
 
-export const getUser = async (id: number) => {
-  let result: any = null;
-  try {
-    result = await axios.get(URL + "/" + id, { headers: AuthHeader() });
-  } catch (err) {
-    console.log(err);
-  }
+// export const getUsers = async () => {
+//   let result: any = null;
+//   try {
+//     result = await axios.get(URL + "", { headers: AuthHeader() });
+//   } catch (err) {
+//     console.log(err);
+//   }
 
-  return result;
-};
+//   return result;
+// };
+
+// export const getUser = async (id: number) => {
+//   let result: any = null;
+//   try {
+//     result = await axios.get(URL + "/" + id, { headers: AuthHeader() });
+//   } catch (err) {
+//     console.log(err);
+//   }
+
+//   return result;
+// };

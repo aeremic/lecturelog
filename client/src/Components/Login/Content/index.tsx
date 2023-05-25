@@ -16,6 +16,7 @@ import {
 } from "../../../resources/Typography";
 import { useForm } from "react-hook-form";
 import { login } from "../../../services/Common/Auth";
+import { useNavigate } from "react-router-dom";
 
 interface ILoginFormInput {
   email: string;
@@ -23,15 +24,18 @@ interface ILoginFormInput {
 }
 
 const Content = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<ILoginFormInput>();
 
   const onSubmit = async (data: ILoginFormInput) => {
     let res: any = await login(data);
+    if (res) {
+      navigate("/users", { replace: true });
+    }
   };
 
   return (

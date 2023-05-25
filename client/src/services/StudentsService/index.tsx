@@ -1,16 +1,7 @@
-import axios from "axios";
-import { API } from "../Common";
 import { AuthHeader } from "../Common/Auth/AuthHeader";
+import { get } from "../Common/ServiceBase";
 
-const URL: string = API + "/student";
+const URL: string = "/student";
 
-export const getStudents = async () => {
-  let result: any = null;
-  try {
-    result = await axios.get(URL + "/getStudents", { headers: AuthHeader() });
-  } catch (err) {
-    console.log(err);
-  }
-
-  return result;
-};
+export const getStudents = async () =>
+  await get(`${URL}/getStudents`, AuthHeader());

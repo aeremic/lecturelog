@@ -21,7 +21,7 @@ export class SubjectUseCases extends GenericUseCases<SubjectEntity>{
     }
 
     async create(subjectEntity: SubjectEntity): Promise<SubjectEntity> {
-        return super.create(this.subjectRepository, this.loggerUseCases, subjectEntity);  
+        return super.create(this.subjectRepository, this.loggerUseCases, subjectEntity);
     }
 
     async update(subjectEntity: SubjectEntity): Promise<SubjectEntity> {
