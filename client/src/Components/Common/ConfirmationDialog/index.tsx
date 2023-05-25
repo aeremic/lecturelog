@@ -34,11 +34,9 @@ const ConfirmationDialog = (props: IConfirmationDialogRawProps) => {
   const [value, setValue] = useState(valueProp);
 
   useEffect(() => {
-    setValue(valueProp);
-    // TODO: Check this issue
-    // if (!open) {
-    //   setValue(valueProp);
-    // }
+    if (open) {
+      setValue(valueProp);
+    }
   }, [valueProp, open]);
 
   const handleEntering = () => {};
