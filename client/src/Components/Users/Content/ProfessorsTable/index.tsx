@@ -60,7 +60,6 @@ const ProfessorsTable = () => {
   }, []);
 
   const handleRemoveDialogClick = (index: number) => {
-    debugger;
     setValue(index);
     setOpen(true);
   };

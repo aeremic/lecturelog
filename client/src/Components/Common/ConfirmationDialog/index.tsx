@@ -7,7 +7,6 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Typography } from "@mui/material";
-import { No, Yes } from "../../../resources/Typography";
 
 export interface IConfirmationDialogRawProps {
   id: string;
@@ -35,9 +34,11 @@ const ConfirmationDialog = (props: IConfirmationDialogRawProps) => {
   const [value, setValue] = useState(valueProp);
 
   useEffect(() => {
-    if (!open) {
-      setValue(valueProp);
-    }
+    setValue(valueProp);
+    // TODO: Check this issue
+    // if (!open) {
+    //   setValue(valueProp);
+    // }
   }, [valueProp, open]);
 
   const handleEntering = () => {};
@@ -62,22 +63,6 @@ const ConfirmationDialog = (props: IConfirmationDialogRawProps) => {
       <DialogTitle>{title}</DialogTitle>
       <DialogContent dividers>
         <Typography>{content}</Typography>
-        {/* <RadioGroup
-          ref={radioGroupRef}
-          aria-label="ringtone"
-          name="ringtone"
-          value={value}
-          onChange={handleChange}
-        >
-          {options.map((option) => (
-            <FormControlLabel
-              value={option}
-              key={option}
-              control={<Radio />}
-              label={option}
-            />
-          ))}
-        </RadioGroup> */}
       </DialogContent>
       <DialogActions>
         <Button autoFocus onClick={handleCancel}>
