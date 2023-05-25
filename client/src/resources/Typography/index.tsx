@@ -4,9 +4,11 @@ export const Users = "Users";
 
 export const Subjects = "Subjects";
 
-export const Professors = "Professors";
+export const AllSubjects = "All Subjects";
 
-export const Students = "Students";
+export const AllProfessors = "All Professors";
+
+export const AllStudents = "All Students";
 
 export const LogIn = "Log In";
 
@@ -22,4 +24,20 @@ export const NoStudentsFound = "No Students Found";
 
 export const NoProfessorsFound = "No Professors Found";
 
+export const NoSubjectsFound = "No Subjects Found";
+
 export const Search = "Search";
+
+export const Name = "Name";
+
+export const PointsPerPresence = "Points Per Presence";
+
+export const Action = "Action";
+
+export const Index = "Index";
+
+export const FirstName = "First Name";
+
+export const LastName = "Last Name";
+
+export const Remove = "Remove";

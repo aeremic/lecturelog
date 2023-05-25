@@ -14,7 +14,14 @@ import {
 import PaginationComponent from "../../../Common/PaginationComponent";
 import { useEffect, useState } from "react";
 import { getProfessors } from "../../../../services/ProfessorsService";
-import { NoProfessorsFound, Search } from "../../../../resources/Typography";
+import {
+  Action,
+  FirstName,
+  LastName,
+  NoProfessorsFound,
+  Remove,
+  Search,
+} from "../../../../resources/Typography";
 
 interface IProfessor {
   email: string;
@@ -66,9 +73,9 @@ const ProfessorsTable = () => {
                   }}
                 >
                   <TableCell>Email</TableCell>
-                  <TableCell align="center">First name</TableCell>
-                  <TableCell align="center">Last name</TableCell>
-                  <TableCell align="center">Action</TableCell>
+                  <TableCell align="center">{FirstName}</TableCell>
+                  <TableCell align="center">{LastName}</TableCell>
+                  <TableCell align="center">{Action}</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -83,7 +90,7 @@ const ProfessorsTable = () => {
                     <TableCell align="center">{professor.firstname}</TableCell>
                     <TableCell align="center">{professor.lastname}</TableCell>
                     <TableCell align="center">
-                      <Button>Remove</Button>
+                      <Button>{Remove}</Button>
                     </TableCell>
                   </TableRow>
                 ))}

@@ -14,7 +14,16 @@ import {
 import PaginationComponent from "../../../Common/PaginationComponent";
 import { getStudents } from "../../../../services/StudentsService";
 import { useEffect, useState } from "react";
-import { NoStudentsFound, Search } from "../../../../resources/Typography";
+import {
+  Action,
+  Email,
+  FirstName,
+  Index,
+  LastName,
+  NoStudentsFound,
+  Remove,
+  Search,
+} from "../../../../resources/Typography";
 
 interface IStudent {
   index: string;
@@ -67,11 +76,11 @@ const StudentsTable = () => {
                     },
                   }}
                 >
-                  <TableCell>Index</TableCell>
-                  <TableCell>Email</TableCell>
-                  <TableCell align="center">First name</TableCell>
-                  <TableCell align="center">Last name</TableCell>
-                  <TableCell align="center">Action</TableCell>
+                  <TableCell>{Index}</TableCell>
+                  <TableCell>{Email}</TableCell>
+                  <TableCell align="center">{FirstName}</TableCell>
+                  <TableCell align="center">{LastName}</TableCell>
+                  <TableCell align="center">{Action}</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -87,7 +96,7 @@ const StudentsTable = () => {
                     <TableCell align="center">{student.firstname}</TableCell>
                     <TableCell align="center">{student.lastname}</TableCell>
                     <TableCell align="center">
-                      <Button>Remove</Button>
+                      <Button>{Remove}</Button>
                     </TableCell>
                   </TableRow>
                 ))}

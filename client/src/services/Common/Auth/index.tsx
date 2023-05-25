@@ -11,10 +11,14 @@ export const login = async (data: ILogin) => {
   let email: string = data?.email;
   let password: string = data?.password;
   try {
-    const res = await post(`${URL}/login`, {
-      email,
-      password,
-    });
+    const res = await post(
+      `${URL}/login`,
+      {
+        email,
+        password,
+      },
+      false
+    );
 
     if (res && res.data && res.data.accessToken) {
       localStorage.setItem("accessToken", JSON.stringify(res.data.accessToken));
