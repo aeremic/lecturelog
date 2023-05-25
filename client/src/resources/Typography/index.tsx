@@ -41,3 +41,11 @@ export const FirstName = "First Name";
 export const LastName = "Last Name";
 
 export const Remove = "Remove";
+
+export const RemoveUser = "Remove User";
+
+export const AreYouSure = "Are you sure?";
+
+export const Yes = "Yes";
+
+export const No = "No";

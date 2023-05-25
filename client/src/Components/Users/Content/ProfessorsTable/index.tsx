@@ -16,14 +16,20 @@ import { useEffect, useState } from "react";
 import { getProfessors } from "../../../../services/ProfessorsService";
 import {
   Action,
+  AreYouSure,
   FirstName,
   LastName,
+  No,
   NoProfessorsFound,
   Remove,
+  RemoveUser,
   Search,
+  Yes,
 } from "../../../../resources/Typography";
+import ConfirmationDialog from "../../../Common/ConfirmationDialog";
 
 interface IProfessor {
+  id: number;
   email: string;
   firstname: string;
   lastname: string;
@@ -32,12 +38,15 @@ interface IProfessor {
 const ProfessorsTable = () => {
   const initialState: IProfessor[] = [
     {
+      id: 0,
       email: "",
       firstname: "",
       lastname: "",
     },
   ];
 
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState(0);
   const [professors, setProfessors] = useState(initialState);
   const [professorsLoaded, setProfessorsLoaded] = useState(false);
 
@@ -49,6 +58,21 @@ const ProfessorsTable = () => {
       }
     });
   }, []);
+
+  const handleRemoveDialogClick = (index: number) => {
+    debugger;
+    setValue(index);
+    setOpen(true);
+  };
+
+  const handleRemoveDialogClose = (newValue?: any) => {
+    setOpen(false);
+
+    debugger;
+    if (newValue) {
+      setValue(newValue);
+    }
+  };
 
   return (
     <>
@@ -90,7 +114,13 @@ const ProfessorsTable = () => {
                     <TableCell align="center">{professor.firstname}</TableCell>
                     <TableCell align="center">{professor.lastname}</TableCell>
                     <TableCell align="center">
-                      <Button>{Remove}</Button>
+                      <Button
+                        onClick={() => {
+                          handleRemoveDialogClick(professor.id);
+                        }}
+                      >
+                        {Remove}
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -104,6 +134,17 @@ const ProfessorsTable = () => {
       ) : (
         <Typography>{NoProfessorsFound}</Typography>
       )}
+      <ConfirmationDialog
+        id="remove-professor-menu"
+        keepMounted
+        open={open}
+        title={RemoveUser}
+        content={AreYouSure}
+        negativeAction={No}
+        positiveAction={Yes}
+        value={value}
+        onClose={handleRemoveDialogClose}
+      />
     </>
   );
 };
