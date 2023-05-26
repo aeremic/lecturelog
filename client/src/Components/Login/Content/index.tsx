@@ -34,7 +34,7 @@ const Content = () => {
   const onSubmit = async (data: ILoginFormInput) => {
     let res: any = await login(data);
     if (res) {
-      navigate("/users", { replace: true });
+      navigate("/admin/users", { replace: true });
     }
   };
 

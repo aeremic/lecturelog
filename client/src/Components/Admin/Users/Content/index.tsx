@@ -12,7 +12,7 @@ import {
   AllProfessors,
   AllStudents,
   Users,
-} from "../../../resources/Typography";
+} from "../../../../resources/Typography";
 import StudentsTable from "./StudentsTable";
 
 const Content = () => {

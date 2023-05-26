@@ -16,7 +16,7 @@ const Menu = () => {
     <Box role="presentation">
       <List>
         <ListItem>
-          <ListItemButton component={Link} to="/users">
+          <ListItemButton component={Link} to="/admin/users">
             <ListItemIcon>
               <PeopleAltIcon />
             </ListItemIcon>
@@ -24,7 +24,7 @@ const Menu = () => {
           </ListItemButton>
         </ListItem>
         <ListItem>
-          <ListItemButton component={Link} to="/subjects">
+          <ListItemButton component={Link} to="/admin/subjects">
             <ListItemIcon>
               <LibraryBooksIcon />
             </ListItemIcon>

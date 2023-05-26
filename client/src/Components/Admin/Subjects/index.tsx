@@ -1,11 +1,11 @@
 import React from "react";
 import Loader from "../Common/Loader";
-import Header from "../Common/Header";
 import { ErrorBoundary } from "react-error-boundary";
-import ErrorComponent from "../Common/ErrorComponent";
 import { ThemeProvider } from "@mui/material";
-import theme from "../../styles";
 import Content from "./Content";
+import theme from "../../../styles";
+import Header from "../../Common/Header";
+import ErrorComponent from "../../Common/ErrorComponent";
 
 const Subjects = () => {
   return (

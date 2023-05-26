@@ -49,3 +49,9 @@ export const AreYouSure = "Are you sure?";
 export const Yes = "Yes";
 
 export const No = "No";
+
+export const Cancel = "Cancel";
+
+export const Add = "Add";
+
+export const AddUser = "Add User";

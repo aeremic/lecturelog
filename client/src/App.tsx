@@ -2,10 +2,11 @@ import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Loader from "./components/Common/Loader";
 import PrivateRoute from "./components/Common/PrivateRoute";
-import Users from "./components/Users";
-import Subjects from "./components/Subjects";
 import Login from "./components/Login";
 import Main from "./components/Login";
+import Users from "./components/Admin/Users";
+import AddUser from "./components/Admin/AddUser";
+import Subjects from "./components/Admin/Subjects";
 
 const App = () => {
   return (
@@ -14,8 +15,9 @@ const App = () => {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<Main />} />
-          <Route path="/users" element={<Users />} />
-          <Route path="/subjects" element={<Subjects />} />
+          <Route path="/admin/users" element={<Users />} />
+          <Route path="/admin/adduser" element={<AddUser />} />
+          <Route path="/admin/subjects" element={<Subjects />} />
           {/* <PrivateRoute path="/">
             <Main />
           </PrivateRoute> */}

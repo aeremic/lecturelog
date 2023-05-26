@@ -46,7 +46,6 @@ const ConfirmationDialog = (props: IConfirmationDialogRawProps) => {
   };
 
   const handleOk = () => {
-    debugger;
     onClose(value);
   };
 
@@ -63,10 +62,17 @@ const ConfirmationDialog = (props: IConfirmationDialogRawProps) => {
         <Typography>{content}</Typography>
       </DialogContent>
       <DialogActions>
-        <Button autoFocus onClick={handleCancel}>
+        <Button
+          autoFocus
+          variant="contained"
+          color="error"
+          onClick={handleCancel}
+        >
           {negativeAction}
         </Button>
-        <Button onClick={handleOk}>{positiveAction}</Button>
+        <Button variant="contained" color="success" onClick={handleOk}>
+          {positiveAction}
+        </Button>
       </DialogActions>
     </Dialog>
   );

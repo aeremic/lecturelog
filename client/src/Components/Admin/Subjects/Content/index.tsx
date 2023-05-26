@@ -6,6 +6,7 @@ import {
   Container,
   Divider,
   Paper,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -16,18 +17,18 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { getSubjects } from "../../../services/SubjectsService";
+import { getSubjects } from "../../../../services/SubjectsService";
 import {
   Action,
+  Add,
   AllSubjects,
   Name,
   NoSubjectsFound,
   PointsPerPresence,
   Remove,
-  Search,
   Subjects,
-} from "../../../resources/Typography";
-import PaginationComponent from "../../Common/PaginationComponent";
+} from "../../../../resources/Typography";
+import PaginationComponent from "../../../Common/PaginationComponent";
 
 interface ISubject {
   name: string;
@@ -59,19 +60,23 @@ const SubjectsTable = () => {
       {subjectsLoaded ? (
         <Container sx={{ mt: 2 }}>
           <Typography variant="h5">{Subjects}</Typography>
-
           <Card>
             <CardContent>
               <Typography variant="h6">{AllSubjects}</Typography>
               <Divider sx={{ mb: 2 }} />
-              <TextField
-                id="outlined-basic"
-                label={Search}
-                variant="outlined"
-                size="small"
-                sx={{ mb: 1, width: 1 }}
-              />
-              <TableContainer component={Paper}>
+              {/* <TextField
+            id="outlined-basic"
+            label={Search}
+            variant="outlined"
+            size="small"
+            sx={{ mb: 1, width: 0.9 }}
+          /> */}
+              <Stack direction="row">
+                <Button variant="contained" color="success">
+                  {Add}
+                </Button>
+              </Stack>
+              <TableContainer component={Paper} sx={{ mt: 1 }}>
                 <Table sx={{ minWidth: 290 }} aria-label="simple table">
                   <TableHead>
                     <TableRow
@@ -102,7 +107,9 @@ const SubjectsTable = () => {
                           {subject.pointsPerPresence}
                         </TableCell>
                         <TableCell align="center">
-                          <Button>{Remove}</Button>
+                          <Button variant="contained" color="error">
+                            {Remove}
+                          </Button>{" "}
                         </TableCell>
                       </TableRow>
                     ))}

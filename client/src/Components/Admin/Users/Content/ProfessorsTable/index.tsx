@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Paper,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -11,22 +12,24 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import PaginationComponent from "../../../Common/PaginationComponent";
 import { useEffect, useState } from "react";
-import { getProfessors } from "../../../../services/ProfessorsService";
+
+import AddIcon from "@mui/icons-material/Add";
+import { Link } from "react-router-dom";
+import { getProfessors } from "../../../../../services/ProfessorsService";
 import {
   Action,
   AreYouSure,
+  Cancel,
   FirstName,
   LastName,
-  No,
   NoProfessorsFound,
   Remove,
   RemoveUser,
-  Search,
   Yes,
-} from "../../../../resources/Typography";
-import ConfirmationDialog from "../../../Common/ConfirmationDialog";
+} from "../../../../../resources/Typography";
+import PaginationComponent from "../../../../Common/PaginationComponent";
+import ConfirmationDialog from "../../../../Common/ConfirmationDialog";
 
 interface IProfessor {
   id: number;
@@ -45,8 +48,8 @@ const ProfessorsTable = () => {
     },
   ];
 
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(0);
+  const [removeDialogOpen, setRemoveDialogOpen] = useState(false);
+  const [removeIndexValue, setRemoveIndexValue] = useState(0);
   const [professors, setProfessors] = useState(initialState);
   const [professorsLoaded, setProfessorsLoaded] = useState(false);
 
@@ -60,16 +63,14 @@ const ProfessorsTable = () => {
   }, []);
 
   const handleRemoveDialogClick = (index: number) => {
-    setValue(index);
-    setOpen(true);
+    setRemoveIndexValue(index);
+    setRemoveDialogOpen(true);
   };
 
   const handleRemoveDialogClose = (newValue?: any) => {
-    setOpen(false);
-
-    debugger;
+    setRemoveDialogOpen(false);
     if (newValue) {
-      setValue(newValue);
+      setRemoveIndexValue(newValue);
     }
   };
 
@@ -77,14 +78,25 @@ const ProfessorsTable = () => {
     <>
       {professorsLoaded ? (
         <Box>
-          <TextField
+          {/* <TextField
             id="outlined-basic"
             label={Search}
             variant="outlined"
             size="small"
-            sx={{ mb: 1, width: 1 }}
-          />
-          <TableContainer component={Paper}>
+            sx={{ mb: 1, width: 0.9 }}
+          /> */}
+          <Stack direction="row">
+            <Button
+              component={Link}
+              to="/admin/adduser"
+              variant="contained"
+              color="success"
+              size="large"
+            >
+              <AddIcon />
+            </Button>
+          </Stack>
+          <TableContainer component={Paper} sx={{ mt: 1 }}>
             <Table sx={{ minWidth: 290 }} aria-label="simple table">
               <TableHead>
                 <TableRow
@@ -117,6 +129,8 @@ const ProfessorsTable = () => {
                         onClick={() => {
                           handleRemoveDialogClick(professor.id);
                         }}
+                        variant="contained"
+                        color="error"
                       >
                         {Remove}
                       </Button>
@@ -136,12 +150,12 @@ const ProfessorsTable = () => {
       <ConfirmationDialog
         id="remove-professor-menu"
         keepMounted
-        open={open}
+        open={removeDialogOpen}
         title={RemoveUser}
         content={AreYouSure}
-        negativeAction={No}
+        negativeAction={Cancel}
         positiveAction={Yes}
-        value={value}
+        value={removeIndexValue}
         onClose={handleRemoveDialogClose}
       />
     </>

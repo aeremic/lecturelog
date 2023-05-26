@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Paper,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -11,19 +12,19 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import PaginationComponent from "../../../Common/PaginationComponent";
-import { getStudents } from "../../../../services/StudentsService";
 import { useEffect, useState } from "react";
+import { getStudents } from "../../../../../services/StudentsService/index";
 import {
   Action,
+  Add,
   Email,
   FirstName,
   Index,
   LastName,
   NoStudentsFound,
   Remove,
-  Search,
-} from "../../../../resources/Typography";
+} from "../../../../../resources/Typography";
+import PaginationComponent from "../../../../Common/PaginationComponent";
 
 interface IStudent {
   index: string;
@@ -58,14 +59,19 @@ const StudentsTable = () => {
     <>
       {studentsLoaded ? (
         <Box>
-          <TextField
+          {/* <TextField
             id="outlined-basic"
             label={Search}
             variant="outlined"
             size="small"
-            sx={{ mb: 1, width: 1 }}
-          />
-          <TableContainer component={Paper}>
+            sx={{ mb: 1, width: 0.9 }}
+          /> */}
+          <Stack direction="row">
+            <Button variant="contained" color="success">
+              {Add}
+            </Button>
+          </Stack>
+          <TableContainer component={Paper} sx={{ mt: 1 }}>
             <Table sx={{ minWidth: 290 }} aria-label="simple table">
               <TableHead>
                 <TableRow
@@ -96,7 +102,9 @@ const StudentsTable = () => {
                     <TableCell align="center">{student.firstname}</TableCell>
                     <TableCell align="center">{student.lastname}</TableCell>
                     <TableCell align="center">
-                      <Button>{Remove}</Button>
+                      <Button variant="contained" color="error">
+                        {Remove}
+                      </Button>{" "}
                     </TableCell>
                   </TableRow>
                 ))}
