@@ -1,5 +1,6 @@
 import {
   Alert,
+  AlertColor,
   Box,
   Button,
   Paper,
@@ -78,31 +79,26 @@ const ProfessorsTable = () => {
   const [professors, setProfessors] = useState(professorsTableInitialState);
   const [professorsLoaded, setProfessorsLoaded] = useState(false);
 
-  const [openSuccessAlert, setOpenSuccessAlert] = useState(false);
-  const [openFailureAlert, setOpenFailureAlert] = useState(false);
-
-  const [alertSuccessMessage, setAlertSuccessMessage] = useState("");
-  const [alertFailureMessage, setAlertFailureMessage] = useState("");
+  const [openAlert, setOpenAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertType, setAlertType] = useState<AlertColor>();
 
   useEffect(() => {
-    getProfessors()
-      .then((response) => {
-        if (
-          response &&
-          response.status &&
-          response.status === HttpStatusCode.Ok &&
-          response.data
-        ) {
-          setProfessors(response.data);
-          setProfessorsLoaded(true);
-        } else {
-          setAlertFailureMessage(AlertFailureMessage);
-          setOpenFailureAlert(true);
-        }
-      })
-      .catch(() => {
-        // TODO: Error should trigger alert
-      });
+    getProfessors().then((response) => {
+      if (
+        response &&
+        response.status &&
+        response.status === HttpStatusCode.Ok &&
+        response.data
+      ) {
+        setProfessors(response.data);
+        setProfessorsLoaded(true);
+      } else {
+        setAlertType("error");
+        setAlertMessage(AlertFailureMessage);
+        setOpenAlert(true);
+      }
+    });
   }, [professorsLoaded]);
 
   const handleRemoveDialogClick = (index: number) => {
@@ -117,12 +113,14 @@ const ProfessorsTable = () => {
 
       let res = await removeUser(removeIndexValue);
       if (res && res.status && res.status === HttpStatusCode.Ok) {
-        setAlertSuccessMessage(UserSuccessfullyRemoved);
-        setOpenSuccessAlert(true);
+        setAlertType("success");
+        setAlertMessage(UserSuccessfullyRemoved);
+        setOpenAlert(true);
         setProfessorsLoaded(false);
       } else {
-        setAlertFailureMessage(AlertFailureMessage);
-        setOpenFailureAlert(true);
+        setAlertType("error");
+        setAlertMessage(AlertFailureMessage);
+        setOpenAlert(true);
       }
     }
   };
@@ -153,33 +151,26 @@ const ProfessorsTable = () => {
     if (newValue) {
       setManipulateUserValue(newValue);
 
-      setAlertSuccessMessage(UserAddedSuccessfully);
-      setOpenSuccessAlert(true);
+      setAlertType("success");
+      setAlertMessage(UserAddedSuccessfully);
+      setOpenAlert(true);
+
       setProfessorsLoaded(false);
     } else {
-      setAlertFailureMessage(UserNotAdded);
-      setOpenFailureAlert(true);
+      setAlertType("error");
+      setAlertMessage(UserNotAdded);
+      setOpenAlert(true);
     }
   };
 
-  const handleCloseSuccessAlert = (
+  const handleCloseAlert = (
     event?: React.SyntheticEvent | Event,
     reason?: string
   ) => {
     if (reason === "clickaway") {
       return;
     }
-    setOpenSuccessAlert(false);
-  };
-
-  const handleCloseFailureAlert = (
-    event?: React.SyntheticEvent | Event,
-    reason?: string
-  ) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setOpenFailureAlert(false);
+    setOpenAlert(false);
   };
 
   return (
@@ -284,29 +275,16 @@ const ProfessorsTable = () => {
         onClose={handleEditUserDialogClose}
       />
       <Snackbar
-        open={openSuccessAlert}
+        open={openAlert}
         autoHideDuration={6000}
-        onClose={handleCloseSuccessAlert}
+        onClose={handleCloseAlert}
       >
         <Alert
-          onClose={handleCloseSuccessAlert}
-          severity="success"
+          onClose={handleCloseAlert}
+          severity={alertType}
           sx={{ width: "100%" }}
         >
-          {alertSuccessMessage}
-        </Alert>
-      </Snackbar>
-      <Snackbar
-        open={openFailureAlert}
-        autoHideDuration={6000}
-        onClose={handleCloseFailureAlert}
-      >
-        <Alert
-          onClose={handleCloseFailureAlert}
-          severity="error"
-          sx={{ width: "100%" }}
-        >
-          {alertFailureMessage}
+          {alertMessage}
         </Alert>
       </Snackbar>
     </>
