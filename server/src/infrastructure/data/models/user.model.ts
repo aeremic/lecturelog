@@ -17,6 +17,12 @@ export class User {
   @Column({ type: 'varchar', length: 120 })
   public email: string;
 
+  @Column({ type: 'smallint', nullable: true })
+  public index?: number;
+
+  @Column({ type: 'smallint', nullable: true })
+  public year?: number;
+
   @Column({ type: 'varchar', length: 120 })
   public hash: string;
 

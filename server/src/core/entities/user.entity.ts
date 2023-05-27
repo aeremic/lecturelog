@@ -4,12 +4,16 @@ export class UserEntity {
   public id?: number;
 
   public firstname: string;
-  
+
   public lastname: string;
-  
+
   public email: string;
-  
+
+  public index?: number;
+
+  public year?: number;
+
   public hash?: string;
-    
+
   public role?: RoleEnum
 }

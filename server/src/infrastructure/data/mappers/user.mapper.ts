@@ -10,6 +10,8 @@ export class UserMapper {
             firstname: userModel?.firstname,
             lastname: userModel?.lastname,
             email: userModel?.email,
+            index: userModel?.index,
+            year: userModel?.year,
             hash: userModel?.hash
         };
 
@@ -39,6 +41,8 @@ export class UserMapper {
             firstname: userEntity?.firstname,
             lastname: userEntity?.lastname,
             email: userEntity?.email,
+            index: userEntity?.index,
+            year: userEntity?.year,
             hash: userEntity?.hash,
             role: userType,
 

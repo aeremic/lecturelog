@@ -60,11 +60,11 @@ export const AddUser = "Add User";
 
 export const EditUser = "Edit User";
 
-export const PleaseEnterFirstName = "Please Enter First Name";
+export const PleaseEnterFirstName = "Please enter user first name";
 
-export const PleaseEnterLastName = "Please Enter Last Name";
+export const PleaseEnterLastName = "Please enter user last name";
 
-export const PleaseEnterEmail = "Please Enter Email";
+export const PleaseEnterEmail = "Please enter user email";
 
 export const UserType = "User Type";
 

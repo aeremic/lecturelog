@@ -25,21 +25,17 @@ import {
   Remove,
 } from "../../../../../resources/Typography";
 import PaginationComponent from "../../../../Common/PaginationComponent";
-
-interface IStudent {
-  index: string;
-  email: string;
-  firstname: string;
-  lastname: string;
-}
+import { IStudent } from "../../../../../Models/User/Student";
 
 const StudentsTable = () => {
   const initialState: IStudent[] = [
     {
-      index: "",
+      id: 0,
       email: "",
       firstname: "",
       lastname: "",
+      index: null,
+      year: null,
     },
   ];
 
@@ -59,13 +55,6 @@ const StudentsTable = () => {
     <>
       {studentsLoaded ? (
         <Box>
-          {/* <TextField
-            id="outlined-basic"
-            label={Search}
-            variant="outlined"
-            size="small"
-            sx={{ mb: 1, width: 0.9 }}
-          /> */}
           <Stack direction="row">
             <Button variant="contained" color="success">
               {Add}
@@ -96,7 +85,7 @@ const StudentsTable = () => {
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
-                      {student.index}
+                      {student.index}/{student.year}
                     </TableCell>
                     <TableCell>{student.email}</TableCell>
                     <TableCell align="center">{student.firstname}</TableCell>
@@ -104,7 +93,7 @@ const StudentsTable = () => {
                     <TableCell align="center">
                       <Button variant="contained" color="error">
                         {Remove}
-                      </Button>{" "}
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}

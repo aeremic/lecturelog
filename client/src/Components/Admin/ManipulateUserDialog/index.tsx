@@ -26,6 +26,7 @@ import {
 } from "../../../resources/Typography";
 import { useForm } from "react-hook-form";
 import { Professor } from "../../../resources/Typography/index";
+import { RoleEnum } from "../../../Models/Enums";
 
 export interface IManipulateUserDialogRawProps {
   id: string;
@@ -34,18 +35,13 @@ export interface IManipulateUserDialogRawProps {
   title: string;
   negativeAction: string;
   positiveAction: string;
+  defaultRoleEnum: RoleEnum;
   value: any;
   onClose: (value?: any) => void;
 }
 
-enum RoleEnum {
-  professor = "professor",
-  student = "student",
-  admin = "admin",
-}
-
 interface IManipulateUserFormInput {
-  // TODO: Add index for students
+  // TODO: Add index for students.
   firstname: string;
   lastname: string;
   email: string;
@@ -65,20 +61,23 @@ const ManipulateUserDialog = (props: IManipulateUserDialogRawProps) => {
     title,
     negativeAction,
     positiveAction,
+    defaultRoleEnum,
     ...other
   } = props;
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<IManipulateUserFormInput>();
+  const { register, handleSubmit, reset, formState } =
+    useForm<IManipulateUserFormInput>();
   const [value, setValue] = useState(valueProp);
 
   useEffect(() => {
-    if (open) {
+    if (!open) {
       setValue(valueProp);
     }
-  }, [valueProp, open]);
+
+    // TODO: Bug - Role not reseting after submit. On opening pop up again "User type" is preselected. User needs to click "Add" two times.
+    if (formState.isSubmitSuccessful) {
+      reset({ firstname: "", lastname: "", email: "", role: RoleEnum.Default });
+    }
+  }, [formState, valueProp, open, reset]);
 
   const handleEntering = () => {};
 
@@ -91,19 +90,16 @@ const ManipulateUserDialog = (props: IManipulateUserDialogRawProps) => {
   };
 
   const onSubmit = async (data: IManipulateUserFormInput) => {
-    debugger;
     let manipulateUser: IManipulateUser = { id: value.id, actionResult: true };
     setValue(manipulateUser);
-    // TODO: Check Role for empty value
 
-    console.log(value);
     console.log(data);
     handleOk();
   };
 
   return (
     <Dialog
-      sx={{ "& .MuiDialog-paper": { width: "80%", maxHeight: 435 } }}
+      sx={{ "& .MuiDialog-paper": { width: "100%", maxHeight: 635 } }}
       maxWidth="xs"
       TransitionProps={{ onEntering: handleEntering }}
       open={open}
@@ -112,7 +108,7 @@ const ManipulateUserDialog = (props: IManipulateUserDialogRawProps) => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <DialogTitle>{title}</DialogTitle>
         <DialogContent dividers>
-          <FormControl>
+          <FormControl fullWidth>
             <FormGroup sx={{ mt: 2 }}>
               <FormLabel>{FirstName}</FormLabel>
               <TextField
@@ -141,19 +137,20 @@ const ManipulateUserDialog = (props: IManipulateUserDialogRawProps) => {
               ></TextField>
             </FormGroup>
             <FormGroup sx={{ mt: 2 }}>
-              <InputLabel id="demo-simple-select-required-label">
-                {UserType}
-              </InputLabel>
+              <FormLabel>{UserType}</FormLabel>
               <TextField
                 select
-                defaultValue=""
+                disabled
+                defaultValue={defaultRoleEnum}
                 inputProps={register("role", {
-                  required: "Please select type of the user",
+                  required: true,
                 })}
               >
-                <MenuItem value="professor">{Professor}</MenuItem>
-                <MenuItem value="student">{Student}</MenuItem>
-                <MenuItem value="admin">{Admin}</MenuItem>
+                {defaultRoleEnum == RoleEnum.Professor ? (
+                  <MenuItem value="professor">{Professor}</MenuItem>
+                ) : (
+                  <MenuItem value="student">{Student}</MenuItem>
+                )}
               </TextField>
             </FormGroup>
           </FormControl>

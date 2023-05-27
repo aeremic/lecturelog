@@ -25,6 +25,7 @@ import {
   Cancel,
   Edit,
   EditUser,
+  Email,
   FirstName,
   LastName,
   NoProfessorsFound,
@@ -35,13 +36,9 @@ import {
 import PaginationComponent from "../../../../Common/PaginationComponent";
 import ConfirmationDialog from "../../../../Common/ConfirmationDialog";
 import ManipulateUserDialog from "../../../ManipulateUserDialog";
-
-interface IProfessor {
-  id: number;
-  email: string;
-  firstname: string;
-  lastname: string;
-}
+import { RoleEnum } from "../../../../../Models/Enums";
+import { Professor } from "../../../../../resources/Typography/index";
+import { IProfessor } from "../../../../../Models/User/Professor";
 
 interface IManipulateUser {
   id: number;
@@ -103,6 +100,7 @@ const ProfessorsTable = () => {
   };
 
   const handleEditUserDialogClose = (newValue?: any) => {
+    // TODO: Bug - Values not updated.
     setEditUserDialogOpen(false);
     if (newValue) {
       setManipulateUserValue(newValue);
@@ -115,7 +113,7 @@ const ProfessorsTable = () => {
   };
 
   const handleAddUserDialogClose = (newValue?: any) => {
-    debugger;
+    // TODO: Bug - Values not updated.
     setAddUserDialogOpen(false);
     if (newValue) {
       setManipulateUserValue(newValue);
@@ -126,13 +124,6 @@ const ProfessorsTable = () => {
     <>
       {professorsLoaded ? (
         <Box>
-          {/* <TextField
-            id="outlined-basic"
-            label={Search}
-            variant="outlined"
-            size="small"
-            sx={{ mb: 1, width: 0.9 }}
-          /> */}
           <Stack direction="row">
             <Button
               onClick={() => {
@@ -156,7 +147,7 @@ const ProfessorsTable = () => {
                     },
                   }}
                 >
-                  <TableCell>Email</TableCell>
+                  <TableCell>{Email}</TableCell>
                   <TableCell align="center">{FirstName}</TableCell>
                   <TableCell align="center">{LastName}</TableCell>
                   <TableCell align="center">{Action}</TableCell>
@@ -208,22 +199,24 @@ const ProfessorsTable = () => {
         onClose={handleRemoveDialogClose}
       />
       <ManipulateUserDialog
-        id="add-user-menu"
+        id="add-professor-menu"
         keepMounted
         open={addUserDialogOpen}
         title={AddUser}
         negativeAction={Cancel}
         positiveAction={Add}
+        defaultRoleEnum={RoleEnum.Professor}
         value={manipulateUserValue}
         onClose={handleAddUserDialogClose}
       />
       <ManipulateUserDialog
-        id="edit-user-menu"
+        id="edit-professor-menu"
         keepMounted
         open={editUserDialogOpen}
         title={EditUser}
         negativeAction={Cancel}
         positiveAction={Edit}
+        defaultRoleEnum={RoleEnum.Professor}
         value={manipulateUserValue}
         onClose={handleEditUserDialogClose}
       />

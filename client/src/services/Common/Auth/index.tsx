@@ -26,7 +26,7 @@ export const login = async (data: ILogin) => {
 
     return res;
   } catch (err) {
-    console.log(err); // TODO: Fix for PROD
+    console.log(err); // TODO: Fix for PROD.
   }
 };
 
