@@ -20,12 +20,8 @@ export class SubjectUseCases extends GenericUseCases<SubjectEntity>{
         return super.getById(this.subjectRepository, this.loggerUseCases, id);
     }
 
-    async create(subjectEntity: SubjectEntity): Promise<SubjectEntity> {
-        return super.create(this.subjectRepository, this.loggerUseCases, subjectEntity);
-    }
-
-    async update(subjectEntity: SubjectEntity): Promise<SubjectEntity> {
-        return super.update(this.subjectRepository, this.loggerUseCases, subjectEntity);
+    async createOrUpdate(subjectEntity: SubjectEntity): Promise<SubjectEntity> {
+        return super.createOrUpdate(this.subjectRepository, this.loggerUseCases, subjectEntity);
     }
 
     async delete(id: number): Promise<number> {

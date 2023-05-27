@@ -37,5 +37,18 @@ export const post = async (
     header = AuthHeader();
   }
   const URL: string = API + endpoint;
-  return axios.post(URL, modelToPost);
+  return axios.post(URL, modelToPost, { headers: header });
+};
+
+export const remove = async (
+  endpoint: string,
+  id: number,
+  autoIncludeAuthHeader: boolean = true,
+  header: any = null
+) => {
+  if (autoIncludeAuthHeader && header == null) {
+    header = AuthHeader();
+  }
+  const URL: string = API + endpoint;
+  return axios.delete(`${URL}/${id}`, { headers: header });
 };

@@ -73,3 +73,11 @@ export const Professor = "Professor";
 export const Student = "Student";
 
 export const Admin = "Admin";
+
+export const UserSuccessfullyRemoved = "User successfully removed";
+
+export const UserAddedSuccessfully = "User added successfully";
+
+export const UserNotAdded = "User not added";
+
+export const AlertFailureMessage = "Something went wrong! :(";

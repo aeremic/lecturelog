@@ -25,15 +25,17 @@ import {
   Remove,
 } from "../../../../../resources/Typography";
 import PaginationComponent from "../../../../Common/PaginationComponent";
-import { IStudent } from "../../../../../Models/User/Student";
+import { RoleEnum } from "../../../../../Models/Enums";
+import { IUser } from "../../../../../Models/User";
 
 const StudentsTable = () => {
-  const initialState: IStudent[] = [
+  const initialState: IUser[] = [
     {
       id: 0,
       email: "",
       firstname: "",
       lastname: "",
+      role: RoleEnum.Default,
       index: null,
       year: null,
     },
@@ -53,13 +55,13 @@ const StudentsTable = () => {
 
   return (
     <>
+      <Stack direction="row">
+        <Button variant="contained" color="success" sx={{ mb: 1 }}>
+          {Add}
+        </Button>
+      </Stack>
       {studentsLoaded ? (
         <Box>
-          <Stack direction="row">
-            <Button variant="contained" color="success">
-              {Add}
-            </Button>
-          </Stack>
           <TableContainer component={Paper} sx={{ mt: 1 }}>
             <Table sx={{ minWidth: 290 }} aria-label="simple table">
               <TableHead>

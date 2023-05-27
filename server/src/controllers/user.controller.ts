@@ -28,15 +28,8 @@ export class UserController {
     @Roles('admin')
     @UseGuards(RoleGuard)
     @Post()
-    create(@Body() userEntity: any): Promise<UserEntity> {
-        return this.userUseCases.create(userEntity)
-    }
-
-    @Roles('admin')
-    @UseGuards(RoleGuard)
-    @Put()
-    update(@Body() userEntity: any): Promise<UserEntity> {
-        return this.userUseCases.update(userEntity)
+    createOrUpdate(@Body() userEntity: any): Promise<UserEntity> {
+        return this.userUseCases.createOrUpdate(userEntity)
     }
 
     @Roles('admin')

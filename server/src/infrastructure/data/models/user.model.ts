@@ -23,8 +23,14 @@ export class User {
   @Column({ type: 'smallint', nullable: true })
   public year?: number;
 
-  @Column({ type: 'varchar', length: 120 })
-  public hash: string;
+  @Column({ type: 'varchar', length: 120, nullable: true })
+  public hash?: string;
+
+  @Column({ type: 'varchar', length: 120, nullable: true })
+  public generatedPassword?: string;
+
+  @Column({ type: 'boolean', nullable: true })
+  public isActivated?: boolean;
 
   @Column({ type: 'smallint' })
   public role: number

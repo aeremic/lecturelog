@@ -17,6 +17,7 @@ import {
 import { useForm } from "react-hook-form";
 import { login } from "../../../services/Common/Auth";
 import { useNavigate } from "react-router-dom";
+import { HttpStatusCode } from "axios";
 
 interface ILoginFormInput {
   email: string;
@@ -33,7 +34,7 @@ const Content = () => {
 
   const onSubmit = async (data: ILoginFormInput) => {
     let res: any = await login(data);
-    if (res) {
+    if (res && res.status && res.status === HttpStatusCode.Created) {
       navigate("/admin/users", { replace: true });
     }
   };

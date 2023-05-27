@@ -27,6 +27,9 @@ import {
 import { useForm } from "react-hook-form";
 import { Professor } from "../../../resources/Typography/index";
 import { RoleEnum } from "../../../Models/Enums";
+import { createOrUpdateUser } from "../../../services/UsersService";
+import { IUser } from "../../../Models/User";
+import { HttpStatusCode } from "axios";
 
 export interface IManipulateUserDialogRawProps {
   id: string;
@@ -42,9 +45,12 @@ export interface IManipulateUserDialogRawProps {
 
 interface IManipulateUserFormInput {
   // TODO: Add index for students.
+  id: number;
   firstname: string;
   lastname: string;
   email: string;
+  index?: number | null;
+  year?: number | null;
   role: RoleEnum;
 }
 
@@ -69,13 +75,13 @@ const ManipulateUserDialog = (props: IManipulateUserDialogRawProps) => {
   const [value, setValue] = useState(valueProp);
 
   useEffect(() => {
-    if (!open) {
+    if (open) {
       setValue(valueProp);
     }
 
     // TODO: Bug - Role not reseting after submit. On opening pop up again "User type" is preselected. User needs to click "Add" two times.
     if (formState.isSubmitSuccessful) {
-      reset({ firstname: "", lastname: "", email: "", role: RoleEnum.Default });
+      reset();
     }
   }, [formState, valueProp, open, reset]);
 
@@ -90,11 +96,29 @@ const ManipulateUserDialog = (props: IManipulateUserDialogRawProps) => {
   };
 
   const onSubmit = async (data: IManipulateUserFormInput) => {
-    let manipulateUser: IManipulateUser = { id: value.id, actionResult: true };
-    setValue(manipulateUser);
+    let user: IUser = {
+      id: value.id,
+      firstname: data.firstname,
+      lastname: data.lastname,
+      email: data.email,
+      role: data.role,
+      index: data.index,
+      year: data.year,
+    };
 
-    console.log(data);
-    handleOk();
+    let res: any = await createOrUpdateUser(user);
+    if (
+      res &&
+      res.status &&
+      res.status === HttpStatusCode.Created &&
+      res.data &&
+      res.data.id
+    ) {
+      setValue({ id: res.data.id, actionResult: true });
+      handleOk();
+    } else {
+      handleCancel();
+    }
   };
 
   return (

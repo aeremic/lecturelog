@@ -12,7 +12,9 @@ export class UserMapper {
             email: userModel?.email,
             index: userModel?.index,
             year: userModel?.year,
-            hash: userModel?.hash
+            hash: userModel?.hash,
+            generatedPassword: userModel.generatedPassword,
+            isActivated: userModel.isActivated
         };
 
         userEntity.role = userEntity.id ? this.getRoleEnum(userModel?.role) : undefined;
@@ -44,6 +46,8 @@ export class UserMapper {
             index: userEntity?.index,
             year: userEntity?.year,
             hash: userEntity?.hash,
+            generatedPassword: userEntity.generatedPassword,
+            isActivated: userEntity.isActivated,
             role: userType,
 
             studentsSubjects: null,

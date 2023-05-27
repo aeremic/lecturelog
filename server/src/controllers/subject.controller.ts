@@ -28,15 +28,8 @@ export class SubjectController {
     @Roles('admin')
     @UseGuards(RoleGuard)
     @Post()
-    create(@Body() subjectEntity: any): Promise<SubjectEntity> {
-        return this.subjectUseCases.create(subjectEntity)
-    }
-
-    @Roles('admin')
-    @UseGuards(RoleGuard)
-    @Put()
-    update(@Body() subjectEntity: any): Promise<SubjectEntity> {
-        return this.subjectUseCases.update(subjectEntity)
+    createOrUpdate(@Body() subjectEntity: any): Promise<SubjectEntity> {
+        return this.subjectUseCases.createOrUpdate(subjectEntity)
     }
 
     @Roles('admin')

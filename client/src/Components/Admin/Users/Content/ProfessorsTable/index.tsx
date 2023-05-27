@@ -1,7 +1,9 @@
 import {
+  Alert,
   Box,
   Button,
   Paper,
+  Snackbar,
   Stack,
   Table,
   TableBody,
@@ -9,18 +11,16 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  TextField,
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-
 import AddIcon from "@mui/icons-material/Add";
-import { Link } from "react-router-dom";
 import { getProfessors } from "../../../../../services/ProfessorsService";
 import {
   Action,
   Add,
   AddUser,
+  AlertFailureMessage,
   AreYouSure,
   Cancel,
   Edit,
@@ -31,14 +31,18 @@ import {
   NoProfessorsFound,
   Remove,
   RemoveUser,
+  UserAddedSuccessfully,
+  UserNotAdded,
+  UserSuccessfullyRemoved,
   Yes,
 } from "../../../../../resources/Typography";
 import PaginationComponent from "../../../../Common/PaginationComponent";
 import ConfirmationDialog from "../../../../Common/ConfirmationDialog";
 import ManipulateUserDialog from "../../../ManipulateUserDialog";
 import { RoleEnum } from "../../../../../Models/Enums";
-import { Professor } from "../../../../../resources/Typography/index";
-import { IProfessor } from "../../../../../Models/User/Professor";
+import { IUser } from "../../../../../Models/User";
+import { removeUser } from "../../../../../services/UsersService";
+import { HttpStatusCode } from "axios";
 
 interface IManipulateUser {
   id: number;
@@ -46,12 +50,13 @@ interface IManipulateUser {
 }
 
 const ProfessorsTable = () => {
-  const professorsTableInitialState: IProfessor[] = [
+  const professorsTableInitialState: IUser[] = [
     {
       id: 0,
       email: "",
       firstname: "",
       lastname: "",
+      role: RoleEnum.Default,
     },
   ];
 
@@ -73,24 +78,52 @@ const ProfessorsTable = () => {
   const [professors, setProfessors] = useState(professorsTableInitialState);
   const [professorsLoaded, setProfessorsLoaded] = useState(false);
 
+  const [openSuccessAlert, setOpenSuccessAlert] = useState(false);
+  const [openFailureAlert, setOpenFailureAlert] = useState(false);
+
+  const [alertSuccessMessage, setAlertSuccessMessage] = useState("");
+  const [alertFailureMessage, setAlertFailureMessage] = useState("");
+
   useEffect(() => {
-    getProfessors().then((response) => {
-      if (response && response.data) {
-        setProfessors(response.data);
-        setProfessorsLoaded(true);
-      }
-    });
-  }, []);
+    getProfessors()
+      .then((response) => {
+        if (
+          response &&
+          response.status &&
+          response.status === HttpStatusCode.Ok &&
+          response.data
+        ) {
+          setProfessors(response.data);
+          setProfessorsLoaded(true);
+        } else {
+          setAlertFailureMessage(AlertFailureMessage);
+          setOpenFailureAlert(true);
+        }
+      })
+      .catch(() => {
+        // TODO: Error should trigger alert
+      });
+  }, [professorsLoaded]);
 
   const handleRemoveDialogClick = (index: number) => {
     setRemoveIndexValue(index);
     setRemoveDialogOpen(true);
   };
 
-  const handleRemoveDialogClose = (newValue?: any) => {
+  const handleRemoveDialogClose = async (newValue?: any) => {
     setRemoveDialogOpen(false);
     if (newValue) {
       setRemoveIndexValue(newValue);
+
+      let res = await removeUser(removeIndexValue);
+      if (res && res.status && res.status === HttpStatusCode.Ok) {
+        setAlertSuccessMessage(UserSuccessfullyRemoved);
+        setOpenSuccessAlert(true);
+        setProfessorsLoaded(false);
+      } else {
+        setAlertFailureMessage(AlertFailureMessage);
+        setOpenFailureAlert(true);
+      }
     }
   };
 
@@ -105,6 +138,8 @@ const ProfessorsTable = () => {
     if (newValue) {
       setManipulateUserValue(newValue);
     }
+
+    setProfessorsLoaded(false);
   };
 
   const handleAddUserDialogClick = (addUser: IManipulateUser) => {
@@ -117,25 +152,53 @@ const ProfessorsTable = () => {
     setAddUserDialogOpen(false);
     if (newValue) {
       setManipulateUserValue(newValue);
+
+      setAlertSuccessMessage(UserAddedSuccessfully);
+      setOpenSuccessAlert(true);
+      setProfessorsLoaded(false);
+    } else {
+      setAlertFailureMessage(UserNotAdded);
+      setOpenFailureAlert(true);
     }
+  };
+
+  const handleCloseSuccessAlert = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenSuccessAlert(false);
+  };
+
+  const handleCloseFailureAlert = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenFailureAlert(false);
   };
 
   return (
     <>
+      <Stack direction="row">
+        <Button
+          onClick={() => {
+            handleAddUserDialogClick({ id: 0, actionResult: false });
+          }}
+          variant="contained"
+          color="success"
+          size="large"
+          sx={{ mb: 1 }}
+        >
+          <AddIcon />
+        </Button>
+      </Stack>
       {professorsLoaded ? (
         <Box>
-          <Stack direction="row">
-            <Button
-              onClick={() => {
-                handleAddUserDialogClick({ id: 0, actionResult: false });
-              }}
-              variant="contained"
-              color="success"
-              size="large"
-            >
-              <AddIcon />
-            </Button>
-          </Stack>
           <TableContainer component={Paper} sx={{ mt: 1 }}>
             <Table sx={{ minWidth: 290 }} aria-label="simple table">
               <TableHead>
@@ -220,6 +283,32 @@ const ProfessorsTable = () => {
         value={manipulateUserValue}
         onClose={handleEditUserDialogClose}
       />
+      <Snackbar
+        open={openSuccessAlert}
+        autoHideDuration={6000}
+        onClose={handleCloseSuccessAlert}
+      >
+        <Alert
+          onClose={handleCloseSuccessAlert}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          {alertSuccessMessage}
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={openFailureAlert}
+        autoHideDuration={6000}
+        onClose={handleCloseFailureAlert}
+      >
+        <Alert
+          onClose={handleCloseFailureAlert}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+          {alertFailureMessage}
+        </Alert>
+      </Snackbar>
     </>
   );
 };

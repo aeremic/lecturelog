@@ -1,4 +1,5 @@
-import { get, getById } from "../Common/ServiceBase";
+import { IUser } from "../../Models/User";
+import { get, getById, post, remove } from "../Common/ServiceBase";
 
 const URL: string = "/user";
 
@@ -6,24 +7,18 @@ export const getUsers = async () => await get(URL);
 
 export const getUser = async (id: number) => await getById(URL, id);
 
-// export const getUsers = async () => {
-//   let result: any = null;
-//   try {
-//     result = await axios.get(URL + "", { headers: AuthHeader() });
-//   } catch (err) {
-//     console.log(err);
-//   }
+export const createOrUpdateUser = async (data: IUser) => {
+  try {
+    return await post(`${URL}`, data);
+  } catch (err) {
+    console.log(err); // TODO: Fix for PROD.
+  }
+};
 
-//   return result;
-// };
-
-// export const getUser = async (id: number) => {
-//   let result: any = null;
-//   try {
-//     result = await axios.get(URL + "/" + id, { headers: AuthHeader() });
-//   } catch (err) {
-//     console.log(err);
-//   }
-
-//   return result;
-// };
+export const removeUser = async (id: number) => {
+  try {
+    return await remove(`${URL}`, id);
+  } catch (err) {
+    console.log(err); // TODO: Fix for PROD.
+  }
+};

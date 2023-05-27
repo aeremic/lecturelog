@@ -21,12 +21,8 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
         return super.getById(this.userRepository, this.loggerUseCases, id);
     }
 
-    async create(userEntity: UserEntity): Promise<UserEntity> {
-        return super.create(this.userRepository, this.loggerUseCases, userEntity);
-    }
-
-    async update(userEntity: UserEntity): Promise<UserEntity> {
-        return super.update(this.userRepository, this.loggerUseCases, userEntity);
+    async createOrUpdate(userEntity: UserEntity): Promise<UserEntity> {
+        return super.createOrUpdate(this.userRepository, this.loggerUseCases, userEntity);
     }
 
     async delete(id: number): Promise<number> {

@@ -77,7 +77,7 @@ export class AuthService {
                     role: registerDto.role
                 };
 
-                if (await this.userUseCases.create(userEntity)) {
+                if (await this.userUseCases.createOrUpdate(userEntity)) {
                     result = true;
                 }
             }

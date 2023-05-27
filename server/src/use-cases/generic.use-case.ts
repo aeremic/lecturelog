@@ -1,7 +1,7 @@
 import { ErrorConstants } from "src/core/common/constants/error.constant";
 
 export class GenericUseCases<T extends { id?: number }> {
-    
+
     async get(repository: any, logger: any): Promise<T[]> {
         let result: T[] | PromiseLike<T[]>;
         try {
@@ -24,20 +24,7 @@ export class GenericUseCases<T extends { id?: number }> {
         return result;
     }
 
-    async create(repository: any, logger: any, entity: T): Promise<T> {
-        let result: T | PromiseLike<T>;
-        try {
-            if (entity) {
-                result = await repository.createOrUpdate(entity);
-            }
-        } catch (error) {
-            logger.log(ErrorConstants.PostMethodError, error?.message, error?.stack);
-        }
-
-        return result;
-    }
-
-    async update(repository: any, logger: any, entity: T): Promise<T> {
+    async createOrUpdate(repository: any, logger: any, entity: T): Promise<T> {
         let result: T | PromiseLike<T>;
         try {
             if (entity) {
