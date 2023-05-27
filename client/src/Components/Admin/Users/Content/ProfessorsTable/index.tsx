@@ -84,14 +84,9 @@ const ProfessorsTable = () => {
   const [alertType, setAlertType] = useState<AlertColor>();
 
   useEffect(() => {
-    getProfessors().then((response) => {
-      if (
-        response &&
-        response.status &&
-        response.status === HttpStatusCode.Ok &&
-        response.data
-      ) {
-        setProfessors(response.data);
+    getProfessors().then((res) => {
+      if (res && res.status && res.status === HttpStatusCode.Ok && res.data) {
+        setProfessors(res.data);
         setProfessorsLoaded(true);
       } else {
         setAlertType("error");

@@ -45,9 +45,9 @@ const StudentsTable = () => {
   const [studentsLoaded, setStudentsLoaded] = useState(false);
 
   useEffect(() => {
-    getStudents().then((response) => {
-      if (response && response.data) {
-        setStudents(response.data);
+    getStudents().then((res) => {
+      if (res && res.data) {
+        setStudents(res.data);
         setStudentsLoaded(true);
       }
     });

@@ -3,9 +3,21 @@ import { get, getById, post, remove } from "../Common/ServiceBase";
 
 const URL: string = "/user";
 
-export const getUsers = async () => await get(URL);
+export const getUsers: any = async () => {
+  try {
+    return await get(URL);
+  } catch (err) {
+    console.log(err); // TODO: Fix for PROD.
+  }
+};
 
-export const getUser = async (id: number) => await getById(URL, id);
+export const getUser: any = async (id: number) => {
+  try {
+    return await getById(URL, id);
+  } catch (err) {
+    console.log(err); // TODO: Fix for PROD.
+  }
+};
 
 export const createOrUpdateUser = async (data: IUser) => {
   try {
