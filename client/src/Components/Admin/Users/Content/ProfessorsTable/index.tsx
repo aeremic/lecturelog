@@ -19,8 +19,12 @@ import { Link } from "react-router-dom";
 import { getProfessors } from "../../../../../services/ProfessorsService";
 import {
   Action,
+  Add,
+  AddUser,
   AreYouSure,
   Cancel,
+  Edit,
+  EditUser,
   FirstName,
   LastName,
   NoProfessorsFound,
@@ -30,6 +34,7 @@ import {
 } from "../../../../../resources/Typography";
 import PaginationComponent from "../../../../Common/PaginationComponent";
 import ConfirmationDialog from "../../../../Common/ConfirmationDialog";
+import ManipulateUserDialog from "../../../ManipulateUserDialog";
 
 interface IProfessor {
   id: number;
@@ -38,8 +43,13 @@ interface IProfessor {
   lastname: string;
 }
 
+interface IManipulateUser {
+  id: number;
+  actionResult: boolean;
+}
+
 const ProfessorsTable = () => {
-  const initialState: IProfessor[] = [
+  const professorsTableInitialState: IProfessor[] = [
     {
       id: 0,
       email: "",
@@ -48,9 +58,22 @@ const ProfessorsTable = () => {
     },
   ];
 
+  const manipulateUserInitialState: IManipulateUser = {
+    id: 0,
+    actionResult: false,
+  };
+
   const [removeDialogOpen, setRemoveDialogOpen] = useState(false);
   const [removeIndexValue, setRemoveIndexValue] = useState(0);
-  const [professors, setProfessors] = useState(initialState);
+
+  const [editUserDialogOpen, setEditUserDialogOpen] = useState(false);
+  const [addUserDialogOpen, setAddUserDialogOpen] = useState(false);
+
+  const [manipulateUserValue, setManipulateUserValue] = useState(
+    manipulateUserInitialState
+  );
+
+  const [professors, setProfessors] = useState(professorsTableInitialState);
   const [professorsLoaded, setProfessorsLoaded] = useState(false);
 
   useEffect(() => {
@@ -74,6 +97,31 @@ const ProfessorsTable = () => {
     }
   };
 
+  const handleEditUserDialogClick = (editUser: IManipulateUser) => {
+    setManipulateUserValue(editUser);
+    setEditUserDialogOpen(true);
+  };
+
+  const handleEditUserDialogClose = (newValue?: any) => {
+    setEditUserDialogOpen(false);
+    if (newValue) {
+      setManipulateUserValue(newValue);
+    }
+  };
+
+  const handleAddUserDialogClick = (addUser: IManipulateUser) => {
+    setManipulateUserValue(addUser);
+    setAddUserDialogOpen(true);
+  };
+
+  const handleAddUserDialogClose = (newValue?: any) => {
+    debugger;
+    setAddUserDialogOpen(false);
+    if (newValue) {
+      setManipulateUserValue(newValue);
+    }
+  };
+
   return (
     <>
       {professorsLoaded ? (
@@ -87,8 +135,9 @@ const ProfessorsTable = () => {
           /> */}
           <Stack direction="row">
             <Button
-              component={Link}
-              to="/admin/adduser"
+              onClick={() => {
+                handleAddUserDialogClick({ id: 0, actionResult: false });
+              }}
               variant="contained"
               color="success"
               size="large"
@@ -157,6 +206,26 @@ const ProfessorsTable = () => {
         positiveAction={Yes}
         value={removeIndexValue}
         onClose={handleRemoveDialogClose}
+      />
+      <ManipulateUserDialog
+        id="add-user-menu"
+        keepMounted
+        open={addUserDialogOpen}
+        title={AddUser}
+        negativeAction={Cancel}
+        positiveAction={Add}
+        value={manipulateUserValue}
+        onClose={handleAddUserDialogClose}
+      />
+      <ManipulateUserDialog
+        id="edit-user-menu"
+        keepMounted
+        open={editUserDialogOpen}
+        title={EditUser}
+        negativeAction={Cancel}
+        positiveAction={Edit}
+        value={manipulateUserValue}
+        onClose={handleEditUserDialogClose}
       />
     </>
   );

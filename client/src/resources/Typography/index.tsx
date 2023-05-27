@@ -54,4 +54,22 @@ export const Cancel = "Cancel";
 
 export const Add = "Add";
 
+export const Edit = "Edit";
+
 export const AddUser = "Add User";
+
+export const EditUser = "Edit User";
+
+export const PleaseEnterFirstName = "Please Enter First Name";
+
+export const PleaseEnterLastName = "Please Enter Last Name";
+
+export const PleaseEnterEmail = "Please Enter Email";
+
+export const UserType = "User Type";
+
+export const Professor = "Professor";
+
+export const Student = "Student";
+
+export const Admin = "Admin";

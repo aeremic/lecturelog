@@ -5,7 +5,6 @@ import PrivateRoute from "./components/Common/PrivateRoute";
 import Login from "./components/Login";
 import Main from "./components/Login";
 import Users from "./components/Admin/Users";
-import AddUser from "./components/Admin/AddUser";
 import Subjects from "./components/Admin/Subjects";
 
 const App = () => {
@@ -16,7 +15,6 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<Main />} />
           <Route path="/admin/users" element={<Users />} />
-          <Route path="/admin/adduser" element={<AddUser />} />
           <Route path="/admin/subjects" element={<Subjects />} />
           {/* <PrivateRoute path="/">
             <Main />
