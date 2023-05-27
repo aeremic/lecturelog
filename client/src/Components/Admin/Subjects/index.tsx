@@ -1,5 +1,3 @@
-import React from "react";
-import Loader from "../Common/Loader";
 import { ErrorBoundary } from "react-error-boundary";
 import { ThemeProvider } from "@mui/material";
 import Content from "./Content";
