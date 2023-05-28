@@ -1,17 +1,29 @@
 import { MailerService } from "@nestjs-modules/mailer";
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class MailService {
-    constructor(private mailerService: MailerService) { }
+    @Inject()
+    private readonly mailerService: MailerService;
 
-    async sendMail(email: string, name: string) {
+    @Inject()
+    private readonly config: ConfigService;
+
+    // TODO: Create resource file.
+    async sendRegistrationMail(id: number, email: string, firstname: string, code: string) {
+        let baseUrl = this.config.get("APP_URL");
+        let templatePath = './utils/templates/registration';
+        let subject = "BolognApp - New Registration";
+
         await this.mailerService.sendMail({
             to: email,
-            subject: 'Greeting from NestJS NodeMailer',
-            template: './utils/templates/registration',
+            subject: subject,
+            template: templatePath,
             context: {
-                name: name
+                firstname: firstname,
+                url: baseUrl + `/register?=${id}`,
+                code: code
             }
         })
     }
