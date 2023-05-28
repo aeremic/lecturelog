@@ -6,6 +6,8 @@ import { LoggerUseCases } from '../logger/logger.use-case';
 import { ErrorConstants } from 'src/core/common/constants/error.constant';
 import { ProfessorsDto } from 'src/core/dtos/professors.dto';
 import { MailService } from 'src/services';
+import { v4 as uuid } from 'uuid';
+import { Encoding } from 'src/core/common/encoding';
 
 @Injectable()
 export class UserUseCases extends GenericUseCases<UserEntity>{
@@ -27,7 +29,26 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
     }
 
     async createOrUpdate(userEntity: UserEntity): Promise<UserEntity> {
-        return super.createOrUpdate(this.userRepository, this.loggerUseCases, userEntity);
+        // TODO: Return some type of response if user already exist with that email!
+        let result: UserEntity | PromiseLike<UserEntity>;
+
+        try {
+            let userInDb = await this.getByEmail(userEntity.email);
+            if (!this.isFound(userInDb)) {
+                userEntity.generatedPassword = Encoding.generateRandomPassword();
+                userEntity.isActivated = false;
+
+                // TODO: Remove comment for PROD
+                result = await super.createOrUpdate(this.userRepository, this.loggerUseCases, userEntity);
+                if (result && result.id) {
+                    // await this.mailService.sendRegistrationMail(result.id, userEntity.email, userEntity.firstname, userEntity.generatedPassword);
+                }
+            }
+        } catch (error) {
+            this.loggerUseCases.log(ErrorConstants.GetMethodError, error?.message, error?.stack);
+        }
+
+        return result;
     }
 
     async delete(id: number): Promise<number> {
@@ -67,8 +88,6 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
         let skip = page * size;
 
         try {
-            //let temp = await this.mailService.sendMail("jagodinagrobari@gmail.com", "proba");
-
             professors = await this.userRepository.getProfessors(size, skip);
             totalProfessorsCount = await this.userRepository.getProfessorsCount();
 
