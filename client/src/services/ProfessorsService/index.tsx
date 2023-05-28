@@ -2,10 +2,9 @@ import { get } from "../Common/ServiceBase";
 
 const URL: string = "/professor";
 
-// TODO: Wrap call with try-catch block. Error is thrown when session expires!
-export const getProfessors = async () => {
+export const getProfessors = async (query: string) => {
   try {
-    return await get(`${URL}/getProfessors`);
+    return await get(`${URL}/getProfessors${query}`);
   } catch (err) {
     console.log(err); // TODO: Fix for PROD.
   }

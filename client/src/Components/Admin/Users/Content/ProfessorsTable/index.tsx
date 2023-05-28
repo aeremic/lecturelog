@@ -11,6 +11,7 @@ import {
   TableCell,
   TableContainer,
   TableHead,
+  TablePagination,
   TableRow,
   Typography,
 } from "@mui/material";
@@ -61,6 +62,14 @@ const ProfessorsTable = () => {
     },
   ];
 
+  const [professors, setProfessors] = useState(professorsTableInitialState);
+  const [professorsLoaded, setProfessorsLoaded] = useState(false);
+  const [professorsCount, setProfessorsCount] = useState(0);
+  const [controller, setController] = useState({
+    page: 0,
+    rowsPerPage: 10,
+  });
+
   const manipulateUserInitialState: IManipulateUser = {
     id: 0,
     actionResult: false,
@@ -76,17 +85,18 @@ const ProfessorsTable = () => {
     manipulateUserInitialState
   );
 
-  const [professors, setProfessors] = useState(professorsTableInitialState);
-  const [professorsLoaded, setProfessorsLoaded] = useState(false);
-
   const [openAlert, setOpenAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState<AlertColor>();
 
   useEffect(() => {
-    getProfessors().then((res) => {
-      if (res && res.status && res.status === HttpStatusCode.Ok && res.data) {
-        setProfessors(res.data);
+    getProfessors(
+      `?page=${controller.page}&size=${controller.rowsPerPage}`
+    ).then((res) => {
+      if (res && res.status === HttpStatusCode.Ok && res.data) {
+        setProfessors(res.data.professors ?? []);
+        setProfessorsCount(res.data.count);
+
         setProfessorsLoaded(true);
       } else {
         setAlertType("error");
@@ -94,7 +104,21 @@ const ProfessorsTable = () => {
         setOpenAlert(true);
       }
     });
-  }, [professorsLoaded]);
+  }, [controller, professorsLoaded]);
+
+  const handlePageChange = (event: any, newPage: number) => {
+    setProfessorsLoaded(false);
+    setController({ ...controller, page: newPage });
+  };
+
+  const handleChangeRowsPerPage = (event: any) => {
+    setProfessorsLoaded(false);
+    setController({
+      ...controller,
+      rowsPerPage: parseInt(event.target.value, 10),
+      page: 0,
+    });
+  };
 
   const handleRemoveDialogClick = (index: number) => {
     setRemoveIndexValue(index);
@@ -111,6 +135,7 @@ const ProfessorsTable = () => {
         setAlertType("success");
         setAlertMessage(UserSuccessfullyRemoved);
         setOpenAlert(true);
+
         setProfessorsLoaded(false);
       } else {
         setAlertType("error");
@@ -120,20 +145,20 @@ const ProfessorsTable = () => {
     }
   };
 
-  const handleEditUserDialogClick = (editUser: IManipulateUser) => {
-    setManipulateUserValue(editUser);
-    setEditUserDialogOpen(true);
-  };
+  // const handleEditUserDialogClick = (editUser: IManipulateUser) => {
+  //   setManipulateUserValue(editUser);
+  //   setEditUserDialogOpen(true);
+  // };
 
-  const handleEditUserDialogClose = (newValue?: any) => {
-    // TODO: Bug - Values not updated.
-    setEditUserDialogOpen(false);
-    if (newValue) {
-      setManipulateUserValue(newValue);
-    }
+  // const handleEditUserDialogClose = (newValue?: any) => {
+  //   // TODO: Bug - Values not updated.
+  //   setEditUserDialogOpen(false);
+  //   if (newValue) {
+  //     setManipulateUserValue(newValue);
+  //   }
 
-    setProfessorsLoaded(false);
-  };
+  //   setProfessorsLoaded(false);
+  // };
 
   const handleAddUserDialogClick = (addUser: IManipulateUser) => {
     setManipulateUserValue(addUser);
@@ -230,7 +255,14 @@ const ProfessorsTable = () => {
             </Table>
           </TableContainer>{" "}
           <Box sx={{ m: 1 }}>
-            <PaginationComponent />
+            <TablePagination
+              component="div"
+              onPageChange={handlePageChange}
+              page={controller.page}
+              count={professorsCount}
+              rowsPerPage={controller.rowsPerPage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            ></TablePagination>
           </Box>
         </Box>
       ) : (
@@ -258,7 +290,7 @@ const ProfessorsTable = () => {
         value={manipulateUserValue}
         onClose={handleAddUserDialogClose}
       />
-      <ManipulateUserDialog
+      {/* <ManipulateUserDialog
         id="edit-professor-menu"
         keepMounted
         open={editUserDialogOpen}
@@ -268,7 +300,7 @@ const ProfessorsTable = () => {
         defaultRoleEnum={RoleEnum.Professor}
         value={manipulateUserValue}
         onClose={handleEditUserDialogClose}
-      />
+      /> */}
       <Snackbar
         open={openAlert}
         autoHideDuration={6000}

@@ -4,6 +4,7 @@ import { UserEntity } from 'src/core/entities/user.entity';
 import { GenericUseCases } from '../generic.use-case';
 import { LoggerUseCases } from '../logger/logger.use-case';
 import { ErrorConstants } from 'src/core/common/constants/error.constant';
+import { ProfessorsDto } from 'src/core/dtos/professors.dto';
 
 @Injectable()
 export class UserUseCases extends GenericUseCases<UserEntity>{
@@ -55,10 +56,20 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
         return result;
     }
 
-    async getProfessors(): Promise<UserEntity[]> {
-        let result: UserEntity[] | PromiseLike<UserEntity[]>;
+    async getProfessors(page: number, size: number): Promise<ProfessorsDto> {
+        let result: ProfessorsDto | PromiseLike<ProfessorsDto>;
+        let professors: UserEntity[] | PromiseLike<UserEntity[]>;
+        let totalProfessorsCount: number | PromiseLike<number>;
+        let skip = page * size;
+
         try {
-            result = await this.userRepository.getProfessors();
+            professors = await this.userRepository.getProfessors(size, skip);
+            totalProfessorsCount = await this.userRepository.getProfessorsCount();
+
+            result = {
+                professors: professors,
+                count: totalProfessorsCount
+            }
         } catch (error) {
             this.loggerUseCases.log(ErrorConstants.GetMethodError, error?.message, error?.stack);
         }

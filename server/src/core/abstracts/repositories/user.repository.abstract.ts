@@ -19,7 +19,9 @@ export abstract class UserRepositoryAbstract {
 
     abstract getByEmail(email: string): Promise<UserEntity>;
 
-    abstract getProfessors(): Promise<UserEntity[]>;
+    abstract getProfessors(size: number, skip: number): Promise<UserEntity[]>;
+
+    abstract getProfessorsCount(): Promise<number>;
 
     abstract getStudents(): Promise<UserEntity[]>;
 }
