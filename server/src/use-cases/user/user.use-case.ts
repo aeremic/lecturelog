@@ -40,7 +40,7 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
 
                 // TODO: Remove comment for PROD
                 result = await super.createOrUpdate(this.userRepository, this.loggerUseCases, userEntity);
-                if (result && result.id) {
+                if (result && result.id != null) {
                     // await this.mailService.sendRegistrationMail(result.id, userEntity.email, userEntity.firstname, userEntity.generatedPassword);
                 }
             }
