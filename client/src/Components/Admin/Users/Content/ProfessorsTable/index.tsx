@@ -95,7 +95,7 @@ const ProfessorsTable = () => {
     ).then((res) => {
       if (res && res.status === HttpStatusCode.Ok && res.data) {
         setProfessors(res.data.professors ?? []);
-        setProfessorsCount(res.data.count);
+        setProfessorsCount(res.data.count ?? 0);
 
         setProfessorsLoaded(true);
       } else {

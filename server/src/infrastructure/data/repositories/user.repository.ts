@@ -53,7 +53,7 @@ export class UserRepository implements UserRepositoryAbstract {
 
     async getProfessors(size: number, skip: number): Promise<UserEntity[]> {
         let result = await this.userModelRepository.find({
-            where: { role: UserMapper.getType(RoleEnum.professor) }, order: { email: "DESC" },
+            where: { role: UserMapper.getType(RoleEnum.professor) }, order: { email: "ASC" },
             take: size,
             skip: skip
         });

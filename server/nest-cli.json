@@ -4,6 +4,6 @@
   "sourceRoot": "src",
   "compilerOptions": {
     "deleteOutDir": true,
-    "assets": ["utils/envs/*"]
+    "assets": ["utils/envs/*", "utils/templates/*"]
   }
 }

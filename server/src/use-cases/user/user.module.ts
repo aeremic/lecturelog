@@ -8,9 +8,10 @@ import { UserController } from 'src/controllers/user.controller';
 import { LoggerModule } from '../logger/logger.module';
 import { ProfessorController } from 'src/controllers/professor.controller';
 import { StudentController } from 'src/controllers/student.controller';
+import { MailModule } from 'src/services/mail.module';
 
 @Module({
-    imports: [LoggerModule, TypeOrmModule.forFeature([User, StudentsSubjects, ProfessorsSubjects])],
+    imports: [LoggerModule, MailModule, TypeOrmModule.forFeature([User, StudentsSubjects, ProfessorsSubjects])],
     providers: [
         UserUseCases,
         {

@@ -5,11 +5,15 @@ import { GenericUseCases } from '../generic.use-case';
 import { LoggerUseCases } from '../logger/logger.use-case';
 import { ErrorConstants } from 'src/core/common/constants/error.constant';
 import { ProfessorsDto } from 'src/core/dtos/professors.dto';
+import { MailService } from 'src/services';
 
 @Injectable()
 export class UserUseCases extends GenericUseCases<UserEntity>{
     @Inject(UserRepositoryAbstract)
     private userRepository: UserRepositoryAbstract
+
+    @Inject(MailService)
+    private mailService: MailService;
 
     @Inject(LoggerUseCases)
     private loggerUseCases: LoggerUseCases;
@@ -63,6 +67,8 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
         let skip = page * size;
 
         try {
+            //let temp = await this.mailService.sendMail("jagodinagrobari@gmail.com", "proba");
+
             professors = await this.userRepository.getProfessors(size, skip);
             totalProfessorsCount = await this.userRepository.getProfessorsCount();
 
