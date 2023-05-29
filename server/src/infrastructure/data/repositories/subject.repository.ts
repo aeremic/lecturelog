@@ -1,7 +1,4 @@
 import { Repository } from "typeorm";
-import { BadGatewayException } from '@nestjs/common';
-import { rejects } from "assert";
-import { resolve } from "path";
 import { InjectRepository } from "@nestjs/typeorm";
 import { SubjectEntity } from "src/core/entities";
 import { SubjectRepositoryAbstract } from "src/core/abstracts/repositories/subject.repository.abstract";

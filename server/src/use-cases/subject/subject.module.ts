@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ProfessorsSubjects, StudentsSubjects, Subject } from 'src/infrastructure/data/models';
+import { ProfessorsSubjectGroups, StudentsSubjectGroups, Subject, SubjectGroup } from 'src/infrastructure/data/models';
 import { SubjectUseCases } from './subject.use-case';
 import { SubjectController } from 'src/controllers/subject.controller';
 import { SubjectRepositoryAbstract } from 'src/core/abstracts/repositories/subject.repository.abstract';
@@ -9,7 +9,7 @@ import { LoggerModule } from '../logger/logger.module';
 import { UserModule } from '../user/user.module';
 
 @Module({
-    imports: [UserModule, LoggerModule, TypeOrmModule.forFeature([Subject, StudentsSubjects, ProfessorsSubjects])],
+    imports: [UserModule, LoggerModule, TypeOrmModule.forFeature([Subject, SubjectGroup, StudentsSubjectGroups, ProfessorsSubjectGroups])],
     providers: [
         SubjectUseCases,
         {

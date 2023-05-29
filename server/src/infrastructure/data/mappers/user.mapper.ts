@@ -50,8 +50,8 @@ export class UserMapper {
             isActivated: userEntity?.isActivated,
             role: userType,
 
-            studentsSubjects: null,
-            professorsSubjects: null
+            studentsSubjectGroups: null,
+            professorsSubjectGroups: null
         };
 
         return userModel;
