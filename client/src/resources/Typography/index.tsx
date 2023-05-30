@@ -16,6 +16,8 @@ export const Email = "Email";
 
 export const Password = "Password";
 
+export const RepeatPassword = "Repeat Password";
+
 export const PleaseEnterYourEmail = "Please enter your email";
 
 export const PleaseEnterYourPassword = "Please enter your password";
@@ -81,3 +83,18 @@ export const UserAddedSuccessfully = "User added successfully";
 export const UserNotAdded = "User not added";
 
 export const AlertFailureMessage = "Something went wrong! :(";
+
+export const RegistrationWithEmail = "Registration with email";
+
+export const Code = "Code";
+
+export const PleaseEnterYourCode = "Please enter your code";
+
+export const PleaseEnterYourNewPassword = "Please enter your new password";
+
+export const PleaseRepeatYourNewPassword = "Please repeat your new password";
+
+export const Register = "Register";
+
+export const EmailRegistrationSubtitle =
+  "Please enter your temporary code to activate this account";

@@ -22,7 +22,7 @@ export class MailService {
             template: templatePath,
             context: {
                 firstname: firstname,
-                url: baseUrl + `/register?=${id}`,
+                url: baseUrl + `/emailregistration?id=${id}`,
                 code: code
             }
         })

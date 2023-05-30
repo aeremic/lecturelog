@@ -7,8 +7,10 @@ export class EmailVerificationMapper {
         let emailVerificationEntity: EmailVerificationEntity = {
             id: emailVerificationModel?.id,
             userId: emailVerificationModel?.userId,
+            email: emailVerificationModel?.email,
             sentOn: emailVerificationModel?.sentOn,
-            code: emailVerificationModel?.code
+            code: emailVerificationModel?.code,
+            expired: emailVerificationModel?.expired,
         };
 
         return emailVerificationEntity;
@@ -29,8 +31,10 @@ export class EmailVerificationMapper {
         let emailVerificationModel: EmailVerification = {
             id: emailVerificationEntity?.id,
             userId: emailVerificationEntity?.userId,
+            email: emailVerificationEntity?.email,
             sentOn: emailVerificationEntity?.sentOn,
             code: emailVerificationEntity?.code,
+            expired: emailVerificationEntity?.expired,
 
             user: null
         };

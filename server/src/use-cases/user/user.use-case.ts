@@ -7,8 +7,9 @@ import { ErrorConstants } from 'src/core/common/constants/error.constant';
 import { ProfessorsDto } from 'src/core/dtos/professors.dto';
 import { MailService } from 'src/services';
 import { Encoding } from 'src/core/common/encoding';
-import { EmailVerificationUseCases } from '../emailverification/emailverification.use-case';
+import { EmailVerificationUseCases } from '../emailverification/email-verification.use-case';
 import { EmailVerificationEntity } from 'src/core/entities';
+import { EmailRegistrationDto } from 'src/core/dtos';
 
 @Injectable()
 export class UserUseCases extends GenericUseCases<UserEntity>{
@@ -33,24 +34,9 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
     }
 
     async createOrUpdate(userEntity: UserEntity): Promise<UserEntity> {
-        // TODO: Return some type of response if user already exist with that email!
         let result: UserEntity | PromiseLike<UserEntity>;
-
         try {
-            let userInDb = await this.getByEmail(userEntity.email);
-            if (!this.isFound(userInDb) || !userInDb.isActivated) {
-
-                userEntity.isActivated = false;
-                result = await super.createOrUpdate(this.userRepository, this.loggerUseCases, userEntity);
-
-                if (result && result.id != null) {
-                    let code = Encoding.generateRandomPassword();
-
-                    // TODO: Remove comment for PROD
-                    await this.mailService.sendRegistrationMail(result.id, result.email, result.firstname, code);
-                    await this.emailVerificationUseCases.createValidation(result.id, code);
-                }
-            }
+            result = await super.createOrUpdate(this.userRepository, this.loggerUseCases, userEntity);
         } catch (error) {
             this.loggerUseCases.log(ErrorConstants.GetMethodError, error?.message, error?.stack);
         }
@@ -115,6 +101,57 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
             result = await this.userRepository.getStudents();
         } catch (error) {
             this.loggerUseCases.log(ErrorConstants.GetMethodError, error?.message, error?.stack);
+        }
+
+        return result;
+    }
+
+    async createUser(userEntity: UserEntity): Promise<UserEntity> {
+        // TODO: Return some type of response if user already exist with that email!
+        let result: UserEntity | PromiseLike<UserEntity>;
+
+        try {
+            let userInDb = await this.getByEmail(userEntity.email);
+            if (!this.isFound(userInDb) || !userInDb.isActivated) {
+
+                userEntity.isActivated = false;
+                result = await super.createOrUpdate(this.userRepository, this.loggerUseCases, userEntity);
+
+                if (this.isFound(result)) {
+                    let code = Encoding.generateRandomPassword();
+
+                    // TODO: Remove comment for PROD
+                    // await this.mailService.sendRegistrationMail(result.id, result.email, result.firstname, code);
+
+                    await this.emailVerificationUseCases.invalidPreviousEmailValidation(result.email);
+                    await this.emailVerificationUseCases.createValidation(result.id, result.email, code);
+                }
+            }
+        } catch (error) {
+            this.loggerUseCases.log(ErrorConstants.GetMethodError, error?.message, error?.stack);
+        }
+
+        return result;
+    }
+
+    async emailRegistration(emailRegistrationDto: EmailRegistrationDto): Promise<boolean> {
+        let result: boolean | PromiseLike<boolean> = false;
+        try {
+            let emailVerification = await this.emailVerificationUseCases.getLatestEmailVerificationByUserId(emailRegistrationDto.userId, emailRegistrationDto.code);
+            if (this.emailVerificationUseCases.isFound(emailVerification)) {
+                let expirationDate: Date = new Date(emailVerification.sentOn.setMinutes(emailVerification.sentOn.getMinutes() + 10));
+                let currentDate: Date = new Date(Date.now());
+
+                if (currentDate <= expirationDate) {
+                    let userInDb = await this.getById(emailRegistrationDto.userId);
+                    if (this.isFound(userInDb)) {
+                        userInDb.isActivated = true;
+                        await this.createOrUpdate(userInDb);
+                    }
+                }
+            }
+        } catch (error) {
+            this.loggerUseCases.log(ErrorConstants.PostMethodError, error?.message, error?.stack);
         }
 
         return result;

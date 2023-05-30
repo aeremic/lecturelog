@@ -6,6 +6,7 @@ import Login from "./components/Login";
 import Main from "./components/Login";
 import Users from "./components/Admin/Users";
 import Subjects from "./components/Admin/Subjects";
+import EmailRegistration from "./components/EmailRegistration";
 
 const App = () => {
   return (
@@ -13,6 +14,7 @@ const App = () => {
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/emailregistration" element={<EmailRegistration />} />
           <Route path="/" element={<Main />} />
           <Route path="/admin/users" element={<Users />} />
           <Route path="/admin/subjects" element={<Subjects />} />

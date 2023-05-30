@@ -12,6 +12,7 @@ import { Subjects, Users } from "../../../resources/Typography";
 import { Link } from "react-router-dom";
 
 const Menu = () => {
+  // TODO: Hide menu when logged off.
   return (
     <Box role="presentation">
       <List>

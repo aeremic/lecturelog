@@ -5,7 +5,8 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }));
+  // TODO: Disable error messages for PROD
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true, /*disableErrorMessages: true*/ }));
   app.enableCors();
 
   await app.listen(30000);

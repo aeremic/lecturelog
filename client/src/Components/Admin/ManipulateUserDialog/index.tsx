@@ -27,7 +27,7 @@ import {
 import { useForm } from "react-hook-form";
 import { Professor } from "../../../resources/Typography/index";
 import { RoleEnum } from "../../../Models/Enums";
-import { createOrUpdateUser } from "../../../services/UsersService";
+import { createUser } from "../../../services/UsersService";
 import { IUser } from "../../../Models/User";
 import { HttpStatusCode } from "axios";
 
@@ -106,7 +106,7 @@ const ManipulateUserDialog = (props: IManipulateUserDialogRawProps) => {
       year: data.year,
     };
 
-    let res: any = await createOrUpdateUser(user);
+    let res: any = await createUser(user);
     if (
       res &&
       res.status &&

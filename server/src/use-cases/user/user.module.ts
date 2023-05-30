@@ -9,7 +9,7 @@ import { LoggerModule } from '../logger/logger.module';
 import { ProfessorController } from 'src/controllers/professor.controller';
 import { StudentController } from 'src/controllers/student.controller';
 import { MailModule } from 'src/services/mail.module';
-import { EmailVerificationModule } from '../emailverification/emailverification.module';
+import { EmailVerificationModule } from '../emailverification/email-verification.module';
 
 @Module({
     imports: [LoggerModule, MailModule, EmailVerificationModule, TypeOrmModule.forFeature([User, EmailVerification, StudentsSubjectGroups, ProfessorsSubjectGroups])],

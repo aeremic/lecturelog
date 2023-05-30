@@ -19,9 +19,9 @@ export const getUser: any = async (id: number) => {
   }
 };
 
-export const createOrUpdateUser = async (data: IUser) => {
+export const createUser = async (data: IUser) => {
   try {
-    return await post(`${URL}`, data);
+    return await post(`${URL}/createUser`, data);
   } catch (err) {
     console.log(err); // TODO: Fix for PROD.
   }

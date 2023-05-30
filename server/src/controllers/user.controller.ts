@@ -4,6 +4,7 @@ import { UserEntity } from '../core/entities/user.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RoleGuard } from 'src/auth/guards/role.guard';
+import { EmailRegistrationDto } from 'src/core/dtos';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('api/user')
@@ -44,5 +45,19 @@ export class UserController {
     @Get('/getbyfirstname/:firstname')
     getByFirstname(@Param('firstname') firstname: any) {
         return this.userUseCases.getByFirstname(firstname);
+    }
+
+    @Roles('admin')
+    @UseGuards(RoleGuard)
+    @Post('/createUser')
+    createUser(@Body() userEntity: any): Promise<UserEntity> {
+        return this.userUseCases.createUser(userEntity)
+    }
+
+    @Roles('admin', 'professor', 'student')
+    @UseGuards(RoleGuard)
+    @Post('/emailRegistration')
+    emailRegistration(@Body() emailRegistrationDto: EmailRegistrationDto): Promise<boolean> {
+        return this.userUseCases.emailRegistration(emailRegistrationDto)
     }
 }

@@ -2,7 +2,7 @@ import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { EmailVerification } from "../models";
 import { EmailVerificationEntity } from "src/core/entities";
-import { EmailVerificationRepositoryAbstract } from "src/core/abstracts/repositories/emailverification.repository.abstract";
+import { EmailVerificationRepositoryAbstract } from "src/core/abstracts/repositories/email-verification.repository.abstract";
 import { EmailVerificationMapper } from "../mappers/emailverification.mapper";
 
 export class EmailVerificationRepository implements EmailVerificationRepositoryAbstract {
@@ -38,4 +38,19 @@ export class EmailVerificationRepository implements EmailVerificationRepositoryA
 
     //#endregion
 
+    async getLatestEmailVerificationByUserId(userId: number, code: string): Promise<EmailVerificationEntity> {
+        let result = await this.emailVerificationModelRepository.findOne({
+            where: { userId: userId, code: code, expired: false }, order: { sentOn: "DESC" }
+        })
+
+        return EmailVerificationMapper.ToEntity(result);
+    }
+
+    async getPreviousEmailValidation(email: string): Promise<EmailVerificationEntity> {
+        let result = await this.emailVerificationModelRepository.findOne({
+            where: { email: email, expired: false }
+        })
+
+        return EmailVerificationMapper.ToEntity(result);
+    }
 }

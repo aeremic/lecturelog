@@ -15,4 +15,7 @@ export abstract class EmailVerificationRepositoryAbstract {
 
     //#endregion
 
+    abstract getPreviousEmailValidation(email: string): Promise<EmailVerificationEntity>;
+
+    abstract getLatestEmailVerificationByUserId(userId: number, code: string): Promise<EmailVerificationEntity>;
 }

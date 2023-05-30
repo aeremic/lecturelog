@@ -3,7 +3,11 @@ export class EmailVerificationEntity {
 
     public userId: number;
 
+    public email: string;
+
     public sentOn: Date;
 
     public code: string;
+
+    public expired?: boolean;
 }

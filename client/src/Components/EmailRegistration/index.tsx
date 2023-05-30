@@ -1,11 +1,11 @@
 import { Box, Card, CardContent, ThemeProvider } from "@mui/material";
-import theme from "../../styles";
-import Content from "./Content";
+import theme from "../../styles/index";
+import Header from "../Common/Header";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorComponent from "../Common/ErrorComponent";
-import Header from "../Common/Header";
+import Content from "./Content";
 
-const Login = () => {
+const EmailRegistration = () => {
   return (
     <ThemeProvider theme={theme}>
       <Header />
@@ -27,4 +27,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default EmailRegistration;
