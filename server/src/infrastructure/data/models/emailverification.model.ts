@@ -19,7 +19,7 @@ export class EmailVerification {
     public code: string;
 
     @Column({ type: 'boolean', nullable: true })
-    public expired?: boolean;
+    public notValid?: boolean;
 
     @ManyToOne(() => User, user => user.emailVerifications)
     public user: User;

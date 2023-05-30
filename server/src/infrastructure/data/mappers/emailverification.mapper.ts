@@ -10,7 +10,7 @@ export class EmailVerificationMapper {
             email: emailVerificationModel?.email,
             sentOn: emailVerificationModel?.sentOn,
             code: emailVerificationModel?.code,
-            expired: emailVerificationModel?.expired,
+            notValid: emailVerificationModel?.notValid,
         };
 
         return emailVerificationEntity;
@@ -34,7 +34,7 @@ export class EmailVerificationMapper {
             email: emailVerificationEntity?.email,
             sentOn: emailVerificationEntity?.sentOn,
             code: emailVerificationEntity?.code,
-            expired: emailVerificationEntity?.expired,
+            notValid: emailVerificationEntity?.notValid,
 
             user: null
         };

@@ -40,7 +40,7 @@ export class EmailVerificationRepository implements EmailVerificationRepositoryA
 
     async getLatestEmailVerificationByUserId(userId: number, code: string): Promise<EmailVerificationEntity> {
         let result = await this.emailVerificationModelRepository.findOne({
-            where: { userId: userId, code: code, expired: false }, order: { sentOn: "DESC" }
+            where: { userId: userId, code: code, notValid: false }, order: { sentOn: "DESC" }
         })
 
         return EmailVerificationMapper.ToEntity(result);
@@ -48,7 +48,7 @@ export class EmailVerificationRepository implements EmailVerificationRepositoryA
 
     async getPreviousEmailValidation(email: string): Promise<EmailVerificationEntity> {
         let result = await this.emailVerificationModelRepository.findOne({
-            where: { email: email, expired: false }
+            where: { email: email }
         })
 
         return EmailVerificationMapper.ToEntity(result);

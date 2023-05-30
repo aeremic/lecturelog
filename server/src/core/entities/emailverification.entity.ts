@@ -9,5 +9,5 @@ export class EmailVerificationEntity {
 
     public code: string;
 
-    public expired?: boolean;
+    public notValid?: boolean;
 }

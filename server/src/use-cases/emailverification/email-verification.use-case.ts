@@ -33,7 +33,8 @@ export class EmailVerificationUseCases extends GenericUseCases<EmailVerification
             userId: userId,
             email: email,
             sentOn: new Date(Date.now()),
-            code: code
+            code: code,
+            notValid: false
         };
 
         return this.createOrUpdate(emailVerification);
@@ -42,7 +43,7 @@ export class EmailVerificationUseCases extends GenericUseCases<EmailVerification
     async invalidPreviousEmailValidation(email: string): Promise<void> {
         let previousEmailValidation = await this.emailVerificationRepository.getPreviousEmailValidation(email);
         if (this.isFound(previousEmailValidation)) {
-            previousEmailValidation.expired = true;
+            previousEmailValidation.notValid = true;
             this.createOrUpdate(previousEmailValidation);
         }
     }
