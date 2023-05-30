@@ -16,9 +16,9 @@ export class StudentsSubjectGroups {
     @Column({ type: 'decimal' })
     public sumOfPresencePoints: number;
 
-    @ManyToOne(() => User, student => student.studentsSubjectGroups, { cascade: true })
+    @ManyToOne(() => User, student => student.studentsSubjectGroups)
     public student: User;
 
-    @ManyToOne(() => SubjectGroup, subjectGroup => subjectGroup.studentsSubjectGroups, { cascade: true })
+    @ManyToOne(() => SubjectGroup, subjectGroup => subjectGroup.studentsSubjectGroups)
     public subjectGroup: SubjectGroup;
 }

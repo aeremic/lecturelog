@@ -1,5 +1,5 @@
 import { SubjectEntity } from "src/core/entities";
-import { Subject, SubjectGroup } from "../models";
+import { Subject } from "../models";
 import { SubjectGroupMapper } from "./subjectgroup.mapper";
 
 export class SubjectMapper {

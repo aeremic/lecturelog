@@ -13,7 +13,6 @@ export class UserMapper {
             index: userModel?.index,
             year: userModel?.year,
             hash: userModel?.hash,
-            generatedPassword: userModel?.generatedPassword,
             isActivated: userModel?.isActivated
         };
 
@@ -46,12 +45,12 @@ export class UserMapper {
             index: userEntity?.index,
             year: userEntity?.year,
             hash: userEntity?.hash,
-            generatedPassword: userEntity?.generatedPassword,
             isActivated: userEntity?.isActivated,
             role: userType,
 
             studentsSubjectGroups: null,
-            professorsSubjectGroups: null
+            professorsSubjectGroups: null,
+            emailVerifications: null
         };
 
         return userModel;

@@ -15,8 +15,6 @@ export class UserEntity {
 
   public hash?: string;
 
-  public generatedPassword?: string;
-
   public isActivated?: boolean;
 
   public role?: RoleEnum

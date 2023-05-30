@@ -6,19 +6,23 @@ import { LoggerUseCases } from '../logger/logger.use-case';
 import { ErrorConstants } from 'src/core/common/constants/error.constant';
 import { ProfessorsDto } from 'src/core/dtos/professors.dto';
 import { MailService } from 'src/services';
-import { v4 as uuid } from 'uuid';
 import { Encoding } from 'src/core/common/encoding';
+import { EmailVerificationUseCases } from '../emailverification/emailverification.use-case';
+import { EmailVerificationEntity } from 'src/core/entities';
 
 @Injectable()
 export class UserUseCases extends GenericUseCases<UserEntity>{
     @Inject(UserRepositoryAbstract)
-    private userRepository: UserRepositoryAbstract
+    private userRepository: UserRepositoryAbstract;
 
     @Inject(MailService)
     private mailService: MailService;
 
     @Inject(LoggerUseCases)
     private loggerUseCases: LoggerUseCases;
+
+    @Inject(EmailVerificationUseCases)
+    private emailVerificationUseCases: EmailVerificationUseCases;
 
     async get(): Promise<UserEntity[]> {
         return super.get(this.userRepository, this.loggerUseCases);
@@ -34,14 +38,17 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
 
         try {
             let userInDb = await this.getByEmail(userEntity.email);
-            if (!this.isFound(userInDb)) {
-                userEntity.generatedPassword = Encoding.generateRandomPassword();
-                userEntity.isActivated = false;
+            if (!this.isFound(userInDb) || !userInDb.isActivated) {
 
-                // TODO: Remove comment for PROD
+                userEntity.isActivated = false;
                 result = await super.createOrUpdate(this.userRepository, this.loggerUseCases, userEntity);
+
                 if (result && result.id != null) {
-                    // await this.mailService.sendRegistrationMail(result.id, userEntity.email, userEntity.firstname, userEntity.generatedPassword);
+                    let code = Encoding.generateRandomPassword();
+
+                    // TODO: Remove comment for PROD
+                    await this.mailService.sendRegistrationMail(result.id, result.email, result.firstname, code);
+                    await this.emailVerificationUseCases.createValidation(result.id, code);
                 }
             }
         } catch (error) {

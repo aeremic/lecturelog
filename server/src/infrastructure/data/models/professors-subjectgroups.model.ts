@@ -13,9 +13,9 @@ export class ProfessorsSubjectGroups {
     @Column()
     public subjectGroupId: number;
 
-    @ManyToOne(() => User, professor => professor.professorsSubjectGroups, { cascade: true })
+    @ManyToOne(() => User, professor => professor.professorsSubjectGroups)
     public professor: User;
 
-    @ManyToOne(() => SubjectGroup, subjectGroup => subjectGroup.professorsSubjectGroups, { cascade: true })
+    @ManyToOne(() => SubjectGroup, subjectGroup => subjectGroup.professorsSubjectGroups)
     public subjectGroup: SubjectGroup;
 }

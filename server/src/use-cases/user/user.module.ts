@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ProfessorsSubjectGroups, StudentsSubjectGroups, User } from 'src/infrastructure/data/models';
+import { ProfessorsSubjectGroups, StudentsSubjectGroups, User, EmailVerification } from 'src/infrastructure/data/models';
 import { UserUseCases } from './user.use-case';
 import { UserRepository } from 'src/infrastructure/data/repositories/user.repository';
 import { UserRepositoryAbstract } from 'src/core/abstracts/repositories/user.repository.abstract';
@@ -9,9 +9,10 @@ import { LoggerModule } from '../logger/logger.module';
 import { ProfessorController } from 'src/controllers/professor.controller';
 import { StudentController } from 'src/controllers/student.controller';
 import { MailModule } from 'src/services/mail.module';
+import { EmailVerificationModule } from '../emailverification/emailverification.module';
 
 @Module({
-    imports: [LoggerModule, MailModule, TypeOrmModule.forFeature([User, StudentsSubjectGroups, ProfessorsSubjectGroups])],
+    imports: [LoggerModule, MailModule, EmailVerificationModule, TypeOrmModule.forFeature([User, EmailVerification, StudentsSubjectGroups, ProfessorsSubjectGroups])],
     providers: [
         UserUseCases,
         {
