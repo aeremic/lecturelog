@@ -51,6 +51,14 @@ export class UserRepository implements UserRepositoryAbstract {
         return UserMapper.ToEntity(result);
     }
 
+    async getActivatedByEmail(email: string): Promise<UserEntity> {
+        let result = await this.userModelRepository.findOneBy({
+            email: email, isActivated: true
+        });
+
+        return UserMapper.ToEntity(result);
+    }
+
     async getProfessors(size: number, skip: number): Promise<UserEntity[]> {
         let result = await this.userModelRepository.find({
             where: { isActivated: true, role: UserMapper.getType(RoleEnum.professor) }, order: { email: "ASC" },

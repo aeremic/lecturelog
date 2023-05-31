@@ -30,9 +30,9 @@ export class SubjectGroupMapper {
             groupNo: subjectGroupEntity?.groupNo,
             pointsPerPresence: subjectGroupEntity?.pointsPerPresence,
 
-            subject: null,
-            studentsSubjectGroups: null,
-            professorsSubjectGroups: null
+            subject: undefined,
+            studentsSubjectGroups: undefined,
+            professorsSubjectGroups: undefined
         };
 
         return subjectGroupModel;

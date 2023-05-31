@@ -36,7 +36,7 @@ export class EmailVerificationMapper {
             code: emailVerificationEntity?.code,
             notValid: emailVerificationEntity?.notValid,
 
-            user: null
+            user: undefined
         };
 
         return emailVerificationModel;

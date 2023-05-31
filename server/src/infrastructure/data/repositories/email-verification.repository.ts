@@ -48,7 +48,7 @@ export class EmailVerificationRepository implements EmailVerificationRepositoryA
 
     async getPreviousEmailValidation(email: string): Promise<EmailVerificationEntity> {
         let result = await this.emailVerificationModelRepository.findOne({
-            where: { email: email }
+            where: { email: email, notValid: false }
         })
 
         return EmailVerificationMapper.ToEntity(result);

@@ -25,7 +25,6 @@ import {
 
 interface IEmailRegistration {
   userId: number;
-  email: string;
   code: string;
   password: string;
   repeatedPassword: string;

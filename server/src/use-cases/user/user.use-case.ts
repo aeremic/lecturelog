@@ -10,6 +10,7 @@ import { Encoding } from 'src/core/common/encoding';
 import { EmailVerificationUseCases } from '../emailverification/email-verification.use-case';
 import { EmailVerificationEntity } from 'src/core/entities';
 import { EmailRegistrationDto } from 'src/core/dtos';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UserUseCases extends GenericUseCases<UserEntity>{
@@ -24,6 +25,9 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
 
     @Inject(EmailVerificationUseCases)
     private emailVerificationUseCases: EmailVerificationUseCases;
+
+    @Inject()
+    private readonly config: ConfigService;
 
     async get(): Promise<UserEntity[]> {
         return super.get(this.userRepository, this.loggerUseCases);
@@ -74,6 +78,19 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
         return result;
     }
 
+    async getActivatedByEmail(email: string): Promise<UserEntity> {
+        let result: UserEntity | PromiseLike<UserEntity>;
+        try {
+            if (email) {
+                result = await this.userRepository.getActivatedByEmail(email);
+            }
+        } catch (error) {
+            this.loggerUseCases.log(ErrorConstants.GetMethodError, error?.message, error?.stack);
+        }
+
+        return result;
+    }
+
     async getProfessors(page: number, size: number): Promise<ProfessorsDto> {
         let result: ProfessorsDto | PromiseLike<ProfessorsDto>;
         let professors: UserEntity[] | PromiseLike<UserEntity[]>;
@@ -111,8 +128,8 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
         let result: UserEntity | PromiseLike<UserEntity>;
 
         try {
-            let userInDb = await this.getByEmail(userEntity.email);
-            if (!this.isFound(userInDb) || !userInDb.isActivated) {
+            let activatedUserInDb = await this.getActivatedByEmail(userEntity.email);
+            if (!this.isFound(activatedUserInDb)) {
 
                 userEntity.isActivated = false;
                 result = await super.createOrUpdate(this.userRepository, this.loggerUseCases, userEntity);
@@ -139,14 +156,16 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
         try {
             let emailVerification = await this.emailVerificationUseCases.getLatestEmailVerificationByUserId(emailRegistrationDto.userId, emailRegistrationDto.code);
             if (this.emailVerificationUseCases.isFound(emailVerification)) {
-                let expirationDate: Date = new Date(emailVerification.sentOn.setMinutes(emailVerification.sentOn.getMinutes() + 10));
+                let timeToRegister: number = this.config.get('REG_DURATION') ?? 60;
+                let expirationDate: Date = new Date(emailVerification.sentOn.setMinutes(emailVerification.sentOn.getMinutes() + timeToRegister));
                 let currentDate: Date = new Date(Date.now());
 
                 if (currentDate <= expirationDate) {
                     let userInDb = await this.getById(emailRegistrationDto.userId);
-                    if (this.isFound(userInDb)) {
+                    if (this.isFound(userInDb) && !userInDb.isActivated) {
                         userInDb.isActivated = true;
                         await this.createOrUpdate(userInDb);
+                        result = true;
                     }
                 }
             }

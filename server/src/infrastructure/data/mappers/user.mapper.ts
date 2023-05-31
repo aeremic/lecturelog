@@ -48,9 +48,9 @@ export class UserMapper {
             isActivated: userEntity?.isActivated,
             role: userType,
 
-            studentsSubjectGroups: null,
-            professorsSubjectGroups: null,
-            emailVerifications: null
+            studentsSubjectGroups: undefined,
+            professorsSubjectGroups: undefined,
+            emailVerifications: undefined
         };
 
         return userModel;
