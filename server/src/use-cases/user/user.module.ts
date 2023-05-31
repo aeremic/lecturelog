@@ -10,9 +10,11 @@ import { ProfessorController } from 'src/controllers/professor.controller';
 import { StudentController } from 'src/controllers/student.controller';
 import { MailModule } from 'src/services/mail.module';
 import { EmailVerificationModule } from '../emailverification/email-verification.module';
+import { AuthModule } from 'src/auth/auth.module';
+import { BcryptModule } from 'src/services/bcrypt.module';
 
 @Module({
-    imports: [LoggerModule, MailModule, EmailVerificationModule, TypeOrmModule.forFeature([User, EmailVerification, StudentsSubjectGroups, ProfessorsSubjectGroups])],
+    imports: [LoggerModule, MailModule, EmailVerificationModule, BcryptModule, TypeOrmModule.forFeature([User, EmailVerification, StudentsSubjectGroups, ProfessorsSubjectGroups])],
     providers: [
         UserUseCases,
         {

@@ -1,16 +1,17 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { UserRepositoryAbstract } from 'src/core/abstracts/repositories/user.repository.abstract';
 import { UserEntity } from 'src/core/entities/user.entity';
 import { GenericUseCases } from '../generic.use-case';
 import { LoggerUseCases } from '../logger/logger.use-case';
 import { ErrorConstants } from 'src/core/common/constants/error.constant';
 import { ProfessorsDto } from 'src/core/dtos/professors.dto';
-import { MailService } from 'src/services';
+import { BcryptService, MailService } from 'src/services';
 import { Encoding } from 'src/core/common/encoding';
 import { EmailVerificationUseCases } from '../emailverification/email-verification.use-case';
 import { EmailVerificationEntity } from 'src/core/entities';
 import { EmailRegistrationDto } from 'src/core/dtos';
 import { ConfigService } from '@nestjs/config';
+import { AuthService } from 'src/auth';
 
 @Injectable()
 export class UserUseCases extends GenericUseCases<UserEntity>{
@@ -25,6 +26,9 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
 
     @Inject(EmailVerificationUseCases)
     private emailVerificationUseCases: EmailVerificationUseCases;
+
+    @Inject(BcryptService)
+    private bcryptService: BcryptService;
 
     @Inject()
     private readonly config: ConfigService;
@@ -163,9 +167,15 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
                 if (currentDate <= expirationDate) {
                     let userInDb = await this.getById(emailRegistrationDto.userId);
                     if (this.isFound(userInDb) && !userInDb.isActivated) {
-                        userInDb.isActivated = true;
-                        await this.createOrUpdate(userInDb);
-                        result = true;
+                        let hashedPassword: any = await this.bcryptService.createUserPassword(emailRegistrationDto.password, emailRegistrationDto.repeatedPassword);
+
+                        if (hashedPassword) {
+                            userInDb.isActivated = true;
+                            userInDb.hash = hashedPassword;
+
+                            await this.createOrUpdate(userInDb);
+                            result = true;
+                        }
                     }
                 }
             }

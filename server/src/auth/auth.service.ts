@@ -3,9 +3,8 @@ import { UserEntity } from '../core/entities/user.entity';
 import { LoginDto, RegisterDto } from "src/core/dtos";
 import { JwtService } from "@nestjs/jwt";
 import { UserUseCases } from "src/use-cases";
+import { BcryptService } from 'src/services';
 
-const bcrypt = require('bcrypt');
-const saltRounds = 10;
 @Injectable()
 export class AuthService {
     @Inject(UserUseCases)
@@ -14,6 +13,9 @@ export class AuthService {
     @Inject(JwtService)
     private jwtService: JwtService;
 
+    @Inject(BcryptService)
+    private bcryptService: BcryptService;
+
     //#region Login implementation
 
     async validateUserCredentials(email: string, password: string): Promise<UserEntity> {
@@ -21,7 +23,7 @@ export class AuthService {
             if (email && password) {
                 this.userUseCases.getByEmail(email).then((user) => {
                     if (this.userUseCases.isFound(user)) {
-                        this.checkPasswordHash(password, user.hash).then((res) => {
+                        this.bcryptService.checkPasswordHash(password, user.hash).then((res) => {
                             resolve(res);
                         });
                     } else {
@@ -67,7 +69,7 @@ export class AuthService {
             let userInDb = await this.userUseCases.getByEmail(registerDto.email);
 
             if (!this.userUseCases.isFound(userInDb)) {
-                let hashedPassword = await this.hashPassword(registerDto.password);
+                let hashedPassword = await this.bcryptService.hashPassword(registerDto.password);
 
                 let userEntity: UserEntity = {
                     firstname: registerDto.firstname,
@@ -89,18 +91,6 @@ export class AuthService {
     //#endregion
 
     //#region Private implementation
-
-    private async checkPasswordHash(password: string, hash: string): Promise<any> {
-        let res = await bcrypt.compare(password, hash);
-
-        return res;
-    }
-
-    private async hashPassword(password: string): Promise<string> {
-        let res = await bcrypt.hash(password, saltRounds);
-
-        return res;
-    }
 
     //#endregion
 }
