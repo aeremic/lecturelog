@@ -1,4 +1,4 @@
-import { UserEntity } from "../entities/user.entity";
+import { UserEntity } from "../../entities/user.entity";
 
 export class ProfessorsDto {
     public professors: UserEntity[] | PromiseLike<UserEntity[]>;

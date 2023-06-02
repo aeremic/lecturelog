@@ -4,7 +4,7 @@ import { UserEntity } from 'src/core/entities/user.entity';
 import { GenericUseCases } from '../generic.use-case';
 import { LoggerUseCases } from '../logger/logger.use-case';
 import { ErrorConstants } from 'src/core/common/constants/error.constant';
-import { ProfessorsDto } from 'src/core/dtos/professors.dto';
+import { ProfessorsDto } from 'src/core/dtos/responses/professors.dto';
 import { BcryptService, MailService } from 'src/services';
 import { Encoding } from 'src/core/common/encoding';
 import { EmailVerificationUseCases } from '../emailverification/email-verification.use-case';

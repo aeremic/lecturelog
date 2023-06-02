@@ -42,16 +42,6 @@ const Content = () => {
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState<AlertColor>();
 
-  const handleCloseAlert = (
-    event?: React.SyntheticEvent | Event,
-    reason?: string
-  ) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setOpenAlert(false);
-  };
-
   const onSubmit = async (data: ILoginFormInput) => {
     let res: any = await login(data);
     if (res) {
@@ -67,6 +57,16 @@ const Content = () => {
       setAlertMessage(AlertFailureMessage);
       setOpenAlert(true);
     }
+  };
+
+  const handleCloseAlert = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenAlert(false);
   };
 
   return (

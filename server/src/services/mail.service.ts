@@ -1,6 +1,7 @@
 import { MailerService } from "@nestjs-modules/mailer";
 import { Inject, Injectable } from "@nestjs/common";
 import { ConfigService } from '@nestjs/config';
+import { LocalizationEn } from "src/utils/resources/localization-en.resource";
 
 @Injectable()
 export class MailService {
@@ -13,8 +14,9 @@ export class MailService {
     // TODO: Create resource file.
     async sendRegistrationMail(id: number, email: string, firstname: string, code: string) {
         let baseUrl = this.config.get("APP_URL");
-        let templatePath = './utils/templates/registration';
-        let subject = "BolognApp - New Registration";
+
+        let templatePath = LocalizationEn.templatePath;
+        let subject = LocalizationEn.emailSubject;
 
         await this.mailerService.sendMail({
             to: email,
