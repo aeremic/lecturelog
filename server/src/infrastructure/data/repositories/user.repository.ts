@@ -71,7 +71,7 @@ export class UserRepository implements UserRepositoryAbstract {
 
     async getProfessorsCount(): Promise<number> {
         let result = await this.userModelRepository.count({
-            where: { role: UserMapper.getType(RoleEnum.professor) }
+            where: { isActivated: true, role: UserMapper.getType(RoleEnum.professor) }
         })
 
         return result;

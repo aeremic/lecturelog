@@ -100,3 +100,8 @@ export const EmailRegistrationSubtitle =
   "Please enter your temporary code to activate this account";
 
 export const WrongCredentials = "Wrong credentials";
+
+export const EmailRegistrationSuccess =
+  "Account successfully activated. Please log in with your new password.";
+
+export const ActivationFailed = "Activation failed";

@@ -3,6 +3,7 @@ import {
   AlertColor,
   Button,
   Container,
+  Divider,
   FormControl,
   FormGroup,
   FormLabel,
@@ -13,6 +14,7 @@ import {
 import {
   AlertFailureMessage,
   Email,
+  EmailRegistrationSuccess,
   LogIn,
   Password,
   PleaseEnterYourEmail,
@@ -21,7 +23,7 @@ import {
 } from "../../../resources/Typography";
 import { useForm } from "react-hook-form";
 import { login } from "../../../services/Common/Auth";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { HttpStatusCode } from "axios";
 import { useState } from "react";
 
@@ -31,6 +33,10 @@ interface ILoginFormInput {
 }
 
 const Content = () => {
+  const [queryParameters] = useSearchParams();
+  let emailRegistrationSuccess: boolean =
+    queryParameters.get("success") == "true";
+
   const navigate = useNavigate();
   const {
     register,
@@ -78,6 +84,12 @@ const Content = () => {
         <Typography component="h1" variant="h5">
           {LogIn}
         </Typography>
+        <Divider sx={{ m: 2 }} />
+        {emailRegistrationSuccess ? (
+          <Alert severity="success">{EmailRegistrationSuccess}</Alert>
+        ) : (
+          <></>
+        )}
         <FormControl sx={{ minWidth: "300px" }}>
           <form onSubmit={handleSubmit(onSubmit)}>
             <FormGroup sx={{ mt: 2 }}>
