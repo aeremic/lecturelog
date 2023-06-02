@@ -98,3 +98,5 @@ export const Register = "Register";
 
 export const EmailRegistrationSubtitle =
   "Please enter your temporary code to activate this account";
+
+export const WrongCredentials = "Wrong credentials";
