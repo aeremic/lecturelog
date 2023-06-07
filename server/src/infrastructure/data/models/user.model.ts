@@ -39,6 +39,6 @@ export class User {
   @OneToMany(() => ProfessorsSubjectGroups, professorsSubjectGroups => professorsSubjectGroups.professor, { nullable: true })
   public professorsSubjectGroups!: ProfessorsSubjectGroups[];
 
-  @OneToMany(() => EmailVerification, emailVerification => emailVerification.user, { nullable: true, cascade: true })
+  @OneToMany(() => EmailVerification, emailVerification => emailVerification.user, { nullable: true })
   public emailVerifications!: EmailVerification[];
 }

@@ -21,6 +21,6 @@ export class EmailVerification {
     @Column({ type: 'boolean', nullable: true })
     public notValid?: boolean;
 
-    @ManyToOne(() => User, user => user.emailVerifications)
+    @ManyToOne(() => User, user => user.emailVerifications, { onDelete: 'CASCADE' })
     public user: User;
 }
