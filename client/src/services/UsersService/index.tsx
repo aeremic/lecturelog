@@ -2,7 +2,7 @@ import { IEmailRegistration } from "../../Models/EmailRegistration";
 import { IUser } from "../../Models/User";
 import { get, getById, post, remove } from "../Common/ServiceBase";
 
-const URL: string = "/user";
+const URL = "/user";
 
 export const getUsers: any = async () => {
   try {

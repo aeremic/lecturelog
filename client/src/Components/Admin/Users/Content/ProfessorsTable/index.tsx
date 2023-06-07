@@ -17,6 +17,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { getProfessors } from "../../../../../services/ProfessorsService";
 import {
   Action,
@@ -38,7 +39,6 @@ import {
   UserSuccessfullyRemoved,
   Yes,
 } from "../../../../../resources/Typography";
-import PaginationComponent from "../../../../Common/PaginationComponent";
 import ConfirmationDialog from "../../../../Common/ConfirmationDialog";
 import ManipulateUserDialog from "../../../ManipulateUserDialog";
 import { RoleEnum } from "../../../../../Models/Enums";
@@ -202,7 +202,7 @@ const ProfessorsTable = () => {
           }}
           variant="contained"
           color="success"
-          size="large"
+          size="small"
           sx={{ mb: 1 }}
         >
           <AddIcon />
@@ -243,11 +243,11 @@ const ProfessorsTable = () => {
                         onClick={() => {
                           handleRemoveDialogClick(professor.id);
                         }}
-                        variant="contained"
+                        variant="outlined"
                         color="error"
                         size="small"
                       >
-                        {Remove}
+                        <DeleteIcon />
                       </Button>
                     </TableCell>
                   </TableRow>

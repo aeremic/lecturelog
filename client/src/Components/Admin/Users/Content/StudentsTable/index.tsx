@@ -43,6 +43,7 @@ import { removeUser } from "../../../../../services/UsersService";
 import AddIcon from "@mui/icons-material/Add";
 import ConfirmationDialog from "../../../../Common/ConfirmationDialog";
 import ManipulateUserDialog from "../../../ManipulateUserDialog";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 interface IManipulateUser {
   id: number;
@@ -186,7 +187,7 @@ const StudentsTable = () => {
           }}
           variant="contained"
           color="success"
-          size="large"
+          size="small"
           sx={{ mb: 1 }}
         >
           <AddIcon />
@@ -229,11 +230,11 @@ const StudentsTable = () => {
                         onClick={() => {
                           handleRemoveDialogClick(student.id);
                         }}
-                        variant="contained"
+                        variant="outlined"
                         color="error"
                         size="small"
                       >
-                        {Remove}
+                        <DeleteIcon />
                       </Button>
                     </TableCell>
                   </TableRow>
