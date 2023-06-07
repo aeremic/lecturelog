@@ -10,7 +10,7 @@ export class UserRepository implements UserRepositoryAbstract {
     @InjectRepository(User)
     private readonly userModelRepository: Repository<User>
 
-    //#region Implementation of Base repository   
+    //#region Implementation of Generic repository   
 
     async get(): Promise<UserEntity[]> {
         let result = await this.userModelRepository.find();

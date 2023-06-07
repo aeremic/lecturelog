@@ -9,7 +9,7 @@ export class SubjectRepository implements SubjectRepositoryAbstract {
     @InjectRepository(Subject)
     private readonly subjectModelRepository: Repository<Subject>
 
-    //#region Implementation of Base repository   
+    //#region Implementation of Generic repository   
 
     async get(): Promise<SubjectEntity[]> {
         let result = await this.subjectModelRepository.find();

@@ -9,7 +9,19 @@ export class LoggerRepository implements LoggerRepositoryAbstract {
     @InjectRepository(Logger)
     private readonly loggerModelRepository: Repository<Logger>
 
-    //#region Implementation of Base repository   
+    //#region Implementation of Generic repository   
+
+    async get(): Promise<LoggerEntity[]> {
+        let result = await this.loggerModelRepository.find();
+
+        return LoggerMapper.ToEntities(result);
+    }
+
+    async getById(id: number): Promise<LoggerEntity> {
+        let result = await this.loggerModelRepository.findOneBy({ id: id })
+
+        return LoggerMapper.ToEntity(result);
+    }
 
     async createOrUpdate(loggerEntity: LoggerEntity): Promise<LoggerEntity> {
         let loggerModel: Logger = LoggerMapper.ToModel(loggerEntity);
@@ -17,6 +29,12 @@ export class LoggerRepository implements LoggerRepositoryAbstract {
 
         return LoggerMapper.ToEntity(result);
     }
-    
+
+    async delete(id: number): Promise<number> {
+        let result = await this.loggerModelRepository.delete({ id: id });
+
+        return result.affected;
+    }
+
     //#endregion
 }

@@ -1,11 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { LoggerEntity } from 'src/core/entities';
+import { GenericRepositoryAbstract } from './generic.repositoty.abstract';
 
 @Injectable()
-export abstract class LoggerRepositoryAbstract { 
-    //#region Base repository   
-    
-    abstract createOrUpdate(loggerEntity: LoggerEntity): Promise<LoggerEntity>;
-
-    //#endregion
+export abstract class LoggerRepositoryAbstract extends GenericRepositoryAbstract<LoggerEntity> {
 }

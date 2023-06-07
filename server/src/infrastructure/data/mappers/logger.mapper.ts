@@ -15,6 +15,17 @@ export class LoggerMapper {
         return loggerEntity;
     }
 
+    public static ToEntities(loggerModels: Logger[]): LoggerEntity[] {
+        let loggerEntities: LoggerEntity[];
+        if (loggerModels && loggerModels.length > 0) {
+            loggerEntities = loggerModels.map(loggerModel => {
+                return this.ToEntity(loggerModel);
+            });
+        }
+
+        return loggerEntities;
+    }
+
     public static ToModel(loggerEntity: LoggerEntity): Logger {
         let loggerModel: Logger = {
             id: loggerEntity?.id,
