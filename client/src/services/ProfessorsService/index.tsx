@@ -1,6 +1,6 @@
 import { get } from "../Common/ServiceBase";
 
-const URL: string = "/professor";
+const URL = "/professor";
 
 export const getProfessors = async (query: string) => {
   try {

@@ -34,7 +34,7 @@ interface ILoginFormInput {
 
 const Content = () => {
   const [queryParameters] = useSearchParams();
-  let emailRegistrationSuccess: boolean =
+  const emailRegistrationSuccess: boolean =
     queryParameters.get("success") == "true";
 
   const navigate = useNavigate();
@@ -49,7 +49,7 @@ const Content = () => {
   const [alertType, setAlertType] = useState<AlertColor>();
 
   const onSubmit = async (data: ILoginFormInput) => {
-    let res: any = await login(data);
+    const res: any = await login(data);
     if (res) {
       if (res.status && res.status === HttpStatusCode.Created) {
         navigate("/admin/users", { replace: true });
@@ -90,7 +90,7 @@ const Content = () => {
         ) : (
           <></>
         )}
-        <FormControl sx={{ minWidth: "300px" }}>
+        <FormControl fullWidth sx={{ minWidth: "300px" }}>
           <form onSubmit={handleSubmit(onSubmit)}>
             <FormGroup sx={{ mt: 2 }}>
               <FormLabel>{Email}</FormLabel>
@@ -99,11 +99,8 @@ const Content = () => {
                 variant="outlined"
                 type="email"
                 {...register("email", { required: true })}
-              >
-                {errors?.email?.type === "required" && (
-                  <Typography>This field is required</Typography>
-                )}
-              </TextField>
+                sx={{ mt: 0.8 }}
+              ></TextField>
             </FormGroup>
             <FormGroup sx={{ mt: 2 }}>
               <FormLabel>{Password}</FormLabel>
@@ -112,11 +109,8 @@ const Content = () => {
                 variant="outlined"
                 type="password"
                 {...register("password", { required: true })}
-              >
-                {errors?.email?.type === "required" && (
-                  <Typography>This field is required</Typography>
-                )}
-              </TextField>
+                sx={{ mt: 0.8 }}
+              ></TextField>
             </FormGroup>
             <FormGroup sx={{ mt: 2 }}>
               <Button variant="contained" size="large" type="submit">

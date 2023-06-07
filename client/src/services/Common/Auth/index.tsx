@@ -1,6 +1,6 @@
 import { post } from "../ServiceBase";
 
-const URL: string = "/auth";
+const URL = "/auth";
 
 interface ILogin {
   email: string;
@@ -26,8 +26,9 @@ export const logout = () => {
 };
 
 export const getAuthorizationToken = () => {
-  let accessToken = localStorage.getItem("accessToken");
+  const accessToken = localStorage.getItem("accessToken");
   let parsedAccessToken = null;
+
   if (accessToken) {
     parsedAccessToken = JSON.parse(accessToken);
   }

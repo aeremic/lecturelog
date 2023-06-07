@@ -27,8 +27,8 @@ export class User {
   @Column({ type: 'varchar', length: 120, nullable: true })
   public hash?: string;
 
-  @Column({ type: 'boolean', nullable: true })
-  public isActivated?: boolean;
+  @Column({ type: 'boolean' })
+  public isActivated: boolean;
 
   @Column({ type: 'smallint' })
   public role: number

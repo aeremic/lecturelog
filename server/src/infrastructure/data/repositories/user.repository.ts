@@ -59,6 +59,14 @@ export class UserRepository implements UserRepositoryAbstract {
         return UserMapper.ToEntity(result);
     }
 
+    async getActivatedByEmailOrIndex(email: string, index: number, year: number): Promise<UserEntity> {
+        let result = await this.userModelRepository.findOne({
+            where: [{ email: email, isActivated: true }, { index: index, year: year, isActivated: true }],
+        });
+
+        return UserMapper.ToEntity(result);
+    }
+
     async getProfessors(size: number, skip: number): Promise<UserEntity[]> {
         let result = await this.userModelRepository.find({
             where: { isActivated: true, role: UserMapper.getType(RoleEnum.professor) }, order: { email: "ASC" },
@@ -77,9 +85,21 @@ export class UserRepository implements UserRepositoryAbstract {
         return result;
     }
 
-    async getStudents(): Promise<UserEntity[]> {
-        let result = await this.userModelRepository.findBy({ role: UserMapper.getType(RoleEnum.student) });
+    async getStudents(size: number, skip: number): Promise<UserEntity[]> {
+        let result = await this.userModelRepository.find({
+            where: { isActivated: true, role: UserMapper.getType(RoleEnum.student) }, order: { email: "ASC" },
+            take: size,
+            skip: skip
+        });
 
         return UserMapper.ToEntities(result);
+    }
+
+    async getStudentsCount(): Promise<number> {
+        let result = await this.userModelRepository.count({
+            where: { isActivated: true, role: UserMapper.getType(RoleEnum.student) }
+        })
+
+        return result;
     }
 }

@@ -76,7 +76,8 @@ export class AuthService {
                     lastname: registerDto.lastname,
                     email: registerDto.email,
                     hash: hashedPassword,
-                    role: registerDto.role
+                    role: registerDto.role,
+                    isActivated: true
                 };
 
                 if (await this.userUseCases.createOrUpdate(userEntity)) {

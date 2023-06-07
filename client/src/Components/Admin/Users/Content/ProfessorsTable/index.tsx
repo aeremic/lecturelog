@@ -130,7 +130,7 @@ const ProfessorsTable = () => {
     if (newValue) {
       setRemoveIndexValue(newValue);
 
-      let res = await removeUser(removeIndexValue);
+      const res = await removeUser(removeIndexValue);
       if (res && res.status && res.status === HttpStatusCode.Ok) {
         setAlertType("success");
         setAlertMessage(UserSuccessfullyRemoved);
@@ -211,7 +211,7 @@ const ProfessorsTable = () => {
       {professorsLoaded ? (
         <Box>
           <TableContainer component={Paper} sx={{ mt: 1 }}>
-            <Table sx={{ minWidth: 290 }} aria-label="simple table">
+            <Table size="small" sx={{ minWidth: 290 }}>
               <TableHead>
                 <TableRow
                   sx={{
@@ -245,6 +245,7 @@ const ProfessorsTable = () => {
                         }}
                         variant="contained"
                         color="error"
+                        size="small"
                       >
                         {Remove}
                       </Button>
@@ -253,7 +254,7 @@ const ProfessorsTable = () => {
                 ))}
               </TableBody>
             </Table>
-          </TableContainer>{" "}
+          </TableContainer>
           <Box sx={{ m: 1 }}>
             <TablePagination
               component="div"

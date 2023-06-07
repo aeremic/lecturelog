@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Inject, Param, ParseIntPipe, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Inject, Param, ParseIntPipe, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { UserUseCases } from 'src/use-cases';
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from 'src/auth/decorators/roles.decorator';
@@ -13,7 +13,7 @@ export class StudentController {
     @Roles('admin')
     @UseGuards(RoleGuard)
     @Get('/getstudents')
-    getStudents() {
-        return this.userUseCases.getStudents();
+    getStudents(@Query('page', ParseIntPipe) page: number, @Query('size', ParseIntPipe) size: number) {
+        return this.userUseCases.getStudents(page, size);
     }
 }       

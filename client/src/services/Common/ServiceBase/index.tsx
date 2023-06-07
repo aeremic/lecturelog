@@ -4,7 +4,7 @@ import { AuthHeader } from "../Headers/AuthHeader";
 
 export const get = async (
   endpoint: string,
-  autoIncludeAuthHeader: boolean = true,
+  autoIncludeAuthHeader = true,
   header: any = null
 ) => {
   if (autoIncludeAuthHeader && header == null) {
@@ -17,7 +17,7 @@ export const get = async (
 export const getById = async (
   endpoint: string,
   id: number,
-  autoIncludeAuthHeader: boolean = true,
+  autoIncludeAuthHeader = true,
   header: any = null
 ) => {
   if (autoIncludeAuthHeader && header == null) {
@@ -30,7 +30,7 @@ export const getById = async (
 export const post = async (
   endpoint: string,
   modelToPost: any,
-  autoIncludeAuthHeader: boolean = true,
+  autoIncludeAuthHeader = true,
   header: any = null
 ) => {
   if (autoIncludeAuthHeader && header == null) {
@@ -43,7 +43,7 @@ export const post = async (
 export const remove = async (
   endpoint: string,
   id: number,
-  autoIncludeAuthHeader: boolean = true,
+  autoIncludeAuthHeader = true,
   header: any = null
 ) => {
   if (autoIncludeAuthHeader && header == null) {

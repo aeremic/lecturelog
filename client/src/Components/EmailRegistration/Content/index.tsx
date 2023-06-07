@@ -45,10 +45,10 @@ const Content = () => {
   const [alertType, setAlertType] = useState<AlertColor>();
 
   const onSubmit = async (data: IEmailRegistration) => {
-    let userId: string | null = queryParameters.get("id");
+    const userId: string | null = queryParameters.get("id");
     data.userId = userId != null ? parseInt(userId) : -1;
 
-    let res: any = await emailRegistration(data);
+    const res: any = await emailRegistration(data);
     if (res && res.status && res.status === HttpStatusCode.Created) {
       if (res.data) {
         navigate(`/login?success=${res.data}`, { replace: true });
@@ -91,11 +91,8 @@ const Content = () => {
                 variant="outlined"
                 type="text"
                 {...register("code", { required: true })}
-              >
-                {errors?.code?.type === "required" && (
-                  <Typography>This field is required</Typography>
-                )}
-              </TextField>
+                sx={{ mt: 0.8 }}
+              ></TextField>
             </FormGroup>
             <FormGroup sx={{ mt: 2 }}>
               <FormLabel>{Password}</FormLabel>
@@ -104,11 +101,8 @@ const Content = () => {
                 variant="outlined"
                 type="password"
                 {...register("password", { required: true })}
-              >
-                {errors?.password?.type === "required" && (
-                  <Typography>This field is required</Typography>
-                )}
-              </TextField>
+                sx={{ mt: 0.8 }}
+              ></TextField>
             </FormGroup>
             <FormGroup sx={{ mt: 2 }}>
               <FormLabel>{RepeatPassword}</FormLabel>
@@ -117,11 +111,8 @@ const Content = () => {
                 variant="outlined"
                 type="password"
                 {...register("repeatedPassword", { required: true })}
-              >
-                {errors?.repeatedPassword?.type === "required" && (
-                  <Typography>This field is required</Typography>
-                )}
-              </TextField>
+                sx={{ mt: 0.8 }}
+              ></TextField>
             </FormGroup>
             <FormGroup sx={{ mt: 2 }}>
               <Button variant="contained" size="large" type="submit">

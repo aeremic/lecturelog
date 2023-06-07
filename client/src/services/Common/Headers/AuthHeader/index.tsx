@@ -1,5 +1,5 @@
 export const AuthHeader = () => {
-  let accessToken = localStorage.getItem("accessToken");
+  const accessToken = localStorage.getItem("accessToken");
   let parsedAccessToken = null;
   if (accessToken) {
     parsedAccessToken = JSON.parse(accessToken);

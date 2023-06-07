@@ -12,6 +12,8 @@ import { EmailVerificationEntity } from 'src/core/entities';
 import { EmailRegistrationDto } from 'src/core/dtos';
 import { ConfigService } from '@nestjs/config';
 import { AuthService } from 'src/auth';
+import { StudentsDto } from 'src/core/dtos/responses/students.dto';
+import { RoleEnum } from 'src/core/common/enums/role.enum';
 
 @Injectable()
 export class UserUseCases extends GenericUseCases<UserEntity>{
@@ -95,6 +97,19 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
         return result;
     }
 
+    async getActivatedByEmailOrIndex(email: string, index?: number, year?: number): Promise<UserEntity> {
+        let result: UserEntity | PromiseLike<UserEntity>;
+        try {
+            if (email && index && year) {
+                result = await this.userRepository.getActivatedByEmailOrIndex(email, index, year);
+            }
+        } catch (error) {
+            this.loggerUseCases.log(ErrorConstants.GetMethodError, error?.message, error?.stack);
+        }
+
+        return result;
+    }
+
     async getProfessors(page: number, size: number): Promise<ProfessorsDto> {
         let result: ProfessorsDto | PromiseLike<ProfessorsDto>;
         let professors: UserEntity[] | PromiseLike<UserEntity[]>;
@@ -116,10 +131,20 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
         return result;
     }
 
-    async getStudents(): Promise<UserEntity[]> {
-        let result: UserEntity[] | PromiseLike<UserEntity[]>;
+    async getStudents(page: number, size: number): Promise<StudentsDto> {
+        let result: StudentsDto | PromiseLike<StudentsDto>;
+        let students: UserEntity[] | PromiseLike<UserEntity[]>;
+        let totalStudentsCount: number | PromiseLike<number>;
+        let skip = page * size;
+
         try {
-            result = await this.userRepository.getStudents();
+            students = await this.userRepository.getStudents(size, skip);
+            totalStudentsCount = await this.userRepository.getStudentsCount();
+
+            result = {
+                students: students,
+                count: totalStudentsCount
+            }
         } catch (error) {
             this.loggerUseCases.log(ErrorConstants.GetMethodError, error?.message, error?.stack);
         }
@@ -132,7 +157,14 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
         let result: UserEntity | PromiseLike<UserEntity>;
 
         try {
-            let activatedUserInDb = await this.getActivatedByEmail(userEntity.email);
+            let activatedUserInDb: UserEntity = null;
+
+            if (userEntity.role == RoleEnum.student) {
+                activatedUserInDb = await this.getActivatedByEmailOrIndex(userEntity.email, userEntity.index, userEntity.year);
+            } else {
+                activatedUserInDb = await this.getActivatedByEmail(userEntity.email);
+            }
+
             if (!this.isFound(activatedUserInDb)) {
 
                 userEntity.isActivated = false;

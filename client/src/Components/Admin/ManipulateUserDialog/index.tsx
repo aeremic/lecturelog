@@ -10,6 +10,7 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  Stack,
   TextField,
 } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -17,12 +18,16 @@ import {
   Admin,
   Email,
   FirstName,
+  Index,
   LastName,
   PleaseEnterEmail,
   PleaseEnterFirstName,
   PleaseEnterLastName,
+  PleaseEnterStudentIndex,
+  PleaseEnterStudentYear,
   Student,
   UserType,
+  Year,
 } from "../../../resources/Typography";
 import { useForm } from "react-hook-form";
 import { Professor } from "../../../resources/Typography/index";
@@ -79,13 +84,10 @@ const ManipulateUserDialog = (props: IManipulateUserDialogRawProps) => {
       setValue(valueProp);
     }
 
-    // TODO: Bug - Role not reseting after submit. On opening pop up again "User type" is preselected. User needs to click "Add" two times.
     if (formState.isSubmitSuccessful) {
       reset();
     }
   }, [formState, valueProp, open, reset]);
-
-  const handleEntering = () => {};
 
   const handleCancel = () => {
     onClose();
@@ -96,7 +98,7 @@ const ManipulateUserDialog = (props: IManipulateUserDialogRawProps) => {
   };
 
   const onSubmit = async (data: IManipulateUserFormInput) => {
-    let user: IUser = {
+    const user: IUser = {
       id: value.id,
       firstname: data.firstname,
       lastname: data.lastname,
@@ -106,7 +108,7 @@ const ManipulateUserDialog = (props: IManipulateUserDialogRawProps) => {
       year: data.year,
     };
 
-    let res: any = await createUser(user);
+    const res: any = await createUser(user);
     if (
       res &&
       res.status &&
@@ -123,9 +125,8 @@ const ManipulateUserDialog = (props: IManipulateUserDialogRawProps) => {
 
   return (
     <Dialog
-      sx={{ "& .MuiDialog-paper": { width: "100%", maxHeight: 635 } }}
+      sx={{ "& .MuiDialog-paper": { width: "100%", maxHeight: 700 } }}
       maxWidth="xs"
-      TransitionProps={{ onEntering: handleEntering }}
       open={open}
       {...other}
     >
@@ -140,6 +141,7 @@ const ManipulateUserDialog = (props: IManipulateUserDialogRawProps) => {
                 variant="outlined"
                 type="text"
                 {...register("firstname", { required: true })}
+                sx={{ mt: 0.8 }}
               ></TextField>
             </FormGroup>
             <FormGroup sx={{ mt: 2 }}>
@@ -149,6 +151,7 @@ const ManipulateUserDialog = (props: IManipulateUserDialogRawProps) => {
                 variant="outlined"
                 type="text"
                 {...register("lastname", { required: true })}
+                sx={{ mt: 0.8 }}
               ></TextField>
             </FormGroup>
             <FormGroup sx={{ mt: 2 }}>
@@ -158,8 +161,43 @@ const ManipulateUserDialog = (props: IManipulateUserDialogRawProps) => {
                 variant="outlined"
                 type="email"
                 {...register("email", { required: true })}
+                sx={{ mt: 0.8 }}
               ></TextField>
             </FormGroup>
+            {defaultRoleEnum == RoleEnum.Student ? (
+              <Stack direction="row">
+                <FormGroup sx={{ mt: 2, mr: 2 }}>
+                  <FormLabel>{Index}</FormLabel>
+                  <TextField
+                    label={PleaseEnterStudentIndex}
+                    variant="outlined"
+                    type="number"
+                    {...register("index", {
+                      required: true,
+                      valueAsNumber: true,
+                      validate: (value: any) => value > 0,
+                    })}
+                    sx={{ mt: 0.8 }}
+                  ></TextField>
+                </FormGroup>
+                <FormGroup sx={{ mt: 2 }}>
+                  <FormLabel>{Year}</FormLabel>
+                  <TextField
+                    label={PleaseEnterStudentYear}
+                    variant="outlined"
+                    type="number"
+                    {...register("year", {
+                      required: true,
+                      valueAsNumber: true,
+                      validate: (value: any) => value > 0,
+                    })}
+                    sx={{ mt: 0.8 }}
+                  ></TextField>
+                </FormGroup>
+              </Stack>
+            ) : (
+              <></>
+            )}
             <FormGroup sx={{ mt: 2 }}>
               <FormLabel>{UserType}</FormLabel>
               <TextField
@@ -169,6 +207,7 @@ const ManipulateUserDialog = (props: IManipulateUserDialogRawProps) => {
                 inputProps={register("role", {
                   required: true,
                 })}
+                sx={{ mt: 0.8 }}
               >
                 {defaultRoleEnum == RoleEnum.Professor ? (
                   <MenuItem value="professor">{Professor}</MenuItem>

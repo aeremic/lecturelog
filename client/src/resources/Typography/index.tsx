@@ -105,3 +105,9 @@ export const EmailRegistrationSuccess =
   "Account successfully activated. Please log in with your new password.";
 
 export const ActivationFailed = "Activation failed";
+
+export const Year = "Year";
+
+export const PleaseEnterStudentIndex = "Enter index";
+
+export const PleaseEnterStudentYear = "Enter year";
