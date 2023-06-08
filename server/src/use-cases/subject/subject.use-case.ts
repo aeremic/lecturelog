@@ -3,6 +3,8 @@ import { SubjectRepositoryAbstract } from 'src/core/abstracts/repositories/subje
 import { SubjectEntity } from 'src/core/entities';
 import { GenericUseCases } from '../generic.use-case';
 import { LoggerUseCases } from '../logger/logger.use-case';
+import { ErrorConstants } from 'src/core/common/constants/error.constant';
+import { SubjectsDto } from 'src/core/dtos/responses/subjects.dto';
 
 @Injectable()
 export class SubjectUseCases extends GenericUseCases<SubjectEntity>{
@@ -26,5 +28,26 @@ export class SubjectUseCases extends GenericUseCases<SubjectEntity>{
 
     async delete(id: number): Promise<number> {
         return super.delete(this.subjectRepository, this.loggerUseCases, id);
+    }
+
+    async getSubjects(page: number, size: number): Promise<SubjectsDto> {
+        let result: SubjectsDto | PromiseLike<SubjectsDto>;
+        let subjects: SubjectEntity[] | PromiseLike<SubjectEntity[]>;
+        let totalSubjectsCount: number | PromiseLike<number>;
+        let skip = page * size;
+
+        try {
+            subjects = await this.subjectRepository.getSubjects(size, skip);
+            totalSubjectsCount = await this.subjectRepository.getSubjectsCount();
+
+            result = {
+                subjects: subjects,
+                count: totalSubjectsCount
+            }
+        } catch (error) {
+            this.loggerUseCases.log(ErrorConstants.GetMethodError, error?.message, error?.stack);
+        }
+
+        return result;
     }
 }

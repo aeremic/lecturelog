@@ -1,4 +1,6 @@
 import {
+  Alert,
+  AlertColor,
   Box,
   Button,
   Card,
@@ -6,14 +8,15 @@ import {
   Container,
   Divider,
   Paper,
+  Snackbar,
   Stack,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
+  TablePagination,
   TableRow,
-  TextField,
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -21,110 +24,224 @@ import { getSubjects } from "../../../../services/SubjectsService";
 import {
   Action,
   Add,
+  AlertFailureMessage,
   AllSubjects,
+  AreYouSure,
+  Cancel,
+  Id,
   Name,
   NoSubjectsFound,
-  PointsPerPresence,
-  Remove,
+  RemoveSubject,
+  SubjectSuccessfullyRemoved,
   Subjects,
+  Yes,
 } from "../../../../resources/Typography";
-import PaginationComponent from "../../../Common/PaginationComponent";
+import { HttpStatusCode } from "axios";
+import AddIcon from "@mui/icons-material/Add";
+import DeleteIcon from "@mui/icons-material/Delete";
+import ConfirmationDialog from "../../../Common/ConfirmationDialog";
 
 interface ISubject {
+  id: number;
   name: string;
-  pointsPerPresence: number;
 }
 
 const SubjectsTable = () => {
-  const initialState: ISubject[] = [
+  const subjectInitialState: ISubject[] = [
     {
+      id: 0,
       name: "",
-      pointsPerPresence: 0,
     },
   ];
 
-  const [subjects, setSubjects] = useState(initialState);
+  const [subjects, setSubjects] = useState(subjectInitialState);
   const [subjectsLoaded, setSubjectsLoaded] = useState(false);
+  const [subjectsCount, setSubjectsCount] = useState(0);
+  const [controller, setController] = useState({
+    page: 0,
+    rowsPerPage: 10,
+  });
+
+  const [removeDialogOpen, setRemoveDialogOpen] = useState(false);
+  const [removeIndexValue, setRemoveIndexValue] = useState(0);
+
+  const [openAlert, setOpenAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertType, setAlertType] = useState<AlertColor>();
 
   useEffect(() => {
-    getSubjects().then((response) => {
-      if (response && response.data) {
-        setSubjects(response.data);
-        setSubjectsLoaded(true);
+    getSubjects(`?page=${controller.page}&size=${controller.rowsPerPage}`).then(
+      (res) => {
+        if (res && res.status === HttpStatusCode.Ok && res.data) {
+          setSubjects(res.data.subjects ?? []);
+          setSubjectsCount(res.data.count ?? 0);
+
+          setSubjectsLoaded(true);
+        } else {
+          setAlertType("error");
+          setAlertMessage(AlertFailureMessage);
+          setOpenAlert(true);
+        }
       }
+    );
+  }, [controller, subjectsLoaded]);
+
+  const handlePageChange = (event: any, newPage: number) => {
+    setSubjectsLoaded(false);
+    setController({ ...controller, page: newPage });
+  };
+
+  const handleChangeRowsPerPage = (event: any) => {
+    setSubjectsLoaded(false);
+    setController({
+      ...controller,
+      rowsPerPage: parseInt(event.target.value, 10),
+      page: 0,
     });
-  }, []);
+  };
+
+  const handleRemoveDialogClick = (index: number) => {
+    setRemoveIndexValue(index);
+    setRemoveDialogOpen(true);
+  };
+
+  const handleRemoveDialogClose = async (newValue?: any) => {
+    setRemoveDialogOpen(false);
+    if (newValue) {
+      setRemoveIndexValue(newValue);
+
+      const res: any = null; /// await removeUser(removeIndexValue);
+      if (res && res.status && res.status === HttpStatusCode.Ok) {
+        setAlertType("success");
+        setAlertMessage(SubjectSuccessfullyRemoved);
+        setOpenAlert(true);
+
+        setSubjectsLoaded(false);
+      } else {
+        setAlertType("error");
+        setAlertMessage(AlertFailureMessage);
+        setOpenAlert(true);
+      }
+    }
+  };
+
+  const handleCloseAlert = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenAlert(false);
+  };
 
   return (
     <>
-      {subjectsLoaded ? (
-        <Container sx={{ mt: 2 }}>
-          <Typography variant="h5">{Subjects}</Typography>
-          <Card>
-            <CardContent>
-              <Typography variant="h6">{AllSubjects}</Typography>
-              <Divider sx={{ mb: 2 }} />
-              {/* <TextField
-            id="outlined-basic"
-            label={Search}
-            variant="outlined"
-            size="small"
-            sx={{ mb: 1, width: 0.9 }}
-          /> */}
-              <Stack direction="row">
-                <Button variant="contained" color="success">
-                  {Add}
-                </Button>
-              </Stack>
-              <TableContainer component={Paper} sx={{ mt: 1 }}>
-                <Table sx={{ minWidth: 290 }} aria-label="simple table">
-                  <TableHead>
-                    <TableRow
-                      sx={{
-                        "& th": {
-                          backgroundColor: "primary.light",
-                          color: "primary.contrastText",
-                        },
-                      }}
-                    >
-                      <TableCell align="center">{Name}</TableCell>
-                      <TableCell align="center">{PointsPerPresence}</TableCell>
-                      <TableCell align="center">{Action}</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {subjects.map((subject, index) => (
+      <Container sx={{ mt: 2 }}>
+        <Typography variant="h5">{Subjects}</Typography>
+        <Card>
+          <CardContent>
+            <Typography variant="h6">{AllSubjects}</Typography>
+            <Divider sx={{ mb: 2 }} />
+            <Stack direction="row">
+              <Button
+                onClick={() => {
+                  // handleAddUserDialogClick({ id: 0, actionResult: false });
+                }}
+                variant="contained"
+                color="success"
+                size="small"
+                sx={{ mb: 1 }}
+              >
+                <AddIcon />
+              </Button>
+            </Stack>
+            {subjectsLoaded ? (
+              <Box>
+                <TableContainer component={Paper} sx={{ mt: 1 }}>
+                  <Table sx={{ minWidth: 290 }} size="small">
+                    <TableHead>
                       <TableRow
-                        key={index}
                         sx={{
-                          "&:last-child td, &:last-child th": { border: 0 },
+                          "& th": {
+                            backgroundColor: "primary.light",
+                            color: "primary.contrastText",
+                          },
                         }}
                       >
-                        <TableCell component="th" scope="row">
-                          {subject.name}
-                        </TableCell>
-                        <TableCell align="center">
-                          {subject.pointsPerPresence}
-                        </TableCell>
-                        <TableCell align="center">
-                          <Button variant="contained" color="error">
-                            {Remove}
-                          </Button>{" "}
-                        </TableCell>
+                        <TableCell>{Id}</TableCell>
+                        <TableCell align="center">{Name}</TableCell>
+                        <TableCell align="center">{Action}</TableCell>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>{" "}
-              <Box sx={{ m: 1 }}>
-                <PaginationComponent />
+                    </TableHead>
+                    <TableBody>
+                      {subjects.map((subject, index) => (
+                        <TableRow
+                          key={index}
+                          sx={{
+                            "&:last-child td, &:last-child th": { border: 0 },
+                          }}
+                        >
+                          <TableCell>{subject.id}</TableCell>
+                          <TableCell align="center">{subject.name}</TableCell>
+                          <TableCell align="center">
+                            <Button
+                              onClick={() => {
+                                handleRemoveDialogClick(subject.id);
+                              }}
+                              variant="outlined"
+                              color="error"
+                              size="small"
+                            >
+                              <DeleteIcon />
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+                <Box sx={{ m: 1 }}>
+                  <TablePagination
+                    component="div"
+                    onPageChange={handlePageChange}
+                    page={controller.page}
+                    count={subjectsCount}
+                    rowsPerPage={controller.rowsPerPage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                  ></TablePagination>
+                </Box>
               </Box>
-            </CardContent>
-          </Card>
-        </Container>
-      ) : (
-        <Typography>{NoSubjectsFound}</Typography>
-      )}
+            ) : (
+              <Typography>{NoSubjectsFound}</Typography>
+            )}
+            <ConfirmationDialog
+              id="remove-subject-menu"
+              keepMounted
+              open={removeDialogOpen}
+              title={RemoveSubject}
+              content={AreYouSure}
+              negativeAction={Cancel}
+              positiveAction={Yes}
+              value={removeIndexValue}
+              onClose={handleRemoveDialogClose}
+            />
+            <Snackbar
+              open={openAlert}
+              autoHideDuration={6000}
+              onClose={handleCloseAlert}
+            >
+              <Alert
+                onClose={handleCloseAlert}
+                severity={alertType}
+                sx={{ width: "100%" }}
+              >
+                {alertMessage}
+              </Alert>
+            </Snackbar>
+          </CardContent>
+        </Card>
+      </Container>
     </>
   );
 };

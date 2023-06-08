@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Inject, Param, ParseIntPipe, Post, Put, Delete, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Param, ParseIntPipe, Post, Put, Delete, UseGuards, Query } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RoleGuard } from 'src/auth/guards/role.guard';
@@ -20,7 +20,7 @@ export class SubjectController {
 
     @Roles('admin')
     @UseGuards(RoleGuard)
-    @Get(':id')
+    @Get('/getById/:id')
     getById(@Param('id', ParseIntPipe) id: number): Promise<SubjectEntity> {
         return this.subjectUseCases.getById(id);
     }
@@ -37,5 +37,12 @@ export class SubjectController {
     @Delete(':id')
     delete(@Param('id', ParseIntPipe) id: number): Promise<number> {
         return this.subjectUseCases.delete(id)
+    }
+
+    @Roles('admin')
+    @UseGuards(RoleGuard)
+    @Get('/getsubjects')
+    getSubjects(@Query('page', ParseIntPipe) page: number, @Query('size', ParseIntPipe) size: number) {
+        return this.subjectUseCases.getSubjects(page, size);
     }
 }

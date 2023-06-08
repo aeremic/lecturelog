@@ -4,4 +4,8 @@ import { GenericRepositoryAbstract } from './generic.repositoty.abstract';
 
 @Injectable()
 export abstract class SubjectRepositoryAbstract extends GenericRepositoryAbstract<SubjectEntity>  {
+    abstract getSubjects(size: number, skip: number): Promise<SubjectEntity[]>;
+
+    abstract getSubjectsCount(): Promise<number>;
+
 }

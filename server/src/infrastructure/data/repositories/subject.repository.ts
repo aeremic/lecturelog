@@ -38,4 +38,18 @@ export class SubjectRepository implements SubjectRepositoryAbstract {
 
     //#endregion
 
+    async getSubjects(size: number, skip: number): Promise<SubjectEntity[]> {
+        let result = await this.subjectModelRepository.find({
+            take: size,
+            skip: skip
+        });
+
+        return SubjectMapper.ToEntities(result);
+    }
+
+    async getSubjectsCount(): Promise<number> {
+        let result = await this.subjectModelRepository.count();
+
+        return result;
+    }
 }

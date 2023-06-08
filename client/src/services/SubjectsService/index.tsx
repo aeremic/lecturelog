@@ -1,10 +1,10 @@
 import { get, getById } from "../Common/ServiceBase";
 
-const URL: string = "/subject";
+const URL = "/subject";
 
-export const getSubjects = async () => {
+export const getSubjects = async (query: string) => {
   try {
-    return await get(URL);
+    return await get(`${URL}/getSubjects${query}`);
   } catch (err) {
     console.log(err); // TODO: Fix for PROD.
   }

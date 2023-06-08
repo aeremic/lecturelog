@@ -111,3 +111,9 @@ export const Year = "Year";
 export const PleaseEnterStudentIndex = "Enter index";
 
 export const PleaseEnterStudentYear = "Enter year";
+
+export const SubjectSuccessfullyRemoved = "Subject successfully removed";
+
+export const Id = "Id";
+
+export const RemoveSubject = "Remove Subject";
