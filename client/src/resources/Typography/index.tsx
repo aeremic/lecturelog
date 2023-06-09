@@ -119,3 +119,21 @@ export const Id = "Id";
 export const RemoveSubject = "Remove Subject";
 
 export const Subject = "Subject";
+
+export const SubjectName = "Subject Name";
+
+export const PleaseEnterSubjectName = "Please enter name";
+
+export const AddGroup = "Add group";
+
+export const Group = "Group";
+
+export const PleaseEnterPointsPerPresence = "Points";
+
+export const Professors = "Professors";
+
+export const RightArrow = ">>";
+
+export const LeftArrow = "<<";
+
+export const SelectStudents = "Select Students";
