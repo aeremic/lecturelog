@@ -7,6 +7,7 @@ import Main from "./components/Login";
 import Users from "./components/Admin/Users";
 import Subjects from "./components/Admin/Subjects";
 import EmailRegistration from "./components/EmailRegistration";
+import Subject from "./components/Admin/Subjects/Content/Subject";
 
 const App = () => {
   return (
@@ -18,6 +19,8 @@ const App = () => {
           <Route path="/" element={<Main />} />
           <Route path="/admin/users" element={<Users />} />
           <Route path="/admin/subjects" element={<Subjects />} />
+          <Route path="/admin/subjects/subject" element={<Subject />} />
+
           {/* <PrivateRoute path="/">
             <Main />
           </PrivateRoute> */}

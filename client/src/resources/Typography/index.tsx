@@ -117,3 +117,5 @@ export const SubjectSuccessfullyRemoved = "Subject successfully removed";
 export const Id = "Id";
 
 export const RemoveSubject = "Remove Subject";
+
+export const Subject = "Subject";

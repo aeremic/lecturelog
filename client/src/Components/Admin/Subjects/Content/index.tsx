@@ -40,6 +40,7 @@ import { HttpStatusCode } from "axios";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ConfirmationDialog from "../../../Common/ConfirmationDialog";
+import { useNavigate } from "react-router-dom";
 
 interface ISubject {
   id: number;
@@ -69,6 +70,8 @@ const SubjectsTable = () => {
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState<AlertColor>();
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     getSubjects(`?page=${controller.page}&size=${controller.rowsPerPage}`).then(
       (res) => {
@@ -85,6 +88,10 @@ const SubjectsTable = () => {
       }
     );
   }, [controller, subjectsLoaded]);
+
+  const handleAddUserDialogClick = () => {
+    navigate("subject");
+  };
 
   const handlePageChange = (event: any, newPage: number) => {
     setSubjectsLoaded(false);
@@ -146,7 +153,7 @@ const SubjectsTable = () => {
             <Stack direction="row">
               <Button
                 onClick={() => {
-                  // handleAddUserDialogClick({ id: 0, actionResult: false });
+                  handleAddUserDialogClick();
                 }}
                 variant="contained"
                 color="success"
@@ -178,6 +185,8 @@ const SubjectsTable = () => {
                       {subjects.map((subject, index) => (
                         <TableRow
                           key={index}
+                          hover
+                          onClick={() => console.log(index)}
                           sx={{
                             "&:last-child td, &:last-child th": { border: 0 },
                           }}
