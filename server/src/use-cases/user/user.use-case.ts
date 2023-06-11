@@ -84,11 +84,17 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
         return result;
     }
 
-    async getActivatedByEmail(email: string): Promise<UserEntity> {
+    getActivatedAdmin = async (userEntity: UserEntity): Promise<UserEntity> =>
+        this.getActivatedByEmail(userEntity);
+
+    getActivatedProfessor = async (userEntity: UserEntity): Promise<UserEntity> =>
+        this.getActivatedByEmail(userEntity);
+
+    async getActivatedByEmail(userEntity: UserEntity): Promise<UserEntity> {
         let result: UserEntity | PromiseLike<UserEntity>;
         try {
-            if (email) {
-                result = await this.userRepository.getActivatedByEmail(email);
+            if (userEntity.email) {
+                result = await this.userRepository.getActivatedByEmail(userEntity.email);
             }
         } catch (error) {
             this.loggerUseCases.log(ErrorConstants.GetMethodError, error?.message, error?.stack);
@@ -97,11 +103,11 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
         return result;
     }
 
-    async getActivatedByEmailOrIndex(email: string, index?: number, year?: number): Promise<UserEntity> {
+    async getActivatedStudent(userEntity: UserEntity): Promise<UserEntity> {
         let result: UserEntity | PromiseLike<UserEntity>;
         try {
-            if (email && index && year) {
-                result = await this.userRepository.getActivatedByEmailOrIndex(email, index, year);
+            if (userEntity.email && userEntity.index && userEntity.year) {
+                result = await this.userRepository.getActivatedByEmailOrIndex(userEntity.email, userEntity.index, userEntity.year);
             }
         } catch (error) {
             this.loggerUseCases.log(ErrorConstants.GetMethodError, error?.message, error?.stack);
@@ -152,21 +158,30 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
         return result;
     }
 
+    getActivatedUser = async (userEntity: UserEntity, getActivatedUserFunc: (userEntity: UserEntity) => Promise<UserEntity>): Promise<UserEntity> =>
+        await getActivatedUserFunc(userEntity);
+
+
+    async checkIfActiveUserNotFound(userEntity: UserEntity): Promise<Boolean> {
+        let activatedUserInDb: UserEntity = null;
+
+        if (userEntity.role === RoleEnum.student) {
+            activatedUserInDb = await this.getActivatedUser(userEntity, this.getActivatedStudent);
+        } else if (userEntity.role === RoleEnum.professor) {
+            activatedUserInDb = await this.getActivatedUser(userEntity, this.getActivatedProfessor);
+        } else if (userEntity.role === RoleEnum.admin) {
+            activatedUserInDb = await this.getActivatedUser(userEntity, this.getActivatedAdmin);
+        }
+
+        return !this.isFound(activatedUserInDb);
+    }
+
     async createUser(userEntity: UserEntity): Promise<UserEntity> {
         // TODO: Return some type of response if user already exist with that email!
         let result: UserEntity | PromiseLike<UserEntity>;
 
         try {
-            let activatedUserInDb: UserEntity = null;
-
-            if (userEntity.role == RoleEnum.student) {
-                activatedUserInDb = await this.getActivatedByEmailOrIndex(userEntity.email, userEntity.index, userEntity.year);
-            } else {
-                activatedUserInDb = await this.getActivatedByEmail(userEntity.email);
-            }
-
-            if (!this.isFound(activatedUserInDb)) {
-
+            if (await this.checkIfActiveUserNotFound(userEntity)) {
                 userEntity.isActivated = false;
                 result = await super.createOrUpdate(this.userRepository, this.loggerUseCases, userEntity);
 
