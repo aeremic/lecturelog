@@ -90,11 +90,11 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
     getActivatedProfessor = async (userEntity: UserEntity): Promise<UserEntity> =>
         this.getActivatedByEmail(userEntity);
 
-    async getActivatedByEmail(userEntity: UserEntity): Promise<UserEntity> {
+    getActivatedStudent = async (userEntity: UserEntity): Promise<UserEntity> => {
         let result: UserEntity | PromiseLike<UserEntity>;
         try {
-            if (userEntity.email) {
-                result = await this.userRepository.getActivatedByEmail(userEntity.email);
+            if (userEntity.email && userEntity.index && userEntity.year) {
+                result = await this.userRepository.getActivatedByEmailOrIndex(userEntity.email, userEntity.index, userEntity.year);
             }
         } catch (error) {
             this.loggerUseCases.log(ErrorConstants.GetMethodError, error?.message, error?.stack);
@@ -103,11 +103,11 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
         return result;
     }
 
-    async getActivatedStudent(userEntity: UserEntity): Promise<UserEntity> {
+    async getActivatedByEmail(userEntity: UserEntity): Promise<UserEntity> {
         let result: UserEntity | PromiseLike<UserEntity>;
         try {
-            if (userEntity.email && userEntity.index && userEntity.year) {
-                result = await this.userRepository.getActivatedByEmailOrIndex(userEntity.email, userEntity.index, userEntity.year);
+            if (userEntity.email) {
+                result = await this.userRepository.getActivatedByEmail(userEntity.email);
             }
         } catch (error) {
             this.loggerUseCases.log(ErrorConstants.GetMethodError, error?.message, error?.stack);
@@ -158,9 +158,9 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
         return result;
     }
 
-    getActivatedUser = async (userEntity: UserEntity, getActivatedUserFunc: (userEntity: UserEntity) => Promise<UserEntity>): Promise<UserEntity> =>
-        await getActivatedUserFunc(userEntity);
-
+    async getActivatedUser(userEntity: UserEntity, getActivatedUserFunc: (userEntity: UserEntity) => Promise<UserEntity>): Promise<UserEntity> {
+        return await getActivatedUserFunc(userEntity);
+    }
 
     async checkIfActiveUserNotFound(userEntity: UserEntity): Promise<Boolean> {
         let activatedUserInDb: UserEntity = null;
