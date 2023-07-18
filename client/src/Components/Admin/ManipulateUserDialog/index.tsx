@@ -49,7 +49,6 @@ export interface IManipulateUserDialogRawProps {
 }
 
 interface IManipulateUserFormInput {
-  // TODO: Add index for students.
   id: number;
   firstname: string;
   lastname: string;
@@ -57,11 +56,6 @@ interface IManipulateUserFormInput {
   index?: number | null;
   year?: number | null;
   role: RoleEnum;
-}
-
-interface IManipulateUser {
-  id: number;
-  actionResult: boolean;
 }
 
 const ManipulateUserDialog = (props: IManipulateUserDialogRawProps) => {

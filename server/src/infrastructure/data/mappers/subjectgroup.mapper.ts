@@ -1,5 +1,7 @@
 import { SubjectGroupEntity } from "src/core/entities";
 import { SubjectGroup } from "../models";
+import { StudentsSubjectGroupsMapper } from "./students-subjectgroups.mapper";
+import { ProfessorsSubjectGroupsMapper } from "./professors-subjectgroups.mapper";
 
 export class SubjectGroupMapper {
 
@@ -7,7 +9,9 @@ export class SubjectGroupMapper {
         let subjectGroupEntity: SubjectGroupEntity = {
             id: subjectGroupModel?.id,
             groupNo: subjectGroupModel?.groupNo,
-            pointsPerPresence: subjectGroupModel?.pointsPerPresence
+            pointsPerPresence: subjectGroupModel?.pointsPerPresence,
+            students: StudentsSubjectGroupsMapper.ToEntities(subjectGroupModel.studentsSubjectGroups),
+            professors: ProfessorsSubjectGroupsMapper.ToEntities(subjectGroupModel.professorsSubjectGroups)
         };
 
         return subjectGroupEntity;

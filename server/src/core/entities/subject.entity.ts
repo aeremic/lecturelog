@@ -6,5 +6,4 @@ export class SubjectEntity {
     public name: string;
 
     public subjectGroups: SubjectGroupEntity[];
-
 }
