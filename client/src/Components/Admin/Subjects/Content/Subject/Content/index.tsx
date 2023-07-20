@@ -95,11 +95,16 @@ const Content = () => {
   const handleSubjectGroupChange = (event: any) => {
     if (["pointsPerPresence"].includes(event.target.name)) {
       const newSubjectGroups = [...subject.subjectGroups];
-
       const index = parseInt(event.target.id);
-      const temp: string = event.target.name;
 
-      newSubjectGroups[index]["pointsPerPresence"] = event.target.value;
+      switch (event.target.name) {
+        case "pointsPerPresence":
+          newSubjectGroups[index]["pointsPerPresence"] = event.target.value;
+          break;
+        default:
+          break;
+      }
+
       setSubject({
         subjectName: subject.subjectName,
         subjectGroups: newSubjectGroups,
@@ -112,12 +117,6 @@ const Content = () => {
 
     console.log(subject);
   };
-
-  // const onSubmit = async (data: IManipulateSubjectFormInput) => {
-  //   const subject: ISubject = {
-  //     name: data.name,
-  //     subjectGroups: [],
-  //   };
 
   // const res: any = await createOrUpdateSubject(subject);
   // if (
