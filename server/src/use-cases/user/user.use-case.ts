@@ -14,6 +14,7 @@ import { ConfigService } from '@nestjs/config';
 import { AuthService } from 'src/auth';
 import { StudentsDto } from 'src/core/dtos/responses/students.dto';
 import { RoleEnum } from 'src/core/common/enums/role.enum';
+import { AllUsersExceptAdminDto } from 'src/core/dtos/responses/all-users-except-admin.dto';
 
 @Injectable()
 export class UserUseCases extends GenericUseCases<UserEntity>{
@@ -228,6 +229,21 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
             }
         } catch (error) {
             this.loggerUseCases.log(ErrorConstants.PostMethodError, error?.message, error?.stack);
+        }
+
+        return result;
+    }
+
+    async getAllExceptAdmin(): Promise<AllUsersExceptAdminDto> {
+        let result: AllUsersExceptAdminDto | PromiseLike<AllUsersExceptAdminDto>;
+        try {
+            let users = await this.userRepository.getAllExceptAdmin();
+            result = {
+                professors: users.filter(u => u.role == RoleEnum.professor),
+                students: users.filter(u => u.role == RoleEnum.student)
+            }
+        } catch (error) {
+            this.loggerUseCases.log(ErrorConstants.GetMethodError, error?.message, error?.stack);
         }
 
         return result;

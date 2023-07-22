@@ -12,7 +12,7 @@ export const getSubjects = async (query: string) => {
 
 export const getSubject = async (id: number) => {
   try {
-    return await getById(URL, id);
+    return await getById(`${URL}/getById`, id);
   } catch (err) {
     console.log(err); // TODO: Fix for PROD.
   }

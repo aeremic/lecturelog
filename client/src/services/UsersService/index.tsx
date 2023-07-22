@@ -14,7 +14,7 @@ export const getUsers: any = async () => {
 
 export const getUser: any = async (id: number) => {
   try {
-    return await getById(URL, id);
+    return await getById(`${URL}/getById`, id);
   } catch (err) {
     console.log(err); // TODO: Fix for PROD.
   }
@@ -39,6 +39,14 @@ export const emailRegistration = async (data: IEmailRegistration) => {
 export const removeUser = async (id: number) => {
   try {
     return await remove(`${URL}`, id);
+  } catch (err) {
+    console.log(err); // TODO: Fix for PROD.
+  }
+};
+
+export const getAllExceptAdmin = async () => {
+  try {
+    return await get(`${URL}/getAllExceptAdmin`);
   } catch (err) {
     console.log(err); // TODO: Fix for PROD.
   }

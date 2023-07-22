@@ -21,7 +21,7 @@ export class UserController {
 
     @Roles('admin')
     @UseGuards(RoleGuard)
-    @Get(':id')
+    @Get('/getById/:id')
     getById(@Param('id', ParseIntPipe) id: number): Promise<UserEntity> {
         return this.userUseCases.getById(id);
     }
@@ -59,5 +59,12 @@ export class UserController {
     @Post('/emailRegistration')
     emailRegistration(@Body() emailRegistrationDto: EmailRegistrationDto): Promise<boolean> {
         return this.userUseCases.emailRegistration(emailRegistrationDto)
+    }
+
+    @Roles('admin')
+    @UseGuards(RoleGuard)
+    @Get('/getAllExceptAdmin')
+    getAllExceptAdmin() {
+        return this.userUseCases.getAllExceptAdmin();
     }
 }

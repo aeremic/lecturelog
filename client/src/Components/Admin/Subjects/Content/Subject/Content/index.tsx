@@ -1,4 +1,5 @@
 import {
+  AlertColor,
   Box,
   Button,
   Card,
@@ -19,18 +20,17 @@ import {
   OutlinedInput,
   Paper,
   Select,
-  SelectChangeEvent,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
-import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
-import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import {
-  Add,
   AddGroup,
+  AlertFailureMessage,
   CreateSubject,
   Group,
+  NoProfessorsFound,
+  NoStudentsFound,
   PleaseEnterPointsPerPresence,
   PleaseEnterSubjectName,
   PointsPerPresence,
@@ -40,11 +40,11 @@ import {
   Subject,
   SubjectName,
 } from "../../../../../../resources/Typography";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { HttpStatusCode } from "axios";
-import { ISubject } from "../../../../../../Models/Subject";
-import { ISubjectGroup } from "../../../../../../Models/SubjectGroup";
-import { Id } from "../../../../../../resources/Typography/index";
+import { RoleEnum } from "../../../../../../Models/Enums";
+import { IUser } from "../../../../../../Models/User";
+import { getAllExceptAdmin } from "../../../../../../services/UsersService";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -57,37 +57,24 @@ const MenuProps = {
   },
 };
 
-const names = [
-  "Oliver Hansen",
-  "Van Henry",
-  "April Tucker",
-  "Ralph Hubbard",
-  "Omar Alexander",
-  "Carlos Abbott",
-  "Miriam Wagner",
-  "Bradley Wilkerson",
-  "Virginia Andrews",
-  "Kelly Snyder",
-];
-
-function not(a: readonly number[], b: readonly number[]) {
+function not(a: readonly IUser[], b: readonly IUser[]) {
   return a.filter((value) => b.indexOf(value) === -1);
 }
 
-function intersection(a: readonly number[], b: readonly number[]) {
+function intersection(a: readonly IUser[], b: readonly IUser[]) {
   return a.filter((value) => b.indexOf(value) !== -1);
 }
 
 interface IStudentFormInput {
-  checked: number[];
-  left: number[];
-  leftChecked: number[];
-  right: number[];
-  rightChecked: number[];
+  checked: IUser[];
+  left: IUser[];
+  leftChecked: IUser[];
+  right: IUser[];
+  rightChecked: IUser[];
 }
 
 interface ISubjectGroupsFormInput {
-  professors: string[];
+  professors: IUser[];
   pointsPerPresence: number;
   students: IStudentFormInput;
 }
@@ -98,6 +85,20 @@ interface ISubjectFormInput {
 }
 
 const Content = () => {
+  const userInitialState: IUser[] = [
+    {
+      id: 0,
+      email: "",
+      firstname: "",
+      lastname: "",
+      index: null,
+      year: null,
+      role: RoleEnum.Default,
+    },
+  ];
+
+  const [professors, setProfessors] = useState(userInitialState);
+  const [students, setStudents] = useState(userInitialState);
   const [subject, setSubject] = useState<ISubjectFormInput>({
     subjectName: "",
     subjectGroups: [
@@ -106,14 +107,44 @@ const Content = () => {
         pointsPerPresence: 0,
         students: {
           checked: [],
-          left: [0, 1, 2, 3],
+          left: [],
           leftChecked: [],
-          right: [4, 5, 6, 7],
+          right: [],
           rightChecked: [],
         },
       },
     ],
   });
+  const [dataLoaded, setDataLoaded] = useState(false);
+
+  const [openAlert, setOpenAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertType, setAlertType] = useState<AlertColor>();
+
+  useEffect(() => {
+    getAllExceptAdmin().then((res) => {
+      if (res && res.status === HttpStatusCode.Ok && res.data) {
+        setProfessors(res.data.professors ?? []);
+        setStudents(res.data.students ?? []);
+
+        const newSubjectGroups = [...subject.subjectGroups];
+        newSubjectGroups.forEach((element) => {
+          element.students.right = students;
+        });
+
+        setSubject({
+          subjectName: subject.subjectName,
+          subjectGroups: newSubjectGroups,
+        });
+
+        setDataLoaded(true);
+      } else {
+        setAlertType("error");
+        setAlertMessage(AlertFailureMessage);
+        setOpenAlert(true);
+      }
+    });
+  }, [dataLoaded]);
 
   const addGroup = (event: any) => {
     event.preventDefault();
@@ -126,9 +157,9 @@ const Content = () => {
           pointsPerPresence: 0,
           students: {
             checked: [],
-            left: [0, 1, 2, 3],
+            left: students,
             leftChecked: [],
-            right: [4, 5, 6, 7],
+            right: [],
             rightChecked: [],
           },
         },
@@ -204,8 +235,7 @@ const Content = () => {
   // }
   //};
 
-  const handleChecked = (index: number, value: number) => {
-    debugger;
+  const handleChecked = (index: number, value: IUser) => {
     const newSubjectGroups = [...subject.subjectGroups];
     const currentIndex =
       subject.subjectGroups[index].students.checked.indexOf(value);
@@ -237,7 +267,6 @@ const Content = () => {
   };
 
   const handleCheckedRight = (index: number) => {
-    debugger;
     const newSubjectGroups = [...subject.subjectGroups];
 
     newSubjectGroups[index].students.right = newSubjectGroups[
@@ -259,7 +288,6 @@ const Content = () => {
   };
 
   const handleCheckedLeft = (index: number) => {
-    debugger;
     const newSubjectGroups = [...subject.subjectGroups];
 
     newSubjectGroups[index].students.left = newSubjectGroups[
@@ -280,16 +308,16 @@ const Content = () => {
     });
   };
 
-  const customList = (index: number, items: readonly number[]) => (
+  const customList = (index: number, items: readonly IUser[]) => (
     <Paper sx={{ width: 200, height: 230, overflow: "auto" }}>
       <List dense component="div" role="list">
-        {items.map((value: number) => {
+        {items.map((value: IUser) => {
           const labelId = `transfer-list-item-${value}-label`;
 
           return (
             <Box>
               <ListItem
-                key={value}
+                key={value.id}
                 role="listitem"
                 button
                 onClick={() => {
@@ -311,7 +339,10 @@ const Content = () => {
                     }}
                   />
                 </ListItemIcon>
-                <ListItemText id={labelId} primary={`List item ${value + 1}`} />
+                <ListItemText
+                  id={labelId}
+                  primary={`List item ${value.id + 1}`}
+                />
               </ListItem>
             </Box>
           );
@@ -399,22 +430,32 @@ const Content = () => {
                                   }}
                                 >
                                   {selected.map((value) => (
-                                    <Chip key={value} label={value} />
+                                    <Chip
+                                      key={value.id}
+                                      label={
+                                        value.firstname + " " + value.lastname
+                                      }
+                                    />
                                   ))}
                                 </Box>
                               )}
                               MenuProps={MenuProps}
                               sx={{ mt: 0.8 }}
                             >
-                              {names.map((name) => (
-                                <MenuItem
-                                  id={index.toString()}
-                                  key={name}
-                                  value={name}
-                                >
-                                  {name}
+                              {dataLoaded ? (
+                                professors.map((professor) => (
+                                  <MenuItem
+                                    key={professor.id}
+                                    value={professor.id}
+                                  >
+                                    {professor.firstname} {professor.lastname}
+                                  </MenuItem>
+                                ))
+                              ) : (
+                                <MenuItem key={-1} value={-1} disabled={true}>
+                                  {NoProfessorsFound}
                                 </MenuItem>
-                              ))}
+                              )}
                             </Select>
                           </FormGroup>
                           <FormGroup sx={{ mt: 2, minWidth: 10 }}>
@@ -433,65 +474,69 @@ const Content = () => {
                           </FormGroup>
                         </Stack>
                         <FormGroup sx={{ mt: 2 }}>
-                          <FormLabel>{SelectStudents}</FormLabel>
+                          <FormLabel sx={{ mb: 1 }}>{SelectStudents}</FormLabel>
                           <Stack direction="row">
-                            <Grid
-                              container
-                              spacing={2}
-                              justifyContent="center"
-                              alignItems="center"
-                            >
-                              <Grid item>
-                                {customList(
-                                  index,
-                                  subject.subjectGroups[index].students.left
-                                )}
-                              </Grid>
-                              <Grid item>
-                                <Grid
-                                  container
-                                  direction="column"
-                                  alignItems="center"
-                                >
-                                  <Button
-                                    sx={{ my: 0.5 }}
-                                    variant="outlined"
-                                    size="small"
-                                    onClick={() => {
-                                      handleCheckedRight(index);
-                                    }}
-                                    disabled={
-                                      subject.subjectGroups[index].students
-                                        .leftChecked.length === 0
-                                    }
-                                    aria-label="move selected right"
+                            {dataLoaded ? (
+                              <Grid
+                                container
+                                spacing={2}
+                                justifyContent="center"
+                                alignItems="center"
+                              >
+                                <Grid item>
+                                  {customList(
+                                    index,
+                                    subject.subjectGroups[index].students.left
+                                  )}
+                                </Grid>
+                                <Grid item>
+                                  <Grid
+                                    container
+                                    direction="column"
+                                    alignItems="center"
                                   >
-                                    &gt;
-                                  </Button>
-                                  <Button
-                                    sx={{ my: 0.5 }}
-                                    variant="outlined"
-                                    size="small"
-                                    onClick={() => {
-                                      handleCheckedLeft(index);
-                                    }}
-                                    disabled={
-                                      subject.subjectGroups[index].students
-                                        .rightChecked.length === 0
-                                    }
-                                    aria-label="move selected left"
-                                  >
-                                    &lt;
-                                  </Button>
+                                    <Button
+                                      sx={{ my: 0.5 }}
+                                      variant="outlined"
+                                      size="small"
+                                      onClick={() => {
+                                        handleCheckedRight(index);
+                                      }}
+                                      disabled={
+                                        subject.subjectGroups[index].students
+                                          .leftChecked.length === 0
+                                      }
+                                      aria-label="move selected right"
+                                    >
+                                      &gt;
+                                    </Button>
+                                    <Button
+                                      sx={{ my: 0.5 }}
+                                      variant="outlined"
+                                      size="small"
+                                      onClick={() => {
+                                        handleCheckedLeft(index);
+                                      }}
+                                      disabled={
+                                        subject.subjectGroups[index].students
+                                          .rightChecked.length === 0
+                                      }
+                                      aria-label="move selected left"
+                                    >
+                                      &lt;
+                                    </Button>
+                                  </Grid>
+                                </Grid>
+                                <Grid item>
+                                  {customList(
+                                    index,
+                                    subject.subjectGroups[index].students.right
+                                  )}
                                 </Grid>
                               </Grid>
-                              <Grid item>
-                                {customList(
-                                  index,
-                                  subject.subjectGroups[index].students.right
-                                )}
-                              </Grid>
-                            </Grid>
+                            ) : (
+                              <Typography>{NoStudentsFound}</Typography>
+                            )}
                           </Stack>
                           <Box sx={{ mt: 1, textAlign: "right" }}>
                             <Button

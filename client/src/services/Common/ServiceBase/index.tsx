@@ -2,12 +2,9 @@ import axios from "axios";
 import { API } from "..";
 import { AuthHeader } from "../Headers/AuthHeader";
 
-export const get = async (
-  endpoint: string,
-  autoIncludeAuthHeader = true,
-  header: any = null
-) => {
-  if (autoIncludeAuthHeader && header == null) {
+export const get = async (endpoint: string, autoIncludeAuthHeader = true) => {
+  let header = { Authorization: "" };
+  if (autoIncludeAuthHeader) {
     header = AuthHeader();
   }
   const URL: string = API + endpoint;
@@ -17,10 +14,10 @@ export const get = async (
 export const getById = async (
   endpoint: string,
   id: number,
-  autoIncludeAuthHeader = true,
-  header: any = null
+  autoIncludeAuthHeader = true
 ) => {
-  if (autoIncludeAuthHeader && header == null) {
+  let header = { Authorization: "" };
+  if (autoIncludeAuthHeader) {
     header = AuthHeader();
   }
   const URL: string = API + endpoint;
@@ -30,10 +27,10 @@ export const getById = async (
 export const post = async (
   endpoint: string,
   modelToPost: any,
-  autoIncludeAuthHeader = true,
-  header: any = null
+  autoIncludeAuthHeader = true
 ) => {
-  if (autoIncludeAuthHeader && header == null) {
+  let header = { Authorization: "" };
+  if (autoIncludeAuthHeader) {
     header = AuthHeader();
   }
   const URL: string = API + endpoint;
@@ -43,10 +40,10 @@ export const post = async (
 export const remove = async (
   endpoint: string,
   id: number,
-  autoIncludeAuthHeader = true,
-  header: any = null
+  autoIncludeAuthHeader = true
 ) => {
-  if (autoIncludeAuthHeader && header == null) {
+  let header = { Authorization: "" };
+  if (autoIncludeAuthHeader) {
     header = AuthHeader();
   }
   const URL: string = API + endpoint;

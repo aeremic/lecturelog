@@ -102,4 +102,16 @@ export class UserRepository implements UserRepositoryAbstract {
 
         return result;
     }
+
+    async getAllExceptAdmin(): Promise<UserEntity[]> {
+        let result = await this.userModelRepository.find({
+            where: [
+                { isActivated: true, role: UserMapper.getType(RoleEnum.professor) },
+                { isActivated: true, role: UserMapper.getType(RoleEnum.student) }
+            ],
+            order: { email: "ASC" }
+        });
+
+        return UserMapper.ToEntities(result);
+    }
 }
