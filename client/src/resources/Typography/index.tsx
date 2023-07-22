@@ -137,3 +137,7 @@ export const RightArrow = ">>";
 export const LeftArrow = "<<";
 
 export const SelectStudents = "Select Students";
+
+export const CreateSubject = "Create Subject";
+
+export const RemoveGroup = "Remove Group";

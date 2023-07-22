@@ -23,11 +23,13 @@ import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArro
 import {
   Add,
   AddGroup,
+  CreateSubject,
   Group,
   PleaseEnterPointsPerPresence,
   PleaseEnterSubjectName,
   PointsPerPresence,
   Professors,
+  RemoveGroup,
   SelectStudents,
   Subject,
   SubjectName,
@@ -36,13 +38,7 @@ import { useState } from "react";
 import { HttpStatusCode } from "axios";
 import { ISubject } from "../../../../../../Models/Subject";
 import { ISubjectGroup } from "../../../../../../Models/SubjectGroup";
-
-interface IManipulateSubjectFormInput {
-  name: string;
-  subjectGroups: any;
-}
-
-const subjectGroups: ISubjectGroup[] = [];
+import { Id } from "../../../../../../resources/Typography/index";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -71,7 +67,7 @@ const names = [
 const Content = () => {
   const [subject, setSubject] = useState({
     subjectName: "",
-    subjectGroups: [{ pointsPerPresence: 0, test: "" }],
+    subjectGroups: [{ professors: [], pointsPerPresence: 0, students: [] }],
   });
 
   const addGroup = (event: any) => {
@@ -80,8 +76,17 @@ const Content = () => {
       subjectName: subject.subjectName,
       subjectGroups: [
         ...subject.subjectGroups,
-        { pointsPerPresence: 0, test: "" },
+        { professors: [], pointsPerPresence: 0, students: [] },
       ],
+    });
+  };
+
+  const removeGroup = (index: number) => {
+    subject.subjectGroups.splice(index, 1);
+
+    setSubject({
+      subjectName: subject.subjectName,
+      subjectGroups: subject.subjectGroups,
     });
   };
 
@@ -93,11 +98,25 @@ const Content = () => {
   };
 
   const handleSubjectGroupChange = (event: any) => {
-    if (["pointsPerPresence"].includes(event.target.name)) {
+    let index = -1;
+    if (event.target.id !== undefined) {
+      index = parseInt(event.target.id);
+    } else {
+      const inputParams = event.target.name.split("#");
+      index = inputParams[0];
+      event.target.name = inputParams[1];
+    }
+
+    if (
+      index != -1 &&
+      ["professors", "pointsPerPresence"].includes(event.target.name)
+    ) {
       const newSubjectGroups = [...subject.subjectGroups];
-      const index = parseInt(event.target.id);
 
       switch (event.target.name) {
+        case "professors":
+          newSubjectGroups[index]["professors"] = event.target.value;
+          break;
         case "pointsPerPresence":
           newSubjectGroups[index]["pointsPerPresence"] = event.target.value;
           break;
@@ -153,14 +172,26 @@ const Content = () => {
                     </Stack>
                   </FormGroup>
                   <FormGroup>
-                    <Button
-                      onClick={addGroup}
-                      variant="contained"
-                      color="success"
-                      sx={{ mt: 0.8 }}
-                    >
-                      {AddGroup}
-                    </Button>
+                    <Stack>
+                      <Box sx={{ mt: 1, textAlign: "right" }}>
+                        <Button
+                          onClick={addGroup}
+                          variant="contained"
+                          color="info"
+                          sx={{ maxWidth: "xs", mr: 1 }}
+                        >
+                          {AddGroup}
+                        </Button>
+                        <Button
+                          type="submit"
+                          variant="contained"
+                          color="success"
+                          sx={{ maxWidth: "xs" }}
+                        >
+                          {CreateSubject}
+                        </Button>
+                      </Box>
+                    </Stack>
                   </FormGroup>
                 </FormControl>
               </CardContent>
@@ -172,46 +203,48 @@ const Content = () => {
                 return (
                   <Card key={index} sx={{ mt: 1 }}>
                     <CardContent>
-                      <Typography variant="h6">{Group} I</Typography>
+                      <Stack direction="row">
+                        <Typography variant="h6">{Group}</Typography>
+                      </Stack>
                       <Divider />
                       <FormControl fullWidth>
                         <Stack direction="row">
                           <FormGroup sx={{ mt: 2, mr: 2, minWidth: 440 }}>
                             <FormLabel>{Professors}</FormLabel>
-                            {/* <Select
-                            id="multiple-chip"
-                            size="small"
-                            multiple
-                            value={personName}
-                            onChange={handleChange}
-                            input={
-                              <OutlinedInput
-                                id="select-multiple-chip"
-                                label="Chip"
-                              />
-                            }
-                            renderValue={(selected) => (
-                              <Box
-                                sx={{
-                                  display: "flex",
-                                  flexWrap: "wrap",
-                                  gap: 0.5,
-                                }}
-                              >
-                                {selected.map((value) => (
-                                  <Chip key={value} label={value} />
-                                ))}
-                              </Box>
-                            )}
-                            MenuProps={MenuProps}
-                            sx={{ mt: 0.8 }}
-                          >
-                            {names.map((name) => (
-                              <MenuItem key={name} value={name}>
-                                {name}
-                              </MenuItem>
-                            ))}
-                          </Select> */}
+                            <Select
+                              id={index.toString()}
+                              name={index.toString() + "#" + "professors"}
+                              size="small"
+                              multiple
+                              value={subject.subjectGroups[index].professors}
+                              onChange={handleSubjectGroupChange}
+                              input={<OutlinedInput label="Chip" />}
+                              renderValue={(selected) => (
+                                <Box
+                                  sx={{
+                                    display: "flex",
+                                    flexWrap: "wrap",
+                                    gap: 0.5,
+                                  }}
+                                >
+                                  {selected.map((value) => (
+                                    <Chip key={value} label={value} />
+                                  ))}
+                                </Box>
+                              )}
+                              MenuProps={MenuProps}
+                              sx={{ mt: 0.8 }}
+                            >
+                              {names.map((name) => (
+                                <MenuItem
+                                  id={index.toString()}
+                                  key={name}
+                                  value={name}
+                                >
+                                  {name}
+                                </MenuItem>
+                              ))}
+                            </Select>
                           </FormGroup>
                           <FormGroup sx={{ mt: 2, minWidth: 10 }}>
                             <FormLabel>{PointsPerPresence}</FormLabel>
@@ -287,24 +320,22 @@ const Content = () => {
                             </Select> */}
                             </FormGroup>
                           </Stack>
+                          <Box sx={{ mt: 1, textAlign: "right" }}>
+                            <Button
+                              onClick={() => removeGroup(index)}
+                              variant="contained"
+                              color="error"
+                              sx={{ maxWidth: "xs" }}
+                            >
+                              {RemoveGroup}
+                            </Button>
+                          </Box>
                         </FormGroup>
                       </FormControl>
                     </CardContent>
                   </Card>
                 );
               })}
-            </Stack>
-            <Stack>
-              <Box sx={{ mt: 1, textAlign: "right" }}>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="success"
-                  sx={{ maxWidth: "xs" }}
-                >
-                  {Add}
-                </Button>
-              </Box>
             </Stack>
           </Grid>
         </Grid>
