@@ -3,6 +3,7 @@ import {
   Button,
   Card,
   CardContent,
+  Checkbox,
   Chip,
   Container,
   Divider,
@@ -10,8 +11,13 @@ import {
   FormGroup,
   FormLabel,
   Grid,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
   MenuItem,
   OutlinedInput,
+  Paper,
   Select,
   SelectChangeEvent,
   Stack,
@@ -64,10 +70,49 @@ const names = [
   "Kelly Snyder",
 ];
 
+function not(a: readonly number[], b: readonly number[]) {
+  return a.filter((value) => b.indexOf(value) === -1);
+}
+
+function intersection(a: readonly number[], b: readonly number[]) {
+  return a.filter((value) => b.indexOf(value) !== -1);
+}
+
+interface IStudentFormInput {
+  checked: number[];
+  left: number[];
+  leftChecked: number[];
+  right: number[];
+  rightChecked: number[];
+}
+
+interface ISubjectGroupsFormInput {
+  professors: string[];
+  pointsPerPresence: number;
+  students: IStudentFormInput;
+}
+
+interface ISubjectFormInput {
+  subjectName: string;
+  subjectGroups: ISubjectGroupsFormInput[];
+}
+
 const Content = () => {
-  const [subject, setSubject] = useState({
+  const [subject, setSubject] = useState<ISubjectFormInput>({
     subjectName: "",
-    subjectGroups: [{ professors: [], pointsPerPresence: 0, students: [] }],
+    subjectGroups: [
+      {
+        professors: [],
+        pointsPerPresence: 0,
+        students: {
+          checked: [],
+          left: [0, 1, 2, 3],
+          leftChecked: [],
+          right: [4, 5, 6, 7],
+          rightChecked: [],
+        },
+      },
+    ],
   });
 
   const addGroup = (event: any) => {
@@ -76,7 +121,17 @@ const Content = () => {
       subjectName: subject.subjectName,
       subjectGroups: [
         ...subject.subjectGroups,
-        { professors: [], pointsPerPresence: 0, students: [] },
+        {
+          professors: [],
+          pointsPerPresence: 0,
+          students: {
+            checked: [],
+            left: [0, 1, 2, 3],
+            leftChecked: [],
+            right: [4, 5, 6, 7],
+            rightChecked: [],
+          },
+        },
       ],
     });
   };
@@ -148,6 +203,122 @@ const Content = () => {
   // } else {
   // }
   //};
+
+  const handleChecked = (index: number, value: number) => {
+    debugger;
+    const newSubjectGroups = [...subject.subjectGroups];
+    const currentIndex =
+      subject.subjectGroups[index].students.checked.indexOf(value);
+    const newChecked = [...subject.subjectGroups[index].students.checked];
+
+    if (currentIndex === -1) {
+      newChecked.push(value);
+    } else {
+      newChecked.splice(currentIndex, 1);
+    }
+
+    const newLeftChecked = intersection(
+      newChecked,
+      subject.subjectGroups[index].students.left
+    );
+    const newRightChecked = intersection(
+      newChecked,
+      subject.subjectGroups[index].students.right
+    );
+
+    newSubjectGroups[index].students.checked = newChecked;
+    newSubjectGroups[index].students.leftChecked = newLeftChecked;
+    newSubjectGroups[index].students.rightChecked = newRightChecked;
+
+    setSubject({
+      subjectName: subject.subjectName,
+      subjectGroups: newSubjectGroups,
+    });
+  };
+
+  const handleCheckedRight = (index: number) => {
+    debugger;
+    const newSubjectGroups = [...subject.subjectGroups];
+
+    newSubjectGroups[index].students.right = newSubjectGroups[
+      index
+    ].students.right.concat(newSubjectGroups[index].students.leftChecked);
+    newSubjectGroups[index].students.left = not(
+      newSubjectGroups[index].students.left,
+      newSubjectGroups[index].students.leftChecked
+    );
+    newSubjectGroups[index].students.checked = not(
+      newSubjectGroups[index].students.checked,
+      newSubjectGroups[index].students.leftChecked
+    );
+
+    setSubject({
+      subjectName: subject.subjectName,
+      subjectGroups: newSubjectGroups,
+    });
+  };
+
+  const handleCheckedLeft = (index: number) => {
+    debugger;
+    const newSubjectGroups = [...subject.subjectGroups];
+
+    newSubjectGroups[index].students.left = newSubjectGroups[
+      index
+    ].students.left.concat(newSubjectGroups[index].students.rightChecked);
+    newSubjectGroups[index].students.right = not(
+      newSubjectGroups[index].students.right,
+      newSubjectGroups[index].students.rightChecked
+    );
+    newSubjectGroups[index].students.checked = not(
+      newSubjectGroups[index].students.checked,
+      newSubjectGroups[index].students.rightChecked
+    );
+
+    setSubject({
+      subjectName: subject.subjectName,
+      subjectGroups: newSubjectGroups,
+    });
+  };
+
+  const customList = (index: number, items: readonly number[]) => (
+    <Paper sx={{ width: 200, height: 230, overflow: "auto" }}>
+      <List dense component="div" role="list">
+        {items.map((value: number) => {
+          const labelId = `transfer-list-item-${value}-label`;
+
+          return (
+            <Box>
+              <ListItem
+                key={value}
+                role="listitem"
+                button
+                onClick={() => {
+                  console.log(index, value);
+                  handleChecked(index, value);
+                }}
+              >
+                <ListItemIcon>
+                  <Checkbox
+                    checked={
+                      subject.subjectGroups[index].students.checked.indexOf(
+                        value
+                      ) !== -1
+                    }
+                    tabIndex={-1}
+                    disableRipple
+                    inputProps={{
+                      "aria-labelledby": labelId,
+                    }}
+                  />
+                </ListItemIcon>
+                <ListItemText id={labelId} primary={`List item ${value + 1}`} />
+              </ListItem>
+            </Box>
+          );
+        })}
+      </List>
+    </Paper>
+  );
 
   return (
     <Container sx={{ mt: 1 }}>
@@ -264,61 +435,63 @@ const Content = () => {
                         <FormGroup sx={{ mt: 2 }}>
                           <FormLabel>{SelectStudents}</FormLabel>
                           <Stack direction="row">
-                            <FormGroup>
-                              {/* <Select
-                              multiple
-                              native
-                              value={personName}
-                              inputProps={{
-                                id: "select-multiple-native",
-                              }}
-                              sx={{ minWidth: 280 }}
+                            <Grid
+                              container
+                              spacing={2}
+                              justifyContent="center"
+                              alignItems="center"
                             >
-                              {names.map((name) => (
-                                <option key={name} value={name}>
-                                  {name}
-                                </option>
-                              ))}
-                            </Select> */}
-                            </FormGroup>
-                            <Stack sx={{ m: "auto" }}>
-                              <FormGroup>
-                                <Button
-                                  variant="contained"
-                                  color="success"
-                                  sx={{ maxHeight: 30 }}
+                              <Grid item>
+                                {customList(
+                                  index,
+                                  subject.subjectGroups[index].students.left
+                                )}
+                              </Grid>
+                              <Grid item>
+                                <Grid
+                                  container
+                                  direction="column"
+                                  alignItems="center"
                                 >
-                                  <KeyboardDoubleArrowRightIcon />
-                                </Button>
-                              </FormGroup>
-                              <Divider sx={{ m: 1 }} />
-                              <FormGroup>
-                                <Button
-                                  variant="contained"
-                                  color="success"
-                                  sx={{ maxHeight: 30 }}
-                                >
-                                  <KeyboardDoubleArrowLeftIcon />
-                                </Button>
-                              </FormGroup>
-                            </Stack>
-                            <FormGroup>
-                              {/* <Select
-                              multiple
-                              native
-                              value={personName}
-                              inputProps={{
-                                id: "select-multiple-native",
-                              }}
-                              sx={{ minWidth: 280 }}
-                            >
-                              {names.map((name) => (
-                                <option key={name} value={name}>
-                                  {name}
-                                </option>
-                              ))}
-                            </Select> */}
-                            </FormGroup>
+                                  <Button
+                                    sx={{ my: 0.5 }}
+                                    variant="outlined"
+                                    size="small"
+                                    onClick={() => {
+                                      handleCheckedRight(index);
+                                    }}
+                                    disabled={
+                                      subject.subjectGroups[index].students
+                                        .leftChecked.length === 0
+                                    }
+                                    aria-label="move selected right"
+                                  >
+                                    &gt;
+                                  </Button>
+                                  <Button
+                                    sx={{ my: 0.5 }}
+                                    variant="outlined"
+                                    size="small"
+                                    onClick={() => {
+                                      handleCheckedLeft(index);
+                                    }}
+                                    disabled={
+                                      subject.subjectGroups[index].students
+                                        .rightChecked.length === 0
+                                    }
+                                    aria-label="move selected left"
+                                  >
+                                    &lt;
+                                  </Button>
+                                </Grid>
+                              </Grid>
+                              <Grid item>
+                                {customList(
+                                  index,
+                                  subject.subjectGroups[index].students.right
+                                )}
+                              </Grid>
+                            </Grid>
                           </Stack>
                           <Box sx={{ mt: 1, textAlign: "right" }}>
                             <Button
