@@ -1,4 +1,5 @@
 import {
+  Alert,
   AlertColor,
   Box,
   Button,
@@ -20,6 +21,7 @@ import {
   OutlinedInput,
   Paper,
   Select,
+  Snackbar,
   Stack,
   TextField,
   Typography,
@@ -45,6 +47,9 @@ import { HttpStatusCode } from "axios";
 import { RoleEnum } from "../../../../../../Models/Enums";
 import { IUser } from "../../../../../../Models/User";
 import { getAllExceptAdmin } from "../../../../../../services/UsersService";
+import { ISubject } from "../../../../../../Models/Subject";
+import { SubjectName } from "../../../../../../resources/Typography/index";
+import { ISubjectGroup } from "../../../../../../Models/SubjectGroup";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -220,20 +225,33 @@ const Content = () => {
   const handleSubmit = (event: any) => {
     event.preventDefault();
 
-    console.log(subject);
-  };
+    const preparedSubjectGroups: ISubjectGroup[] = [];
+    subject.subjectGroups.forEach((element) => {
+      preparedSubjectGroups.push({
+        groupNo: 1,
+        pointsPerPresence: element.pointsPerPresence,
+        professors: element.professors,
+        students: element.students.right,
+      });
+    });
 
-  // const res: any = await createOrUpdateSubject(subject);
-  // if (
-  //   res &&
-  //   res.status &&
-  //   res.status === HttpStatusCode.Created &&
-  //   res.data &&
-  //   res.data.id
-  // ) {
-  // } else {
-  // }
-  //};
+    const modelToPost: ISubject = {
+      name: subject.subjectName,
+      subjectGroups: preparedSubjectGroups,
+    };
+
+    // const res: any = await createOrUpdateSubject(modelToPost);
+    // if (
+    //   res &&
+    //   res.status &&
+    //   res.status === HttpStatusCode.Created &&
+    //   res.data &&
+    //   res.data.id
+    // ) {
+    // } else {
+    // }
+    // };
+  };
 
   const cleanChecked = (
     newSubjectGroups: ISubjectGroupsFormInput[],
@@ -371,6 +389,16 @@ const Content = () => {
     </Paper>
   );
 
+  const handleCloseAlert = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenAlert(false);
+  };
+
   return (
     <Container sx={{ mt: 1 }}>
       <Typography variant="h5">{Subject}</Typography>
@@ -472,7 +500,7 @@ const Content = () => {
                                   </MenuItem>
                                 ))
                               ) : (
-                                <MenuItem key={-1} value={-1} disabled={true}>
+                                <MenuItem disabled={true}>
                                   {NoProfessorsFound}
                                 </MenuItem>
                               )}
@@ -578,6 +606,19 @@ const Content = () => {
           </Grid>
         </Grid>
       </form>
+      <Snackbar
+        open={openAlert}
+        autoHideDuration={6000}
+        onClose={handleCloseAlert}
+      >
+        <Alert
+          onClose={handleCloseAlert}
+          severity={alertType}
+          sx={{ width: "100%" }}
+        >
+          {alertMessage}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };

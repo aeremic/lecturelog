@@ -1,10 +1,9 @@
-import { IProfessorsSubjectGroups } from "../ProfessorsSubjectGroups";
-import { IStudentsSubjectGroups } from "../StudentsSubjectGroups";
+import { IUser } from "../User";
 
 export interface ISubjectGroup {
   id?: number;
   groupNo: number;
   pointsPerPresence: number;
-  students: IStudentsSubjectGroups[];
-  professors: IProfessorsSubjectGroups[];
+  students: IUser[];
+  professors: IUser[];
 }
