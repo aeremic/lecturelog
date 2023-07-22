@@ -129,7 +129,7 @@ const Content = () => {
 
         const newSubjectGroups = [...subject.subjectGroups];
         newSubjectGroups.forEach((element) => {
-          element.students.right = students;
+          element.students.left = students;
         });
 
         setSubject({
@@ -235,8 +235,28 @@ const Content = () => {
   // }
   //};
 
+  const cleanChecked = (
+    newSubjectGroups: ISubjectGroupsFormInput[],
+    index: number,
+    checked: IUser[]
+  ) => {
+    const newLeftChecked = intersection(
+      checked,
+      subject.subjectGroups[index].students.left
+    );
+    const newRightChecked = intersection(
+      checked,
+      subject.subjectGroups[index].students.right
+    );
+
+    newSubjectGroups[index].students.checked = checked;
+    newSubjectGroups[index].students.leftChecked = newLeftChecked;
+    newSubjectGroups[index].students.rightChecked = newRightChecked;
+  };
+
   const handleChecked = (index: number, value: IUser) => {
     const newSubjectGroups = [...subject.subjectGroups];
+
     const currentIndex =
       subject.subjectGroups[index].students.checked.indexOf(value);
     const newChecked = [...subject.subjectGroups[index].students.checked];
@@ -247,18 +267,7 @@ const Content = () => {
       newChecked.splice(currentIndex, 1);
     }
 
-    const newLeftChecked = intersection(
-      newChecked,
-      subject.subjectGroups[index].students.left
-    );
-    const newRightChecked = intersection(
-      newChecked,
-      subject.subjectGroups[index].students.right
-    );
-
-    newSubjectGroups[index].students.checked = newChecked;
-    newSubjectGroups[index].students.leftChecked = newLeftChecked;
-    newSubjectGroups[index].students.rightChecked = newRightChecked;
+    cleanChecked(newSubjectGroups, index, newChecked);
 
     setSubject({
       subjectName: subject.subjectName,
@@ -279,6 +288,12 @@ const Content = () => {
     newSubjectGroups[index].students.checked = not(
       newSubjectGroups[index].students.checked,
       newSubjectGroups[index].students.leftChecked
+    );
+
+    cleanChecked(
+      newSubjectGroups,
+      index,
+      newSubjectGroups[index].students.checked
     );
 
     setSubject({
@@ -302,6 +317,12 @@ const Content = () => {
       newSubjectGroups[index].students.rightChecked
     );
 
+    cleanChecked(
+      newSubjectGroups,
+      index,
+      newSubjectGroups[index].students.checked
+    );
+
     setSubject({
       subjectName: subject.subjectName,
       subjectGroups: newSubjectGroups,
@@ -309,7 +330,7 @@ const Content = () => {
   };
 
   const customList = (index: number, items: readonly IUser[]) => (
-    <Paper sx={{ width: 200, height: 230, overflow: "auto" }}>
+    <Paper sx={{ width: 278, height: 230, overflow: "auto" }}>
       <List dense component="div" role="list">
         {items.map((value: IUser) => {
           const labelId = `transfer-list-item-${value}-label`;
@@ -321,7 +342,6 @@ const Content = () => {
                 role="listitem"
                 button
                 onClick={() => {
-                  console.log(index, value);
                   handleChecked(index, value);
                 }}
               >
@@ -341,7 +361,7 @@ const Content = () => {
                 </ListItemIcon>
                 <ListItemText
                   id={labelId}
-                  primary={`List item ${value.id + 1}`}
+                  primary={`${value.index}/${value.year} ${value.firstname} ${value.lastname}`}
                 />
               </ListItem>
             </Box>
@@ -446,7 +466,7 @@ const Content = () => {
                                 professors.map((professor) => (
                                   <MenuItem
                                     key={professor.id}
-                                    value={professor.id}
+                                    value={professor}
                                   >
                                     {professor.firstname} {professor.lastname}
                                   </MenuItem>
