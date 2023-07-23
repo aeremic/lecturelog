@@ -40,7 +40,6 @@ import {
   RemoveGroup,
   SelectStudents,
   Subject,
-  SubjectName,
 } from "../../../../../../resources/Typography";
 import { useEffect, useState } from "react";
 import { HttpStatusCode } from "axios";
@@ -50,6 +49,7 @@ import { getAllExceptAdmin } from "../../../../../../services/UsersService";
 import { ISubject } from "../../../../../../Models/Subject";
 import { SubjectName } from "../../../../../../resources/Typography/index";
 import { ISubjectGroup } from "../../../../../../Models/SubjectGroup";
+import { createOrUpdateSubject } from "../../../../../../services/SubjectsService";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -222,7 +222,7 @@ const Content = () => {
     }
   };
 
-  const handleSubmit = (event: any) => {
+  const handleSubmit = async (event: any) => {
     event.preventDefault();
 
     const preparedSubjectGroups: ISubjectGroup[] = [];
@@ -240,17 +240,16 @@ const Content = () => {
       subjectGroups: preparedSubjectGroups,
     };
 
-    // const res: any = await createOrUpdateSubject(modelToPost);
-    // if (
-    //   res &&
-    //   res.status &&
-    //   res.status === HttpStatusCode.Created &&
-    //   res.data &&
-    //   res.data.id
-    // ) {
-    // } else {
-    // }
-    // };
+    const res: any = await createOrUpdateSubject(modelToPost);
+    if (
+      res &&
+      res.status &&
+      res.status === HttpStatusCode.Created &&
+      res.data &&
+      res.data.id
+    ) {
+      console.log(res.data);
+    }
   };
 
   const cleanChecked = (

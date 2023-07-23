@@ -1,13 +1,15 @@
 import { ProfessorsSubjectGroupsEntity, SubjectGroupEntity } from "src/core/entities";
 import { ProfessorsSubjectGroups, SubjectGroup } from "../models";
 import { UserMapper } from './user.mapper';
+import { SubjectGroupMapper } from "./subjectgroup.mapper";
 
 export class ProfessorsSubjectGroupsMapper {
 
     public static ToEntity(professorsSubjectGroupsModel: ProfessorsSubjectGroups): ProfessorsSubjectGroupsEntity {
         let professorsSubjectGroupsEntity: ProfessorsSubjectGroupsEntity = {
             id: professorsSubjectGroupsModel?.id,
-            professor: UserMapper.ToEntity(professorsSubjectGroupsModel?.professor)
+            professor: UserMapper.ToEntity(professorsSubjectGroupsModel?.professor),
+            subjectGroup: SubjectGroupMapper.ToEntity(professorsSubjectGroupsModel?.subjectGroup),
         };
 
         return professorsSubjectGroupsEntity;
@@ -27,10 +29,10 @@ export class ProfessorsSubjectGroupsMapper {
     public static ToModel(professorsSubjectGroupsEntity: ProfessorsSubjectGroupsEntity): ProfessorsSubjectGroups {
         let professorsSubjectGroups: ProfessorsSubjectGroups = {
             id: professorsSubjectGroupsEntity?.id,
-            professor: UserMapper.ToModel(professorsSubjectGroupsEntity.professor),
+            professor: UserMapper.ToModel(professorsSubjectGroupsEntity?.professor),
+            professorId: professorsSubjectGroupsEntity?.professor?.id,
 
             subjectGroup: undefined,
-            professorId: undefined,
             subjectGroupId: undefined
         };
 

@@ -45,4 +45,11 @@ export class SubjectController {
     getSubjects(@Query('page', ParseIntPipe) page: number, @Query('size', ParseIntPipe) size: number) {
         return this.subjectUseCases.getSubjects(page, size);
     }
+
+    @Roles('admin')
+    @UseGuards(RoleGuard)
+    @Post('/createOrUpdateSubject')
+    createOrUpdateSubject(@Body() request: any): Promise<SubjectEntity> {
+        return this.subjectUseCases.createOrUpdateSubject(request)
+    }
 }

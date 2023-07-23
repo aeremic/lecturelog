@@ -10,8 +10,8 @@ export class SubjectGroupMapper {
             id: subjectGroupModel?.id,
             groupNo: subjectGroupModel?.groupNo,
             pointsPerPresence: subjectGroupModel?.pointsPerPresence,
-            students: StudentsSubjectGroupsMapper.ToEntities(subjectGroupModel.studentsSubjectGroups),
-            professors: ProfessorsSubjectGroupsMapper.ToEntities(subjectGroupModel.professorsSubjectGroups)
+            students: StudentsSubjectGroupsMapper.ToEntities(subjectGroupModel?.studentsSubjectGroups),
+            professors: ProfessorsSubjectGroupsMapper.ToEntities(subjectGroupModel?.professorsSubjectGroups)
         };
 
         return subjectGroupEntity;
@@ -33,10 +33,10 @@ export class SubjectGroupMapper {
             id: subjectGroupEntity?.id,
             groupNo: subjectGroupEntity?.groupNo,
             pointsPerPresence: subjectGroupEntity?.pointsPerPresence,
+            studentsSubjectGroups: StudentsSubjectGroupsMapper.ToModels(subjectGroupEntity?.students),
+            professorsSubjectGroups: ProfessorsSubjectGroupsMapper.ToModels(subjectGroupEntity?.professors),
 
             subject: undefined,
-            studentsSubjectGroups: undefined,
-            professorsSubjectGroups: undefined
         };
 
         return subjectGroupModel;

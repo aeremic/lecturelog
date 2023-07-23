@@ -1,15 +1,23 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { SubjectRepositoryAbstract } from 'src/core/abstracts/repositories/subject.repository.abstract';
-import { SubjectEntity } from 'src/core/entities';
+import { ProfessorsSubjectGroupsEntity, StudentsSubjectGroupsEntity, SubjectEntity, SubjectGroupEntity } from 'src/core/entities';
 import { GenericUseCases } from '../generic.use-case';
 import { LoggerUseCases } from '../logger/logger.use-case';
 import { ErrorConstants } from 'src/core/common/constants/error.constant';
 import { SubjectsDto } from 'src/core/dtos/responses/subjects.dto';
+import { Subject } from 'rxjs';
+import { ProfessorsGroupsUseCases } from '../professors-groups/professors-groups.use-case';
 
 @Injectable()
 export class SubjectUseCases extends GenericUseCases<SubjectEntity>{
     @Inject(SubjectRepositoryAbstract)
     private subjectRepository: SubjectRepositoryAbstract
+
+    @Inject(ProfessorsGroupsUseCases)
+    private professorsGroupsUseCases: ProfessorsGroupsUseCases
+
+    // @Inject(StudentsGroupsUseCases)
+    // private studentsGroupsUseCases: StudentsGroupsUseCases
 
     @Inject(LoggerUseCases)
     private loggerUseCases: LoggerUseCases;
@@ -46,6 +54,42 @@ export class SubjectUseCases extends GenericUseCases<SubjectEntity>{
             }
         } catch (error) {
             this.loggerUseCases.log(ErrorConstants.GetMethodError, error?.message, error?.stack);
+        }
+
+        return result;
+    }
+
+    async createOrUpdateSubject(subjectEntity: any): Promise<SubjectEntity> {
+        let result: SubjectEntity | PromiseLike<SubjectEntity>;
+        if (subjectEntity) {
+            result = await super.createOrUpdate(this.subjectRepository, this.loggerUseCases, subjectEntity);
+
+            if (subjectEntity.id && subjectEntity.subjectGroups) {
+                subjectEntity.subjectGroups.forEach(group => {
+                    if (group.professors) {
+                        group.professors.forEach(element => {
+                            let professorsSubjectGroups: ProfessorsSubjectGroupsEntity = {
+                                subjectGroup: group,
+                                professor: element.professor
+                            }
+
+                            this.professorsGroupsUseCases.createOrUpdate(professorsSubjectGroups);
+                        });
+                    }
+
+                    if (group.students) {
+                        group.students.forEach(element => {
+                            let studentsSubjectGroups: StudentsSubjectGroupsEntity = {
+                                subjectGroup: group,
+                                sumOfPresencePoints: element.sumOfPresencePoints,
+                                student: element.student
+                            }
+
+                            //super.createOrUpdate(this.subjectRepository, this.loggerUseCases, studentsSubjectGroups);
+                        });
+                    }
+                });
+            }
         }
 
         return result;

@@ -7,9 +7,10 @@ import { SubjectRepositoryAbstract } from 'src/core/abstracts/repositories/subje
 import { SubjectRepository } from 'src/infrastructure/data/repositories/subject.repository';
 import { LoggerModule } from '../logger/logger.module';
 import { UserModule } from '../user/user.module';
+import { ProfessorsGroupsModule } from '../professors-groups/professors-groups.module';
 
 @Module({
-    imports: [UserModule, LoggerModule, TypeOrmModule.forFeature([Subject, SubjectGroup, StudentsSubjectGroups, ProfessorsSubjectGroups])],
+    imports: [UserModule, LoggerModule, ProfessorsGroupsModule, TypeOrmModule.forFeature([Subject, SubjectGroup, StudentsSubjectGroups, ProfessorsSubjectGroups])],
     providers: [
         SubjectUseCases,
         {
