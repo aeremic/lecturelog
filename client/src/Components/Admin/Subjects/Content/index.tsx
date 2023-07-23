@@ -142,6 +142,12 @@ const SubjectsTable = () => {
     setOpenAlert(false);
   };
 
+  const handleSubjectClick = (subjectId: number) => {
+    navigate(`subject?subjectId=${subjectId}`, {
+      replace: true,
+    });
+  };
+
   return (
     <>
       <Container sx={{ mt: 2 }}>
@@ -186,7 +192,7 @@ const SubjectsTable = () => {
                         <TableRow
                           key={index}
                           hover
-                          onClick={() => console.log(index)}
+                          onClick={() => handleSubjectClick(subject.id)}
                           sx={{
                             "&:last-child td, &:last-child th": { border: 0 },
                           }}

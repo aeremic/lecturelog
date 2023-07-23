@@ -68,24 +68,20 @@ export class SubjectUseCases extends GenericUseCases<SubjectEntity>{
                 result.subjectGroups.forEach(group => {
                     if (group.professors) {
                         group.professors.forEach(async element => {
-                            let professorsSubjectGroups: ProfessorsSubjectGroupsEntity = {
+                            await this.professorsGroupsUseCases.createOrUpdate({
                                 professor: element.professor,
                                 subjectGroup: group
-                            }
-
-                            await this.professorsGroupsUseCases.createOrUpdate(professorsSubjectGroups);
+                            });
                         });
                     }
 
                     if (group.students) {
                         group.students.forEach(async element => {
-                            let studentsSubjectGroups: StudentsSubjectGroupsEntity = {
+                            await this.studentsGroupsUseCases.createOrUpdate({
                                 student: element.student,
                                 subjectGroup: group,
                                 sumOfPresencePoints: element.sumOfPresencePoints,
-                            }
-
-                            await this.studentsGroupsUseCases.createOrUpdate(studentsSubjectGroups);
+                            });
                         });
                     }
                 });

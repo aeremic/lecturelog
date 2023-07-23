@@ -33,7 +33,7 @@ export class ProfessorsSubjectGroupsMapper {
             professor: UserMapper.ToModel(professorsSubjectGroupsEntity?.professor),
             subjectGroupId: professorsSubjectGroupsEntity?.subjectGroup?.id,
 
-            subjectGroup: undefined// SubjectGroupMapper.ToModel(professorsSubjectGroupsEntity?.subjectGroup),
+            subjectGroup: undefined
         };
 
         return professorsSubjectGroups;

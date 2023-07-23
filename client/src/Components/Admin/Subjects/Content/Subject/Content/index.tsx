@@ -49,9 +49,13 @@ import { getAllExceptAdmin } from "../../../../../../services/UsersService";
 import { ISubject } from "../../../../../../Models/Subject";
 import { SubjectName } from "../../../../../../resources/Typography/index";
 import { ISubjectGroup } from "../../../../../../Models/SubjectGroup";
-import { createOrUpdateSubject } from "../../../../../../services/SubjectsService";
+import {
+  createOrUpdateSubject,
+  getSubject,
+} from "../../../../../../services/SubjectsService";
 import { IProfessorsGroups } from "../../../../../../Models/ProfessorsGroups";
 import { IStudentsGroups } from "../../../../../../Models/StudentsGroups";
+import { useSearchParams } from "react-router-dom";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -92,6 +96,8 @@ interface ISubjectFormInput {
 }
 
 const Content = () => {
+  const [queryParameters] = useSearchParams();
+
   const userInitialState: IUser[] = [
     {
       id: 0,
@@ -123,34 +129,94 @@ const Content = () => {
     ],
   });
   const [dataLoaded, setDataLoaded] = useState(false);
+  const [subjectLoaded, setSubjectLoaded] = useState(false);
 
   const [openAlert, setOpenAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState<AlertColor>();
 
   useEffect(() => {
-    getAllExceptAdmin().then((res) => {
-      if (res && res.status === HttpStatusCode.Ok && res.data) {
-        setProfessors(res.data.professors ?? []);
-        setStudents(res.data.students ?? []);
+    const subjectIdParam: string | null = queryParameters.get("subjectId");
+    const subjectId = subjectIdParam != null ? parseInt(subjectIdParam) : -1;
 
-        const newSubjectGroups = [...subject.subjectGroups];
-        newSubjectGroups.forEach((element) => {
-          element.students.left = students;
+    const fetchData = async () => {
+      let subjectName: string = subject.subjectName;
+      const newSubjectGroups: ISubjectGroupsFormInput[] = [
+        ...subject.subjectGroups,
+      ];
+
+      if (subjectId != -1) {
+        await getSubject(subjectId).then((res: any) => {
+          debugger;
+          if (res && res.status === HttpStatusCode.Ok && res.data) {
+            if (res.data.subjectGroups) {
+              res.data.subjectGroups.forEach((group: any) => {
+                const groupStudentsFormInput: IUser[] = [];
+                if (group.students) {
+                  group.students.forEach((element: any) => {
+                    groupStudentsFormInput.push(element.student);
+                  });
+                }
+
+                const groupProfessorsFormInput: IUser[] = [];
+                if (group.professors) {
+                  group.professors.forEach((element: any) => {
+                    groupProfessorsFormInput.push(element.professors);
+                  });
+                }
+
+                const groupFormInput: ISubjectGroupsFormInput = {
+                  professors: groupProfessorsFormInput,
+                  pointsPerPresence: group.pointsPerPresence,
+                  students: {
+                    checked: [],
+                    left: [],
+                    leftChecked: [],
+                    right: groupStudentsFormInput,
+                    rightChecked: [],
+                  },
+                };
+
+                newSubjectGroups.push(groupFormInput);
+              });
+            }
+            subjectName = res.data.name;
+
+            setSubjectLoaded(true);
+          } else {
+            setAlertType("error");
+            setAlertMessage(AlertFailureMessage);
+            setOpenAlert(true);
+          }
         });
-
-        setSubject({
-          subjectName: subject.subjectName,
-          subjectGroups: newSubjectGroups,
-        });
-
-        setDataLoaded(true);
       } else {
-        setAlertType("error");
-        setAlertMessage(AlertFailureMessage);
-        setOpenAlert(true);
+        setSubjectLoaded(true);
       }
-    });
+
+      await getAllExceptAdmin().then((res) => {
+        if (res && res.status === HttpStatusCode.Ok && res.data) {
+          setProfessors(res.data.professors ?? []);
+          setStudents(res.data.students ?? []);
+
+          newSubjectGroups.forEach((element) => {
+            element.students.left = students;
+          });
+
+          setDataLoaded(true);
+        } else {
+          setAlertType("error");
+          setAlertMessage(AlertFailureMessage);
+          setOpenAlert(true);
+        }
+      });
+
+      setSubject({
+        subjectName: subjectName,
+        subjectGroups: newSubjectGroups,
+      });
+    };
+
+    fetchData();
   }, [dataLoaded]);
 
   const addGroup = (event: any) => {
@@ -228,7 +294,7 @@ const Content = () => {
     event.preventDefault();
 
     const preparedSubjectGroups: ISubjectGroup[] = [];
-    subject.subjectGroups.forEach((element) => {
+    subject.subjectGroups.forEach((element, index) => {
       const preparedProfessors: IProfessorsGroups[] = [];
       element.professors.forEach((p) => {
         preparedProfessors.push({
@@ -245,7 +311,7 @@ const Content = () => {
       });
 
       preparedSubjectGroups.push({
-        groupNo: 1,
+        groupNo: index + 1,
         pointsPerPresence: element.pointsPerPresence,
         professors: preparedProfessors,
         students: preparedStudents,
