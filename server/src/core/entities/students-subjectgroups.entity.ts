@@ -6,7 +6,7 @@ export class StudentsSubjectGroupsEntity {
 
     public sumOfPresencePoints: number;
 
-    public subjectGroup: SubjectGroupEntity;
+    public subjectGroup?: SubjectGroupEntity;
 
     public student: UserEntity;
 }

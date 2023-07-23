@@ -33,9 +33,9 @@ export class StudentsSubjectGroupsMapper {
             sumOfPresencePoints: studentsSubjectGroupsEntity?.sumOfPresencePoints,
             student: UserMapper.ToModel(studentsSubjectGroupsEntity?.student),
             studentId: studentsSubjectGroupsEntity?.student?.id,
+            subjectGroupId: studentsSubjectGroupsEntity?.subjectGroup?.id,
 
             subjectGroup: undefined,
-            subjectGroupId: undefined
         };
 
         return studentsSubjectGroups;

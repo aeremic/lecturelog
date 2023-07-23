@@ -4,7 +4,7 @@ import { UserEntity } from "./user.entity";
 export class ProfessorsSubjectGroupsEntity {
     public id?: number;
 
-    public subjectGroup: SubjectGroupEntity;
+    public subjectGroup?: SubjectGroupEntity;
 
     public professor: UserEntity;
 }

@@ -29,11 +29,11 @@ export class ProfessorsSubjectGroupsMapper {
     public static ToModel(professorsSubjectGroupsEntity: ProfessorsSubjectGroupsEntity): ProfessorsSubjectGroups {
         let professorsSubjectGroups: ProfessorsSubjectGroups = {
             id: professorsSubjectGroupsEntity?.id,
-            professor: UserMapper.ToModel(professorsSubjectGroupsEntity?.professor),
             professorId: professorsSubjectGroupsEntity?.professor?.id,
+            professor: UserMapper.ToModel(professorsSubjectGroupsEntity?.professor),
+            subjectGroupId: professorsSubjectGroupsEntity?.subjectGroup?.id,
 
-            subjectGroup: undefined,
-            subjectGroupId: undefined
+            subjectGroup: undefined// SubjectGroupMapper.ToModel(professorsSubjectGroupsEntity?.subjectGroup),
         };
 
         return professorsSubjectGroups;

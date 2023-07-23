@@ -50,6 +50,8 @@ import { ISubject } from "../../../../../../Models/Subject";
 import { SubjectName } from "../../../../../../resources/Typography/index";
 import { ISubjectGroup } from "../../../../../../Models/SubjectGroup";
 import { createOrUpdateSubject } from "../../../../../../services/SubjectsService";
+import { IProfessorsGroups } from "../../../../../../Models/ProfessorsGroups";
+import { IStudentsGroups } from "../../../../../../Models/StudentsGroups";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -227,11 +229,26 @@ const Content = () => {
 
     const preparedSubjectGroups: ISubjectGroup[] = [];
     subject.subjectGroups.forEach((element) => {
+      const preparedProfessors: IProfessorsGroups[] = [];
+      element.professors.forEach((p) => {
+        preparedProfessors.push({
+          professor: p,
+        });
+      });
+
+      const preparedStudents: IStudentsGroups[] = [];
+      element.students.right.forEach((s) => {
+        preparedStudents.push({
+          sumOfPresencePoints: 0,
+          student: s,
+        });
+      });
+
       preparedSubjectGroups.push({
         groupNo: 1,
         pointsPerPresence: element.pointsPerPresence,
-        professors: element.professors,
-        students: element.students.right,
+        professors: preparedProfessors,
+        students: preparedStudents,
       });
     });
 
