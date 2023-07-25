@@ -137,6 +137,9 @@ const Content = () => {
       let id: number = subject.id;
       const newSubjectGroups: ISubjectGroupsFormInput[] = [];
 
+      let professors: IUser[] = [];
+      let students: IUser[] = [];
+
       if (subjectId != -1) {
         await getSubject(subjectId).then((res: any) => {
           if (res && res.status === HttpStatusCode.Ok && res.data) {
@@ -188,11 +191,14 @@ const Content = () => {
 
       await getAllExceptAdmin().then((res) => {
         if (res && res.status === HttpStatusCode.Ok && res.data) {
-          setProfessors(res.data.professors ?? []);
-          setStudents(res.data.students ?? []);
+          professors = res.data.professors;
+          students = res.data.students;
 
           newSubjectGroups.forEach((element) => {
-            element.students.left = not(students, element.students.right);
+            element.students.left =
+              element.students.right && element.students.right.length > 0
+                ? intersection(students, element.students.right)
+                : students;
           });
 
           setDataLoaded(true);
@@ -208,10 +214,13 @@ const Content = () => {
         subjectName: subjectName,
         subjectGroups: newSubjectGroups,
       });
+
+      setProfessors(professors);
+      setStudents(students);
     };
 
     fetchData();
-  }, [dataLoaded]);
+  }, []);
 
   const addGroup = (event: any) => {
     event.preventDefault();

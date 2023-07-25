@@ -55,11 +55,11 @@ export class SubjectRepository implements SubjectRepositoryAbstract {
 
     async getSubject(id: number): Promise<SubjectEntity> {
         let result = await this.subjectModelRepository.createQueryBuilder("subject")
-            .innerJoinAndSelect("subject.subjectGroups", "subjectGroup")
-            .innerJoinAndSelect("subjectGroup.studentsSubjectGroups", "studentsSubjectGroups")
-            .innerJoinAndSelect("studentsSubjectGroups.student", "user1")
-            .innerJoinAndSelect("subjectGroup.professorsSubjectGroups", "professorsSubjectGroups")
-            .innerJoinAndSelect("professorsSubjectGroups.professor", "user2")
+            .leftJoinAndSelect("subject.subjectGroups", "subjectGroup")
+            .leftJoinAndSelect("subjectGroup.studentsSubjectGroups", "studentsSubjectGroups")
+            .leftJoinAndSelect("studentsSubjectGroups.student", "user1")
+            .leftJoinAndSelect("subjectGroup.professorsSubjectGroups", "professorsSubjectGroups")
+            .leftJoinAndSelect("professorsSubjectGroups.professor", "user2")
             .where("subject.id = :id", { id: id })
             .printSql()
             .getOne()
