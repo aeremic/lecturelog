@@ -91,6 +91,7 @@ interface ISubjectGroupsFormInput {
 }
 
 interface ISubjectFormInput {
+  id: number;
   subjectName: string;
   subjectGroups: ISubjectGroupsFormInput[];
 }
@@ -110,24 +111,16 @@ const Content = () => {
     },
   ];
 
+  const subjectInitialState = {
+    id: -1,
+    subjectName: "",
+    subjectGroups: [],
+  };
+
   const [professors, setProfessors] = useState(userInitialState);
   const [students, setStudents] = useState(userInitialState);
-  const [subject, setSubject] = useState<ISubjectFormInput>({
-    subjectName: "",
-    subjectGroups: [
-      {
-        professors: [],
-        pointsPerPresence: 0,
-        students: {
-          checked: [],
-          left: [],
-          leftChecked: [],
-          right: [],
-          rightChecked: [],
-        },
-      },
-    ],
-  });
+  const [subject, setSubject] =
+    useState<ISubjectFormInput>(subjectInitialState);
   const [dataLoaded, setDataLoaded] = useState(false);
   const [subjectLoaded, setSubjectLoaded] = useState(false);
 
@@ -141,13 +134,11 @@ const Content = () => {
 
     const fetchData = async () => {
       let subjectName: string = subject.subjectName;
-      const newSubjectGroups: ISubjectGroupsFormInput[] = [
-        ...subject.subjectGroups,
-      ];
+      let id: number = subject.id;
+      const newSubjectGroups: ISubjectGroupsFormInput[] = [];
 
       if (subjectId != -1) {
         await getSubject(subjectId).then((res: any) => {
-          debugger;
           if (res && res.status === HttpStatusCode.Ok && res.data) {
             if (res.data.subjectGroups) {
               res.data.subjectGroups.forEach((group: any) => {
@@ -161,7 +152,7 @@ const Content = () => {
                 const groupProfessorsFormInput: IUser[] = [];
                 if (group.professors) {
                   group.professors.forEach((element: any) => {
-                    groupProfessorsFormInput.push(element.professors);
+                    groupProfessorsFormInput.push(element.professor);
                   });
                 }
 
@@ -180,6 +171,8 @@ const Content = () => {
                 newSubjectGroups.push(groupFormInput);
               });
             }
+
+            id = res.data.id;
             subjectName = res.data.name;
 
             setSubjectLoaded(true);
@@ -199,7 +192,7 @@ const Content = () => {
           setStudents(res.data.students ?? []);
 
           newSubjectGroups.forEach((element) => {
-            element.students.left = students;
+            element.students.left = not(students, element.students.right);
           });
 
           setDataLoaded(true);
@@ -211,6 +204,7 @@ const Content = () => {
       });
 
       setSubject({
+        id: id,
         subjectName: subjectName,
         subjectGroups: newSubjectGroups,
       });
@@ -222,6 +216,7 @@ const Content = () => {
   const addGroup = (event: any) => {
     event.preventDefault();
     setSubject({
+      id: subject.id,
       subjectName: subject.subjectName,
       subjectGroups: [
         ...subject.subjectGroups,
@@ -244,6 +239,7 @@ const Content = () => {
     subject.subjectGroups.splice(index, 1);
 
     setSubject({
+      id: subject.id,
       subjectName: subject.subjectName,
       subjectGroups: subject.subjectGroups,
     });
@@ -251,6 +247,7 @@ const Content = () => {
 
   const handleSubjectNameChange = (event: any) => {
     setSubject({
+      id: subject.id,
       subjectName: event.target.value,
       subjectGroups: subject.subjectGroups,
     });
@@ -284,6 +281,7 @@ const Content = () => {
       }
 
       setSubject({
+        id: subject.id,
         subjectName: subject.subjectName,
         subjectGroups: newSubjectGroups,
       });
@@ -319,6 +317,7 @@ const Content = () => {
     });
 
     const modelToPost: ISubject = {
+      id: subject.id,
       name: subject.subjectName,
       subjectGroups: preparedSubjectGroups,
     };
@@ -370,6 +369,7 @@ const Content = () => {
     cleanChecked(newSubjectGroups, index, newChecked);
 
     setSubject({
+      id: subject.id,
       subjectName: subject.subjectName,
       subjectGroups: newSubjectGroups,
     });
@@ -397,6 +397,7 @@ const Content = () => {
     );
 
     setSubject({
+      id: subject.id,
       subjectName: subject.subjectName,
       subjectGroups: newSubjectGroups,
     });
@@ -424,6 +425,7 @@ const Content = () => {
     );
 
     setSubject({
+      id: subject.id,
       subjectName: subject.subjectName,
       subjectGroups: newSubjectGroups,
     });

@@ -52,4 +52,11 @@ export class SubjectController {
     createOrUpdateSubject(@Body() request: any): Promise<SubjectEntity> {
         return this.subjectUseCases.createOrUpdateSubject(request)
     }
+
+    @Roles('admin')
+    @UseGuards(RoleGuard)
+    @Get('/getSubject/:id')
+    getSubject(@Param('id', ParseIntPipe) id: number): Promise<SubjectEntity> {
+        return this.subjectUseCases.getSubject(id);
+    }
 }

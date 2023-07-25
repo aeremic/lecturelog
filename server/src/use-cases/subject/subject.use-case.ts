@@ -90,4 +90,16 @@ export class SubjectUseCases extends GenericUseCases<SubjectEntity>{
 
         return result;
     }
+
+    async getSubject(id: number): Promise<SubjectEntity> {
+        let result: SubjectEntity | PromiseLike<SubjectEntity>;
+
+        try {
+            result = await this.subjectRepository.getSubject(id);
+        } catch (error) {
+            this.loggerUseCases.log(ErrorConstants.GetMethodError, error?.message, error?.stack);
+        }
+
+        return result;
+    }
 }

@@ -1,4 +1,4 @@
-import { Repository } from "typeorm";
+import { Repository, createQueryBuilder, getRepository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { SubjectEntity } from "src/core/entities";
 import { SubjectRepositoryAbstract } from "src/core/abstracts/repositories/subject.repository.abstract";
@@ -51,5 +51,24 @@ export class SubjectRepository implements SubjectRepositoryAbstract {
         let result = await this.subjectModelRepository.count();
 
         return result;
+    }
+
+    async getSubject(id: number): Promise<SubjectEntity> {
+        let result = await this.subjectModelRepository.createQueryBuilder("subject")
+            .innerJoinAndSelect("subject.subjectGroups", "subjectGroup")
+            .innerJoinAndSelect("subjectGroup.studentsSubjectGroups", "studentsSubjectGroups")
+            .innerJoinAndSelect("studentsSubjectGroups.student", "user1")
+            .innerJoinAndSelect("subjectGroup.professorsSubjectGroups", "professorsSubjectGroups")
+            .innerJoinAndSelect("professorsSubjectGroups.professor", "user2")
+            .where("subject.id = :id", { id: id })
+            .printSql()
+            .getOne()
+
+
+        return SubjectMapper.ToEntity({
+            id: result.id,
+            name: result.name,
+            subjectGroups: result.subjectGroups
+        });
     }
 }
