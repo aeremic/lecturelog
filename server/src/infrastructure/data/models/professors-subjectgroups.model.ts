@@ -13,7 +13,7 @@ export class ProfessorsSubjectGroups {
     @Column()
     public subjectGroupId: number;
 
-    @ManyToOne(() => User, professor => professor.professorsSubjectGroups)
+    @ManyToOne(() => User, professor => professor.professorsSubjectGroups, { onDelete: 'CASCADE' })
     public professor: User;
 
     @ManyToOne(() => SubjectGroup, subjectGroup => subjectGroup.professorsSubjectGroups)

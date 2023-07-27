@@ -16,7 +16,7 @@ export class StudentsSubjectGroups {
     @Column({ type: 'decimal' })
     public sumOfPresencePoints: number;
 
-    @ManyToOne(() => User, student => student.studentsSubjectGroups)
+    @ManyToOne(() => User, student => student.studentsSubjectGroups, { onDelete: 'CASCADE' })
     public student: User;
 
     @ManyToOne(() => SubjectGroup, subjectGroup => subjectGroup.studentsSubjectGroups)
