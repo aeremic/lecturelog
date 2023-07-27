@@ -141,3 +141,5 @@ export const SelectStudents = "Select Students";
 export const CreateSubject = "Create Subject";
 
 export const RemoveGroup = "Remove Group";
+
+export const UpdateSubject = "Update Subject";

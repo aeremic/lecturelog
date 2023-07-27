@@ -40,6 +40,7 @@ import {
   RemoveGroup,
   SelectStudents,
   Subject,
+  UpdateSubject,
 } from "../../../../../../resources/Typography";
 import { useEffect, useState } from "react";
 import { HttpStatusCode } from "axios";
@@ -56,6 +57,7 @@ import {
 import { IProfessorsGroups } from "../../../../../../Models/ProfessorsGroups";
 import { IStudentsGroups } from "../../../../../../Models/StudentsGroups";
 import { useSearchParams } from "react-router-dom";
+import CancelIcon from "@mui/icons-material/Cancel";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -112,7 +114,7 @@ const Content = () => {
   ];
 
   const subjectInitialState = {
-    id: -1,
+    id: 0,
     subjectName: "",
     subjectGroups: [],
   };
@@ -303,7 +305,10 @@ const Content = () => {
     const preparedSubjectGroups: ISubjectGroup[] = [];
     subject.subjectGroups.forEach((element, index) => {
       const preparedProfessors: IProfessorsGroups[] = [];
-      element.professors.forEach((p) => {
+
+      [
+        ...new Map(element.professors.map((item) => [item.id, item])).values(),
+      ].forEach((p) => {
         preparedProfessors.push({
           professor: p,
         });
@@ -319,7 +324,7 @@ const Content = () => {
 
       preparedSubjectGroups.push({
         groupNo: index + 1,
-        pointsPerPresence: element.pointsPerPresence,
+        pointsPerPresence: Math.abs(element.pointsPerPresence),
         professors: preparedProfessors,
         students: preparedStudents,
       });
@@ -492,6 +497,21 @@ const Content = () => {
     setOpenAlert(false);
   };
 
+  const removeSelectedProfessor = (event: any, index: any, value: any) => {
+    const newSubjectGroups = [...subject.subjectGroups];
+    newSubjectGroups[index]["professors"].forEach((item, itemIdx) => {
+      if (item.id === value.id) {
+        newSubjectGroups[index]["professors"].splice(itemIdx, 1);
+      }
+    });
+
+    setSubject({
+      id: subject.id,
+      subjectName: subject.subjectName,
+      subjectGroups: newSubjectGroups,
+    });
+  };
+
   return (
     <Container sx={{ mt: 1 }}>
       <Typography variant="h5">{Subject}</Typography>
@@ -525,14 +545,25 @@ const Content = () => {
                         >
                           {AddGroup}
                         </Button>
-                        <Button
-                          type="submit"
-                          variant="contained"
-                          color="success"
-                          sx={{ maxWidth: "xs" }}
-                        >
-                          {CreateSubject}
-                        </Button>
+                        {subject.id != -1 ? (
+                          <Button
+                            type="submit"
+                            variant="contained"
+                            color="success"
+                            sx={{ maxWidth: "xs" }}
+                          >
+                            {UpdateSubject}
+                          </Button>
+                        ) : (
+                          <Button
+                            type="submit"
+                            variant="contained"
+                            color="success"
+                            sx={{ maxWidth: "xs" }}
+                          >
+                            {CreateSubject}
+                          </Button>
+                        )}
                       </Box>
                     </Stack>
                   </FormGroup>
@@ -572,9 +603,21 @@ const Content = () => {
                                 >
                                   {selected.map((value) => (
                                     <Chip
+                                      id={value.id.toString()}
                                       key={value.id}
                                       label={
                                         value.firstname + " " + value.lastname
+                                      }
+                                      clickable
+                                      deleteIcon={
+                                        <CancelIcon
+                                          onMouseDown={(event: any) =>
+                                            event.stopPropagation()
+                                          }
+                                        />
+                                      }
+                                      onDelete={(e) =>
+                                        removeSelectedProfessor(e, index, value)
                                       }
                                     />
                                   ))}
