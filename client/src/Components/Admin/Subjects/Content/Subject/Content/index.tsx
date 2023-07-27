@@ -545,7 +545,7 @@ const Content = () => {
                         >
                           {AddGroup}
                         </Button>
-                        {subject.id != -1 ? (
+                        {subject.id > 0 ? (
                           <Button
                             type="submit"
                             variant="contained"

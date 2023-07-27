@@ -131,7 +131,12 @@ const StudentsTable = () => {
       setRemoveIndexValue(newValue);
 
       const res = await removeUser(removeIndexValue);
-      if (res && res.status && res.status === HttpStatusCode.Ok) {
+      if (
+        res &&
+        res.status &&
+        res.status === HttpStatusCode.Ok &&
+        res.data > 0
+      ) {
         setAlertType("success");
         setAlertMessage(UserSuccessfullyRemoved);
         setOpenAlert(true);
