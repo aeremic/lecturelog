@@ -29,6 +29,7 @@ import {
 import {
   AddGroup,
   AlertFailureMessage,
+  AlertSuccessfullMessage,
   Cancel,
   CreateSubject,
   Group,
@@ -347,7 +348,13 @@ const Content = () => {
       res.data &&
       res.data.id
     ) {
-      console.log(res.data);
+      setAlertType("success");
+      setAlertMessage(AlertSuccessfullMessage);
+      setOpenAlert(true);
+    } else {
+      setAlertType("error");
+      setAlertMessage(AlertFailureMessage);
+      setOpenAlert(true);
     }
   };
 

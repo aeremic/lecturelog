@@ -84,6 +84,8 @@ export const UserNotAdded = "User not added";
 
 export const AlertFailureMessage = "Something went wrong! :(";
 
+export const AlertSuccessfullMessage = "Successfull";
+
 export const RegistrationWithEmail = "Registration with email";
 
 export const Code = "Code";
