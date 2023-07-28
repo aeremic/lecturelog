@@ -20,7 +20,10 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { getSubjects } from "../../../../services/SubjectsService";
+import {
+  getSubjects,
+  removeSubject,
+} from "../../../../services/SubjectsService";
 import {
   Action,
   Add,
@@ -117,8 +120,13 @@ const SubjectsTable = () => {
     if (newValue) {
       setRemoveIndexValue(newValue);
 
-      const res: any = null; /// await removeUser(removeIndexValue);
-      if (res && res.status && res.status === HttpStatusCode.Ok) {
+      const res: any = await removeSubject(removeIndexValue);
+      if (
+        res &&
+        res.status &&
+        res.status === HttpStatusCode.Ok &&
+        res.data > 0
+      ) {
         setAlertType("success");
         setAlertMessage(SubjectSuccessfullyRemoved);
         setOpenAlert(true);
@@ -144,7 +152,7 @@ const SubjectsTable = () => {
 
   const handleSubjectClick = (subjectId: number) => {
     navigate(`subject?subjectId=${subjectId}`, {
-      replace: true,
+      replace: false,
     });
   };
 
@@ -195,13 +203,15 @@ const SubjectsTable = () => {
                           onClick={() => handleSubjectClick(subject.id)}
                           sx={{
                             "&:last-child td, &:last-child th": { border: 0 },
+                            cursor: "pointer",
                           }}
                         >
                           <TableCell>{subject.id}</TableCell>
                           <TableCell align="center">{subject.name}</TableCell>
                           <TableCell align="center">
                             <Button
-                              onClick={() => {
+                              onClick={(e) => {
+                                e.stopPropagation();
                                 handleRemoveDialogClick(subject.id);
                               }}
                               variant="outlined"

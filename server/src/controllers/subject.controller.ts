@@ -59,4 +59,11 @@ export class SubjectController {
     getSubject(@Param('id', ParseIntPipe) id: number): Promise<SubjectEntity> {
         return this.subjectUseCases.getSubject(id);
     }
+
+    // @Roles('admin')
+    // @UseGuards(RoleGuard)
+    // @Delete('/deleteSubject/:id')
+    // deleteSubject(@Param('id', ParseIntPipe) id: number): Promise<number> {
+    //     return this.subjectUseCases.deleteSubject(id)
+    // }
 }

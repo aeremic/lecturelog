@@ -1,4 +1,4 @@
-import { get, getById, post } from "../Common/ServiceBase";
+import { get, getById, post, remove } from "../Common/ServiceBase";
 
 const URL = "/subject";
 
@@ -21,6 +21,14 @@ export const getSubject = async (id: number) => {
 export const createOrUpdateSubject = async (data: any) => {
   try {
     return await post(`${URL}/createOrUpdateSubject`, data);
+  } catch (err) {
+    console.log(err); // TODO: Fix for PROD.
+  }
+};
+
+export const removeSubject = async (id: number) => {
+  try {
+    return await remove(`${URL}`, id);
   } catch (err) {
     console.log(err); // TODO: Fix for PROD.
   }

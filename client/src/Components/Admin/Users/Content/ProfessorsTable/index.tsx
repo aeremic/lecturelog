@@ -30,6 +30,7 @@ import {
   EditUser,
   Email,
   FirstName,
+  Id,
   LastName,
   NoProfessorsFound,
   Remove,
@@ -226,7 +227,8 @@ const ProfessorsTable = () => {
                     },
                   }}
                 >
-                  <TableCell>{Email}</TableCell>
+                  <TableCell>{Id}</TableCell>
+                  <TableCell align="center">{Email}</TableCell>
                   <TableCell align="center">{FirstName}</TableCell>
                   <TableCell align="center">{LastName}</TableCell>
                   <TableCell align="center">{Action}</TableCell>
@@ -239,8 +241,9 @@ const ProfessorsTable = () => {
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
-                      {professor.email}
+                      {professor.id}
                     </TableCell>
+                    <TableCell align="center">{professor.email}</TableCell>
                     <TableCell align="center">{professor.firstname}</TableCell>
                     <TableCell align="center">{professor.lastname}</TableCell>
                     <TableCell align="center">

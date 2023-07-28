@@ -16,6 +16,6 @@ export class ProfessorsSubjectGroups {
     @ManyToOne(() => User, professor => professor.professorsSubjectGroups, { onDelete: 'CASCADE' })
     public professor: User;
 
-    @ManyToOne(() => SubjectGroup, subjectGroup => subjectGroup.professorsSubjectGroups)
+    @ManyToOne(() => SubjectGroup, subjectGroup => subjectGroup.professorsSubjectGroups, { onDelete: 'CASCADE' })
     public subjectGroup: SubjectGroup;
 }

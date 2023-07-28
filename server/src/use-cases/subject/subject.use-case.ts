@@ -62,30 +62,35 @@ export class SubjectUseCases extends GenericUseCases<SubjectEntity>{
 
     async createOrUpdateSubject(subjectEntity: SubjectEntity): Promise<SubjectEntity> {
         let result: SubjectEntity | PromiseLike<SubjectEntity>;
-        if (subjectEntity) {
-            result = await super.createOrUpdate(this.subjectRepository, this.loggerUseCases, subjectEntity);
-            if (result.id && result.subjectGroups) {
-                result.subjectGroups.forEach(group => {
-                    if (group.professors) {
-                        group.professors.forEach(async element => {
-                            await this.professorsGroupsUseCases.createOrUpdate({
-                                professor: element.professor,
-                                subjectGroup: group
-                            });
-                        });
-                    }
 
-                    if (group.students) {
-                        group.students.forEach(async element => {
-                            await this.studentsGroupsUseCases.createOrUpdate({
-                                student: element.student,
-                                subjectGroup: group,
-                                sumOfPresencePoints: element.sumOfPresencePoints,
+        try {
+            if (subjectEntity) {
+                result = await super.createOrUpdate(this.subjectRepository, this.loggerUseCases, subjectEntity);
+                if (result.id && result.subjectGroups) {
+                    result.subjectGroups.forEach(group => {
+                        if (group.professors) {
+                            group.professors.forEach(async element => {
+                                await this.professorsGroupsUseCases.createOrUpdate({
+                                    professor: element.professor,
+                                    subjectGroup: group
+                                });
                             });
-                        });
-                    }
-                });
+                        }
+
+                        if (group.students) {
+                            group.students.forEach(async element => {
+                                await this.studentsGroupsUseCases.createOrUpdate({
+                                    student: element.student,
+                                    subjectGroup: group,
+                                    sumOfPresencePoints: element.sumOfPresencePoints,
+                                });
+                            });
+                        }
+                    });
+                }
             }
+        } catch (error) {
+            this.loggerUseCases.log(ErrorConstants.PostMethodError, error?.message, error?.stack);
         }
 
         return result;
@@ -102,4 +107,17 @@ export class SubjectUseCases extends GenericUseCases<SubjectEntity>{
 
         return result;
     }
+
+
+    // async deleteSubject(id: number): Promise<number> {
+    //     let result: number | PromiseLike<number>;
+
+    //     try {
+    //         result = await this.subjectRepository.deleteSubject(id);
+    //     } catch (error) {
+    //         this.loggerUseCases.log(ErrorConstants.DeleteMethodError, error?.message, error?.stack);
+    //     }
+
+    //     return result;
+    // }
 }

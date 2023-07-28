@@ -29,6 +29,7 @@ import {
 import {
   AddGroup,
   AlertFailureMessage,
+  Cancel,
   CreateSubject,
   Group,
   NoProfessorsFound,
@@ -56,7 +57,7 @@ import {
 } from "../../../../../../services/SubjectsService";
 import { IProfessorsGroups } from "../../../../../../Models/ProfessorsGroups";
 import { IStudentsGroups } from "../../../../../../Models/StudentsGroups";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import CancelIcon from "@mui/icons-material/Cancel";
 
 const ITEM_HEIGHT = 48;
@@ -129,6 +130,8 @@ const Content = () => {
   const [openAlert, setOpenAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState<AlertColor>();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const subjectIdParam: string | null = queryParameters.get("subjectId");
@@ -512,6 +515,10 @@ const Content = () => {
     });
   };
 
+  const handleCancelClick = () => {
+    navigate(-1);
+  };
+
   return (
     <Container sx={{ mt: 1 }}>
       <Typography variant="h5">{Subject}</Typography>
@@ -537,9 +544,19 @@ const Content = () => {
                   <FormGroup>
                     <Stack>
                       <Box sx={{ mt: 1, textAlign: "right" }}>
+                        {/* <Button
+                          onClick={handleCancelClick}
+                          variant="contained"
+                          size="small"
+                          color="error"
+                          sx={{ maxWidth: "xs", mr: 1 }}
+                        >
+                          {Cancel}
+                        </Button> */}
                         <Button
                           onClick={addGroup}
                           variant="contained"
+                          size="small"
                           color="info"
                           sx={{ maxWidth: "xs", mr: 1 }}
                         >
@@ -549,8 +566,9 @@ const Content = () => {
                           <Button
                             type="submit"
                             variant="contained"
+                            size="small"
                             color="success"
-                            sx={{ maxWidth: "xs" }}
+                            sx={{ maxWidth: "xs", mr: 0.5 }}
                           >
                             {UpdateSubject}
                           </Button>
@@ -558,8 +576,9 @@ const Content = () => {
                           <Button
                             type="submit"
                             variant="contained"
+                            size="small"
                             color="success"
-                            sx={{ maxWidth: "xs" }}
+                            sx={{ maxWidth: "xs", mr: 0.5 }}
                           >
                             {CreateSubject}
                           </Button>
@@ -726,7 +745,8 @@ const Content = () => {
                             <Button
                               onClick={() => removeGroup(index)}
                               variant="contained"
-                              color="error"
+                              size="small"
+                              color="warning"
                               sx={{ maxWidth: "xs" }}
                             >
                               {RemoveGroup}

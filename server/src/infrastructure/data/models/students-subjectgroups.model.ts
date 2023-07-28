@@ -19,6 +19,6 @@ export class StudentsSubjectGroups {
     @ManyToOne(() => User, student => student.studentsSubjectGroups, { onDelete: 'CASCADE' })
     public student: User;
 
-    @ManyToOne(() => SubjectGroup, subjectGroup => subjectGroup.studentsSubjectGroups)
+    @ManyToOne(() => SubjectGroup, subjectGroup => subjectGroup.studentsSubjectGroups, { onDelete: 'CASCADE' })
     public subjectGroup: SubjectGroup;
 }

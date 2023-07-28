@@ -26,6 +26,7 @@ import {
   Cancel,
   Email,
   FirstName,
+  Id,
   Index,
   LastName,
   NoStudentsFound,
@@ -211,8 +212,9 @@ const StudentsTable = () => {
                     },
                   }}
                 >
-                  <TableCell>{Index}</TableCell>
-                  <TableCell>{Email}</TableCell>
+                  <TableCell>{Id}</TableCell>
+                  <TableCell align="center">{Index}</TableCell>
+                  <TableCell align="center">{Email}</TableCell>
                   <TableCell align="center">{FirstName}</TableCell>
                   <TableCell align="center">{LastName}</TableCell>
                   <TableCell align="center">{Action}</TableCell>
@@ -225,9 +227,12 @@ const StudentsTable = () => {
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
+                      {student.id}
+                    </TableCell>
+                    <TableCell align="center">
                       {student.index}/{student.year}
                     </TableCell>
-                    <TableCell>{student.email}</TableCell>
+                    <TableCell align="center">{student.email}</TableCell>
                     <TableCell align="center">{student.firstname}</TableCell>
                     <TableCell align="center">{student.lastname}</TableCell>
                     <TableCell align="center">
