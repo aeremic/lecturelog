@@ -14,6 +14,7 @@ import {
   Users,
 } from "../../../../resources/Typography";
 import StudentsTable from "./StudentsTable";
+import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 
 const Content = () => {
   return (
@@ -22,7 +23,10 @@ const Content = () => {
         <Grid container spacing={2}>
           <Grid item xs={12}>
             <Box sx={{ mt: 2 }}>
-              <Typography variant="h5">{Users}</Typography>
+              <Typography variant="h5">
+                <PeopleAltIcon fontSize="small" sx={{ mr: 0.5 }} />
+                {Users}
+              </Typography>
             </Box>
           </Grid>
           <Divider sx={{ mb: 2 }} />

@@ -18,6 +18,10 @@ import {
 import { useEffect, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
+import FormatListNumberedIcon from "@mui/icons-material/FormatListNumbered";
+import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
+import PersonIcon from "@mui/icons-material/Person";
+import EditIcon from "@mui/icons-material/Edit";
 import { getProfessors } from "../../../../../services/ProfessorsService";
 import {
   Action,
@@ -227,11 +231,28 @@ const ProfessorsTable = () => {
                     },
                   }}
                 >
-                  <TableCell>{Id}</TableCell>
-                  <TableCell align="center">{Email}</TableCell>
-                  <TableCell align="center">{FirstName}</TableCell>
-                  <TableCell align="center">{LastName}</TableCell>
-                  <TableCell align="center">{Action}</TableCell>
+                  <TableCell>
+                    <FormatListNumberedIcon
+                      fontSize="xs"
+                      sx={{ mt: 1, ml: 0.5 }}
+                    />
+                  </TableCell>
+                  <TableCell align="center">
+                    <AlternateEmailIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
+                    {Email}
+                  </TableCell>
+                  <TableCell align="center">
+                    <PersonIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
+                    {FirstName}
+                  </TableCell>
+                  <TableCell align="center">
+                    <PersonIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
+                    {LastName}
+                  </TableCell>
+                  <TableCell align="center">
+                    <EditIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
+                    {Action}
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>

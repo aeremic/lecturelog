@@ -42,6 +42,10 @@ import {
 import { HttpStatusCode } from "axios";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import FormatListNumberedIcon from "@mui/icons-material/FormatListNumbered";
+import TextFieldsIcon from "@mui/icons-material/TextFields";
+import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import ConfirmationDialog from "../../../Common/ConfirmationDialog";
 import { useNavigate } from "react-router-dom";
 
@@ -159,7 +163,10 @@ const SubjectsTable = () => {
   return (
     <>
       <Container sx={{ mt: 2 }}>
-        <Typography variant="h5">{Subjects}</Typography>
+        <Typography variant="h5">
+          <LibraryBooksIcon fontSize="small" sx={{ mr: 0.5 }} />
+          {Subjects}
+        </Typography>
         <Card>
           <CardContent>
             <Typography variant="h6">{AllSubjects}</Typography>
@@ -190,9 +197,23 @@ const SubjectsTable = () => {
                           },
                         }}
                       >
-                        <TableCell>{Id}</TableCell>
-                        <TableCell align="center">{Name}</TableCell>
-                        <TableCell align="center">{Action}</TableCell>
+                        <TableCell>
+                          <FormatListNumberedIcon
+                            fontSize="xs"
+                            sx={{ mt: 1, ml: 0.5 }}
+                          />
+                        </TableCell>
+                        <TableCell align="center">
+                          <TextFieldsIcon
+                            fontSize="xs"
+                            sx={{ mt: 1, mr: 0.5 }}
+                          />
+                          {Name}
+                        </TableCell>
+                        <TableCell align="center">
+                          <EditIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
+                          {Action}
+                        </TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
