@@ -73,11 +73,19 @@ const MenuProps = {
 };
 
 function not(a: readonly IUser[], b: readonly IUser[]) {
-  return a.filter((value) => b.indexOf(value) === -1);
+  const not = a
+    .map((user) => user.id)
+    .filter((value) => b.map((user) => user.id).indexOf(value) === -1);
+
+  return a.filter((value) => not.indexOf(value.id) !== -1);
 }
 
 function intersection(a: readonly IUser[], b: readonly IUser[]) {
-  return a.filter((value) => b.indexOf(value) !== -1);
+  const intersect = a
+    .map((user) => user.id)
+    .filter((value) => b.map((user) => user.id).indexOf(value) !== -1);
+
+  return a.filter((value) => intersect.indexOf(value.id) !== -1);
 }
 
 interface IStudentFormInput {
@@ -203,7 +211,7 @@ const Content = () => {
           newSubjectGroups.forEach((element) => {
             element.students.left =
               element.students.right && element.students.right.length > 0
-                ? intersection(students, element.students.right)
+                ? not(students, element.students.right)
                 : students;
           });
 
