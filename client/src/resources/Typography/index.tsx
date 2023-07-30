@@ -54,6 +54,8 @@ export const No = "No";
 
 export const Cancel = "Cancel";
 
+export const Ok = "Ok";
+
 export const Add = "Add";
 
 export const Edit = "Edit";
@@ -119,6 +121,8 @@ export const SubjectSuccessfullyRemoved = "Subject successfully removed";
 export const Id = "Id";
 
 export const RemoveSubject = "Remove Subject";
+
+export const OperationSuccessfull = "Operation Successfull";
 
 export const Subject = "Subject";
 

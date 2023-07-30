@@ -35,6 +35,8 @@ import {
   Group,
   NoProfessorsFound,
   NoStudentsFound,
+  Ok,
+  OperationSuccessfull,
   PleaseEnterPointsPerPresence,
   PleaseEnterSubjectName,
   PointsPerPresence,
@@ -60,6 +62,7 @@ import { IProfessorsGroups } from "../../../../../../Models/ProfessorsGroups";
 import { IStudentsGroups } from "../../../../../../Models/StudentsGroups";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import CancelIcon from "@mui/icons-material/Cancel";
+import ConfirmationDialog from "../../../../../Common/ConfirmationDialog";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -135,6 +138,8 @@ const Content = () => {
     useState<ISubjectFormInput>(subjectInitialState);
   const [dataLoaded, setDataLoaded] = useState(false);
   const [subjectLoaded, setSubjectLoaded] = useState(false);
+
+  const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
 
   const [openAlert, setOpenAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
@@ -356,9 +361,11 @@ const Content = () => {
       res.data &&
       res.data.id
     ) {
-      setAlertType("success");
-      setAlertMessage(AlertSuccessfullMessage);
-      setOpenAlert(true);
+      // setAlertType("success");
+      // setAlertMessage(AlertSuccessfullMessage);
+      // setOpenAlert(true);
+
+      setConfirmationDialogOpen(true);
     } else {
       setAlertType("error");
       setAlertMessage(AlertFailureMessage);
@@ -531,6 +538,11 @@ const Content = () => {
   };
 
   const handleCancelClick = () => {
+    navigate(-1);
+  };
+
+  const handleConfirmationDialogClose = async (value?: any) => {
+    setConfirmationDialogOpen(false);
     navigate(-1);
   };
 
@@ -777,6 +789,15 @@ const Content = () => {
           </Grid>
         </Grid>
       </form>
+      <ConfirmationDialog
+        id="confirmation-subject-menu"
+        keepMounted
+        open={confirmationDialogOpen}
+        title={AlertSuccessfullMessage}
+        positiveAction={Ok}
+        value={-1}
+        onClose={handleConfirmationDialogClose}
+      />
       <Snackbar
         open={openAlert}
         autoHideDuration={6000}

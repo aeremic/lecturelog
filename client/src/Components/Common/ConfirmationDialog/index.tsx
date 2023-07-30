@@ -13,8 +13,8 @@ export interface IConfirmationDialogRawProps {
   keepMounted: boolean;
   open: boolean;
   title: string;
-  content: string;
-  negativeAction: string;
+  content?: string;
+  negativeAction?: string;
   positiveAction: string;
   value: any;
   onClose: (value?: any) => void;
@@ -55,18 +55,26 @@ const ConfirmationDialog = (props: IConfirmationDialogRawProps) => {
       {...other}
     >
       <DialogTitle>{title}</DialogTitle>
-      <DialogContent dividers>
-        <Typography>{content}</Typography>
-      </DialogContent>
+      {content ? (
+        <DialogContent dividers>
+          <Typography>{content}</Typography>
+        </DialogContent>
+      ) : (
+        <></>
+      )}
       <DialogActions>
-        <Button
-          autoFocus
-          variant="contained"
-          color="error"
-          onClick={handleCancel}
-        >
-          {negativeAction}
-        </Button>
+        {negativeAction ? (
+          <Button
+            autoFocus
+            variant="contained"
+            color="error"
+            onClick={handleCancel}
+          >
+            {negativeAction}
+          </Button>
+        ) : (
+          <></>
+        )}
         <Button variant="contained" color="success" onClick={handleOk}>
           {positiveAction}
         </Button>
