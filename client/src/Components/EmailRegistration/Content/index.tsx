@@ -30,6 +30,9 @@ import {
 import { IEmailRegistration } from "../../../Models/EmailRegistration";
 import { emailRegistration } from "../../../services/UsersService";
 import { useState } from "react";
+import PasswordIcon from "@mui/icons-material/Password";
+import VpnKeyIcon from "@mui/icons-material/VpnKey";
+import EmailIcon from "@mui/icons-material/Email";
 
 const Content = () => {
   const navigate = useNavigate();
@@ -78,6 +81,7 @@ const Content = () => {
     <>
       <Container component="main">
         <Typography component="h1" variant="h5">
+          <EmailIcon fontSize="small" sx={{ mr: 0.5 }} />
           {RegistrationWithEmail}
         </Typography>
         <Divider sx={{ m: 2 }} />
@@ -85,7 +89,10 @@ const Content = () => {
         <FormControl fullWidth sx={{ minWidth: "300px" }}>
           <form onSubmit={handleSubmit(onSubmit)}>
             <FormGroup sx={{ mt: 2 }}>
-              <FormLabel>{Code}</FormLabel>
+              <FormLabel>
+                <VpnKeyIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                {Code}
+              </FormLabel>
               <TextField
                 label={PleaseEnterYourCode}
                 variant="outlined"
@@ -95,7 +102,10 @@ const Content = () => {
               ></TextField>
             </FormGroup>
             <FormGroup sx={{ mt: 2 }}>
-              <FormLabel>{Password}</FormLabel>
+              <FormLabel>
+                <PasswordIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                {Password}
+              </FormLabel>
               <TextField
                 label={PleaseEnterYourNewPassword}
                 variant="outlined"
@@ -105,7 +115,10 @@ const Content = () => {
               ></TextField>
             </FormGroup>
             <FormGroup sx={{ mt: 2 }}>
-              <FormLabel>{RepeatPassword}</FormLabel>
+              <FormLabel>
+                <PasswordIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                {RepeatPassword}
+              </FormLabel>
               <TextField
                 label={PleaseRepeatYourNewPassword}
                 variant="outlined"

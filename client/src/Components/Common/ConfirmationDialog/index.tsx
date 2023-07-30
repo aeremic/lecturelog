@@ -7,6 +7,8 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Typography } from "@mui/material";
+import CheckIcon from "@mui/icons-material/Check";
+import CloseIcon from "@mui/icons-material/Close";
 
 export interface IConfirmationDialogRawProps {
   id: string;
@@ -70,12 +72,14 @@ const ConfirmationDialog = (props: IConfirmationDialogRawProps) => {
             color="error"
             onClick={handleCancel}
           >
+            <CloseIcon fontSize="xs" sx={{ mr: 0.5 }} />
             {negativeAction}
           </Button>
         ) : (
           <></>
         )}
         <Button variant="contained" color="success" onClick={handleOk}>
+          <CheckIcon fontSize="xs" sx={{ mr: 0.5 }} />
           {positiveAction}
         </Button>
       </DialogActions>

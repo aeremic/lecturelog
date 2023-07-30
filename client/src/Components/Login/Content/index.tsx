@@ -26,6 +26,10 @@ import { login } from "../../../services/Common/Auth";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { HttpStatusCode } from "axios";
 import { useState } from "react";
+import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
+import PasswordIcon from "@mui/icons-material/Password";
+import LoginIcon from "@mui/icons-material/Login";
+import LockOpenIcon from "@mui/icons-material/LockOpen";
 
 interface ILoginFormInput {
   email: string;
@@ -82,6 +86,7 @@ const Content = () => {
           Logo
         </Typography>
         <Typography component="h1" variant="h5">
+          <LockOpenIcon fontSize="small" sx={{ mr: 0.5 }} />
           {LogIn}
         </Typography>
         <Divider sx={{ m: 2 }} />
@@ -93,7 +98,10 @@ const Content = () => {
         <FormControl fullWidth sx={{ minWidth: "300px" }}>
           <form onSubmit={handleSubmit(onSubmit)}>
             <FormGroup sx={{ mt: 2 }}>
-              <FormLabel>{Email}</FormLabel>
+              <FormLabel>
+                <AlternateEmailIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                {Email}
+              </FormLabel>
               <TextField
                 label={PleaseEnterYourEmail}
                 variant="outlined"
@@ -103,7 +111,10 @@ const Content = () => {
               ></TextField>
             </FormGroup>
             <FormGroup sx={{ mt: 2 }}>
-              <FormLabel>{Password}</FormLabel>
+              <FormLabel>
+                <PasswordIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                {Password}
+              </FormLabel>
               <TextField
                 label={PleaseEnterYourPassword}
                 variant="outlined"
@@ -114,7 +125,8 @@ const Content = () => {
             </FormGroup>
             <FormGroup sx={{ mt: 2 }}>
               <Button variant="contained" size="large" type="submit">
-                {LogIn}
+                <LoginIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                <Typography>{LogIn}</Typography>
               </Button>
             </FormGroup>
           </form>

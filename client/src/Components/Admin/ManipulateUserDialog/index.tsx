@@ -35,6 +35,13 @@ import { RoleEnum } from "../../../Models/Enums";
 import { createUser } from "../../../services/UsersService";
 import { IUser } from "../../../Models/User";
 import { HttpStatusCode } from "axios";
+import PersonIcon from "@mui/icons-material/Person";
+import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
+import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
+import ContactPageIcon from "@mui/icons-material/ContactPage";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import CheckIcon from "@mui/icons-material/Check";
+import CloseIcon from "@mui/icons-material/Close";
 
 export interface IManipulateUserDialogRawProps {
   id: string;
@@ -129,7 +136,10 @@ const ManipulateUserDialog = (props: IManipulateUserDialogRawProps) => {
         <DialogContent dividers>
           <FormControl fullWidth>
             <FormGroup sx={{ mt: 2 }}>
-              <FormLabel>{FirstName}</FormLabel>
+              <FormLabel>
+                <PersonIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                {FirstName}
+              </FormLabel>
               <TextField
                 label={PleaseEnterFirstName}
                 variant="outlined"
@@ -139,7 +149,10 @@ const ManipulateUserDialog = (props: IManipulateUserDialogRawProps) => {
               ></TextField>
             </FormGroup>
             <FormGroup sx={{ mt: 2 }}>
-              <FormLabel>{LastName}</FormLabel>
+              <FormLabel>
+                <PersonIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                {LastName}
+              </FormLabel>
               <TextField
                 label={PleaseEnterLastName}
                 variant="outlined"
@@ -149,7 +162,10 @@ const ManipulateUserDialog = (props: IManipulateUserDialogRawProps) => {
               ></TextField>
             </FormGroup>
             <FormGroup sx={{ mt: 2 }}>
-              <FormLabel>{Email}</FormLabel>
+              <FormLabel>
+                <AlternateEmailIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                {Email}
+              </FormLabel>
               <TextField
                 label={PleaseEnterEmail}
                 variant="outlined"
@@ -161,7 +177,10 @@ const ManipulateUserDialog = (props: IManipulateUserDialogRawProps) => {
             {defaultRoleEnum == RoleEnum.Student ? (
               <Stack direction="row">
                 <FormGroup sx={{ mt: 2, mr: 2 }}>
-                  <FormLabel>{Index}</FormLabel>
+                  <FormLabel>
+                    <ContactPageIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                    {Index}
+                  </FormLabel>
                   <TextField
                     label={PleaseEnterStudentIndex}
                     variant="outlined"
@@ -175,7 +194,10 @@ const ManipulateUserDialog = (props: IManipulateUserDialogRawProps) => {
                   ></TextField>
                 </FormGroup>
                 <FormGroup sx={{ mt: 2 }}>
-                  <FormLabel>{Year}</FormLabel>
+                  <FormLabel>
+                    <CalendarMonthIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                    {Year}
+                  </FormLabel>
                   <TextField
                     label={PleaseEnterStudentYear}
                     variant="outlined"
@@ -193,7 +215,10 @@ const ManipulateUserDialog = (props: IManipulateUserDialogRawProps) => {
               <></>
             )}
             <FormGroup sx={{ mt: 2 }}>
-              <FormLabel>{UserType}</FormLabel>
+              <FormLabel>
+                <PeopleAltIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                {UserType}
+              </FormLabel>
               <TextField
                 select
                 disabled
@@ -219,9 +244,12 @@ const ManipulateUserDialog = (props: IManipulateUserDialogRawProps) => {
             color="error"
             onClick={handleCancel}
           >
+            <CloseIcon fontSize="xs" sx={{ mr: 0.5 }} />
             {negativeAction}
           </Button>
           <Button variant="contained" color="success" type="submit">
+            <CheckIcon fontSize="xs" sx={{ mr: 0.5 }} />
+
             {positiveAction}
           </Button>
         </DialogActions>

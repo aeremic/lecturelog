@@ -4,6 +4,7 @@ import Button from "@mui/material/Button";
 import Logo from "../Logo";
 import TemporaryDrawer from "../TemporaryDrawer";
 import { Logout } from "../../../resources/Typography/index";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 const Header = () => {
   return (
@@ -21,7 +22,10 @@ const Header = () => {
           <Typography variant="subtitle2" component="div" sx={{ flexGrow: 1 }}>
             <Logo />
           </Typography>
-          <Button color="inherit">{Logout}</Button>
+          <Button color="inherit">
+            <LogoutIcon fontSize="xs" sx={{ mr: 0.5 }} />
+            <Typography>{Logout}</Typography>
+          </Button>
         </Toolbar>
       </AppBar>
     </Box>

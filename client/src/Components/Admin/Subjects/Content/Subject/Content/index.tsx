@@ -63,6 +63,13 @@ import { IStudentsGroups } from "../../../../../../Models/StudentsGroups";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import CancelIcon from "@mui/icons-material/Cancel";
 import ConfirmationDialog from "../../../../../Common/ConfirmationDialog";
+import SchoolIcon from "@mui/icons-material/School";
+import GradeIcon from "@mui/icons-material/Grade";
+import TextFieldsIcon from "@mui/icons-material/TextFields";
+import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
+import CheckIcon from "@mui/icons-material/Check";
+import CloseIcon from "@mui/icons-material/Close";
+import AddIcon from "@mui/icons-material/Add";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -556,7 +563,10 @@ const Content = () => {
               <CardContent>
                 <FormControl fullWidth>
                   <FormGroup sx={{ mt: 2 }}>
-                    <FormLabel>{SubjectName}</FormLabel>
+                    <FormLabel>
+                      <TextFieldsIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                      {SubjectName}
+                    </FormLabel>
                     <Stack>
                       <TextField
                         label={PleaseEnterSubjectName}
@@ -587,6 +597,7 @@ const Content = () => {
                           color="info"
                           sx={{ maxWidth: "xs", mr: 1 }}
                         >
+                          <AddIcon fontSize="xs" sx={{ mr: 0.5 }} />
                           {AddGroup}
                         </Button>
                         {subject.id > 0 ? (
@@ -597,6 +608,7 @@ const Content = () => {
                             color="success"
                             sx={{ maxWidth: "xs", mr: 0.5 }}
                           >
+                            <CheckIcon fontSize="xs" sx={{ mr: 0.5 }} />
                             {UpdateSubject}
                           </Button>
                         ) : (
@@ -607,6 +619,8 @@ const Content = () => {
                             color="success"
                             sx={{ maxWidth: "xs", mr: 0.5 }}
                           >
+                            <CheckIcon fontSize="xs" sx={{ mr: 0.5 }} />
+
                             {CreateSubject}
                           </Button>
                         )}
@@ -630,7 +644,10 @@ const Content = () => {
                       <FormControl fullWidth>
                         <Stack direction="row">
                           <FormGroup sx={{ mt: 2, mr: 2, minWidth: 440 }}>
-                            <FormLabel>{Professors}</FormLabel>
+                            <FormLabel>
+                              <SchoolIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                              {Professors}
+                            </FormLabel>
                             <Select
                               id={index.toString()}
                               name={index.toString() + "#" + "professors"}
@@ -689,7 +706,10 @@ const Content = () => {
                             </Select>
                           </FormGroup>
                           <FormGroup sx={{ mt: 2, minWidth: 10 }}>
-                            <FormLabel>{PointsPerPresence}</FormLabel>
+                            <FormLabel>
+                              <GradeIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                              {PointsPerPresence}
+                            </FormLabel>
                             <TextField
                               id={index.toString()}
                               label={PleaseEnterPointsPerPresence}
@@ -704,7 +724,10 @@ const Content = () => {
                           </FormGroup>
                         </Stack>
                         <FormGroup sx={{ mt: 2 }}>
-                          <FormLabel sx={{ mb: 1 }}>{SelectStudents}</FormLabel>
+                          <FormLabel sx={{ mb: 1 }}>
+                            <PeopleAltIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                            {SelectStudents}
+                          </FormLabel>
                           <Stack direction="row">
                             {dataLoaded ? (
                               <Grid
@@ -776,6 +799,7 @@ const Content = () => {
                               color="warning"
                               sx={{ maxWidth: "xs" }}
                             >
+                              <CloseIcon fontSize="xs" sx={{ mr: 0.5 }} />
                               {RemoveGroup}
                             </Button>
                           </Box>
