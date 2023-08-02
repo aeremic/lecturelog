@@ -10,7 +10,7 @@ import { BcryptModule } from "src/services/bcrypt.module";
 
 @Module({
     imports: [BcryptModule, UserModule, PassportModule, JwtModule.register({
-        secret: 'SECRET_KEY',
+        secret: 'ZXJlbWl4',
         signOptions: { expiresIn: '1h' },
     })],
     providers: [

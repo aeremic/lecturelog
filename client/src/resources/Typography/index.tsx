@@ -4,6 +4,10 @@ export const Users = "Users";
 
 export const Subjects = "Subjects";
 
+export const MyProfile = "My Profile";
+
+export const MySubjects = "My Subjects";
+
 export const AllSubjects = "All Subjects";
 
 export const AllProfessors = "All Professors";
