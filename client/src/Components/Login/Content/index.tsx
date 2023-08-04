@@ -22,7 +22,7 @@ import {
   WrongCredentials,
 } from "../../../resources/Typography";
 import { useForm } from "react-hook-form";
-import { login } from "../../../services/Common/Auth";
+import { getCurrentUserData, login } from "../../../services/Common/Auth";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { HttpStatusCode } from "axios";
 import { useState } from "react";
@@ -30,6 +30,7 @@ import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import PasswordIcon from "@mui/icons-material/Password";
 import LoginIcon from "@mui/icons-material/Login";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
+import { RoleEnum } from "../../../Models/Enums";
 
 interface ILoginFormInput {
   email: string;
@@ -56,7 +57,24 @@ const Content = () => {
     const res: any = await login(data);
     if (res) {
       if (res.status && res.status === HttpStatusCode.Created) {
-        navigate("/admin/users", { replace: true });
+        const userData = getCurrentUserData();
+        if (userData.id) {
+          switch (userData.role) {
+            case RoleEnum.Admin:
+              navigate("/admin/users", { replace: true });
+              break;
+            case RoleEnum.Professor:
+              navigate(`/professor/mysubjects?id=${userData.id}`, {
+                replace: true,
+              });
+              break;
+            case RoleEnum.Student:
+              navigate(`/student/availablesubjects?id=${userData.id}`, {
+                replace: true,
+              });
+              break;
+          }
+        }
       } else if (res.status && res.status === HttpStatusCode.Unauthorized) {
         setAlertType("error");
         setAlertMessage(WrongCredentials);

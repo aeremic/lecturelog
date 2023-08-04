@@ -25,7 +25,7 @@ export const logout = () => {
   localStorage.removeItem("accessToken");
 };
 
-export const getTokenData = () => {
+export const getCurrentUserData = () => {
   const token = getAuthorizationToken();
   return token != "" ? parseJwt(token) : undefined;
 };

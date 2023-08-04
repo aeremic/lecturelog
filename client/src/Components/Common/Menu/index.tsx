@@ -17,16 +17,16 @@ import {
 } from "../../../resources/Typography";
 import { Link } from "react-router-dom";
 import { RoleEnum } from "../../../Models/Enums";
-import { getTokenData } from "../../../services/Common/Auth";
+import { getCurrentUserData } from "../../../services/Common/Auth";
 
 const Menu = () => {
   // TODO: Hide menu when logged off.
-  const tokenData = getTokenData();
+  const userData = getCurrentUserData();
   return (
     <Box role="presentation">
-      {tokenData.id != undefined ? (
+      {userData.id != undefined ? (
         <List>
-          {tokenData.role == RoleEnum.Admin ? (
+          {userData.role == RoleEnum.Admin ? (
             <>
               <ListItem>
                 <ListItemButton component={Link} to="/admin/users">
@@ -48,10 +48,16 @@ const Menu = () => {
           ) : (
             <></>
           )}
-          {tokenData.role == RoleEnum.Professor ? (
+          {userData.role == RoleEnum.Professor ? (
             <>
               <ListItem>
-                <ListItemButton component={Link} to="/user/profile">
+                <ListItemButton
+                  component={Link}
+                  to={{
+                    pathname: `/user/profile`,
+                    search: `?id=${userData.id}`,
+                  }}
+                >
                   <ListItemIcon>
                     <PeopleAltIcon />
                   </ListItemIcon>
@@ -60,7 +66,13 @@ const Menu = () => {
               </ListItem>
               <Divider />
               <ListItem>
-                <ListItemButton component={Link} to="/professor/subjects">
+                <ListItemButton
+                  component={Link}
+                  to={{
+                    pathname: `/professor/mysubjects`,
+                    search: `?id=${userData.id}`,
+                  }}
+                >
                   <ListItemIcon>
                     <LibraryBooksIcon />
                   </ListItemIcon>
@@ -71,7 +83,7 @@ const Menu = () => {
           ) : (
             <></>
           )}
-          {tokenData.role == RoleEnum.Student ? <>bb</> : <></>}
+          {userData.role == RoleEnum.Student ? <>bb</> : <></>}
         </List>
       ) : (
         <></>
