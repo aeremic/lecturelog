@@ -42,7 +42,8 @@ import {
 import { HttpStatusCode } from "axios";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
+import BorderColorIcon from "@mui/icons-material/BorderColor";
+import NumbersIcon from "@mui/icons-material/Numbers";
 import FormatListNumberedIcon from "@mui/icons-material/FormatListNumbered";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
@@ -211,7 +212,10 @@ const SubjectsTable = () => {
                         <TableCell align="center">
                           {
                             // @ts-ignore
-                            <EditIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
+                            <BorderColorIcon
+                              fontSize="xs"
+                              sx={{ mt: 1, mr: 0.5 }}
+                            />
                           }
                           {Action}
                         </TableCell>

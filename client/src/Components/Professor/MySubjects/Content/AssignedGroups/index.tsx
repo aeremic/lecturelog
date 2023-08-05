@@ -1,19 +1,36 @@
 import {
+  Button,
   Card,
   CardContent,
   Paper,
   Table,
+  TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
 } from "@mui/material";
+import { AssignedSubjects, Begin } from "../../../../../resources/Typography";
+import TextFieldsIcon from "@mui/icons-material/TextFields";
+import BorderColorIcon from "@mui/icons-material/BorderColor";
+import NumbersIcon from "@mui/icons-material/Numbers";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import SmartDisplayIcon from "@mui/icons-material/SmartDisplay";
+import { IAssignedGroupsProps } from "../../../../../ModelHelpers/AssignedGroupsProps";
 import { IGroup } from "../../../../../ModelHelpers/Group";
+import EditIcon from "@mui/icons-material/Edit";
 
-const AssignedGroups = (groups: IGroup[]) => {
+const AssignedGroups: React.FC<IAssignedGroupsProps> = ({
+  groupsProp,
+  tempProp,
+}) => {
+  const groups: IGroup[] = groupsProp;
+
   return (
     <Card sx={{ mt: 1 }}>
       <CardContent>
+        <Typography variant="h6">{AssignedSubjects}</Typography>
         <TableContainer component={Paper} sx={{ mt: 1 }}>
           <Table sx={{ minWidth: 290 }} size="small">
             <TableHead>
@@ -25,46 +42,65 @@ const AssignedGroups = (groups: IGroup[]) => {
                   },
                 }}
               >
-                <TableCell>
-                  <FormatListNumberedIcon
-                    fontSize="xs"
-                    sx={{ mt: 1, ml: 0.5 }}
-                  />
+                <TableCell align="center">
+                  {
+                    // @ts-ignore
+                    <TextFieldsIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
+                  }
                 </TableCell>
                 <TableCell align="center">
-                  <TextFieldsIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
-                  {Name}
+                  {
+                    // @ts-ignore
+                    <NumbersIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
+                  }
                 </TableCell>
                 <TableCell align="center">
-                  <EditIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
-                  {Action}
+                  {
+                    // @ts-ignore
+                    <BorderColorIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
+                  }
+                </TableCell>
+                <TableCell align="center">
+                  {
+                    // @ts-ignore
+                    <SmartDisplayIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
+                  }
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {subjects.map((subject, index) => (
+              {groups.map((group, index) => (
                 <TableRow
                   key={index}
-                  hover
-                  onClick={() => handleSubjectClick(subject.id)}
                   sx={{
                     "&:last-child td, &:last-child th": { border: 0 },
                     cursor: "pointer",
                   }}
                 >
-                  <TableCell>{subject.id}</TableCell>
-                  <TableCell align="center">{subject.name}</TableCell>
+                  <TableCell align="center">{group.name}</TableCell>
+                  <TableCell align="center">{group.groupNo}.</TableCell>
                   <TableCell align="center">
                     <Button
                       onClick={(e) => {
                         e.stopPropagation();
-                        handleRemoveDialogClick(subject.id);
                       }}
                       variant="outlined"
-                      color="error"
+                      color="info"
                       size="small"
                     >
-                      <DeleteIcon />
+                      <EditIcon fontSize="small" />
+                    </Button>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
+                      variant="contained"
+                      color="success"
+                      size="small"
+                    >
+                      <PlayArrowIcon fontSize="small" />
                     </Button>
                   </TableCell>
                 </TableRow>

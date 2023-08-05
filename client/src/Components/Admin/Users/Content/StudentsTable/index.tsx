@@ -46,7 +46,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import FormatListNumberedIcon from "@mui/icons-material/FormatListNumbered";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import PersonIcon from "@mui/icons-material/Person";
-import EditIcon from "@mui/icons-material/Edit";
+import BorderColorIcon from "@mui/icons-material/BorderColor";
+import NumbersIcon from "@mui/icons-material/Numbers";
 import ContactPageIcon from "@mui/icons-material/ContactPage";
 import { IManipulateUser } from "../../../../../ModelHelpers/ManipulateUser";
 
@@ -234,7 +235,7 @@ const StudentsTable = () => {
                     {LastName}
                   </TableCell>
                   <TableCell align="center">
-                    <EditIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
+                    <BorderColorIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
                     {Action}
                   </TableCell>
                 </TableRow>

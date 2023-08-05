@@ -153,3 +153,7 @@ export const CreateSubject = "Create Subject";
 export const RemoveGroup = "Remove Group";
 
 export const UpdateSubject = "Update Subject";
+
+export const AssignedSubjects = "Assigned Subjects";
+
+export const Begin = "Begin";
