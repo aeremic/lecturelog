@@ -31,11 +31,7 @@ import PasswordIcon from "@mui/icons-material/Password";
 import LoginIcon from "@mui/icons-material/Login";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import { RoleEnum } from "../../../Models/Enums";
-
-interface ILoginFormInput {
-  email: string;
-  password: string;
-}
+import { ILoginFormInput } from "../../../ModelHelpers/LoginFormInput";
 
 const Content = () => {
   const [queryParameters] = useSearchParams();
@@ -117,7 +113,10 @@ const Content = () => {
           <form onSubmit={handleSubmit(onSubmit)}>
             <FormGroup sx={{ mt: 2 }}>
               <FormLabel>
-                <AlternateEmailIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                {
+                  // @ts-ignore
+                  <AlternateEmailIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                }
                 {Email}
               </FormLabel>
               <TextField
@@ -130,7 +129,10 @@ const Content = () => {
             </FormGroup>
             <FormGroup sx={{ mt: 2 }}>
               <FormLabel>
-                <PasswordIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                {
+                  // @ts-ignore
+                  <PasswordIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                }
                 {Password}
               </FormLabel>
               <TextField
@@ -143,7 +145,10 @@ const Content = () => {
             </FormGroup>
             <FormGroup sx={{ mt: 2 }}>
               <Button variant="contained" size="large" type="submit">
-                <LoginIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                {
+                  // @ts-ignore
+                  <LoginIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                }
                 <Typography>{LogIn}</Typography>
               </Button>
             </FormGroup>

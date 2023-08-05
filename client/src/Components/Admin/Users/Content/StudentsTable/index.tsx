@@ -48,11 +48,7 @@ import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import PersonIcon from "@mui/icons-material/Person";
 import EditIcon from "@mui/icons-material/Edit";
 import ContactPageIcon from "@mui/icons-material/ContactPage";
-
-interface IManipulateUser {
-  id: number;
-  actionResult: boolean;
-}
+import { IManipulateUser } from "../../../../../ModelHelpers/ManipulateUser";
 
 const StudentsTable = () => {
   const studentsTablleInitialState: IUser[] = [

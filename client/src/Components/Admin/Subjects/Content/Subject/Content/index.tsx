@@ -30,13 +30,11 @@ import {
   AddGroup,
   AlertFailureMessage,
   AlertSuccessfullMessage,
-  Cancel,
   CreateSubject,
   Group,
   NoProfessorsFound,
   NoStudentsFound,
   Ok,
-  OperationSuccessfull,
   PleaseEnterPointsPerPresence,
   PleaseEnterSubjectName,
   PointsPerPresence,
@@ -70,6 +68,8 @@ import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
+import { ISubjectFormInput } from "../../../../../../ModelHelpers/SubjectFormInput";
+import { ISubjectGroupsFormInput } from "../../../../../../ModelHelpers/SubjectGroupsFormInput";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -96,26 +96,6 @@ function intersection(a: readonly IUser[], b: readonly IUser[]) {
     .filter((value) => b.map((user) => user.id).indexOf(value) !== -1);
 
   return a.filter((value) => intersect.indexOf(value.id) !== -1);
-}
-
-interface IStudentFormInput {
-  checked: IUser[];
-  left: IUser[];
-  leftChecked: IUser[];
-  right: IUser[];
-  rightChecked: IUser[];
-}
-
-interface ISubjectGroupsFormInput {
-  professors: IUser[];
-  pointsPerPresence: number;
-  students: IStudentFormInput;
-}
-
-interface ISubjectFormInput {
-  id: number;
-  subjectName: string;
-  subjectGroups: ISubjectGroupsFormInput[];
 }
 
 const Content = () => {
@@ -554,7 +534,7 @@ const Content = () => {
   };
 
   return (
-    <Container sx={{ mt: 1 }}>
+    <Container sx={{ mt: 4 }}>
       <Typography variant="h5">{Subject}</Typography>
       <form onSubmit={handleSubmit}>
         <Grid container spacing={2}>
@@ -564,7 +544,10 @@ const Content = () => {
                 <FormControl fullWidth>
                   <FormGroup sx={{ mt: 2 }}>
                     <FormLabel>
-                      <TextFieldsIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                      {
+                        // @ts-ignore
+                        <TextFieldsIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                      }
                       {SubjectName}
                     </FormLabel>
                     <Stack>
@@ -597,7 +580,10 @@ const Content = () => {
                           color="info"
                           sx={{ maxWidth: "xs", mr: 1 }}
                         >
-                          <AddIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                          {
+                            // @ts-ignore
+                            <AddIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                          }
                           {AddGroup}
                         </Button>
                         {subject.id > 0 ? (
@@ -608,7 +594,10 @@ const Content = () => {
                             color="success"
                             sx={{ maxWidth: "xs", mr: 0.5 }}
                           >
-                            <CheckIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                            {
+                              // @ts-ignore
+                              <CheckIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                            }
                             {UpdateSubject}
                           </Button>
                         ) : (
@@ -619,8 +608,10 @@ const Content = () => {
                             color="success"
                             sx={{ maxWidth: "xs", mr: 0.5 }}
                           >
-                            <CheckIcon fontSize="xs" sx={{ mr: 0.5 }} />
-
+                            {
+                              // @ts-ignore
+                              <CheckIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                            }
                             {CreateSubject}
                           </Button>
                         )}
@@ -645,7 +636,10 @@ const Content = () => {
                         <Stack direction="row">
                           <FormGroup sx={{ mt: 2, mr: 2, minWidth: 440 }}>
                             <FormLabel>
-                              <SchoolIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                              {
+                                // @ts-ignore
+                                <SchoolIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                              }
                               {Professors}
                             </FormLabel>
                             <Select
@@ -707,7 +701,10 @@ const Content = () => {
                           </FormGroup>
                           <FormGroup sx={{ mt: 2, minWidth: 10 }}>
                             <FormLabel>
-                              <GradeIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                              {
+                                // @ts-ignore
+                                <GradeIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                              }
                               {PointsPerPresence}
                             </FormLabel>
                             <TextField
@@ -725,7 +722,10 @@ const Content = () => {
                         </Stack>
                         <FormGroup sx={{ mt: 2 }}>
                           <FormLabel sx={{ mb: 1 }}>
-                            <PeopleAltIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                            {
+                              // @ts-ignore
+                              <PeopleAltIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                            }
                             {SelectStudents}
                           </FormLabel>
                           <Stack direction="row">
@@ -799,7 +799,10 @@ const Content = () => {
                               color="warning"
                               sx={{ maxWidth: "xs" }}
                             >
-                              <CloseIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                              {
+                                // @ts-ignore
+                                <CloseIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                              }
                               {RemoveGroup}
                             </Button>
                           </Box>

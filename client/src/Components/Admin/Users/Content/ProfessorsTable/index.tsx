@@ -50,11 +50,7 @@ import { RoleEnum } from "../../../../../Models/Enums";
 import { IUser } from "../../../../../Models/User";
 import { removeUser } from "../../../../../services/UsersService";
 import { HttpStatusCode } from "axios";
-
-interface IManipulateUser {
-  id: number;
-  actionResult: boolean;
-}
+import { IManipulateUser } from "../../../../../ModelHelpers/ManipulateUser";
 
 const ProfessorsTable = () => {
   const professorsTableInitialState: IUser[] = [

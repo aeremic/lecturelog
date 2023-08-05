@@ -42,6 +42,7 @@ import ContactPageIcon from "@mui/icons-material/ContactPage";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
+import { IManipulateUserFormInput } from "../../../ModelHelpers/ManipulateUserFormInput";
 
 export interface IManipulateUserDialogRawProps {
   id: string;
@@ -53,16 +54,6 @@ export interface IManipulateUserDialogRawProps {
   defaultRoleEnum: RoleEnum;
   value: any;
   onClose: (value?: any) => void;
-}
-
-interface IManipulateUserFormInput {
-  id: number;
-  firstname: string;
-  lastname: string;
-  email: string;
-  index?: number | null;
-  year?: number | null;
-  role: RoleEnum;
 }
 
 const ManipulateUserDialog = (props: IManipulateUserDialogRawProps) => {
@@ -137,7 +128,10 @@ const ManipulateUserDialog = (props: IManipulateUserDialogRawProps) => {
           <FormControl fullWidth>
             <FormGroup sx={{ mt: 2 }}>
               <FormLabel>
-                <PersonIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                {
+                  // @ts-ignore
+                  <PersonIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                }
                 {FirstName}
               </FormLabel>
               <TextField
@@ -150,7 +144,10 @@ const ManipulateUserDialog = (props: IManipulateUserDialogRawProps) => {
             </FormGroup>
             <FormGroup sx={{ mt: 2 }}>
               <FormLabel>
-                <PersonIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                {
+                  // @ts-ignore
+                  <PersonIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                }
                 {LastName}
               </FormLabel>
               <TextField
@@ -163,7 +160,10 @@ const ManipulateUserDialog = (props: IManipulateUserDialogRawProps) => {
             </FormGroup>
             <FormGroup sx={{ mt: 2 }}>
               <FormLabel>
-                <AlternateEmailIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                {
+                  // @ts-ignore
+                  <AlternateEmailIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                }
                 {Email}
               </FormLabel>
               <TextField
@@ -178,7 +178,10 @@ const ManipulateUserDialog = (props: IManipulateUserDialogRawProps) => {
               <Stack direction="row">
                 <FormGroup sx={{ mt: 2, mr: 2 }}>
                   <FormLabel>
-                    <ContactPageIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                    {
+                      // @ts-ignore
+                      <ContactPageIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                    }
                     {Index}
                   </FormLabel>
                   <TextField
@@ -195,7 +198,10 @@ const ManipulateUserDialog = (props: IManipulateUserDialogRawProps) => {
                 </FormGroup>
                 <FormGroup sx={{ mt: 2 }}>
                   <FormLabel>
-                    <CalendarMonthIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                    {
+                      // @ts-ignore
+                      <CalendarMonthIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                    }
                     {Year}
                   </FormLabel>
                   <TextField
@@ -216,7 +222,10 @@ const ManipulateUserDialog = (props: IManipulateUserDialogRawProps) => {
             )}
             <FormGroup sx={{ mt: 2 }}>
               <FormLabel>
-                <PeopleAltIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                {
+                  // @ts-ignore
+                  <PeopleAltIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                }
                 {UserType}
               </FormLabel>
               <TextField
@@ -244,11 +253,17 @@ const ManipulateUserDialog = (props: IManipulateUserDialogRawProps) => {
             color="error"
             onClick={handleCancel}
           >
-            <CloseIcon fontSize="xs" sx={{ mr: 0.5 }} />
+            {
+              // @ts-ignore
+              <CloseIcon fontSize="xs" sx={{ mr: 0.5 }} />
+            }
             {negativeAction}
           </Button>
           <Button variant="contained" color="success" type="submit">
-            <CheckIcon fontSize="xs" sx={{ mr: 0.5 }} />
+            {
+              // @ts-ignore
+              <CheckIcon fontSize="xs" sx={{ mr: 0.5 }} />
+            }
 
             {positiveAction}
           </Button>

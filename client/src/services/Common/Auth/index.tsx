@@ -33,7 +33,6 @@ export const getCurrentUserData = () => {
 const getAuthorizationToken = () => {
   const accessToken = localStorage.getItem("accessToken");
   let parsedAccessToken = "";
-
   if (accessToken) {
     parsedAccessToken = JSON.parse(accessToken);
   }

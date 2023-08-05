@@ -90,7 +90,10 @@ const Content = () => {
           <form onSubmit={handleSubmit(onSubmit)}>
             <FormGroup sx={{ mt: 2 }}>
               <FormLabel>
-                <VpnKeyIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                {
+                  // @ts-ignore
+                  <VpnKeyIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                }
                 {Code}
               </FormLabel>
               <TextField
@@ -103,7 +106,10 @@ const Content = () => {
             </FormGroup>
             <FormGroup sx={{ mt: 2 }}>
               <FormLabel>
-                <PasswordIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                {
+                  // @ts-ignore
+                  <PasswordIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                }
                 {Password}
               </FormLabel>
               <TextField
@@ -116,7 +122,10 @@ const Content = () => {
             </FormGroup>
             <FormGroup sx={{ mt: 2 }}>
               <FormLabel>
-                <PasswordIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                {
+                  // @ts-ignore
+                  <PasswordIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                }
                 {RepeatPassword}
               </FormLabel>
               <TextField

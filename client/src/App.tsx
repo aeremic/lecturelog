@@ -16,6 +16,7 @@ const App = () => {
       <BrowserRouter>
         <Routes>
           /**Login flow routes */
+          <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />
           <Route path="/emailregistration" element={<EmailRegistration />} />
           /**User routes */

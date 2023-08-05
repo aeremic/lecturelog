@@ -48,11 +48,7 @@ import TextFieldsIcon from "@mui/icons-material/TextFields";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import ConfirmationDialog from "../../../Common/ConfirmationDialog";
 import { useNavigate } from "react-router-dom";
-
-interface ISubject {
-  id: number;
-  name: string;
-}
+import { ISubject } from "../../../../ModelHelpers/Subject";
 
 const SubjectsTable = () => {
   const subjectInitialState: ISubject[] = [
@@ -162,12 +158,12 @@ const SubjectsTable = () => {
 
   return (
     <>
-      <Container sx={{ mt: 2 }}>
+      <Container sx={{ mt: 4 }}>
         <Typography variant="h5">
           <LibraryBooksIcon fontSize="small" sx={{ mr: 0.5 }} />
           {Subjects}
         </Typography>
-        <Card>
+        <Card sx={{ mt: 2 }}>
           <CardContent>
             <Typography variant="h6">{AllSubjects}</Typography>
             <Divider sx={{ mb: 2 }} />
@@ -198,10 +194,12 @@ const SubjectsTable = () => {
                         }}
                       >
                         <TableCell>
-                          <FormatListNumberedIcon
-                            fontSize="xs"
-                            sx={{ mt: 1, ml: 0.5 }}
-                          />
+                          {
+                            <FormatListNumberedIcon
+                              fontSize="xs"
+                              sx={{ mt: 1, ml: 0.5 }}
+                            />
+                          }
                         </TableCell>
                         <TableCell align="center">
                           <TextFieldsIcon
@@ -211,7 +209,10 @@ const SubjectsTable = () => {
                           {Name}
                         </TableCell>
                         <TableCell align="center">
-                          <EditIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
+                          {
+                            // @ts-ignore
+                            <EditIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
+                          }
                           {Action}
                         </TableCell>
                       </TableRow>
