@@ -15,6 +15,8 @@ import { AuthService } from 'src/auth';
 import { StudentsDto } from 'src/core/dtos/responses/students.dto';
 import { RoleEnum } from 'src/core/common/enums/role.enum';
 import { AllUsersExceptAdminDto } from 'src/core/dtos/responses/all-users-except-admin.dto';
+import { AssignedGroupDto } from 'src/core/dtos/responses/assigned-group.dto';
+import { SubjectUseCases } from '../subject/subject.use-case';
 
 @Injectable()
 export class UserUseCases extends GenericUseCases<UserEntity>{
@@ -32,6 +34,9 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
 
     @Inject(BcryptService)
     private bcryptService: BcryptService;
+
+    @Inject(SubjectUseCases)
+    private subjectUseCases: SubjectUseCases;
 
     @Inject()
     private readonly config: ConfigService;
@@ -241,6 +246,27 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
             result = {
                 professors: users.filter(u => u.role == RoleEnum.professor),
                 students: users.filter(u => u.role == RoleEnum.student)
+            }
+        } catch (error) {
+            this.loggerUseCases.log(ErrorConstants.GetMethodError, error?.message, error?.stack);
+        }
+
+        return result;
+    }
+
+    async getAssignedGroups(id: number): Promise<AssignedGroupDto[]> {
+        let result: AssignedGroupDto[];
+        try {
+            let subjects = await this.subjectUseCases.getSubjectsByProfessorId(id);
+            if (subjects) {
+                result = [];
+                subjects.forEach(subject => {
+                    if (subject.subjectGroups) {
+                        subject.subjectGroups.forEach(group => {
+                            result.push({ id: subject.id, name: subject.name, groupNo: group.groupNo });
+                        });
+                    }
+                });
             }
         } catch (error) {
             this.loggerUseCases.log(ErrorConstants.GetMethodError, error?.message, error?.stack);

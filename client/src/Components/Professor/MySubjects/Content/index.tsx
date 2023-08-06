@@ -1,16 +1,34 @@
 import { Card, CardContent, Container, Grid, Typography } from "@mui/material";
 import { MySubjects } from "../../../../resources/Typography";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AssignedGroups from "./AssignedGroups";
 import { IGroup } from "../../../../ModelHelpers/Group";
+import { useSearchParams } from "react-router-dom";
+import { HttpStatusCode } from "axios";
+import { getAssignedGroups } from "../../../../services/ProfessorsService";
 
 export const Content = () => {
-  const [groups, setGroups] = useState<IGroup[]>([
-    { id: 1, name: "Klijentske Web Tehnologije", groupNo: 1 },
-    { id: 1, name: "Klijentske Web Tehnologije", groupNo: 2 },
-    { id: 1, name: "Strukture podataka i algoritmi 1", groupNo: 1 },
-  ]);
+  const [queryParameters] = useSearchParams();
+  const userIdParam: string | null = queryParameters.get("id");
+  const userId = userIdParam != null ? parseInt(userIdParam) : -1;
+
+  const [groups, setGroups] = useState<IGroup[]>([]);
   const temp = true;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (userId != -1) {
+        await getAssignedGroups(userId).then((res: any) => {
+          if (res && res.status === HttpStatusCode.Ok && res.data) {
+            setGroups(res.data);
+          }
+        });
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <Container sx={{ mt: 4 }}>
       <Typography variant="h5">{MySubjects}</Typography>

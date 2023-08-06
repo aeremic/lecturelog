@@ -108,16 +108,15 @@ export class SubjectUseCases extends GenericUseCases<SubjectEntity>{
         return result;
     }
 
+    async getSubjectsByProfessorId(id: number): Promise<SubjectEntity[]> {
+        let result: SubjectEntity[] | PromiseLike<SubjectEntity[]>;
 
-    // async deleteSubject(id: number): Promise<number> {
-    //     let result: number | PromiseLike<number>;
+        try {
+            result = await this.subjectRepository.getSubjectsByProfessorId(id);
+        } catch (error) {
+            this.loggerUseCases.log(ErrorConstants.GetMethodError, error?.message, error?.stack);
+        }
 
-    //     try {
-    //         result = await this.subjectRepository.deleteSubject(id);
-    //     } catch (error) {
-    //         this.loggerUseCases.log(ErrorConstants.DeleteMethodError, error?.message, error?.stack);
-    //     }
-
-    //     return result;
-    // }
+        return result;
+    }
 }

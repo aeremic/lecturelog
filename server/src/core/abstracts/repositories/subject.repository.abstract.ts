@@ -9,4 +9,6 @@ export abstract class SubjectRepositoryAbstract extends GenericRepositoryAbstrac
     abstract getSubjectsCount(): Promise<number>;
 
     abstract getSubject(id: number): Promise<SubjectEntity>;
+
+    abstract getSubjectsByProfessorId(id: number): Promise<SubjectEntity[]>;
 }
