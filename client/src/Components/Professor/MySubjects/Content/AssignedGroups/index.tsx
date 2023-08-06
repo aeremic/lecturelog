@@ -20,6 +20,7 @@ import SmartDisplayIcon from "@mui/icons-material/SmartDisplay";
 import { IAssignedGroupsProps } from "../../../../../modelHelpers/AssignedGroupsProps";
 import { IGroup } from "../../../../../modelHelpers/Group";
 import EditIcon from "@mui/icons-material/Edit";
+import convertToRoman from "../../../../../functionHelpers/ConvertToRoman";
 
 const AssignedGroups: React.FC<IAssignedGroupsProps> = ({
   groupsProp,
@@ -78,7 +79,9 @@ const AssignedGroups: React.FC<IAssignedGroupsProps> = ({
                   }}
                 >
                   <TableCell align="center">{group.name}</TableCell>
-                  <TableCell align="center">{group.groupNo}.</TableCell>
+                  <TableCell align="center">
+                    {convertToRoman(group.groupNo)}
+                  </TableCell>
                   <TableCell align="center">
                     <Button
                       onClick={(e) => {
