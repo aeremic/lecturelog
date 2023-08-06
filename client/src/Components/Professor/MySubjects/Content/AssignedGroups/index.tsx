@@ -24,7 +24,7 @@ import convertToRoman from "../../../../../functionHelpers/ConvertToRoman";
 
 const AssignedGroups: React.FC<IAssignedGroupsProps> = ({
   groupsProp,
-  tempProp,
+  handleStartSession,
 }) => {
   const groups: IGroup[] = groupsProp;
 
@@ -83,21 +83,14 @@ const AssignedGroups: React.FC<IAssignedGroupsProps> = ({
                     {convertToRoman(group.groupNo)}
                   </TableCell>
                   <TableCell align="center">
-                    <Button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                      }}
-                      variant="outlined"
-                      color="info"
-                      size="small"
-                    >
+                    <Button variant="outlined" color="info" size="small">
                       <EditIcon fontSize="small" />
                     </Button>
                   </TableCell>
                   <TableCell align="center">
                     <Button
                       onClick={(e) => {
-                        e.stopPropagation();
+                        handleStartSession(group.id);
                       }}
                       variant="contained"
                       color="success"

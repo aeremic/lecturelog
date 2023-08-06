@@ -3,17 +3,18 @@ import { MySubjects } from "../../../../resources/Typography";
 import { useEffect, useState } from "react";
 import AssignedGroups from "./AssignedGroups";
 import { IGroup } from "../../../../modelHelpers/Group";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { HttpStatusCode } from "axios";
 import { getAssignedGroups } from "../../../../services/ProfessorsService";
 
 export const Content = () => {
+  const navigate = useNavigate();
   const [queryParameters] = useSearchParams();
+
   const userIdParam: string | null = queryParameters.get("id");
   const userId = userIdParam != null ? parseInt(userIdParam) : -1;
 
   const [groups, setGroups] = useState<IGroup[]>([]);
-  const temp = true;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,12 +30,19 @@ export const Content = () => {
     fetchData();
   }, []);
 
+  const handleStartSession = (groupId: number) => {
+    navigate(`/professor/room?userId=${userId}&groupId=${groupId}`);
+  };
+
   return (
     <Container sx={{ mt: 4 }}>
       <Typography variant="h5">{MySubjects}</Typography>
       <Grid container spacing={2} sx={{ mt: 2 }}>
         <Grid item xs={6} sx={{ minWidth: 340 }}>
-          <AssignedGroups groupsProp={groups} tempProp={temp} />
+          <AssignedGroups
+            groupsProp={groups}
+            handleStartSession={handleStartSession}
+          />
         </Grid>
         <Grid item xs={6} sx={{ minWidth: 340 }}>
           <Card sx={{ mt: 1 }}>

@@ -9,6 +9,7 @@ import EmailRegistration from "./components/EmailRegistration";
 import Subject from "./components/Admin/Subjects/Content/Subject";
 import MySubjects from "./components/Professor/MySubjects";
 import Profile from "./components/User/Profile";
+import ProfessorRoom from "./components/Professor/ProfessorRoom";
 
 const App = () => {
   return (
@@ -27,6 +28,7 @@ const App = () => {
           <Route path="/admin/subjects/subject" element={<Subject />} />
           /**Professorr routes */
           <Route path="/professor/mysubjects" element={<MySubjects />} />
+          <Route path="/professor/room" element={<ProfessorRoom />} />
           {/* <PrivateRoute path="/">
             <Main />
           </PrivateRoute> */}
