@@ -26,6 +26,7 @@ import convertToRoman from "../../../../../functionHelpers/ConvertToRoman";
 const AssignedGroups: React.FC<IAssignedGroupsProps> = ({
   groupsProp,
   handleStartSession,
+  handleSubjectClick,
 }) => {
   const groups: IGroup[] = groupsProp;
 
@@ -60,12 +61,6 @@ const AssignedGroups: React.FC<IAssignedGroupsProps> = ({
                 <TableCell align="center">
                   {
                     // @ts-ignore
-                    <BorderColorIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
-                  }
-                </TableCell>
-                <TableCell align="center">
-                  {
-                    // @ts-ignore
                     <SmartDisplayIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
                   }
                 </TableCell>
@@ -75,6 +70,8 @@ const AssignedGroups: React.FC<IAssignedGroupsProps> = ({
               {groups.map((group, index) => (
                 <TableRow
                   key={index}
+                  hover
+                  onClick={(e) => handleSubjectClick(group.subjectId)}
                   sx={{
                     "&:last-child td, &:last-child th": { border: 0 },
                     cursor: "pointer",
@@ -83,11 +80,6 @@ const AssignedGroups: React.FC<IAssignedGroupsProps> = ({
                   <TableCell align="center">{group.name}</TableCell>
                   <TableCell align="center">
                     {convertToRoman(group.groupNo)}
-                  </TableCell>
-                  <TableCell align="center">
-                    <Button variant="outlined" color="info" size="small">
-                      <EditIcon fontSize="small" />
-                    </Button>
                   </TableCell>
                   <TableCell align="center">
                     <Button

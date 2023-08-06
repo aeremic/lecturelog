@@ -263,7 +263,7 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
                 subjects.forEach(subject => {
                     if (subject.subjectGroups) {
                         subject.subjectGroups.forEach(group => {
-                            result.push({ id: subject.id, name: subject.name, groupId: group.id, groupNo: group.groupNo });
+                            result.push({ subjectId: subject.id, name: subject.name, groupId: group.id, groupNo: group.groupNo });
                         });
                     }
                 });

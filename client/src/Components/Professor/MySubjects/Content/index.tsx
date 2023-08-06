@@ -35,6 +35,10 @@ export const Content = () => {
     navigate(`/professor/room?userId=${userId}&groupId=${groupId}`);
   };
 
+  const handleSubjectClick = (subjectId: number) => {
+    console.log(subjectId);
+  };
+
   return (
     <Container sx={{ mt: 4 }}>
       <Typography variant="h5">
@@ -42,13 +46,14 @@ export const Content = () => {
         {MySubjects}
       </Typography>
       <Grid container spacing={2} sx={{ mt: 2 }}>
-        <Grid item xs={6} sx={{ minWidth: 340 }}>
+        <Grid item xs={6} sx={{ minWidth: 350 }}>
           <AssignedGroups
             groupsProp={groups}
             handleStartSession={handleStartSession}
+            handleSubjectClick={handleSubjectClick}
           />
         </Grid>
-        <Grid item xs={6} sx={{ minWidth: 340 }}>
+        <Grid item xs={6} sx={{ minWidth: 350 }}>
           <Card sx={{ mt: 1 }}>
             <CardContent>active</CardContent>
           </Card>

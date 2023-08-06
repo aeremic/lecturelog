@@ -1,5 +1,5 @@
 export interface IGroup {
-  id: number;
+  subjectId: number;
   name: string;
   groupId: number;
   groupNo: number;
