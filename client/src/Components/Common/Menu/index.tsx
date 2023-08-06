@@ -16,7 +16,7 @@ import {
   Users,
 } from "../../../resources/Typography";
 import { Link } from "react-router-dom";
-import { RoleEnum } from "../../../Models/Enums";
+import { RoleEnum } from "../../../models/Enums";
 import { getCurrentUserData } from "../../../services/Common/Auth";
 
 const Menu = () => {

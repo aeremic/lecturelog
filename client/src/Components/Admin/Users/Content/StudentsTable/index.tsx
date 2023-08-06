@@ -35,8 +35,8 @@ import {
   UserSuccessfullyRemoved,
   Yes,
 } from "../../../../../resources/Typography";
-import { RoleEnum } from "../../../../../Models/Enums";
-import { IUser } from "../../../../../Models/User";
+import { RoleEnum } from "../../../../../models/Enums";
+import { IUser } from "../../../../../models/User";
 import { HttpStatusCode } from "axios";
 import { removeUser } from "../../../../../services/UsersService";
 import AddIcon from "@mui/icons-material/Add";
@@ -49,7 +49,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import NumbersIcon from "@mui/icons-material/Numbers";
 import ContactPageIcon from "@mui/icons-material/ContactPage";
-import { IManipulateUser } from "../../../../../ModelHelpers/ManipulateUser";
+import { IManipulateUser } from "../../../../../modelHelpers/ManipulateUser";
 
 const StudentsTable = () => {
   const studentsTablleInitialState: IUser[] = [

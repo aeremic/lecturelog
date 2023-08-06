@@ -49,7 +49,7 @@ import TextFieldsIcon from "@mui/icons-material/TextFields";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import ConfirmationDialog from "../../../Common/ConfirmationDialog";
 import { useNavigate } from "react-router-dom";
-import { ISubject } from "../../../../ModelHelpers/Subject";
+import { ISubject } from "../../../../modelHelpers/Subject";
 
 const SubjectsTable = () => {
   const subjectInitialState: ISubject[] = [

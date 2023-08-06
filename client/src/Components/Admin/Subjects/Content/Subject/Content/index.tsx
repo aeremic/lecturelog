@@ -46,18 +46,18 @@ import {
 } from "../../../../../../resources/Typography";
 import { useEffect, useState } from "react";
 import { HttpStatusCode } from "axios";
-import { RoleEnum } from "../../../../../../Models/Enums";
-import { IUser } from "../../../../../../Models/User";
+import { RoleEnum } from "../../../../../../models/Enums";
+import { IUser } from "../../../../../../models/User";
 import { getAllExceptAdmin } from "../../../../../../services/UsersService";
-import { ISubject } from "../../../../../../Models/Subject";
+import { ISubject } from "../../../../../../models/Subject";
 import { SubjectName } from "../../../../../../resources/Typography/index";
-import { ISubjectGroup } from "../../../../../../Models/SubjectGroup";
+import { ISubjectGroup } from "../../../../../../models/SubjectGroup";
 import {
   createOrUpdateSubject,
   getSubject,
 } from "../../../../../../services/SubjectsService";
-import { IProfessorsGroups } from "../../../../../../Models/ProfessorsGroups";
-import { IStudentsGroups } from "../../../../../../Models/StudentsGroups";
+import { IProfessorsGroups } from "../../../../../../models/ProfessorsGroups";
+import { IStudentsGroups } from "../../../../../../models/StudentsGroups";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import CancelIcon from "@mui/icons-material/Cancel";
 import ConfirmationDialog from "../../../../../Common/ConfirmationDialog";
@@ -68,8 +68,8 @@ import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
-import { ISubjectFormInput } from "../../../../../../ModelHelpers/SubjectFormInput";
-import { ISubjectGroupsFormInput } from "../../../../../../ModelHelpers/SubjectGroupsFormInput";
+import { ISubjectFormInput } from "../../../../../../modelHelpers/SubjectFormInput";
+import { ISubjectGroupsFormInput } from "../../../../../../modelHelpers/SubjectGroupsFormInput";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;

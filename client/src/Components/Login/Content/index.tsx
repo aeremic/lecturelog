@@ -30,8 +30,8 @@ import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import PasswordIcon from "@mui/icons-material/Password";
 import LoginIcon from "@mui/icons-material/Login";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
-import { RoleEnum } from "../../../Models/Enums";
-import { ILoginFormInput } from "../../../ModelHelpers/LoginFormInput";
+import { RoleEnum } from "../../../models/Enums";
+import { ILoginFormInput } from "../../../modelHelpers/LoginFormInput";
 
 const Content = () => {
   const [queryParameters] = useSearchParams();

@@ -27,7 +27,7 @@ import {
   RegistrationWithEmail,
   RepeatPassword,
 } from "../../../resources/Typography";
-import { IEmailRegistration } from "../../../Models/EmailRegistration";
+import { IEmailRegistration } from "../../../models/EmailRegistration";
 import { emailRegistration } from "../../../services/UsersService";
 import { useState } from "react";
 import PasswordIcon from "@mui/icons-material/Password";

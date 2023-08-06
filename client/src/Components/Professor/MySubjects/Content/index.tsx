@@ -2,7 +2,7 @@ import { Card, CardContent, Container, Grid, Typography } from "@mui/material";
 import { MySubjects } from "../../../../resources/Typography";
 import { useEffect, useState } from "react";
 import AssignedGroups from "./AssignedGroups";
-import { IGroup } from "../../../../ModelHelpers/Group";
+import { IGroup } from "../../../../modelHelpers/Group";
 import { useSearchParams } from "react-router-dom";
 import { HttpStatusCode } from "axios";
 import { getAssignedGroups } from "../../../../services/ProfessorsService";

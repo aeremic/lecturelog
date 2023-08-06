@@ -47,11 +47,11 @@ import {
 } from "../../../../../resources/Typography";
 import ConfirmationDialog from "../../../../Common/ConfirmationDialog";
 import ManipulateUserDialog from "../../../ManipulateUserDialog";
-import { RoleEnum } from "../../../../../Models/Enums";
-import { IUser } from "../../../../../Models/User";
+import { RoleEnum } from "../../../../../models/Enums";
+import { IUser } from "../../../../../models/User";
 import { removeUser } from "../../../../../services/UsersService";
 import { HttpStatusCode } from "axios";
-import { IManipulateUser } from "../../../../../ModelHelpers/ManipulateUser";
+import { IManipulateUser } from "../../../../../modelHelpers/ManipulateUser";
 
 const ProfessorsTable = () => {
   const professorsTableInitialState: IUser[] = [

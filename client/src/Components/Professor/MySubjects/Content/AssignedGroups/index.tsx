@@ -17,8 +17,8 @@ import BorderColorIcon from "@mui/icons-material/BorderColor";
 import NumbersIcon from "@mui/icons-material/Numbers";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import SmartDisplayIcon from "@mui/icons-material/SmartDisplay";
-import { IAssignedGroupsProps } from "../../../../../ModelHelpers/AssignedGroupsProps";
-import { IGroup } from "../../../../../ModelHelpers/Group";
+import { IAssignedGroupsProps } from "../../../../../modelHelpers/AssignedGroupsProps";
+import { IGroup } from "../../../../../modelHelpers/Group";
 import EditIcon from "@mui/icons-material/Edit";
 
 const AssignedGroups: React.FC<IAssignedGroupsProps> = ({

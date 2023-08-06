@@ -1,4 +1,4 @@
-import { RoleEnum } from "../../Models/Enums";
+import { RoleEnum } from "../../models/Enums";
 
 export interface IManipulateUserFormInput {
   id: number;
