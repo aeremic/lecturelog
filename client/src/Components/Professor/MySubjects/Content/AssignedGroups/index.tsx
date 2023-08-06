@@ -2,6 +2,7 @@ import {
   Button,
   Card,
   CardContent,
+  Divider,
   Paper,
   Table,
   TableBody,
@@ -11,7 +12,7 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { AssignedSubjects, Begin } from "../../../../../resources/Typography";
+import { AssignedSubjects } from "../../../../../resources/Typography";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import NumbersIcon from "@mui/icons-material/Numbers";
@@ -32,6 +33,7 @@ const AssignedGroups: React.FC<IAssignedGroupsProps> = ({
     <Card sx={{ mt: 1 }}>
       <CardContent>
         <Typography variant="h6">{AssignedSubjects}</Typography>
+        <Divider sx={{ mb: 2 }} />
         <TableContainer component={Paper} sx={{ mt: 1 }}>
           <Table sx={{ minWidth: 290 }} size="small">
             <TableHead>
@@ -90,7 +92,7 @@ const AssignedGroups: React.FC<IAssignedGroupsProps> = ({
                   <TableCell align="center">
                     <Button
                       onClick={(e) => {
-                        handleStartSession(group.id);
+                        handleStartSession(group.groupId);
                       }}
                       variant="contained"
                       color="success"

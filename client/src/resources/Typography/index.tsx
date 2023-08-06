@@ -158,4 +158,4 @@ export const AssignedSubjects = "Assigned Subjects";
 
 export const Begin = "Begin";
 
-export const Lecture = "Lecture";
+export const LiveLecture = "Live Lecture";

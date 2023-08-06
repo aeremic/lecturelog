@@ -6,6 +6,7 @@ import { IGroup } from "../../../../modelHelpers/Group";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { HttpStatusCode } from "axios";
 import { getAssignedGroups } from "../../../../services/ProfessorsService";
+import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 
 export const Content = () => {
   const navigate = useNavigate();
@@ -36,7 +37,10 @@ export const Content = () => {
 
   return (
     <Container sx={{ mt: 4 }}>
-      <Typography variant="h5">{MySubjects}</Typography>
+      <Typography variant="h5">
+        <LibraryBooksIcon fontSize="small" sx={{ mr: 0.5 }} />
+        {MySubjects}
+      </Typography>
       <Grid container spacing={2} sx={{ mt: 2 }}>
         <Grid item xs={6} sx={{ minWidth: 340 }}>
           <AssignedGroups
