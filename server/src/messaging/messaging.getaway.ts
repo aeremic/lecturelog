@@ -11,17 +11,19 @@ export class LecturesGetaway implements OnGatewayConnection, OnGatewayDisconnect
     public server: Server;
 
     handleConnection(@ConnectedSocket() client: any) {
-        console.log('New connection');
+        console.log(`${client.id} - New connection`);
     }
 
     handleDisconnect(@ConnectedSocket() client: any) {
-        console.log("Disconnected");
+        console.log(`${client.id} - Disconnected`);
     }
 
     @SubscribeMessage('createLecture')
     createLecture(@MessageBody() data: any, @ConnectedSocket() client: Socket) {
         client.join(data);
 
+        var temp = this.server.sockets.adapter.rooms
+        console.log(temp);
         return undefined;
     }
 

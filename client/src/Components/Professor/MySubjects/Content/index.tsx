@@ -34,7 +34,7 @@ export const Content = () => {
 
   const handleStartSession = (groupId: number) => {
     connect();
-    onCreateLecture("testRoom");
+    onCreateLecture(groupId);
 
     navigate(`/professor/room?userId=${userId}&groupId=${groupId}`);
   };
