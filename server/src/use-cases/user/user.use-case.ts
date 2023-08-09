@@ -274,4 +274,25 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
 
         return result;
     }
+
+    async getActiveAssignedGroups(id: number): Promise<AssignedGroupDto[]> {
+        let result: AssignedGroupDto[];
+        try {
+            let subjects = await this.subjectUseCases.getActiveSubjectsByProfessorId(id);
+            if (subjects) {
+                result = [];
+                subjects.forEach(subject => {
+                    if (subject.subjectGroups) {
+                        subject.subjectGroups.forEach(group => {
+                            result.push({ subjectId: subject.id, name: subject.name, groupId: group.id, groupNo: group.groupNo });
+                        });
+                    }
+                });
+            }
+        } catch (error) {
+            this.loggerUseCases.log(ErrorConstants.GetMethodError, error?.message, error?.stack);
+        }
+
+        return result;
+    }
 }

@@ -8,6 +8,7 @@ import { SubjectsDto } from 'src/core/dtos/responses/subjects.dto';
 import { Subject } from 'rxjs';
 import { ProfessorsGroupsUseCases } from '../professors-groups/professors-groups.use-case';
 import { StudentsGroupsUseCases } from '../students-groups/students-groups.use-case';
+import { LecturesGetaway } from 'src/messaging/messaging.getaway';
 
 @Injectable()
 export class SubjectUseCases extends GenericUseCases<SubjectEntity>{
@@ -22,6 +23,9 @@ export class SubjectUseCases extends GenericUseCases<SubjectEntity>{
 
     @Inject(LoggerUseCases)
     private loggerUseCases: LoggerUseCases;
+
+    @Inject(LecturesGetaway)
+    private lecturesGetaway: LecturesGetaway;
 
     async get(): Promise<SubjectEntity[]> {
         return super.get(this.subjectRepository, this.loggerUseCases);
@@ -113,6 +117,25 @@ export class SubjectUseCases extends GenericUseCases<SubjectEntity>{
 
         try {
             result = await this.subjectRepository.getSubjectsByProfessorId(id);
+        } catch (error) {
+            this.loggerUseCases.log(ErrorConstants.GetMethodError, error?.message, error?.stack);
+        }
+
+        return result;
+    }
+
+    async getActiveSubjectsByProfessorId(id: number): Promise<SubjectEntity[]> {
+        let result: SubjectEntity[] | PromiseLike<SubjectEntity[]>;
+
+        try {
+            let subjects = await this.subjectRepository.getSubjectsByProfessorId(id);
+            if (subjects && subjects.length) {
+                let activeSubjects = this.lecturesGetaway.getAllRooms();
+                if (activeSubjects) {
+                    let activeSubjectsIds = [...activeSubjects.keys()];
+                    result = subjects.filter(s => activeSubjectsIds.includes(s.id.toString()));
+                }
+            }
         } catch (error) {
             this.loggerUseCases.log(ErrorConstants.GetMethodError, error?.message, error?.stack);
         }

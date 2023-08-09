@@ -24,4 +24,11 @@ export class ProfessorController {
     getAssignedGroups(@Param('id', ParseIntPipe) id: number): Promise<AssignedGroupDto[]> {
         return this.userUseCases.getAssignedGroups(id);
     }
+
+    @Roles('professor')
+    @UseGuards(RoleGuard)
+    @Get('/getActiveSubjects/:id')
+    getActiveAssignedGroups(@Param('id', ParseIntPipe) id: number): Promise<AssignedGroupDto[]> {
+        return this.userUseCases.getActiveAssignedGroups(id);
+    }
 }

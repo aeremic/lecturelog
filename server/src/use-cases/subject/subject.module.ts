@@ -9,9 +9,10 @@ import { LoggerModule } from '../logger/logger.module';
 import { ProfessorsGroupsModule } from '../professors-groups/professors-groups.module';
 import { StudentsGroupsModule } from '../students-groups/students-groups.module';
 import { UserModule } from '../user/user.module';
+import { MessagingModule } from 'src/messaging/messaging.module';
 
 @Module({
-    imports: [forwardRef(() => UserModule), LoggerModule, ProfessorsGroupsModule, StudentsGroupsModule, TypeOrmModule.forFeature([Subject, SubjectGroup, StudentsSubjectGroups, ProfessorsSubjectGroups])],
+    imports: [forwardRef(() => UserModule), LoggerModule, ProfessorsGroupsModule, StudentsGroupsModule, MessagingModule, TypeOrmModule.forFeature([Subject, SubjectGroup, StudentsSubjectGroups, ProfessorsSubjectGroups])],
     providers: [
         SubjectUseCases,
         {
