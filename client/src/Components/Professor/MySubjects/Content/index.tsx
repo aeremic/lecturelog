@@ -7,6 +7,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { HttpStatusCode } from "axios";
 import { getAssignedGroups } from "../../../../services/ProfessorsService";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
+import { connect, onCreateLecture } from "../../../../services/Messaging";
 
 export const Content = () => {
   const navigate = useNavigate();
@@ -32,6 +33,9 @@ export const Content = () => {
   }, []);
 
   const handleStartSession = (groupId: number) => {
+    connect();
+    onCreateLecture("testRoom");
+
     navigate(`/professor/room?userId=${userId}&groupId=${groupId}`);
   };
 

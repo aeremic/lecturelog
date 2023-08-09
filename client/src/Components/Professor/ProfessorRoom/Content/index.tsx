@@ -1,5 +1,6 @@
 import { Card, CardContent, Container, Grid, Typography } from "@mui/material";
 import { LiveLecture } from "../../../../resources/Typography";
+import { useEffect } from "react";
 
 export const Content = () => {
   return (

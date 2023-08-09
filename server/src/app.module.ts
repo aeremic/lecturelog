@@ -11,6 +11,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { join } from 'path';
 import { MailModule } from './services/mail.module';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
+import { MessagingModule } from './messaging/messaging.module';
 
 const envFilePath: string = getEnvPath(`${__dirname}/utils/envs`);
 @Module({
@@ -46,7 +47,8 @@ const envFilePath: string = getEnvPath(`${__dirname}/utils/envs`);
     SubjectModule,
     AuthModule,
     LoggerModule,
-    MailModule
+    MailModule,
+    MessagingModule
   ],
 })
 export class AppModule {
