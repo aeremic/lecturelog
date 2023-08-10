@@ -267,6 +267,19 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
                         });
                     }
                 });
+
+                if (result.length) {
+                    let activeSubjectRooms = await this.subjectUseCases.getActiveSubjects();
+                    if (activeSubjectRooms) {
+                        let activeSubjectsIds = [...activeSubjectRooms.keys()]
+                            .filter(key => typeof key === 'number')
+                            .map(function (item) {
+                                return parseInt(item);
+                            });
+
+                        result = result.filter(element => !activeSubjectsIds.includes(element.groupId));
+                    }
+                }
             }
         } catch (error) {
             this.loggerUseCases.log(ErrorConstants.GetMethodError, error?.message, error?.stack);
@@ -278,7 +291,7 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
     async getActiveAssignedGroups(id: number): Promise<AssignedGroupDto[]> {
         let result: AssignedGroupDto[];
         try {
-            let subjects = await this.subjectUseCases.getActiveSubjectsByProfessorId(id);
+            let subjects = await this.subjectUseCases.getSubjectsByProfessorId(id);
             if (subjects) {
                 result = [];
                 subjects.forEach(subject => {
@@ -288,6 +301,19 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
                         });
                     }
                 });
+
+                if (result.length) {
+                    let activeSubjectRooms = await this.subjectUseCases.getActiveSubjects();
+                    if (activeSubjectRooms) {
+                        let activeSubjectsIds = [...activeSubjectRooms.keys()]
+                            .filter(key => typeof key === 'number')
+                            .map(function (item) {
+                                return parseInt(item);
+                            });
+
+                        result = result.filter(element => activeSubjectsIds.includes(element.groupId));
+                    }
+                }
             }
         } catch (error) {
             this.loggerUseCases.log(ErrorConstants.GetMethodError, error?.message, error?.stack);

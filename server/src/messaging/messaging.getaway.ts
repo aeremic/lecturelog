@@ -10,12 +10,20 @@ import { LoggerUseCases } from "src/use-cases/logger/logger.use-case";
         origin: '*',
     },
 })
-export class LecturesGetaway {
+export class LecturesGetaway implements OnGatewayConnection, OnGatewayDisconnect {
     @WebSocketServer()
     private server: Server;
 
     @Inject(LoggerUseCases)
     private loggerUseCases: LoggerUseCases;
+
+    handleConnection(@ConnectedSocket() client: any) {
+        console.log(`${client.id} Connected`)
+    }
+
+    handleDisconnect(@ConnectedSocket() client: any) {
+        console.log(`${client.id} Disconnected`)
+    }
 
     getAllRooms() {
         try {

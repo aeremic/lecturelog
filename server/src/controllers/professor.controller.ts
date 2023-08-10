@@ -27,7 +27,7 @@ export class ProfessorController {
 
     @Roles('professor')
     @UseGuards(RoleGuard)
-    @Get('/getActiveSubjects/:id')
+    @Get('/getActiveAssignedGroups/:id')
     getActiveAssignedGroups(@Param('id', ParseIntPipe) id: number): Promise<AssignedGroupDto[]> {
         return this.userUseCases.getActiveAssignedGroups(id);
     }

@@ -17,3 +17,11 @@ export const getAssignedGroups = async (id: number) => {
     console.log(err); // TODO: Fix for PROD.
   }
 };
+
+export const getActiveAssignedGroups = async (id: number) => {
+  try {
+    return await getById(`${URL}/getActiveAssignedGroups`, id);
+  } catch (err) {
+    console.log(err); // TODO: Fix for PROD.
+  }
+};

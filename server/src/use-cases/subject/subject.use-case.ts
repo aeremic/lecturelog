@@ -124,22 +124,13 @@ export class SubjectUseCases extends GenericUseCases<SubjectEntity>{
         return result;
     }
 
-    async getActiveSubjectsByProfessorId(id: number): Promise<SubjectEntity[]> {
-        let result: SubjectEntity[] | PromiseLike<SubjectEntity[]>;
-
+    async getActiveSubjects(): Promise<Map<string, Set<string>>> {
         try {
-            let subjects = await this.subjectRepository.getSubjectsByProfessorId(id);
-            if (subjects && subjects.length) {
-                let activeSubjects = this.lecturesGetaway.getAllRooms();
-                if (activeSubjects) {
-                    let activeSubjectsIds = [...activeSubjects.keys()];
-                    result = subjects.filter(s => activeSubjectsIds.includes(s.id.toString()));
-                }
-            }
+            return this.lecturesGetaway.getAllRooms();
         } catch (error) {
             this.loggerUseCases.log(ErrorConstants.GetMethodError, error?.message, error?.stack);
         }
 
-        return result;
+        return undefined;
     }
 }

@@ -12,26 +12,26 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { AssignedSubjects } from "../../../../../resources/Typography";
+import { LiveLectures } from "../../../../../resources/Typography";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
 import NumbersIcon from "@mui/icons-material/Numbers";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import SmartDisplayIcon from "@mui/icons-material/SmartDisplay";
-import { IAssignedGroupsProps } from "../../../../../modelHelpers/AssignedGroupsProps";
+import StopCircleIcon from "@mui/icons-material/StopCircle";
+import PauseIcon from "@mui/icons-material/Pause";
+import { IActiveGroupsProps } from "../../../../../modelHelpers/ActiveGroupsProps";
 import { IGroup } from "../../../../../modelHelpers/Group";
 import convertToRoman from "../../../../../functionHelpers/ConvertToRoman";
 
-const AssignedGroups: React.FC<IAssignedGroupsProps> = ({
+const ActiveGroups: React.FC<IActiveGroupsProps> = ({
   groupsProp,
-  handleStartSession,
-  handleSubjectClick,
+  handleStopSession,
+  handleSessionClick,
 }) => {
   const groups: IGroup[] = groupsProp;
 
   return (
     <Card sx={{ mt: 1 }}>
       <CardContent>
-        <Typography variant="h6">{AssignedSubjects}</Typography>
+        <Typography variant="h6">{LiveLectures}</Typography>
         <Divider sx={{ mb: 2 }} />
         <TableContainer component={Paper} sx={{ mt: 1 }}>
           <Table sx={{ minWidth: 290 }} size="small">
@@ -39,8 +39,8 @@ const AssignedGroups: React.FC<IAssignedGroupsProps> = ({
               <TableRow
                 sx={{
                   "& th": {
-                    backgroundColor: "primary.light",
-                    color: "primary.contrastText",
+                    backgroundColor: "secondary.light",
+                    color: "secondary.contrastText",
                   },
                 }}
               >
@@ -59,7 +59,7 @@ const AssignedGroups: React.FC<IAssignedGroupsProps> = ({
                 <TableCell align="center">
                   {
                     // @ts-ignore
-                    <SmartDisplayIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
+                    <StopCircleIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
                   }
                 </TableCell>
               </TableRow>
@@ -69,7 +69,7 @@ const AssignedGroups: React.FC<IAssignedGroupsProps> = ({
                 <TableRow
                   key={index}
                   hover
-                  onClick={(e) => handleSubjectClick(group.subjectId)}
+                  onClick={(e) => handleSessionClick(group.subjectId)}
                   sx={{
                     "&:last-child td, &:last-child th": { border: 0 },
                     cursor: "pointer",
@@ -82,13 +82,13 @@ const AssignedGroups: React.FC<IAssignedGroupsProps> = ({
                   <TableCell align="center">
                     <Button
                       onClick={(e) => {
-                        handleStartSession(group.groupId);
+                        handleStopSession(group.groupId);
                       }}
                       variant="contained"
-                      color="success"
+                      color="error"
                       size="small"
                     >
-                      <PlayArrowIcon fontSize="small" />
+                      <PauseIcon fontSize="small" />
                     </Button>
                   </TableCell>
                 </TableRow>
@@ -101,4 +101,4 @@ const AssignedGroups: React.FC<IAssignedGroupsProps> = ({
   );
 };
 
-export default AssignedGroups;
+export default ActiveGroups;

@@ -21,7 +21,7 @@ export const disconnect = () => {
   }
 };
 
-export const onCreateLecture = (data: any) => {
+export const onStartSession = (data: any) => {
   try {
     socket.emit("createLecture", data);
   } catch (err) {
