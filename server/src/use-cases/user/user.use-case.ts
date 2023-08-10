@@ -269,9 +269,9 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
                 });
 
                 if (result.length) {
-                    let activeSubjectRooms = await this.subjectUseCases.getActiveSubjects();
+                    let activeSubjectRooms = await this.subjectUseCases.getActiveGroups();
                     if (activeSubjectRooms) {
-                        let activeSubjectsIds = this.getActiveSubjectIds(activeSubjectRooms);
+                        let activeSubjectsIds = this.getActiveGroupIds(activeSubjectRooms);
                         result = result.filter(element => !activeSubjectsIds.includes(element.groupId));
                     }
                 }
@@ -298,9 +298,9 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
                 });
 
                 if (result.length) {
-                    let activeSubjectRooms = await this.subjectUseCases.getActiveSubjects();
+                    let activeSubjectRooms = await this.subjectUseCases.getActiveGroups();
                     if (activeSubjectRooms) {
-                        let activeSubjectsIds = this.getActiveSubjectIds(activeSubjectRooms);
+                        let activeSubjectsIds = this.getActiveGroupIds(activeSubjectRooms);
                         result = result.filter(element => activeSubjectsIds.includes(element.groupId));
                     }
                 }
@@ -312,7 +312,7 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
         return result;
     }
 
-    getActiveSubjectIds(activeSubjectRooms: Map<string, Set<string>>): number[] {
+    getActiveGroupIds(activeSubjectRooms: Map<string, Set<string>>): number[] {
         return [...activeSubjectRooms.keys()]
             .filter(key => typeof key === 'number')
             .map(function (item) {

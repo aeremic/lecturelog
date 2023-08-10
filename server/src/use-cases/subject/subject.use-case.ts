@@ -124,7 +124,7 @@ export class SubjectUseCases extends GenericUseCases<SubjectEntity>{
         return result;
     }
 
-    async getActiveSubjects(): Promise<Map<string, Set<string>>> {
+    async getActiveGroups(): Promise<Map<string, Set<string>>> {
         try {
             return this.lecturesGetaway.getAllRooms();
         } catch (error) {
