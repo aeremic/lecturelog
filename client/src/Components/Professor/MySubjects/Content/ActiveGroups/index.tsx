@@ -69,7 +69,7 @@ const ActiveGroups: React.FC<IActiveGroupsProps> = ({
                 <TableRow
                   key={index}
                   hover
-                  onClick={(e) => handleSessionClick(group.subjectId)}
+                  onClick={(e) => handleSessionClick(group.groupId)}
                   sx={{
                     "&:last-child td, &:last-child th": { border: 0 },
                     cursor: "pointer",
