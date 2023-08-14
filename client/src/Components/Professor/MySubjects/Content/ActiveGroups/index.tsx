@@ -29,75 +29,82 @@ const ActiveGroups: React.FC<IActiveGroupsProps> = ({
   const groups: IGroup[] = groupsProp;
 
   return (
-    <Card sx={{ mt: 1 }}>
-      <CardContent>
-        <Typography variant="h6">{LiveLectures}</Typography>
-        <Divider sx={{ mb: 2 }} />
-        <TableContainer component={Paper} sx={{ mt: 1 }}>
-          <Table sx={{ minWidth: 290 }} size="small">
-            <TableHead>
-              <TableRow
-                sx={{
-                  "& th": {
-                    backgroundColor: "secondary.light",
-                    color: "secondary.contrastText",
-                  },
-                }}
-              >
-                <TableCell align="center">
-                  {
-                    // @ts-ignore
-                    <TextFieldsIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
-                  }
-                </TableCell>
-                <TableCell align="center">
-                  {
-                    // @ts-ignore
-                    <NumbersIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
-                  }
-                </TableCell>
-                <TableCell align="center">
-                  {
-                    // @ts-ignore
-                    <StopCircleIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
-                  }
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {groups.map((group, index) => (
-                <TableRow
-                  key={index}
-                  hover
-                  onClick={(e) => handleSessionClick(group.groupId)}
-                  sx={{
-                    "&:last-child td, &:last-child th": { border: 0 },
-                    cursor: "pointer",
-                  }}
-                >
-                  <TableCell align="center">{group.name}</TableCell>
-                  <TableCell align="center">
-                    {convertToRoman(group.groupNo)}
-                  </TableCell>
-                  <TableCell align="center">
-                    <Button
-                      onClick={(e) => {
-                        handleStopSession(group.groupId);
+    <>
+      {groups.length > 0 ? (
+        <Card sx={{ mt: 1 }}>
+          <CardContent>
+            <Typography variant="h6">{LiveLectures}</Typography>
+            <Divider sx={{ mb: 2 }} />
+            <TableContainer component={Paper} sx={{ mt: 1 }}>
+              <Table sx={{ minWidth: 290 }} size="small">
+                <TableHead>
+                  <TableRow
+                    sx={{
+                      "& th": {
+                        backgroundColor: "secondary.light",
+                        color: "secondary.contrastText",
+                      },
+                    }}
+                  >
+                    <TableCell align="center">
+                      {
+                        // @ts-ignore
+                        <TextFieldsIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
+                      }
+                    </TableCell>
+                    <TableCell align="center">
+                      {
+                        // @ts-ignore
+                        <NumbersIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
+                      }
+                    </TableCell>
+                    <TableCell align="center">
+                      {
+                        // @ts-ignore
+                        <StopCircleIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
+                      }
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {groups.map((group, index) => (
+                    <TableRow
+                      key={index}
+                      hover
+                      onClick={(e) => handleSessionClick(group.groupId)}
+                      sx={{
+                        "&:last-child td, &:last-child th": { border: 0 },
+                        cursor: "pointer",
                       }}
-                      variant="contained"
-                      color="error"
-                      size="small"
                     >
-                      <PauseIcon fontSize="small" />
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </CardContent>
-    </Card>
+                      <TableCell align="center">{group.name}</TableCell>
+                      <TableCell align="center">
+                        {convertToRoman(group.groupNo)}
+                      </TableCell>
+                      <TableCell align="center">
+                        <Button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleStopSession(group.groupId);
+                          }}
+                          variant="contained"
+                          color="error"
+                          size="small"
+                        >
+                          <PauseIcon fontSize="small" />
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </CardContent>
+        </Card>
+      ) : (
+        <></>
+      )}
+    </>
   );
 };
 

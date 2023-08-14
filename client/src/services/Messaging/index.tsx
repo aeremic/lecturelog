@@ -2,7 +2,7 @@ import { io } from "socket.io-client";
 import { BASE_URL } from "../Common";
 
 const socket = io(BASE_URL, {
-  autoConnect: false,
+  autoConnect: true,
 });
 
 export const connect = () => {
@@ -24,6 +24,14 @@ export const disconnect = () => {
 export const onStartSession = (data: any) => {
   try {
     socket.emit("createLecture", data);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const onStopSession = (data: any) => {
+  try {
+    socket.emit("leaveLecture", data);
   } catch (err) {
     console.log(err);
   }

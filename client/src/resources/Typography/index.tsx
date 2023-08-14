@@ -161,3 +161,12 @@ export const Begin = "Begin";
 export const LiveLecture = "Live Lecture";
 
 export const LiveLectures = "Live Lectures";
+
+export const NoLiveLectures = "No Live Lectures";
+
+export const AvailableSubjects = "Subjects";
+
+export const NonActiveSubjects = "No live lectures";
+
+export const NonActiveSubjectsDescription =
+  "There aren't any lectures that are currently active for you.";

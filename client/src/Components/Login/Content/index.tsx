@@ -1,7 +1,10 @@
 import {
   Alert,
   AlertColor,
+  Box,
   Button,
+  Card,
+  CardContent,
   Container,
   Divider,
   FormControl,
@@ -94,81 +97,90 @@ const Content = () => {
   };
 
   return (
-    <>
-      <Container component="main">
-        <Typography textAlign="center" variant="h3">
-          Logo
-        </Typography>
-        <Typography component="h1" variant="h5">
-          <LockOpenIcon fontSize="small" sx={{ mr: 0.5 }} />
-          {LogIn}
-        </Typography>
-        <Divider sx={{ m: 2 }} />
-        {emailRegistrationSuccess ? (
-          <Alert severity="success">{EmailRegistrationSuccess}</Alert>
-        ) : (
-          <></>
-        )}
-        <FormControl fullWidth sx={{ minWidth: "300px" }}>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <FormGroup sx={{ mt: 2 }}>
-              <FormLabel>
-                {
-                  // @ts-ignore
-                  <AlternateEmailIcon fontSize="xs" sx={{ mr: 0.5 }} />
-                }
-                {Email}
-              </FormLabel>
-              <TextField
-                label={PleaseEnterYourEmail}
-                variant="outlined"
-                type="email"
-                {...register("email", { required: true })}
-                sx={{ mt: 0.8 }}
-              ></TextField>
-            </FormGroup>
-            <FormGroup sx={{ mt: 2 }}>
-              <FormLabel>
-                {
-                  // @ts-ignore
-                  <PasswordIcon fontSize="xs" sx={{ mr: 0.5 }} />
-                }
-                {Password}
-              </FormLabel>
-              <TextField
-                label={PleaseEnterYourPassword}
-                variant="outlined"
-                type="password"
-                {...register("password", { required: true })}
-                sx={{ mt: 0.8 }}
-              ></TextField>
-            </FormGroup>
-            <FormGroup sx={{ mt: 2 }}>
-              <Button variant="contained" size="large" type="submit">
-                {
-                  // @ts-ignore
-                  <LoginIcon fontSize="xs" sx={{ mr: 0.5 }} />
-                }
-                <Typography>{LogIn}</Typography>
-              </Button>
-            </FormGroup>
-          </form>
-        </FormControl>
-      </Container>
-      <Snackbar
-        open={openAlert}
-        autoHideDuration={6000}
-        onClose={handleCloseAlert}
-      >
-        <Alert
-          onClose={handleCloseAlert}
-          severity={alertType}
-          sx={{ width: "100%" }}
-        >
-          {alertMessage}
-        </Alert>
-      </Snackbar>
-    </>
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      sx={{ mt: 20, flexGrow: 1 }}
+    >
+      <Card variant="outlined">
+        <CardContent>
+          <Container component="main">
+            <Typography textAlign="center" variant="h3">
+              Logo
+            </Typography>
+            <Typography component="h1" variant="h5">
+              <LockOpenIcon fontSize="small" sx={{ mr: 0.5 }} />
+              {LogIn}
+            </Typography>
+            <Divider sx={{ m: 2 }} />
+            {emailRegistrationSuccess ? (
+              <Alert severity="success">{EmailRegistrationSuccess}</Alert>
+            ) : (
+              <></>
+            )}
+            <FormControl fullWidth sx={{ minWidth: "300px" }}>
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <FormGroup sx={{ mt: 2 }}>
+                  <FormLabel>
+                    {
+                      // @ts-ignore
+                      <AlternateEmailIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                    }
+                    {Email}
+                  </FormLabel>
+                  <TextField
+                    label={PleaseEnterYourEmail}
+                    variant="outlined"
+                    type="email"
+                    {...register("email", { required: true })}
+                    sx={{ mt: 0.8 }}
+                  ></TextField>
+                </FormGroup>
+                <FormGroup sx={{ mt: 2 }}>
+                  <FormLabel>
+                    {
+                      // @ts-ignore
+                      <PasswordIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                    }
+                    {Password}
+                  </FormLabel>
+                  <TextField
+                    label={PleaseEnterYourPassword}
+                    variant="outlined"
+                    type="password"
+                    {...register("password", { required: true })}
+                    sx={{ mt: 0.8 }}
+                  ></TextField>
+                </FormGroup>
+                <FormGroup sx={{ mt: 2 }}>
+                  <Button variant="contained" size="large" type="submit">
+                    {
+                      // @ts-ignore
+                      <LoginIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                    }
+                    <Typography>{LogIn}</Typography>
+                  </Button>
+                </FormGroup>
+              </form>
+            </FormControl>
+          </Container>
+          <Snackbar
+            open={openAlert}
+            autoHideDuration={6000}
+            onClose={handleCloseAlert}
+          >
+            <Alert
+              onClose={handleCloseAlert}
+              severity={alertType}
+              sx={{ width: "100%" }}
+            >
+              {alertMessage}
+            </Alert>
+          </Snackbar>
+        </CardContent>
+      </Card>
+    </Box>
   );
 };
 

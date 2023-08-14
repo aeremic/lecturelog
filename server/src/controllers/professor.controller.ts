@@ -22,13 +22,13 @@ export class ProfessorController {
     @UseGuards(RoleGuard)
     @Get('/getAssignedGroups/:id')
     getAssignedGroups(@Param('id', ParseIntPipe) id: number): Promise<AssignedGroupDto[]> {
-        return this.userUseCases.getAssignedGroups(id);
+        return this.userUseCases.getProfessorAssignedGroups(id);
     }
 
     @Roles('professor')
     @UseGuards(RoleGuard)
     @Get('/getActiveAssignedGroups/:id')
     getActiveAssignedGroups(@Param('id', ParseIntPipe) id: number): Promise<AssignedGroupDto[]> {
-        return this.userUseCases.getActiveAssignedGroups(id);
+        return this.userUseCases.getProfessorActiveAssignedGroups(id);
     }
 }

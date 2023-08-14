@@ -47,6 +47,16 @@ export class LecturesGetaway implements OnGatewayConnection, OnGatewayDisconnect
         return undefined;
     }
 
+    @SubscribeMessage('leaveLecture')
+    leaveLecture(@MessageBody() data: any, @ConnectedSocket() client: Socket) {
+        try {
+            client.leave(data);
+        } catch (error) {
+            this.loggerUseCases.log(ErrorConstants.MessagingGetawayError, error?.message, error?.stack);
+        }
+        return undefined;
+    }
+
     @SubscribeMessage('joinLecture')
     joinLecture(@MessageBody() data: any, @ConnectedSocket() client: Socket) {
         try {

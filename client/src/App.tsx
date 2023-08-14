@@ -10,6 +10,7 @@ import Subject from "./components/Admin/Subjects/Content/Subject";
 import MySubjects from "./components/Professor/MySubjects";
 import Profile from "./components/User/Profile";
 import ProfessorRoom from "./components/Professor/ProfessorRoom";
+import AvailableSubjects from "./components/Student/AvailableSubjects";
 
 const App = () => {
   return (
@@ -26,9 +27,14 @@ const App = () => {
           <Route path="/admin/users" element={<Users />} />
           <Route path="/admin/subjects" element={<Subjects />} />
           <Route path="/admin/subjects/subject" element={<Subject />} />
-          /**Professorr routes */
+          /**Professor routes */
           <Route path="/professor/mysubjects" element={<MySubjects />} />
           <Route path="/professor/room" element={<ProfessorRoom />} />
+          /**Student routes */
+          <Route
+            path="/student/availablesubjects"
+            element={<AvailableSubjects />}
+          />
           {/* <PrivateRoute path="/">
             <Main />
           </PrivateRoute> */}

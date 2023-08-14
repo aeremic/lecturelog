@@ -70,6 +70,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
 import { ISubjectFormInput } from "../../../../../../modelHelpers/SubjectFormInput";
 import { ISubjectGroupsFormInput } from "../../../../../../modelHelpers/SubjectGroupsFormInput";
+import convertToRoman from "../../../../../../functionHelpers/ConvertToRoman";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -629,7 +630,9 @@ const Content = () => {
                   <Card key={index} sx={{ mt: 1 }}>
                     <CardContent>
                       <Stack direction="row">
-                        <Typography variant="h6">{Group}</Typography>
+                        <Typography variant="h6">
+                          {Group} {convertToRoman(index + 1)}
+                        </Typography>
                       </Stack>
                       <Divider />
                       <FormControl fullWidth>

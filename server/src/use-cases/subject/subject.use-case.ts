@@ -124,6 +124,18 @@ export class SubjectUseCases extends GenericUseCases<SubjectEntity>{
         return result;
     }
 
+    async getSubjectsByStudentId(id: number): Promise<SubjectEntity[]> {
+        let result: SubjectEntity[] | PromiseLike<SubjectEntity[]>;
+
+        try {
+            result = await this.subjectRepository.getSubjectsByStudentId(id);
+        } catch (error) {
+            this.loggerUseCases.log(ErrorConstants.GetMethodError, error?.message, error?.stack);
+        }
+
+        return result;
+    }
+
     async getActiveGroups(): Promise<Map<string, Set<string>>> {
         try {
             return this.lecturesGetaway.getAllRooms();

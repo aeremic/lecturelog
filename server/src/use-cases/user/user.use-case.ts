@@ -254,7 +254,7 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
         return result;
     }
 
-    async getAssignedGroups(id: number): Promise<AssignedGroupDto[]> {
+    async getProfessorAssignedGroups(id: number): Promise<AssignedGroupDto[]> {
         let result: AssignedGroupDto[];
         try {
             let subjects = await this.subjectUseCases.getSubjectsByProfessorId(id);
@@ -283,7 +283,7 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
         return result;
     }
 
-    async getActiveAssignedGroups(id: number): Promise<AssignedGroupDto[]> {
+    async getProfessorActiveAssignedGroups(id: number): Promise<AssignedGroupDto[]> {
         let result: AssignedGroupDto[];
         try {
             let subjects = await this.subjectUseCases.getSubjectsByProfessorId(id);
@@ -318,5 +318,34 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
             .map(function (item) {
                 return parseInt(item);
             });
+    }
+
+    async getStudentAvailableGroups(id: number): Promise<AssignedGroupDto[]> {
+        let result: AssignedGroupDto[];
+        try {
+            let subjects = await this.subjectUseCases.getSubjectsByStudentId(id);
+            if (subjects) {
+                result = [];
+                subjects.forEach(subject => {
+                    if (subject.subjectGroups) {
+                        subject.subjectGroups.forEach(group => {
+                            result.push({ subjectId: subject.id, name: subject.name, groupId: group.id, groupNo: group.groupNo });
+                        });
+                    }
+                });
+
+                if (result.length) {
+                    let activeSubjectRooms = await this.subjectUseCases.getActiveGroups();
+                    if (activeSubjectRooms) {
+                        let activeSubjectsIds = this.getActiveGroupIds(activeSubjectRooms);
+                        result = result.filter(element => activeSubjectsIds.includes(element.groupId));
+                    }
+                }
+            }
+        } catch (error) {
+            this.loggerUseCases.log(ErrorConstants.GetMethodError, error?.message, error?.stack);
+        }
+
+        return result;
     }
 }

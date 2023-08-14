@@ -10,18 +10,7 @@ const Login = () => {
     <ThemeProvider theme={theme}>
       <Header />
       <ErrorBoundary fallback={<ErrorComponent />}>
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          sx={{ mt: 20, flexGrow: 1 }}
-        >
-          <Card variant="outlined">
-            <CardContent>
-              <Content />
-            </CardContent>
-          </Card>
-        </Box>
+        <Content />
       </ErrorBoundary>
     </ThemeProvider>
   );

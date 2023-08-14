@@ -82,6 +82,7 @@ const AssignedGroups: React.FC<IAssignedGroupsProps> = ({
                   <TableCell align="center">
                     <Button
                       onClick={(e) => {
+                        e.stopPropagation();
                         handleStartSession(group.groupId);
                       }}
                       variant="contained"

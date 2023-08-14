@@ -10,6 +10,7 @@ import {
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import {
+  AvailableSubjects,
   MyProfile,
   MySubjects,
   Subjects,
@@ -23,7 +24,7 @@ const Menu = () => {
   // TODO: Hide menu when logged off.
   const userData = getCurrentUserData();
   return (
-    <Box role="presentation">
+    <Box role="presentation" sx={{ minWidth: 280 }}>
       {userData.id != undefined ? (
         <List>
           {userData.role == RoleEnum.Admin ? (
@@ -83,7 +84,42 @@ const Menu = () => {
           ) : (
             <></>
           )}
-          {userData.role == RoleEnum.Student ? <>bb</> : <></>}
+          {userData.role == RoleEnum.Student ? (
+            <>
+              <ListItem>
+                <ListItemButton
+                  component={Link}
+                  to={{
+                    pathname: `/user/profile`,
+                    search: `?id=${userData.id}`,
+                  }}
+                >
+                  <ListItemIcon>
+                    <PeopleAltIcon />
+                  </ListItemIcon>
+                  <ListItemText primary={MyProfile} />
+                </ListItemButton>
+              </ListItem>
+              <Divider />
+              <Divider />
+              <ListItem>
+                <ListItemButton
+                  component={Link}
+                  to={{
+                    pathname: `/student/availablesubjects`,
+                    search: `?id=${userData.id}`,
+                  }}
+                >
+                  <ListItemIcon>
+                    <LibraryBooksIcon />
+                  </ListItemIcon>
+                  <ListItemText primary={AvailableSubjects} />
+                </ListItemButton>
+              </ListItem>
+            </>
+          ) : (
+            <></>
+          )}
         </List>
       ) : (
         <></>

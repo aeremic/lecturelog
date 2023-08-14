@@ -82,4 +82,15 @@ export class SubjectRepository implements SubjectRepositoryAbstract {
 
         return SubjectMapper.ToEntities(result);
     }
+
+    async getSubjectsByStudentId(id: number): Promise<SubjectEntity[]> {
+        let result = await this.subjectModelRepository.createQueryBuilder("subject")
+            .innerJoinAndSelect("subject.subjectGroups", "subjectGroup")
+            .innerJoinAndSelect("subjectGroup.studentsSubjectGroups", "studentsSubjectGroups")
+            .where("studentsSubjectGroups.studentId = :id", { id: id })
+            .printSql()
+            .getMany()
+
+        return SubjectMapper.ToEntities(result);
+    }
 }

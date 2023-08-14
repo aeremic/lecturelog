@@ -10,7 +10,11 @@ import {
   getAssignedGroups,
 } from "../../../../services/ProfessorsService";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
-import { connect, onStartSession } from "../../../../services/Messaging";
+import {
+  connect,
+  onStartSession,
+  onStopSession,
+} from "../../../../services/Messaging";
 import ActiveGroups from "./ActiveGroups";
 
 export const Content = () => {
@@ -22,6 +26,8 @@ export const Content = () => {
 
   const [assignedGroups, setAssignedGroups] = useState<IGroup[]>([]);
   const [activeGroups, setActiveGroups] = useState<IGroup[]>([]);
+
+  const [groupsLoaded, setGroupsLoaded] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,20 +43,23 @@ export const Content = () => {
             setActiveGroups(res.data);
           }
         });
+
+        setGroupsLoaded(true);
       }
     };
 
     fetchData();
-  }, []);
+  }, [userId, groupsLoaded]);
 
   const handleStartSession = (groupId: number) => {
-    connect();
     onStartSession(groupId);
-
     navigate(`/professor/room?userId=${userId}&groupId=${groupId}`);
   };
 
-  const handleStopSession = (groupId: number) => {};
+  const handleStopSession = (groupId: number) => {
+    onStopSession(groupId);
+    setGroupsLoaded(false);
+  };
 
   const handleSubjectClick = (subjectId: number) => {
     console.log(subjectId);
