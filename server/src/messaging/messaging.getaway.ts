@@ -18,11 +18,11 @@ export class LecturesGetaway implements OnGatewayConnection, OnGatewayDisconnect
     private loggerUseCases: LoggerUseCases;
 
     handleConnection(@ConnectedSocket() client: any) {
-        console.log(`${client.id} Connected`)
+        console.log(`${client.id} Connected`); // TODO: Remove for PROD.
     }
 
     handleDisconnect(@ConnectedSocket() client: any) {
-        console.log(`${client.id} Disconnected`)
+        console.log(`${client.id} Disconnected`); // TODO: Remove for PROD.
     }
 
     getAllRooms() {
@@ -39,7 +39,9 @@ export class LecturesGetaway implements OnGatewayConnection, OnGatewayDisconnect
     createLecture(@MessageBody() data: any, @ConnectedSocket() client: Socket) {
         try {
             client.join(data);
-            console.log(this.getAllRooms());
+            client.broadcast.emit('lecturesChange', { 'lecturesChangeData': data })
+
+            console.log(this.getAllRooms()); // TODO: Remove for PROD.
         }
         catch (error) {
             this.loggerUseCases.log(ErrorConstants.MessagingGetawayError, error?.message, error?.stack);
@@ -47,9 +49,10 @@ export class LecturesGetaway implements OnGatewayConnection, OnGatewayDisconnect
         return undefined;
     }
 
-    @SubscribeMessage('leaveLecture')
-    leaveLecture(@MessageBody() data: any, @ConnectedSocket() client: Socket) {
+    @SubscribeMessage('endLecture')
+    endLecture(@MessageBody() data: any, @ConnectedSocket() client: Socket) {
         try {
+            client.broadcast.emit('lecturesChange', { 'lecturesChangeData': data })
             client.leave(data);
         } catch (error) {
             this.loggerUseCases.log(ErrorConstants.MessagingGetawayError, error?.message, error?.stack);

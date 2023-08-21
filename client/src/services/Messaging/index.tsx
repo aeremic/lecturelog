@@ -1,7 +1,7 @@
 import { io } from "socket.io-client";
 import { BASE_URL } from "../Common";
 
-const socket = io(BASE_URL, {
+export const socket = io(BASE_URL, {
   autoConnect: true,
 });
 
@@ -31,7 +31,7 @@ export const onStartSession = (data: any) => {
 
 export const onStopSession = (data: any) => {
   try {
-    socket.emit("leaveLecture", data);
+    socket.emit("endLecture", data);
   } catch (err) {
     console.log(err);
   }

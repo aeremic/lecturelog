@@ -15,7 +15,6 @@ import {
   Typography,
 } from "@mui/material";
 import {
-  AvailableSubjects,
   LiveLectures,
   NonActiveSubjects,
   NonActiveSubjectsDescription,
@@ -29,6 +28,7 @@ import { useEffect, useState } from "react";
 import { IGroup } from "../../../../modelHelpers/Group";
 import { HttpStatusCode } from "axios";
 import { getAvailableGroups } from "../../../../services/StudentsService";
+import { socket } from "../../../../services/Messaging";
 
 export const Content = () => {
   const navigate = useNavigate();
@@ -40,6 +40,8 @@ export const Content = () => {
   const [availableGroups, setAvailableGroups] = useState<IGroup[]>([]);
 
   const [groupsLoaded, setGroupsLoaded] = useState<boolean>(false);
+
+  const [lecturesChangeEvents, setLecturesChangeEvents] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -55,7 +57,19 @@ export const Content = () => {
     };
 
     fetchData();
-  }, [userId, groupsLoaded]);
+  }, [userId, groupsLoaded, lecturesChangeEvents]);
+
+  useEffect(() => {
+    function onLecturesChange(value: any) {
+      setLecturesChangeEvents(lecturesChangeEvents.concat(value));
+    }
+
+    socket.on("lecturesChange", onLecturesChange);
+
+    return () => {
+      socket.off("lecturesChange", onLecturesChange);
+    };
+  }, [lecturesChangeEvents]);
 
   const handleSessionClick = (groupId: number) => {
     console.log(groupId);
