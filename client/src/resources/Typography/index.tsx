@@ -170,3 +170,12 @@ export const NonActiveSubjects = "No live lectures";
 
 export const NonActiveSubjectsDescription =
   "There aren't any lectures that are currently active for you.";
+
+export const AccessCodeGeneration = "Access Code Generation";
+
+export const PleaseGenerateAccessCodeForStudentsToEnter =
+  "Please generate access code for students to enter";
+
+export const GenerateAccessCode = "GENERATE ACCESS CODE";
+
+export const CurrentlyPresentStudents = "Currently Present Students";

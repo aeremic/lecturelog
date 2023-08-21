@@ -38,9 +38,7 @@ export const Content = () => {
   const userId = userIdParam != null ? parseInt(userIdParam) : -1;
 
   const [availableGroups, setAvailableGroups] = useState<IGroup[]>([]);
-
   const [groupsLoaded, setGroupsLoaded] = useState<boolean>(false);
-
   const [lecturesChangeEvents, setLecturesChangeEvents] = useState([]);
 
   useEffect(() => {
