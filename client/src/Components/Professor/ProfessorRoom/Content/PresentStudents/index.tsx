@@ -17,7 +17,6 @@ import {
   Email,
   FirstName,
   Index,
-  LastName,
 } from "../../../../../resources/Typography";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import ContactPageIcon from "@mui/icons-material/ContactPage";
