@@ -23,4 +23,16 @@ export class LoggerUseCases {
             this.create(loggerEntity);
         } catch { }
     }
+
+    async logWithoutCode(description?: string, stackTrace?: string) {
+        try {
+            let loggerEntity: LoggerEntity = {
+                code: 0,
+                description: description,
+                stackTrace: stackTrace
+            };
+
+            this.create(loggerEntity);
+        } catch { }
+    }
 }

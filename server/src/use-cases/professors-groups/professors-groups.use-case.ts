@@ -1,7 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { GenericUseCases } from '../generic.use-case';
-import { LoggerEntity, ProfessorsSubjectGroupsEntity } from 'src/core/entities';
-import { LoggerRepositoryAbstract } from 'src/core/abstracts/repositories/logger.repository.abstract';
+import { ProfessorsSubjectGroupsEntity } from 'src/core/entities';
 import { ProfessorsGroupsRepositoryAbstract } from 'src/core/abstracts/repositories/professors-groups.repository.abstract';
 import { LoggerUseCases } from '../logger/logger.use-case';
 

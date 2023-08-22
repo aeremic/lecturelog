@@ -1,14 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { SubjectRepositoryAbstract } from 'src/core/abstracts/repositories/subject.repository.abstract';
-import { ProfessorsSubjectGroupsEntity, StudentsSubjectGroupsEntity, SubjectEntity, SubjectGroupEntity } from 'src/core/entities';
+import { SubjectEntity } from 'src/core/entities';
 import { GenericUseCases } from '../generic.use-case';
 import { LoggerUseCases } from '../logger/logger.use-case';
 import { ErrorConstants } from 'src/core/common/constants/error.constant';
 import { SubjectsDto } from 'src/core/dtos/responses/subjects.dto';
-import { Subject } from 'rxjs';
 import { ProfessorsGroupsUseCases } from '../professors-groups/professors-groups.use-case';
 import { StudentsGroupsUseCases } from '../students-groups/students-groups.use-case';
-import { LecturesGetaway } from 'src/messaging/messaging.getaway';
+import { LectureUseCases } from '../lecture/lecture.use-case';
 
 @Injectable()
 export class SubjectUseCases extends GenericUseCases<SubjectEntity>{
@@ -21,11 +20,11 @@ export class SubjectUseCases extends GenericUseCases<SubjectEntity>{
     @Inject(StudentsGroupsUseCases)
     private studentsGroupsUseCases: StudentsGroupsUseCases;
 
+    @Inject(LectureUseCases)
+    private lectureUseCases: LectureUseCases;
+
     @Inject(LoggerUseCases)
     private loggerUseCases: LoggerUseCases;
-
-    @Inject(LecturesGetaway)
-    private lecturesGetaway: LecturesGetaway;
 
     async get(): Promise<SubjectEntity[]> {
         return super.get(this.subjectRepository, this.loggerUseCases);
@@ -138,7 +137,7 @@ export class SubjectUseCases extends GenericUseCases<SubjectEntity>{
 
     async getActiveGroups(): Promise<Map<string, Set<string>>> {
         try {
-            return this.lecturesGetaway.getAllRooms();
+            return this.lectureUseCases.getAllLectures();
         } catch (error) {
             this.loggerUseCases.log(ErrorConstants.GetMethodError, error?.message, error?.stack);
         }

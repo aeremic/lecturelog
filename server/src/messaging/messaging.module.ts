@@ -1,12 +1,13 @@
-import { Module } from "@nestjs/common";
-import { LecturesGetaway } from "./messaging.getaway";
+import { Module, forwardRef } from "@nestjs/common";
+import { MessagingGetaway } from "./messaging.getaway";
 import { LoggerModule } from "src/use-cases/logger/logger.module";
+import { LectureModule } from "src/use-cases/lecture/lecture.module";
 
 @Module({
-    imports: [LoggerModule],
+    imports: [forwardRef(() => LectureModule), LoggerModule],
     providers: [
-        LecturesGetaway,
+        MessagingGetaway,
     ],
-    exports: [LecturesGetaway]
+    exports: [MessagingGetaway]
 })
 export class MessagingModule { }
