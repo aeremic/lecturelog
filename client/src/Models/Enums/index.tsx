@@ -4,3 +4,15 @@ export enum RoleEnum {
   Student = "student",
   Admin = "admin",
 }
+
+export enum CodeGenerationState {
+  notGenerated,
+  generated,
+}
+
+export enum MessagingEnum {
+  CreateLecture = "createLecture",
+  EndLecture = "endLecture",
+  JoinLecture = "joinLecture",
+  StartTimer = "startTimer",
+}

@@ -1,5 +1,6 @@
 import { io } from "socket.io-client";
 import { BASE_URL } from "../Common";
+import { MessagingEnum } from "../../models/Enums";
 
 export const socket = io(BASE_URL, {
   autoConnect: true,
@@ -23,7 +24,7 @@ export const disconnect = () => {
 
 export const onStartSession = (data: any) => {
   try {
-    socket.emit("createLecture", data);
+    socket.emit(MessagingEnum.CreateLecture, data);
   } catch (err) {
     console.log(err);
   }
@@ -31,7 +32,7 @@ export const onStartSession = (data: any) => {
 
 export const onStopSession = (data: any) => {
   try {
-    socket.emit("endLecture", data);
+    socket.emit(MessagingEnum.EndLecture, data);
   } catch (err) {
     console.log(err);
   }
@@ -39,7 +40,15 @@ export const onStopSession = (data: any) => {
 
 export const onJoinLecture = (data: any) => {
   try {
-    socket.emit("joinLecture", data);
+    socket.emit(MessagingEnum.JoinLecture, data);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const onStartTimer = (data: any) => {
+  try {
+    socket.emit(MessagingEnum.StartTimer, data);
   } catch (err) {
     console.log(err);
   }

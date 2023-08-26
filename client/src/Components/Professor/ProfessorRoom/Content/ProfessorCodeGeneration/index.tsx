@@ -14,21 +14,45 @@ import {
   GenerateAccessCode,
   PleaseGenerateAccessCodeForStudentsToEnter,
   StudentsShouldEnterBelowCode,
+  TimeRemaining,
 } from "../../../../../resources/Typography";
 import PinIcon from "@mui/icons-material/Pin";
 import CloseIcon from "@mui/icons-material/Close";
-import { useState } from "react";
-import { CodeGenerationState } from "../../../../../models/Constants";
+import { useEffect, useState } from "react";
+import { CodeGenerationState } from "../../../../../models/Enums";
+import { onStartTimer, socket } from "../../../../../services/Messaging";
+import { useSearchParams } from "react-router-dom";
 
 const codeGenerationState:
   | CodeGenerationState.notGenerated
   | CodeGenerationState.generated = CodeGenerationState.notGenerated;
 
 const ProfessorCodeGeneration = () => {
+  const [queryParameters] = useSearchParams();
+
+  const groupIdParam: string | null = queryParameters.get("groupId");
+  const groupId = groupIdParam != null ? parseInt(groupIdParam) : -1;
+
   const [currentCodeState, setCurrentCodeState] =
     useState<CodeGenerationState>(codeGenerationState);
 
+  const [timer, setTimer] = useState<string>();
+  useEffect(() => {
+    function onTimerEvent(value: any) {
+      if (value.id === groupId && value.lectureTimerEventType === "tick") {
+        setTimer(value.lectureTimerCount);
+      }
+    }
+
+    socket.on("lectureTimerEvent", onTimerEvent);
+
+    return () => {
+      socket.off("lectureTimerEvent", onTimerEvent);
+    };
+  }, [timer]);
+
   const handleGenerateCodeClick = () => {
+    onStartTimer(groupId);
     setCurrentCodeState(CodeGenerationState.generated);
   };
 
@@ -86,7 +110,11 @@ const ProfessorCodeGeneration = () => {
                         justifyContent="center"
                         alignItems="center"
                       >
-                        <Typography>Time remaining: 01:32</Typography>
+                        {timer && (
+                          <Typography>
+                            {TimeRemaining} {timer}s
+                          </Typography>
+                        )}
                       </Box>
                       <LinearProgress color="success" />
                     </Stack>

@@ -17,11 +17,11 @@ export class LectureUseCases {
 
     startLectureTimer(groupId: any) {
         try {
-            this.messagingGetaway.sendTickEventToLecture(groupId, TimerEnum.start);
+            this.messagingGetaway.sendTimerEventToLecture(groupId, TimerEnum.start);
 
             var counter = 120; // pull from db
             var timer = setInterval(() => {
-                this.messagingGetaway.sendTickEventToLecture(groupId, TimerEnum.tick);
+                this.messagingGetaway.sendTimerEventToLecture(groupId, TimerEnum.tick, counter);
                 if (counter > 0) {
                     counter--;
                 }
@@ -37,7 +37,7 @@ export class LectureUseCases {
         try {
             // clearInterval(timerId)
             // remove from redis
-            this.messagingGetaway.sendTickEventToLecture(groupId, TimerEnum.stop);
+            this.messagingGetaway.sendTimerEventToLecture(groupId, TimerEnum.stop);
         } catch (error) {
             this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
         }

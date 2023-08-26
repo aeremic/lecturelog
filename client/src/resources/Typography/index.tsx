@@ -183,3 +183,5 @@ export const CurrentlyPresentStudents = "Currently Present Students";
 export const StudentsShouldEnterBelowCode = "Students should enter below code";
 
 export const CodeWillBeShownHere = "Code will be shown here";
+
+export const TimeRemaining = "Time remaining:";

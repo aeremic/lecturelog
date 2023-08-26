@@ -2,9 +2,9 @@ import { Inject, Injectable, forwardRef } from "@nestjs/common";
 import { ConnectedSocket, MessageBody, OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
 import { Server, Socket } from 'socket.io';
 import { ErrorConstants } from "src/core/common/constants/error.constant";
+import { MessagingConstants } from "src/core/common/constants/messaging.constants";
 import { LectureUseCases } from "src/use-cases/lecture/lecture.use-case";
 import { LoggerUseCases } from "src/use-cases/logger/logger.use-case";
-import { SubjectUseCases } from "src/use-cases/subject/subject.use-case";
 
 @Injectable()
 @WebSocketGateway({
@@ -34,8 +34,8 @@ export class MessagingGetaway implements OnGatewayConnection, OnGatewayDisconnec
         return this.server.sockets.adapter.rooms;
     }
 
-    @SubscribeMessage('createLecture')
-    createLecture(@MessageBody() roomId: any, @ConnectedSocket() client: Socket) {
+    @SubscribeMessage(MessagingConstants.CreateLectureMessage)
+    createRoom(@MessageBody() roomId: any, @ConnectedSocket() client: Socket) {
         try {
             client.join(roomId);
             client.broadcast.emit('lecturesChange', { 'lecturesChangeData': roomId })
@@ -48,8 +48,8 @@ export class MessagingGetaway implements OnGatewayConnection, OnGatewayDisconnec
         return undefined;
     }
 
-    @SubscribeMessage('endLecture')
-    endLecture(@MessageBody() roomId: any, @ConnectedSocket() client: Socket) {
+    @SubscribeMessage(MessagingConstants.EndLectureMessage)
+    endRoom(@MessageBody() roomId: any, @ConnectedSocket() client: Socket) {
         try {
             client.broadcast.emit('lecturesChange', { 'lecturesChangeData': roomId })
             client.leave(roomId);
@@ -59,8 +59,8 @@ export class MessagingGetaway implements OnGatewayConnection, OnGatewayDisconnec
         return undefined;
     }
 
-    @SubscribeMessage('joinLecture')
-    joinLecture(@MessageBody() roomId: any, @ConnectedSocket() client: Socket) {
+    @SubscribeMessage(MessagingConstants.JoinLectureMessage)
+    joinRoom(@MessageBody() roomId: any, @ConnectedSocket() client: Socket) {
         try {
             client.join(roomId);
         }
@@ -70,13 +70,13 @@ export class MessagingGetaway implements OnGatewayConnection, OnGatewayDisconnec
         return undefined;
     }
 
-    @SubscribeMessage("startTimer")
+    @SubscribeMessage(MessagingConstants.StartTimerMessage)
     startTimer(@MessageBody() roomId: any, @ConnectedSocket() client: Socket) {
         this.lectureUseCases.stopLectureTimer(roomId);
         this.lectureUseCases.startLectureTimer(roomId);
     }
 
-    @SubscribeMessage('enableVerification')
+    @SubscribeMessage(MessagingConstants.EnableVerificationMessage)
     enableVerification(@MessageBody() roomId: any) {
         try {
             this.server.in(roomId).emit('enableVerificationAnswer', { 'verificationEnabled': true });
@@ -86,9 +86,9 @@ export class MessagingGetaway implements OnGatewayConnection, OnGatewayDisconnec
         return undefined;
     }
 
-    sendTickEventToLecture(roomId: any, timerEvent: string) {
+    sendTimerEventToLecture(roomId: any, timerEvent: string, counter: number = null) {
         try {
-            this.server.in(roomId).emit('lectureTimerTickEvent', { 'id': roomId, 'lectureTimerTickEvent': timerEvent });
+            this.server.in(roomId).emit('lectureTimerEvent', { 'id': roomId, 'lectureTimerEventType': timerEvent, 'lectureTimerCount': counter ?? -1 });
         } catch (error) {
             this.loggerUseCases.log(ErrorConstants.MessagingGetawayError, error?.message, error?.stack);
         }
