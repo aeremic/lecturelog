@@ -20,7 +20,11 @@ import PinIcon from "@mui/icons-material/Pin";
 import CloseIcon from "@mui/icons-material/Close";
 import { useEffect, useState } from "react";
 import { CodeGenerationState } from "../../../../../models/Enums";
-import { onStartTimer, socket } from "../../../../../services/Messaging";
+import {
+  onGenerateCode,
+  onStartTimer,
+  socket,
+} from "../../../../../services/Messaging";
 import { useSearchParams } from "react-router-dom";
 
 const codeGenerationState:
@@ -32,9 +36,6 @@ const ProfessorCodeGeneration = () => {
 
   const groupIdParam: string | null = queryParameters.get("groupId");
   const groupId = groupIdParam != null ? parseInt(groupIdParam) : -1;
-
-  const [currentCodeState, setCurrentCodeState] =
-    useState<CodeGenerationState>(codeGenerationState);
 
   const [timer, setTimer] = useState<string>();
   useEffect(() => {
@@ -49,11 +50,30 @@ const ProfessorCodeGeneration = () => {
     return () => {
       socket.off("lectureTimerEvent", onTimerEvent);
     };
-  }, [timer]);
+  }, [groupId, timer]);
+
+  const [currentCodeState, setCurrentCodeState] =
+    useState<CodeGenerationState>(codeGenerationState);
+  const [code, setCode] = useState<string>();
+  useEffect(() => {
+    function onCodeEvent(value: any) {
+      console.log(value);
+      if (value.id === groupId) {
+        setCode(value.lectureCodeEventValue);
+        setCurrentCodeState(value.lectureCodeEventType);
+      }
+    }
+
+    socket.on("lectureCodeEvent", onCodeEvent);
+
+    return () => {
+      socket.off("lectureCodeEvent", onCodeEvent);
+    };
+  }, [groupId, code]);
 
   const handleGenerateCodeClick = () => {
     onStartTimer(groupId);
-    setCurrentCodeState(CodeGenerationState.generated);
+    onGenerateCode(groupId);
   };
 
   const handleCancelGenerateCodeClick = () => {
@@ -97,26 +117,31 @@ const ProfessorCodeGeneration = () => {
                 <Card>
                   <CardContent>
                     <Stack direction="column" spacing={2}>
-                      <Box
-                        display="flex"
-                        justifyContent="center"
-                        alignItems="center"
-                      >
-                        <Typography variant="h4">A31Z5</Typography>
-                      </Box>
-                      <Divider />
-                      <Box
-                        display="flex"
-                        justifyContent="center"
-                        alignItems="center"
-                      >
-                        {timer && (
-                          <Typography>
-                            {TimeRemaining} {timer}s
-                          </Typography>
-                        )}
-                      </Box>
-                      <LinearProgress color="success" />
+                      {code && (
+                        <Box
+                          display="flex"
+                          justifyContent="center"
+                          alignItems="center"
+                        >
+                          <Typography variant="h4">{code}</Typography>
+                        </Box>
+                      )}
+                      {timer && (
+                        <>
+                          <Divider />
+                          <Box
+                            display="flex"
+                            justifyContent="center"
+                            alignItems="center"
+                          >
+                            <Typography>
+                              {TimeRemaining}
+                              {`${timer}s`}
+                            </Typography>
+                          </Box>
+                          <LinearProgress color="success" />
+                        </>
+                      )}
                     </Stack>
                   </CardContent>
                 </Card>

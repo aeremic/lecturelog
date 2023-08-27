@@ -8,6 +8,7 @@ export enum RoleEnum {
 export enum CodeGenerationState {
   notGenerated,
   generated,
+  canceled,
 }
 
 export enum MessagingEnum {
@@ -15,4 +16,5 @@ export enum MessagingEnum {
   EndLecture = "endLecture",
   JoinLecture = "joinLecture",
   StartTimer = "startTimer",
+  GenerateCode = "generateCode",
 }

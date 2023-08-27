@@ -53,3 +53,11 @@ export const onStartTimer = (data: any) => {
     console.log(err);
   }
 };
+
+export const onGenerateCode = (data: any) => {
+  try {
+    socket.emit(MessagingEnum.GenerateCode, data);
+  } catch (err) {
+    console.log(err);
+  }
+};

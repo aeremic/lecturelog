@@ -38,7 +38,7 @@ export class MessagingGetaway implements OnGatewayConnection, OnGatewayDisconnec
     createRoom(@MessageBody() roomId: any, @ConnectedSocket() client: Socket) {
         try {
             client.join(roomId);
-            client.broadcast.emit('lecturesChange', { 'lecturesChangeData': roomId })
+            client.broadcast.emit(MessagingConstants.LecturesChangeMessage, { 'lecturesChangeData': roomId })
 
             console.log(this.getAllRooms()); // TODO: Remove for PROD.
         }
@@ -51,7 +51,7 @@ export class MessagingGetaway implements OnGatewayConnection, OnGatewayDisconnec
     @SubscribeMessage(MessagingConstants.EndLectureMessage)
     endRoom(@MessageBody() roomId: any, @ConnectedSocket() client: Socket) {
         try {
-            client.broadcast.emit('lecturesChange', { 'lecturesChangeData': roomId })
+            client.broadcast.emit(MessagingConstants.LecturesChangeMessage, { 'lecturesChangeData': roomId })
             client.leave(roomId);
         } catch (error) {
             this.loggerUseCases.log(ErrorConstants.MessagingGetawayError, error?.message, error?.stack);
@@ -79,16 +79,30 @@ export class MessagingGetaway implements OnGatewayConnection, OnGatewayDisconnec
     @SubscribeMessage(MessagingConstants.EnableVerificationMessage)
     enableVerification(@MessageBody() roomId: any) {
         try {
-            this.server.in(roomId).emit('enableVerificationAnswer', { 'verificationEnabled': true });
+            this.server.in(roomId).emit(MessagingConstants.EnableVerificationAnswerMessage, { 'verificationEnabled': true });
         } catch (error) {
             this.loggerUseCases.log(ErrorConstants.MessagingGetawayError, error?.message, error?.stack);
         }
         return undefined;
     }
 
+    @SubscribeMessage(MessagingConstants.GenerateCodeMessage)
+    generateCode(@MessageBody() roomId: any, @ConnectedSocket() client: Socket) {
+        this.lectureUseCases.generateCode(roomId);
+    }
+
     sendTimerEventToLecture(roomId: any, timerEvent: string, counter: number = null) {
         try {
-            this.server.in(roomId).emit('lectureTimerEvent', { 'id': roomId, 'lectureTimerEventType': timerEvent, 'lectureTimerCount': counter ?? -1 });
+            this.server.in(roomId).emit(MessagingConstants.LectureTimerEventMessage, { 'id': roomId, 'lectureTimerEventType': timerEvent, 'lectureTimerCount': counter ?? -1 });
+        } catch (error) {
+            this.loggerUseCases.log(ErrorConstants.MessagingGetawayError, error?.message, error?.stack);
+        }
+        return undefined;
+    }
+
+    sendCodeEventToLecture(roomId: any, codeEvent: number, code: string = null) {
+        try {
+            this.server.in(roomId).emit(MessagingConstants.LectureCodeEventMessage, { 'id': roomId, 'lectureCodeEventType': codeEvent, 'lectureCodeValue': code ?? '' });
         } catch (error) {
             this.loggerUseCases.log(ErrorConstants.MessagingGetawayError, error?.message, error?.stack);
         }
