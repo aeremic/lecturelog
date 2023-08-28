@@ -70,25 +70,9 @@ export class MessagingGetaway implements OnGatewayConnection, OnGatewayDisconnec
         return undefined;
     }
 
-    @SubscribeMessage(MessagingConstants.StartTimerMessage)
-    startTimer(@MessageBody() roomId: any, @ConnectedSocket() client: Socket) {
-        this.lectureUseCases.stopLectureTimer(roomId);
-        this.lectureUseCases.startLectureTimer(roomId);
-    }
-
-    @SubscribeMessage(MessagingConstants.EnableVerificationMessage)
-    enableVerification(@MessageBody() roomId: any) {
-        try {
-            this.server.in(roomId).emit(MessagingConstants.EnableVerificationAnswerMessage, { 'verificationEnabled': true });
-        } catch (error) {
-            this.loggerUseCases.log(ErrorConstants.MessagingGetawayError, error?.message, error?.stack);
-        }
-        return undefined;
-    }
-
-    @SubscribeMessage(MessagingConstants.GenerateCodeMessage)
-    generateCode(@MessageBody() roomId: any, @ConnectedSocket() client: Socket) {
-        this.lectureUseCases.generateCode(roomId);
+    @SubscribeMessage(MessagingConstants.StartLectureWorkMessage)
+    startLectureWork(@MessageBody() roomId: any, @ConnectedSocket() client: Socket) {
+        this.lectureUseCases.lectureWork(roomId);
     }
 
     sendTimerEventToLecture(roomId: any, timerEvent: string, counter: number = null) {

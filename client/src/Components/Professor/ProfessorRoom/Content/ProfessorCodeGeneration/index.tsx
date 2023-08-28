@@ -20,11 +20,7 @@ import PinIcon from "@mui/icons-material/Pin";
 import CloseIcon from "@mui/icons-material/Close";
 import { useEffect, useState } from "react";
 import { CodeGenerationState } from "../../../../../models/Enums";
-import {
-  onGenerateCode,
-  onStartTimer,
-  socket,
-} from "../../../../../services/Messaging";
+import { onStartLectureWork, socket } from "../../../../../services/Messaging";
 import { useSearchParams } from "react-router-dom";
 
 const codeGenerationState:
@@ -37,11 +33,15 @@ const ProfessorCodeGeneration = () => {
   const groupIdParam: string | null = queryParameters.get("groupId");
   const groupId = groupIdParam != null ? parseInt(groupIdParam) : -1;
 
-  const [timer, setTimer] = useState<string>();
+  const [timer, setTimer] = useState<string>("");
   useEffect(() => {
     function onTimerEvent(value: any) {
-      if (value.id === groupId && value.lectureTimerEventType === "tick") {
-        setTimer(value.lectureTimerCount);
+      if (value.id === groupId) {
+        if (value.lectureTimerEventType === "tick") {
+          setTimer(value.lectureTimerCount);
+        } else if (value.lectureTimerEventType === "stop") {
+          setTimer("");
+        }
       }
     }
 
@@ -53,13 +53,12 @@ const ProfessorCodeGeneration = () => {
   }, [groupId, timer]);
 
   const [currentCodeState, setCurrentCodeState] =
-    useState<CodeGenerationState>(codeGenerationState);
+    useState<CodeGenerationState>(codeGenerationState); // TODO: This needs to be pulled from Redis
   const [code, setCode] = useState<string>();
   useEffect(() => {
     function onCodeEvent(value: any) {
-      console.log(value);
       if (value.id === groupId) {
-        setCode(value.lectureCodeEventValue);
+        setCode(value.lectureCodeValue);
         setCurrentCodeState(value.lectureCodeEventType);
       }
     }
@@ -72,8 +71,7 @@ const ProfessorCodeGeneration = () => {
   }, [groupId, code]);
 
   const handleGenerateCodeClick = () => {
-    onStartTimer(groupId);
-    onGenerateCode(groupId);
+    onStartLectureWork(groupId);
   };
 
   const handleCancelGenerateCodeClick = () => {
@@ -114,20 +112,18 @@ const ProfessorCodeGeneration = () => {
                 <Typography>{StudentsShouldEnterBelowCode}</Typography>
               </Box>
               <Box display="flex" justifyContent="center" alignItems="center">
-                <Card>
-                  <CardContent>
-                    <Stack direction="column" spacing={2}>
-                      {code && (
-                        <Box
-                          display="flex"
-                          justifyContent="center"
-                          alignItems="center"
-                        >
-                          <Typography variant="h4">{code}</Typography>
-                        </Box>
-                      )}
-                      {timer && (
+                {timer && code && (
+                  <Card>
+                    <CardContent>
+                      <Stack direction="column" spacing={2}>
                         <>
+                          <Box
+                            display="flex"
+                            justifyContent="center"
+                            alignItems="center"
+                          >
+                            <Typography variant="h4">{code}</Typography>
+                          </Box>
                           <Divider />
                           <Box
                             display="flex"
@@ -141,10 +137,10 @@ const ProfessorCodeGeneration = () => {
                           </Box>
                           <LinearProgress color="success" />
                         </>
-                      )}
-                    </Stack>
-                  </CardContent>
-                </Card>
+                      </Stack>
+                    </CardContent>
+                  </Card>
+                )}
               </Box>
               <Box display="flex" justifyContent="center" alignItems="center">
                 <Button

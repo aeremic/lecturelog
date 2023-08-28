@@ -46,17 +46,9 @@ export const onJoinLecture = (data: any) => {
   }
 };
 
-export const onStartTimer = (data: any) => {
+export const onStartLectureWork = (data: any) => {
   try {
-    socket.emit(MessagingEnum.StartTimer, data);
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const onGenerateCode = (data: any) => {
-  try {
-    socket.emit(MessagingEnum.GenerateCode, data);
+    socket.emit(MessagingEnum.StartLectureWork, data);
   } catch (err) {
     console.log(err);
   }
