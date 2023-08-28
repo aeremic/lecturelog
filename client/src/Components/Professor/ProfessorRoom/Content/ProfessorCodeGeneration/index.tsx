@@ -20,7 +20,11 @@ import PinIcon from "@mui/icons-material/Pin";
 import CloseIcon from "@mui/icons-material/Close";
 import { useEffect, useState } from "react";
 import { CodeGenerationState } from "../../../../../models/Enums";
-import { onStartLectureWork, socket } from "../../../../../services/Messaging";
+import {
+  onCancelLectureWork,
+  onStartLectureWork,
+  socket,
+} from "../../../../../services/Messaging";
 import { useSearchParams } from "react-router-dom";
 
 const codeGenerationState:
@@ -75,7 +79,7 @@ const ProfessorCodeGeneration = () => {
   };
 
   const handleCancelGenerateCodeClick = () => {
-    setCurrentCodeState(CodeGenerationState.notGenerated);
+    onCancelLectureWork(groupId);
   };
 
   return (

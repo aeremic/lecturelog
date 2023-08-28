@@ -14,6 +14,7 @@ import {
   connect,
   onStartSession,
   onStopSession,
+  socket,
 } from "../../../../services/Messaging";
 import ActiveGroups from "./ActiveGroups";
 
@@ -29,6 +30,7 @@ export const Content = () => {
 
   const [groupsLoaded, setGroupsLoaded] = useState<boolean>(false);
 
+  const [lecturesChangeEvents, setLecturesChangeEvents] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       if (userId != -1) {
@@ -49,7 +51,19 @@ export const Content = () => {
     };
 
     fetchData();
-  }, [userId, groupsLoaded]);
+  }, [userId, groupsLoaded, lecturesChangeEvents]);
+
+  useEffect(() => {
+    function onLecturesChange(value: any) {
+      setLecturesChangeEvents(lecturesChangeEvents.concat(value));
+    }
+
+    socket.on("lecturesChange", onLecturesChange);
+
+    return () => {
+      socket.off("lecturesChange", onLecturesChange);
+    };
+  }, [lecturesChangeEvents]);
 
   const handleStartSession = (groupId: number) => {
     onStartSession(groupId);
@@ -95,3 +109,6 @@ export const Content = () => {
     </Container>
   );
 };
+function setLecturesChangeEvents(arg0: any) {
+  throw new Error("Function not implemented.");
+}
