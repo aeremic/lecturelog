@@ -66,6 +66,7 @@ export const Content = () => {
   };
 
   const handleSessionClick = (groupId: number) => {
+    onStartSession(groupId);
     navigate(`/professor/room?userId=${userId}&groupId=${groupId}`);
   };
 
