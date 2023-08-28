@@ -53,3 +53,11 @@ export const onStartLectureWork = (data: any) => {
     console.log(err);
   }
 };
+
+export const onCancelLectureWork = (data: any) => {
+  try {
+    socket.emit(MessagingEnum.CancelLectureWork, data);
+  } catch (err) {
+    console.log(err);
+  }
+};

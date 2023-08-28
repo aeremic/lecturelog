@@ -16,5 +16,6 @@ export enum MessagingEnum {
   EndLecture = "endLecture",
   JoinLecture = "joinLecture",
   StartLectureWork = "startLectureWork",
+  CancelLectureWork = "cancelLectureWork",
   GenerateCode = "generateCode",
 }

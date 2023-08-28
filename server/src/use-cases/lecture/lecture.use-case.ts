@@ -79,4 +79,13 @@ export class LectureUseCases {
             this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
         }
     }
+
+    cancelLectureWork(groupId: any) {
+        try {
+            this.stopTimer(groupId);
+            this.removeCode(groupId);
+        } catch (error) {
+            this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
+        }
+    }
 }
