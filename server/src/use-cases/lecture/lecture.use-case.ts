@@ -28,7 +28,7 @@ export class LectureUseCases {
             let lecture = JSON.parse(await this.redisService.get(groupId));
             if (lecture) {
                 if (lecture.timer) {
-                    clearInterval(JSON.parse(lecture.timer));
+                    clearInterval(lecture.timer);
                 }
                 await this.redisService.delete(groupId);
             }
@@ -40,12 +40,12 @@ export class LectureUseCases {
         }
     }
 
-    async saveLectureWork(groupId: any, code: string, timer: NodeJS.Timer) {
+    async saveLectureWork(groupId: any, code: string, timerId: number) {
         try {
             let lecture: LectureEntity = {
                 groupId: groupId,
                 code: code,
-                timer: stringify(timer)
+                timer: timerId
             }
 
             await this.redisService.set(groupId, lecture);
@@ -73,7 +73,7 @@ export class LectureUseCases {
                 }
             }, 1000);
 
-            this.saveLectureWork(groupId, code, timer);
+            this.saveLectureWork(groupId, code, timer[Symbol.toPrimitive]());
         } catch (error) {
             this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
         }

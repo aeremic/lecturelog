@@ -3,5 +3,5 @@ export class Lecture {
 
     public code: string;
 
-    public timer: string;
+    public timer?: number;
 }
