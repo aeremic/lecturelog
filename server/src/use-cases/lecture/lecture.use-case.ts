@@ -6,7 +6,6 @@ import { CodeEnum } from "src/core/common/enums/code,enum";
 import { Encoding } from "src/core/common/encoding";
 import { LectureEntity } from "src/core/entities/lecture.entity";
 import { RedisService } from "src/services/redis.service";
-import { stringify } from "flatted";
 
 @Injectable()
 export class LectureUseCases {
