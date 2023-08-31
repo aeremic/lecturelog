@@ -72,12 +72,12 @@ export class MessagingGetaway implements OnGatewayConnection, OnGatewayDisconnec
 
     @SubscribeMessage(MessagingConstants.StartLectureWorkMessage)
     startLectureWork(@MessageBody() roomId: any, @ConnectedSocket() client: Socket) {
-        this.lectureUseCases.lectureWork(roomId);
+        this.lectureUseCases.doLectureWork(roomId);
     }
 
     @SubscribeMessage(MessagingConstants.CancelLectureWorkMessage)
     cancelLectureWork(@MessageBody() roomId: any, @ConnectedSocket() client: Socket) {
-        this.lectureUseCases.cancelLectureWork(roomId);
+        this.lectureUseCases.removeLectureWork(roomId);
     }
 
     sendTimerEventToLecture(roomId: any, timerEvent: string, counter: number = null) {

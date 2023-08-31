@@ -4,99 +4,76 @@ import { LoggerUseCases } from "../logger/logger.use-case";
 import { TimerEnum } from "src/core/common/enums/timer.enum";
 import { CodeEnum } from "src/core/common/enums/code,enum";
 import { Encoding } from "src/core/common/encoding";
-import { group } from "console";
-import { InjectRedis } from "@liaoliaots/nestjs-redis";
-import { Redis } from "ioredis";
+import { LectureEntity } from "src/core/entities/lecture.entity";
+import { RedisService } from "src/services/redis.service";
+import { stringify } from "flatted";
 
 @Injectable()
 export class LectureUseCases {
-    constructor(
-        @InjectRedis() private readonly redis: Redis
-    ) { }
-
     @Inject(forwardRef(() => MessagingGetaway))
     private messagingGetaway: MessagingGetaway;
 
+    @Inject(RedisService)
+    private redisService: RedisService;
+
     @Inject(LoggerUseCases)
     private loggerUseCases: LoggerUseCases;
-
-    async ping(): Promise<unknown> {
-        var temp = await this.redis.call("JSON.GET", "animal");
-        console.log(temp);
-
-        return temp;
-    }
 
     async getAllLectures(): Promise<Map<string, Set<string>>> {
         return this.messagingGetaway.getAllRooms();
     }
 
-    startTimer(groupId: any) {
+    async removeLectureWork(groupId: any) {
         try {
-            this.messagingGetaway.sendTimerEventToLecture(groupId, TimerEnum.start);
-        } catch (error) {
-            this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
-        }
-    }
+            let lecture = JSON.parse(await this.redisService.get(groupId));
+            if (lecture) {
+                if (lecture.timer) {
+                    clearInterval(JSON.parse(lecture.timer));
+                }
+                await this.redisService.delete(groupId);
+            }
 
-    stopTimer(groupId: any) {
-        try {
-            // clearInterval(timerId)
-            // remove from redis
+            this.messagingGetaway.sendCodeEventToLecture(groupId, CodeEnum.notGenerated);
             this.messagingGetaway.sendTimerEventToLecture(groupId, TimerEnum.stop);
         } catch (error) {
             this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
         }
     }
 
-    generateCode(groupId: any) {
+    async saveLectureWork(groupId: any, code: string, timer: NodeJS.Timer) {
         try {
-            // remove from redis old one
-            // check if the code is already generated, don't generate twice
-            let code = Encoding.generateRandomCode();
+            let lecture: LectureEntity = {
+                groupId: groupId,
+                code: code,
+                timer: stringify(timer)
+            }
+
+            await this.redisService.set(groupId, lecture);
+        } catch (error) {
+            this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
+        }
+    }
+
+    async doLectureWork(groupId: any) {
+        try {
+            await this.removeLectureWork(groupId);
+
+            var code = Encoding.generateRandomCode();
+            this.messagingGetaway.sendTimerEventToLecture(groupId, TimerEnum.start);
             this.messagingGetaway.sendCodeEventToLecture(groupId, CodeEnum.generated, code);
-        } catch (error) {
-            this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
-        }
-    }
 
-    removeCode(groupId: any) {
-        try {
-            // remove from redis
-            this.messagingGetaway.sendCodeEventToLecture(groupId, CodeEnum.notGenerated);
-        } catch (error) {
-            this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
-        }
-    }
-
-    lectureWork(groupId: any) {
-        try {
-            this.stopTimer(groupId);
-            this.startTimer(groupId);
-            this.generateCode(groupId);
-
-            var counter = 60; // pull from db
+            var counter = 60;
             var timer = setInterval(() => {
                 if (counter > 0) {
                     this.messagingGetaway.sendTimerEventToLecture(groupId, TimerEnum.tick, counter);
                     counter--;
                 } else if (counter == 0) {
-                    this.removeCode(groupId);
-                    this.stopTimer(groupId);
+                    this.removeLectureWork(groupId);
                     counter--;
                 }
             }, 1000);
 
-            // store timer in redis
-        } catch (error) {
-            this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
-        }
-    }
-
-    cancelLectureWork(groupId: any) {
-        try {
-            this.stopTimer(groupId);
-            this.removeCode(groupId);
+            this.saveLectureWork(groupId, code, timer);
         } catch (error) {
             this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
         }
