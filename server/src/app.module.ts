@@ -12,10 +12,17 @@ import { join } from 'path';
 import { MailModule } from './services/mail.module';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { MessagingModule } from './messaging/messaging.module';
+import { RedisModule } from '@liaoliaots/nestjs-redis';
 
 const envFilePath: string = getEnvPath(`${__dirname}/utils/envs`);
 @Module({
   imports: [
+    RedisModule.forRoot({
+      config: {
+        host: 'localhost',
+        port: 6379,
+      }
+    }),
     MailerModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (config: ConfigService) => ({

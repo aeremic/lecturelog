@@ -5,14 +5,27 @@ import { TimerEnum } from "src/core/common/enums/timer.enum";
 import { CodeEnum } from "src/core/common/enums/code,enum";
 import { Encoding } from "src/core/common/encoding";
 import { group } from "console";
+import { InjectRedis } from "@liaoliaots/nestjs-redis";
+import { Redis } from "ioredis";
 
 @Injectable()
 export class LectureUseCases {
+    constructor(
+        @InjectRedis() private readonly redis: Redis
+    ) { }
+
     @Inject(forwardRef(() => MessagingGetaway))
     private messagingGetaway: MessagingGetaway;
 
     @Inject(LoggerUseCases)
     private loggerUseCases: LoggerUseCases;
+
+    async ping(): Promise<unknown> {
+        var temp = await this.redis.call("JSON.GET", "animal");
+        console.log(temp);
+
+        return temp;
+    }
 
     async getAllLectures(): Promise<Map<string, Set<string>>> {
         return this.messagingGetaway.getAllRooms();

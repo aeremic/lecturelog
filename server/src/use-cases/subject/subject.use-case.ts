@@ -137,6 +137,7 @@ export class SubjectUseCases extends GenericUseCases<SubjectEntity>{
 
     async getActiveGroups(): Promise<Map<string, Set<string>>> {
         try {
+            var temp = await this.lectureUseCases.ping();
             return this.lectureUseCases.getAllLectures();
         } catch (error) {
             this.loggerUseCases.log(ErrorConstants.GetMethodError, error?.message, error?.stack);
