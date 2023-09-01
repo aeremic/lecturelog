@@ -17,26 +17,32 @@ import { RoleEnum } from 'src/core/common/enums/role.enum';
 import { AllUsersExceptAdminDto } from 'src/core/dtos/responses/all-users-except-admin.dto';
 import { AssignedGroupDto } from 'src/core/dtos/responses/assigned-group.dto';
 import { SubjectUseCases } from '../subject/subject.use-case';
+import { CodeEnum } from 'src/core/common/enums/code,enum';
+import { RedisService } from 'src/services/redis.service';
+import { LectureUseCases } from '../lecture/lecture.use-case';
 
 @Injectable()
 export class UserUseCases extends GenericUseCases<UserEntity>{
     @Inject(UserRepositoryAbstract)
     private userRepository: UserRepositoryAbstract;
 
-    @Inject(MailService)
-    private mailService: MailService;
-
-    @Inject(LoggerUseCases)
-    private loggerUseCases: LoggerUseCases;
+    @Inject(SubjectUseCases)
+    private subjectUseCases: SubjectUseCases;
 
     @Inject(EmailVerificationUseCases)
     private emailVerificationUseCases: EmailVerificationUseCases;
 
+    @Inject(LectureUseCases)
+    private lectureUseCases: LectureUseCases;
+
+    @Inject(MailService)
+    private mailService: MailService;
+
     @Inject(BcryptService)
     private bcryptService: BcryptService;
 
-    @Inject(SubjectUseCases)
-    private subjectUseCases: SubjectUseCases;
+    @Inject(LoggerUseCases)
+    private loggerUseCases: LoggerUseCases;
 
     @Inject()
     private readonly config: ConfigService;
@@ -347,5 +353,13 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
         }
 
         return result;
+    }
+
+    async getLastCodeEventByGroupId(id: number): Promise<CodeEnum> {
+        return await this.lectureUseCases.getLastCodeEventByGroupId(id);
+    }
+
+    async getCodeByGroupId(id: number): Promise<string> {
+        return await this.lectureUseCases.getCodeByGroupId(id);
     }
 }

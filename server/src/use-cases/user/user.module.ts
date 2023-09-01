@@ -12,9 +12,10 @@ import { MailModule } from 'src/services/mail.module';
 import { EmailVerificationModule } from '../emailverification/email-verification.module';
 import { BcryptModule } from 'src/services/bcrypt.module';
 import { SubjectModule } from '../subject/subject.module';
+import { LectureModule } from '../lecture/lecture.module';
 
 @Module({
-    imports: [forwardRef(() => SubjectModule), LoggerModule, MailModule, EmailVerificationModule, BcryptModule, TypeOrmModule.forFeature([User, EmailVerification, StudentsSubjectGroups, ProfessorsSubjectGroups])],
+    imports: [forwardRef(() => SubjectModule), LoggerModule, MailModule, EmailVerificationModule, BcryptModule, LectureModule, TypeOrmModule.forFeature([User, EmailVerification, StudentsSubjectGroups, ProfessorsSubjectGroups])],
     providers: [
         UserUseCases,
         {

@@ -25,3 +25,19 @@ export const getActiveAssignedGroups = async (id: number) => {
     console.log(err); // TODO: Fix for PROD.
   }
 };
+
+export const getCodeGeneratedState = async (groupId: number) => {
+  try {
+    return await getById(`${URL}/getLastCodeEventByGroupId`, groupId);
+  } catch (err) {
+    console.log(err); // TODO: Fix for PROD.
+  }
+};
+
+export const getCode = async (groupId: number) => {
+  try {
+    return await getById(`${URL}/getCodeByGroupId`, groupId);
+  } catch (err) {
+    console.log(err); // TODO: Fix for PROD.
+  }
+};

@@ -22,6 +22,34 @@ export class LectureUseCases {
         return this.messagingGetaway.getAllRooms();
     }
 
+    async getLastCodeEventByGroupId(groupId: number): Promise<CodeEnum> {
+        let result: CodeEnum = CodeEnum.notGenerated;
+        try {
+            let lecture = JSON.parse(await this.redisService.get(groupId));
+            if (lecture) {
+                result = CodeEnum.generated;
+            }
+        } catch (error) {
+            this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
+        }
+
+        return result;
+    }
+
+    async getCodeByGroupId(groupId: number): Promise<string> {
+        let result: undefined;
+        try {
+            let lecture = JSON.parse(await this.redisService.get(groupId));
+            if (lecture) {
+                result = lecture.code;
+            }
+        } catch (error) {
+            this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
+        }
+
+        return result;
+    }
+
     async removeLectureWork(groupId: any) {
         try {
             let lecture = JSON.parse(await this.redisService.get(groupId));

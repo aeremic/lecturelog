@@ -26,16 +26,29 @@ import {
   socket,
 } from "../../../../../services/Messaging";
 import { useSearchParams } from "react-router-dom";
-
-const codeGenerationState:
-  | CodeGenerationState.notGenerated
-  | CodeGenerationState.generated = CodeGenerationState.notGenerated;
+import { HttpStatusCode } from "axios";
+import {
+  getCode,
+  getCodeGeneratedState,
+} from "../../../../../services/ProfessorsService";
 
 const ProfessorCodeGeneration = () => {
   const [queryParameters] = useSearchParams();
 
   const groupIdParam: string | null = queryParameters.get("groupId");
   const groupId = groupIdParam != null ? parseInt(groupIdParam) : -1;
+
+  const [currentCodeState, setCurrentCodeState] = useState<CodeGenerationState>(
+    CodeGenerationState.notGenerated
+  );
+  const initCodeGeneratedState = async () => {
+    await getCodeGeneratedState(groupId).then((res: any) => {
+      if (res && res.status === HttpStatusCode.Ok && res.data) {
+        setCurrentCodeState(res.data);
+      }
+    });
+  };
+  initCodeGeneratedState();
 
   const [timer, setTimer] = useState<string>("");
   useEffect(() => {
@@ -56,9 +69,15 @@ const ProfessorCodeGeneration = () => {
     };
   }, [groupId, timer]);
 
-  const [currentCodeState, setCurrentCodeState] =
-    useState<CodeGenerationState>(codeGenerationState); // TODO: This needs to be pulled from Redis
   const [code, setCode] = useState<string>();
+  const initCode = async () => {
+    await getCode(groupId).then((res: any) => {
+      if (res && res.status === HttpStatusCode.Ok && res.data) {
+        setCode(res.data);
+      }
+    });
+  };
+  initCode();
   useEffect(() => {
     function onCodeEvent(value: any) {
       if (value.id === groupId) {
