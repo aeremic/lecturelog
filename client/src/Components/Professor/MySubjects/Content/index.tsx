@@ -17,6 +17,7 @@ import {
   socket,
 } from "../../../../services/Messaging";
 import ActiveGroups from "./ActiveGroups";
+import { ISessionData } from "../../../../modelHelpers/SessionData";
 
 export const Content = () => {
   const navigate = useNavigate();
@@ -66,7 +67,12 @@ export const Content = () => {
   }, [lecturesChangeEvents]);
 
   const handleStartSession = (groupId: number) => {
-    onStartSession(groupId);
+    const sessionData: ISessionData = {
+      startedById: userId,
+      groupId: groupId,
+    };
+
+    onStartSession(JSON.stringify(sessionData));
     navigate(`/professor/room?userId=${userId}&groupId=${groupId}`);
   };
 
@@ -80,7 +86,12 @@ export const Content = () => {
   };
 
   const handleSessionClick = (groupId: number) => {
-    onStartSession(groupId);
+    const sessionData: ISessionData = {
+      startedById: userId,
+      groupId: groupId,
+    };
+
+    onStartSession(JSON.stringify(sessionData));
     navigate(`/professor/room?userId=${userId}&groupId=${groupId}`);
   };
 
@@ -109,6 +120,3 @@ export const Content = () => {
     </Container>
   );
 };
-function setLecturesChangeEvents(arg0: any) {
-  throw new Error("Function not implemented.");
-}

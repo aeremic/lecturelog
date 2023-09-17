@@ -3,7 +3,7 @@ import { UserUseCases } from 'src/use-cases';
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RoleGuard } from 'src/auth/guards/role.guard';
-import { AssignedGroupDto } from 'src/core/dtos/responses/assigned-group.dto';
+import { AvailableGroupDto } from 'src/core/dtos/responses/available-group.dto';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('api/student')
@@ -21,7 +21,7 @@ export class StudentController {
     @Roles('student')
     @UseGuards(RoleGuard)
     @Get('/getAvailableGroups/:id')
-    getAvailableGroups(@Param('id', ParseIntPipe) id: number): Promise<AssignedGroupDto[]> {
+    getAvailableGroups(@Param('id', ParseIntPipe) id: number): Promise<AvailableGroupDto[]> {
         return this.userUseCases.getStudentAvailableGroups(id);
     }
 }       

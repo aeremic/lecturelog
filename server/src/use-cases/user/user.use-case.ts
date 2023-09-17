@@ -20,6 +20,8 @@ import { SubjectUseCases } from '../subject/subject.use-case';
 import { CodeEnum } from 'src/core/common/enums/code,enum';
 import { RedisService } from 'src/services/redis.service';
 import { LectureUseCases } from '../lecture/lecture.use-case';
+import { AvailableGroupDto } from 'src/core/dtos/responses/available-group.dto';
+import { ActiveSubjectGroup } from 'src/core/dtos/responses/active-subject-room.dto';
 
 @Injectable()
 export class UserUseCases extends GenericUseCases<UserEntity>{
@@ -269,7 +271,7 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
                 subjects.forEach(subject => {
                     if (subject.subjectGroups) {
                         subject.subjectGroups.forEach(group => {
-                            result.push({ subjectId: subject.id, name: subject.name, groupId: group.id, groupNo: group.groupNo });
+                            result.push({ subjectId: subject.id, name: subject.name, groupId: group.id, groupNo: group.groupNo, startedById: -1 });
                         });
                     }
                 });
@@ -277,8 +279,15 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
                 if (result.length) {
                     let activeSubjectRooms = await this.subjectUseCases.getActiveGroups();
                     if (activeSubjectRooms) {
-                        let activeSubjectsIds = this.getActiveGroupIds(activeSubjectRooms);
-                        result = result.filter(element => !activeSubjectsIds.includes(element.groupId));
+                        let parsedActiveSubjectGroups = this.parseActiveSubjectGroups(activeSubjectRooms);
+
+                        result = result
+                            .filter(element => !parsedActiveSubjectGroups
+                                .map(function (item) {
+                                    if (item && item.groupId > -1) {
+                                        return item.groupId;
+                                    }
+                                }).includes(element.groupId));
                     }
                 }
             }
@@ -289,6 +298,7 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
         return result;
     }
 
+    // TODO: Refactor below method to reduce number of array iterations!
     async getProfessorActiveAssignedGroups(id: number): Promise<AssignedGroupDto[]> {
         let result: AssignedGroupDto[];
         try {
@@ -298,7 +308,7 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
                 subjects.forEach(subject => {
                     if (subject.subjectGroups) {
                         subject.subjectGroups.forEach(group => {
-                            result.push({ subjectId: subject.id, name: subject.name, groupId: group.id, groupNo: group.groupNo });
+                            result.push({ subjectId: subject.id, name: subject.name, groupId: group.id, groupNo: group.groupNo, startedById: -1 });
                         });
                     }
                 });
@@ -306,8 +316,23 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
                 if (result.length) {
                     let activeSubjectRooms = await this.subjectUseCases.getActiveGroups();
                     if (activeSubjectRooms) {
-                        let activeSubjectsIds = this.getActiveGroupIds(activeSubjectRooms);
-                        result = result.filter(element => activeSubjectsIds.includes(element.groupId));
+                        let parsedActiveSubjectGroups = this.parseActiveSubjectGroups(activeSubjectRooms);
+
+                        result = result
+                            .filter(element => parsedActiveSubjectGroups
+                                .map(function (activeGroup) {
+                                    if (activeGroup && activeGroup.groupId > -1) {
+                                        return activeGroup.groupId;
+                                    }
+                                }).includes(element.groupId));
+
+                        result.forEach(group => {
+                            parsedActiveSubjectGroups.forEach(activeGroup => {
+                                if (activeGroup && activeGroup.groupId > -1 && activeGroup.groupId === group.groupId && activeGroup.startedById === id) {
+                                    group.startedById = id
+                                }
+                            })
+                        })
                     }
                 }
             }
@@ -318,16 +343,8 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
         return result;
     }
 
-    getActiveGroupIds(activeSubjectRooms: Map<string, Set<string>>): number[] {
-        return [...activeSubjectRooms.keys()]
-            .filter(key => typeof key === 'number')
-            .map(function (item) {
-                return parseInt(item);
-            });
-    }
-
-    async getStudentAvailableGroups(id: number): Promise<AssignedGroupDto[]> {
-        let result: AssignedGroupDto[];
+    async getStudentAvailableGroups(id: number): Promise<AvailableGroupDto[]> {
+        let result: AvailableGroupDto[];
         try {
             let subjects = await this.subjectUseCases.getSubjectsByStudentId(id);
             if (subjects) {
@@ -343,8 +360,15 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
                 if (result.length) {
                     let activeSubjectRooms = await this.subjectUseCases.getActiveGroups();
                     if (activeSubjectRooms) {
-                        let activeSubjectsIds = this.getActiveGroupIds(activeSubjectRooms);
-                        result = result.filter(element => activeSubjectsIds.includes(element.groupId));
+                        let parsedActiveSubjectGroups = this.parseActiveSubjectGroups(activeSubjectRooms);
+
+                        result = result
+                            .filter(element => !parsedActiveSubjectGroups
+                                .map(function (item) {
+                                    if (item && item.groupId > -1) {
+                                        return item.groupId;
+                                    }
+                                }).includes(element.groupId));
                     }
                 }
             }
@@ -353,6 +377,17 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
         }
 
         return result;
+    }
+
+    parseActiveSubjectGroups(activeSubjectRooms: Map<string, Set<string>>): ActiveSubjectGroup[] {
+        return [...activeSubjectRooms.keys()]
+            .map(function (key) {
+                try {
+                    return JSON.parse(key);
+                } catch {
+                    return null;
+                }
+            });
     }
 
     async getLastCodeEventByGroupId(id: number): Promise<CodeEnum> {
