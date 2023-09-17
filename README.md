@@ -1,3 +1,3 @@
 # BolognApp
  
-### Web Application for tracking live student presence
+### Web Application for tracking live presence
