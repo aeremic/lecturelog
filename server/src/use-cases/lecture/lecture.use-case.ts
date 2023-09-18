@@ -30,6 +30,26 @@ export class LectureUseCases {
             });
     }
 
+    async getActiveLecturesFromCache(): Promise<ActiveLectureEntity[]> {
+        let result: ActiveLectureEntity[] = [];
+        try {
+            let activeLectures = JSON.parse(await this.redisService.get("groups"));
+            if (activeLectures) {
+                result = activeLectures.map(function (element: string) {
+                    try {
+                        return JSON.parse(element);
+                    } catch {
+                        return null;
+                    }
+                });
+            }
+        } catch (error) {
+            this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
+        }
+
+        return result;
+    }
+
     async saveLecture(group: string) {
         try {
             let groups: string[] = JSON.parse(await this.redisService.get("groups"))
