@@ -50,6 +50,28 @@ export class LectureUseCases {
         return result;
     }
 
+    parseGroupsToLectures(groups: string): ActiveLectureEntity[] {
+        let result: ActiveLectureEntity[] = []
+        try {
+            let groupsParsed = JSON.parse(groups);
+
+            if (groupsParsed) {
+                groupsParsed.forEach(group => {
+                    let lecture: ActiveLectureEntity = {
+                        groupId: group.groupId,
+                        userId: group.userId
+                    }
+
+                    result.push(lecture);
+                });
+            }
+        } catch (error) {
+            this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
+        }
+
+        return result;
+    }
+
     async saveLecture(group: string) {
         try {
             let groups: string[] = JSON.parse(await this.redisService.get("groups"))

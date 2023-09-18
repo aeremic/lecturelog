@@ -35,11 +35,12 @@ export class MessagingGetaway implements OnGatewayConnection, OnGatewayDisconnec
     }
 
     @SubscribeMessage(MessagingConstants.InitializeActiveLecturesMessage)
-    initializeActiveLectures(@MessageBody() rooms: any, @ConnectedSocket() client: Socket) {
+    initializeActiveLectures(@MessageBody() groups: any, @ConnectedSocket() client: Socket) {
         try {
-            if (rooms) {
-                rooms.forEach((roomId: string) => {
-                    client.join(roomId);
+            if (groups) {
+                let rooms = this.lectureUseCases.parseGroupsToLectures(groups);
+                rooms.forEach((room) => {
+                    client.join(JSON.stringify(room));
                 });
             }
         }
