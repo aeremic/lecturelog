@@ -51,9 +51,9 @@ export class MessagingGetaway implements OnGatewayConnection, OnGatewayDisconnec
     }
 
     @SubscribeMessage(MessagingConstants.InitializeActiveLectureMessage)
-    initializeActiveLecture(@MessageBody() roomId: any, @ConnectedSocket() client: Socket) {
+    async initializeActiveLecture(@MessageBody() roomId: any, @ConnectedSocket() client: Socket) {
         try {
-            if (roomId) {
+            if (roomId && await this.lectureUseCases.doesLectureExist(roomId)) {
                 client.join(roomId);
             }
         }

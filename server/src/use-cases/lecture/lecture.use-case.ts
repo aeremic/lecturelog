@@ -127,6 +127,20 @@ export class LectureUseCases {
         return result;
     }
 
+    async doesLectureExist(group: any): Promise<boolean> {
+        let result: boolean = false;
+        try {
+            let lecture = JSON.parse(await this.redisService.get(group));
+            if (lecture) {
+                result = true;
+            }
+        } catch (error) {
+            this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
+        }
+
+        return result;
+    }
+
     async saveLectureWork(group: any, code: string, timerId: number) {
         try {
             let lecture: LectureEntity = {
