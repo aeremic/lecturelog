@@ -8,19 +8,19 @@ import { HttpStatusCode } from "axios";
 import {
   getActiveAssignedGroups,
   getAssignedGroups,
-} from "../../../../services/ProfessorsService";
+} from "../../../../services/HttpService/ProfessorsService";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import {
   connect,
   dispose,
-  initialize,
+  initializeActiveSessions,
   listening,
   onStartSession,
   onStopSession,
-} from "../../../../services/Messaging";
+} from "../../../../services/MessagingService";
 import ActiveGroups from "./ActiveGroups";
 import { ISessionData } from "../../../../modelHelpers/SessionData";
-import { MessagingEvent } from "../../../../models/Enums";
+import { MessagingEvent } from "../../../../modelHelpers/Enums";
 
 export const Content = () => {
   const navigate = useNavigate();
@@ -59,7 +59,7 @@ export const Content = () => {
 
   useEffect(() => {
     connect();
-    initialize(activeGroups);
+    initializeActiveSessions(activeGroups);
 
     function onLecturesChange(value: any) {
       setLecturesChangeEvents(lecturesChangeEvents.concat(value));

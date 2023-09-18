@@ -21,10 +21,6 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import {
-  getSubjects,
-  removeSubject,
-} from "../../../../services/SubjectsService";
-import {
   Action,
   Add,
   AlertFailureMessage,
@@ -50,6 +46,10 @@ import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import ConfirmationDialog from "../../../Common/ConfirmationDialog";
 import { useNavigate } from "react-router-dom";
 import { ISubject } from "../../../../modelHelpers/Subject";
+import {
+  getSubjects,
+  removeSubject,
+} from "../../../../services/HttpService/SubjectsService";
 
 const SubjectsTable = () => {
   const subjectInitialState: ISubject[] = [

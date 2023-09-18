@@ -46,16 +46,11 @@ import {
 } from "../../../../../../resources/Typography";
 import { useEffect, useState } from "react";
 import { HttpStatusCode } from "axios";
-import { RoleEnum } from "../../../../../../models/Enums";
+import { RoleEnum } from "../../../../../../modelHelpers/Enums";
 import { IUser } from "../../../../../../models/User";
-import { getAllExceptAdmin } from "../../../../../../services/UsersService";
 import { ISubject } from "../../../../../../models/Subject";
 import { SubjectName } from "../../../../../../resources/Typography/index";
 import { ISubjectGroup } from "../../../../../../models/SubjectGroup";
-import {
-  createOrUpdateSubject,
-  getSubject,
-} from "../../../../../../services/SubjectsService";
 import { IProfessorsGroups } from "../../../../../../models/ProfessorsGroups";
 import { IStudentsGroups } from "../../../../../../models/StudentsGroups";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -71,6 +66,11 @@ import AddIcon from "@mui/icons-material/Add";
 import { ISubjectFormInput } from "../../../../../../modelHelpers/SubjectFormInput";
 import { ISubjectGroupsFormInput } from "../../../../../../modelHelpers/SubjectGroupsFormInput";
 import convertToRoman from "../../../../../../functionHelpers/ConvertToRoman";
+import { getAllExceptAdmin } from "../../../../../../services/HttpService/UsersService";
+import {
+  createOrUpdateSubject,
+  getSubject,
+} from "../../../../../../services/HttpService/SubjectsService";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;

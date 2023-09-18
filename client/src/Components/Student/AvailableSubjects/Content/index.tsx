@@ -27,8 +27,8 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { IGroup } from "../../../../modelHelpers/Group";
 import { HttpStatusCode } from "axios";
-import { getAvailableGroups } from "../../../../services/StudentsService";
-import { socket } from "../../../../services/Messaging";
+import { socket } from "../../../../services/MessagingService";
+import { getAvailableGroups } from "../../../../services/HttpService/StudentsService";
 
 export const Content = () => {
   const navigate = useNavigate();

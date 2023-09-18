@@ -34,14 +34,14 @@ export class MessagingGetaway implements OnGatewayConnection, OnGatewayDisconnec
         return this.server.sockets.adapter.rooms;
     }
 
-    @SubscribeMessage(MessagingConstants.InitializeMessage)
-    initialize(@MessageBody() roomIds: any, @ConnectedSocket() client: Socket) {
+    @SubscribeMessage(MessagingConstants.InitializeActiveLecturesMessage)
+    initializeActiveLectures(@MessageBody() rooms: any, @ConnectedSocket() client: Socket) {
         try {
-            // if (roomIds) {
-            //     roomIds.forEach((roomId: string) => {
-            //         client.join(roomId);
-            //     });
-            // }
+            if (rooms) {
+                rooms.forEach((roomId: string) => {
+                    client.join(roomId);
+                });
+            }
         }
         catch (error) {
             this.loggerUseCases.log(ErrorConstants.MessagingGetawayError, error?.message, error?.stack);

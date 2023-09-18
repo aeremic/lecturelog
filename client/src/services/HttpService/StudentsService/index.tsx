@@ -1,4 +1,4 @@
-import { get, getById } from "../Common/ServiceBase";
+import { get, getById } from "../HttpServiceBase";
 
 const URL = "/student";
 

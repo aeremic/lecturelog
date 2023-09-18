@@ -12,7 +12,7 @@ export enum CodeGenerationState {
 }
 
 export enum MessagingEnum {
-  Initialize = "initialize",
+  InitializeActiveLectures = "initializeActiveLectures",
   CreateLecture = "createLecture",
   EndLecture = "endLecture",
   JoinLecture = "joinLecture",

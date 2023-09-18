@@ -1,4 +1,4 @@
-import { get, getById, post, remove } from "../Common/ServiceBase";
+import { get, getById, post, remove } from "../HttpServiceBase";
 
 const URL = "/subject";
 

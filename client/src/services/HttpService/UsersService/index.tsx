@@ -1,6 +1,6 @@
-import { IEmailRegistration } from "../../models/EmailRegistration";
-import { IUser } from "../../models/User";
-import { get, getById, post, remove } from "../Common/ServiceBase";
+import { IEmailRegistration } from "../../../models/EmailRegistration";
+import { IUser } from "../../../models/User";
+import { get, getById, post, remove } from "../HttpServiceBase";
 
 const URL = "/user";
 

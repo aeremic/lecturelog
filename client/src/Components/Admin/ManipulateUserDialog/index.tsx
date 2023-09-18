@@ -31,8 +31,7 @@ import {
 } from "../../../resources/Typography";
 import { useForm } from "react-hook-form";
 import { Professor } from "../../../resources/Typography/index";
-import { RoleEnum } from "../../../models/Enums";
-import { createUser } from "../../../services/UsersService";
+import { RoleEnum } from "../../../modelHelpers/Enums";
 import { IUser } from "../../../models/User";
 import { HttpStatusCode } from "axios";
 import PersonIcon from "@mui/icons-material/Person";
@@ -43,6 +42,7 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import { IManipulateUserFormInput } from "../../../modelHelpers/ManipulateUserFormInput";
+import { createUser } from "../../../services/HttpService/UsersService";
 
 export interface IManipulateUserDialogRawProps {
   id: string;

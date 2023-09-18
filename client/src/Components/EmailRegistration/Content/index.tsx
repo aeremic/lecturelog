@@ -28,11 +28,11 @@ import {
   RepeatPassword,
 } from "../../../resources/Typography";
 import { IEmailRegistration } from "../../../models/EmailRegistration";
-import { emailRegistration } from "../../../services/UsersService";
 import { useState } from "react";
 import PasswordIcon from "@mui/icons-material/Password";
 import VpnKeyIcon from "@mui/icons-material/VpnKey";
 import EmailIcon from "@mui/icons-material/Email";
+import { emailRegistration } from "../../../services/HttpService/UsersService";
 
 const Content = () => {
   const navigate = useNavigate();

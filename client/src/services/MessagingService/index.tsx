@@ -1,6 +1,6 @@
 import { io } from "socket.io-client";
 import { BASE_URL } from "../Common";
-import { MessagingEnum } from "../../models/Enums";
+import { MessagingEnum } from "../../modelHelpers/Enums";
 import { ISessionData } from "../../modelHelpers/SessionData";
 
 export const socket = io(BASE_URL, {
@@ -23,14 +23,6 @@ export const disconnect = () => {
   }
 };
 
-export const initialize = (activeGroups: any) => {
-  try {
-    socket.emit(MessagingEnum.Initialize, JSON.stringify(activeGroups));
-  } catch (err) {
-    console.log(err);
-  }
-};
-
 export const listening = (event: string, callback: any) => {
   try {
     socket.on(event, callback);
@@ -42,6 +34,17 @@ export const listening = (event: string, callback: any) => {
 export const dispose = (event: string, callback: any) => {
   try {
     socket.off(event, callback);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const initializeActiveSessions = (activeGroups: any) => {
+  try {
+    socket.emit(
+      MessagingEnum.InitializeActiveLectures,
+      JSON.stringify(activeGroups)
+    );
   } catch (err) {
     console.log(err);
   }

@@ -16,7 +16,6 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { getStudents } from "../../../../../services/StudentsService/index";
 import {
   Action,
   Add,
@@ -35,10 +34,9 @@ import {
   UserSuccessfullyRemoved,
   Yes,
 } from "../../../../../resources/Typography";
-import { RoleEnum } from "../../../../../models/Enums";
+import { RoleEnum } from "../../../../../modelHelpers/Enums";
 import { IUser } from "../../../../../models/User";
 import { HttpStatusCode } from "axios";
-import { removeUser } from "../../../../../services/UsersService";
 import AddIcon from "@mui/icons-material/Add";
 import ConfirmationDialog from "../../../../Common/ConfirmationDialog";
 import ManipulateUserDialog from "../../../ManipulateUserDialog";
@@ -47,9 +45,10 @@ import FormatListNumberedIcon from "@mui/icons-material/FormatListNumbered";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import PersonIcon from "@mui/icons-material/Person";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
-import NumbersIcon from "@mui/icons-material/Numbers";
 import ContactPageIcon from "@mui/icons-material/ContactPage";
 import { IManipulateUser } from "../../../../../modelHelpers/ManipulateUser";
+import { getStudents } from "../../../../../services/HttpService/StudentsService";
+import { removeUser } from "../../../../../services/HttpService/UsersService";
 
 const StudentsTable = () => {
   const studentsTablleInitialState: IUser[] = [

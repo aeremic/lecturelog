@@ -3,7 +3,7 @@ import { ThemeProvider } from "@mui/material/styles";
 import theme from "../../../styles";
 import Header from "../../Common/Header";
 import ErrorComponent from "../../Common/ErrorComponent";
-import { Content } from "./Content";
+import Content from "./Content";
 
 const ProfessorRoom = () => {
   return (

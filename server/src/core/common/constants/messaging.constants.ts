@@ -1,5 +1,5 @@
 export class MessagingConstants {
-    public static InitializeMessage: string = 'initialize';
+    public static InitializeActiveLecturesMessage: string = 'initializeActiveLectures';
     public static CreateLectureMessage: string = 'createLecture';
     public static EndLectureMessage: string = 'endLecture';
     public static JoinLectureMessage: string = 'joinLecture';

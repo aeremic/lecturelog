@@ -25,7 +25,6 @@ import {
   WrongCredentials,
 } from "../../../resources/Typography";
 import { useForm } from "react-hook-form";
-import { getCurrentUserData, login } from "../../../services/Common/Auth";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { HttpStatusCode } from "axios";
 import { useState } from "react";
@@ -33,8 +32,12 @@ import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import PasswordIcon from "@mui/icons-material/Password";
 import LoginIcon from "@mui/icons-material/Login";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
-import { RoleEnum } from "../../../models/Enums";
+import { RoleEnum } from "../../../modelHelpers/Enums";
 import { ILoginFormInput } from "../../../modelHelpers/LoginFormInput";
+import {
+  getCurrentUserData,
+  login,
+} from "../../../services/HttpService/AuthService";
 
 const Content = () => {
   const [queryParameters] = useSearchParams();

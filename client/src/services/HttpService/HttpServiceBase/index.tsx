@@ -1,6 +1,6 @@
 import axios from "axios";
-import { API } from "..";
-import { AuthHeader } from "../Headers/AuthHeader";
+import { API } from "../../Common";
+import { AuthHeader } from "./Headers";
 
 export const get = async (endpoint: string, autoIncludeAuthHeader = true) => {
   let header = { Authorization: "" };

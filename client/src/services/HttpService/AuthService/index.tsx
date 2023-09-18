@@ -1,4 +1,4 @@
-import { post } from "../ServiceBase";
+import { post } from "../HttpServiceBase";
 
 const URL = "/auth";
 

@@ -19,24 +19,24 @@ import {
 import PinIcon from "@mui/icons-material/Pin";
 import CloseIcon from "@mui/icons-material/Close";
 import { useEffect, useState } from "react";
-import { CodeGenerationState } from "../../../../../models/Enums";
+import { CodeGenerationState } from "../../../../../modelHelpers/Enums";
 import {
   dispose,
   listening,
   onCancelLectureWork,
   onStartLectureWork,
-} from "../../../../../services/Messaging";
+} from "../../../../../services/MessagingService";
 import { useSearchParams } from "react-router-dom";
 import { HttpStatusCode } from "axios";
 import {
   getCode,
   getCodeGeneratedState,
-} from "../../../../../services/ProfessorsService";
+} from "../../../../../services/HttpService/ProfessorsService";
 import { ISessionData } from "../../../../../modelHelpers/SessionData";
 import {
   MessagingEvent,
   LectureTimerEventType,
-} from "../../../../../models/Enums/index";
+} from "../../../../../modelHelpers/Enums/index";
 
 const ProfessorCodeGeneration = () => {
   const [queryParameters] = useSearchParams();

@@ -23,7 +23,7 @@ import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import PersonIcon from "@mui/icons-material/Person";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import NumbersIcon from "@mui/icons-material/Numbers";
-import { getProfessors } from "../../../../../services/ProfessorsService";
+import { getProfessors } from "../../../../../services/HttpService/ProfessorsService";
 import {
   Action,
   Add,
@@ -47,11 +47,11 @@ import {
 } from "../../../../../resources/Typography";
 import ConfirmationDialog from "../../../../Common/ConfirmationDialog";
 import ManipulateUserDialog from "../../../ManipulateUserDialog";
-import { RoleEnum } from "../../../../../models/Enums";
+import { RoleEnum } from "../../../../../modelHelpers/Enums";
 import { IUser } from "../../../../../models/User";
-import { removeUser } from "../../../../../services/UsersService";
 import { HttpStatusCode } from "axios";
 import { IManipulateUser } from "../../../../../modelHelpers/ManipulateUser";
+import { removeUser } from "../../../../../services/HttpService/UsersService";
 
 const ProfessorsTable = () => {
   const professorsTableInitialState: IUser[] = [
