@@ -3,4 +3,5 @@ export interface IGroup {
   name: string;
   groupId: number;
   groupNo: number;
+  userId: number;
 }

@@ -68,7 +68,7 @@ export const Content = () => {
 
   const handleStartSession = (groupId: number) => {
     const sessionData: ISessionData = {
-      startedById: userId,
+      userId: userId,
       groupId: groupId,
     };
 
@@ -77,7 +77,12 @@ export const Content = () => {
   };
 
   const handleStopSession = (groupId: number) => {
-    onStopSession(groupId);
+    const sessionData: ISessionData = {
+      userId: userId,
+      groupId: groupId,
+    };
+
+    onStopSession(JSON.stringify(sessionData));
     setGroupsLoaded(false);
   };
 
@@ -85,14 +90,10 @@ export const Content = () => {
     console.log(subjectId);
   };
 
-  const handleSessionClick = (groupId: number) => {
-    const sessionData: ISessionData = {
-      startedById: userId,
-      groupId: groupId,
-    };
-
-    onStartSession(JSON.stringify(sessionData));
-    navigate(`/professor/room?userId=${userId}&groupId=${groupId}`);
+  const handleSessionClick = (group: IGroup) => {
+    if (group.userId === userId) {
+      navigate(`/professor/room?userId=${userId}&groupId=${group.groupId}`);
+    }
   };
 
   return (
@@ -111,6 +112,7 @@ export const Content = () => {
         </Grid>
         <Grid item xs={6} sx={{ minWidth: 350 }}>
           <ActiveGroups
+            userId={userId}
             groupsProp={activeGroups}
             handleStopSession={handleStopSession}
             handleSessionClick={handleSessionClick}

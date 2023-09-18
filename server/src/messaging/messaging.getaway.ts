@@ -82,7 +82,7 @@ export class MessagingGetaway implements OnGatewayConnection, OnGatewayDisconnec
 
     sendTimerEventToLecture(roomId: any, timerEvent: string, counter: number = null) {
         try {
-            this.server.in(roomId).emit(MessagingConstants.LectureTimerEventMessage, { 'id': roomId, 'lectureTimerEventType': timerEvent, 'lectureTimerCount': counter ?? -1 });
+            this.server.in(roomId).emit(MessagingConstants.LectureTimerEventMessage, { 'session': roomId, 'lectureTimerEventType': timerEvent, 'lectureTimerCount': counter ?? -1 });
         } catch (error) {
             this.loggerUseCases.log(ErrorConstants.MessagingGetawayError, error?.message, error?.stack);
         }
@@ -91,7 +91,7 @@ export class MessagingGetaway implements OnGatewayConnection, OnGatewayDisconnec
 
     sendCodeEventToLecture(roomId: any, codeEvent: number, code: string = null) {
         try {
-            this.server.in(roomId).emit(MessagingConstants.LectureCodeEventMessage, { 'id': roomId, 'lectureCodeEventType': codeEvent, 'lectureCodeValue': code ?? '' });
+            this.server.in(roomId).emit(MessagingConstants.LectureCodeEventMessage, { 'session': roomId, 'lectureCodeEventType': codeEvent, 'lectureCodeValue': code ?? '' });
         } catch (error) {
             this.loggerUseCases.log(ErrorConstants.MessagingGetawayError, error?.message, error?.stack);
         }

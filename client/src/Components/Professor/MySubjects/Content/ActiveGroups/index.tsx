@@ -22,6 +22,7 @@ import { IGroup } from "../../../../../modelHelpers/Group";
 import convertToRoman from "../../../../../functionHelpers/ConvertToRoman";
 
 const ActiveGroups: React.FC<IActiveGroupsProps> = ({
+  userId,
   groupsProp,
   handleStopSession,
   handleSessionClick,
@@ -71,7 +72,7 @@ const ActiveGroups: React.FC<IActiveGroupsProps> = ({
                     <TableRow
                       key={index}
                       hover
-                      onClick={(e) => handleSessionClick(group.groupId)}
+                      onClick={(e) => handleSessionClick(group)}
                       sx={{
                         "&:last-child td, &:last-child th": { border: 0 },
                         cursor: "pointer",
@@ -90,6 +91,7 @@ const ActiveGroups: React.FC<IActiveGroupsProps> = ({
                           variant="contained"
                           color="error"
                           size="small"
+                          disabled={group.userId != userId}
                         >
                           <PauseIcon fontSize="small" />
                         </Button>

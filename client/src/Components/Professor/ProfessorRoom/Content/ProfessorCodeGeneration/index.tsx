@@ -31,9 +31,13 @@ import {
   getCode,
   getCodeGeneratedState,
 } from "../../../../../services/ProfessorsService";
+import { ISessionData } from "../../../../../modelHelpers/SessionData";
 
 const ProfessorCodeGeneration = () => {
   const [queryParameters] = useSearchParams();
+
+  const userIdParam: string | null = queryParameters.get("userId");
+  const userId = userIdParam != null ? parseInt(userIdParam) : -1;
 
   const groupIdParam: string | null = queryParameters.get("groupId");
   const groupId = groupIdParam != null ? parseInt(groupIdParam) : -1;
@@ -53,11 +57,14 @@ const ProfessorCodeGeneration = () => {
   const [timer, setTimer] = useState<string>("");
   useEffect(() => {
     function onTimerEvent(value: any) {
-      if (value.id === groupId) {
-        if (value.lectureTimerEventType === "tick") {
-          setTimer(value.lectureTimerCount);
-        } else if (value.lectureTimerEventType === "stop") {
-          setTimer("");
+      if (value && value.session) {
+        const sessionData: ISessionData = JSON.parse(value.session);
+        if (sessionData.userId === userId && sessionData.groupId === groupId) {
+          if (value.lectureTimerEventType === "tick") {
+            setTimer(value.lectureTimerCount);
+          } else if (value.lectureTimerEventType === "stop") {
+            setTimer("");
+          }
         }
       }
     }
@@ -67,7 +74,7 @@ const ProfessorCodeGeneration = () => {
     return () => {
       socket.off("lectureTimerEvent", onTimerEvent);
     };
-  }, [groupId, timer]);
+  }, [groupId, timer, userId]);
 
   const [code, setCode] = useState<string>();
   const initCode = async () => {
@@ -78,11 +85,15 @@ const ProfessorCodeGeneration = () => {
     });
   };
   initCode();
+
   useEffect(() => {
     function onCodeEvent(value: any) {
-      if (value.id === groupId) {
-        setCode(value.lectureCodeValue);
-        setCurrentCodeState(value.lectureCodeEventType);
+      if (value && value.session) {
+        const sessionData: ISessionData = JSON.parse(value.session);
+        if (sessionData.userId === userId && sessionData.groupId === groupId) {
+          setCode(value.lectureCodeValue);
+          setCurrentCodeState(value.lectureCodeEventType);
+        }
       }
     }
 
@@ -91,14 +102,24 @@ const ProfessorCodeGeneration = () => {
     return () => {
       socket.off("lectureCodeEvent", onCodeEvent);
     };
-  }, [groupId, code]);
+  }, [groupId, code, userId]);
 
   const handleGenerateCodeClick = () => {
-    onStartLectureWork(groupId);
+    const sessionData: ISessionData = {
+      userId: userId,
+      groupId: groupId,
+    };
+
+    onStartLectureWork(JSON.stringify(sessionData));
   };
 
   const handleCancelGenerateCodeClick = () => {
-    onCancelLectureWork(groupId);
+    const sessionData: ISessionData = {
+      userId: userId,
+      groupId: groupId,
+    };
+
+    onCancelLectureWork(JSON.stringify(sessionData));
   };
 
   return (

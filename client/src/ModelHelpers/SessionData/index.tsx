@@ -1,4 +1,4 @@
 export interface ISessionData {
-  startedById: number;
+  userId: number;
   groupId: number;
 }

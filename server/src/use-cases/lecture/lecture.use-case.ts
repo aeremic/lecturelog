@@ -50,57 +50,57 @@ export class LectureUseCases {
         return result;
     }
 
-    async removeLectureWork(groupId: any) {
-        try {
-            let lecture = JSON.parse(await this.redisService.get(groupId));
-            if (lecture) {
-                if (lecture.timer) {
-                    clearInterval(lecture.timer);
-                }
-                await this.redisService.delete(groupId);
-            }
-
-            this.messagingGetaway.sendCodeEventToLecture(groupId, CodeEnum.notGenerated);
-            this.messagingGetaway.sendTimerEventToLecture(groupId, TimerEnum.stop);
-        } catch (error) {
-            this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
-        }
-    }
-
-    async saveLectureWork(groupId: any, code: string, timerId: number) {
+    async saveLectureWork(group: any, code: string, timerId: number) {
         try {
             let lecture: LectureEntity = {
-                groupId: groupId,
+                group: group,
                 code: code,
                 timer: timerId
             }
 
-            await this.redisService.set(groupId, lecture);
+            await this.redisService.set(group, lecture);
         } catch (error) {
             this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
         }
     }
 
-    async doLectureWork(groupId: any) {
+    async removeLectureWork(group: any) {
         try {
-            await this.removeLectureWork(groupId);
+            let lecture = JSON.parse(await this.redisService.get(group));
+            if (lecture) {
+                if (lecture.timer) {
+                    clearInterval(lecture.timer);
+                }
+                await this.redisService.delete(group);
+            }
+
+            this.messagingGetaway.sendCodeEventToLecture(group, CodeEnum.notGenerated);
+            this.messagingGetaway.sendTimerEventToLecture(group, TimerEnum.stop);
+        } catch (error) {
+            this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
+        }
+    }
+
+    async doLectureWork(group: any) {
+        try {
+            await this.removeLectureWork(group);
 
             var code = Encoding.generateRandomCode();
-            this.messagingGetaway.sendTimerEventToLecture(groupId, TimerEnum.start);
-            this.messagingGetaway.sendCodeEventToLecture(groupId, CodeEnum.generated, code);
+            this.messagingGetaway.sendTimerEventToLecture(group, TimerEnum.start);
+            this.messagingGetaway.sendCodeEventToLecture(group, CodeEnum.generated, code);
 
             var counter = 60;
             var timer = setInterval(() => {
                 if (counter > 0) {
-                    this.messagingGetaway.sendTimerEventToLecture(groupId, TimerEnum.tick, counter);
+                    this.messagingGetaway.sendTimerEventToLecture(group, TimerEnum.tick, counter);
                     counter--;
                 } else if (counter == 0) {
-                    this.removeLectureWork(groupId);
+                    this.removeLectureWork(group);
                     counter--;
                 }
             }, 1000);
 
-            this.saveLectureWork(groupId, code, timer[Symbol.toPrimitive]());
+            this.saveLectureWork(group, code, timer[Symbol.toPrimitive]());
         } catch (error) {
             this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
         }

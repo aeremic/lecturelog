@@ -1,5 +1,5 @@
 export class LectureEntity {
-    public groupId: number;
+    public group: string;
 
     public code: string;
 

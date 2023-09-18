@@ -3,5 +3,5 @@ export class AssignedGroupDto {
     public name: string;
     public groupId: number;
     public groupNo: number;
-    public startedById: number;
+    public userId: number;
 }

@@ -1,4 +1,4 @@
 export class ActiveSubjectGroup {
-    public startedById: number;
+    public userId: number;
     public groupId: number;
 }

@@ -271,7 +271,7 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
                 subjects.forEach(subject => {
                     if (subject.subjectGroups) {
                         subject.subjectGroups.forEach(group => {
-                            result.push({ subjectId: subject.id, name: subject.name, groupId: group.id, groupNo: group.groupNo, startedById: -1 });
+                            result.push({ subjectId: subject.id, name: subject.name, groupId: group.id, groupNo: group.groupNo, userId: -1 });
                         });
                     }
                 });
@@ -308,7 +308,7 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
                 subjects.forEach(subject => {
                     if (subject.subjectGroups) {
                         subject.subjectGroups.forEach(group => {
-                            result.push({ subjectId: subject.id, name: subject.name, groupId: group.id, groupNo: group.groupNo, startedById: -1 });
+                            result.push({ subjectId: subject.id, name: subject.name, groupId: group.id, groupNo: group.groupNo, userId: -1 });
                         });
                     }
                 });
@@ -328,8 +328,8 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
 
                         result.forEach(group => {
                             parsedActiveSubjectGroups.forEach(activeGroup => {
-                                if (activeGroup && activeGroup.groupId > -1 && activeGroup.groupId === group.groupId && activeGroup.startedById === id) {
-                                    group.startedById = id
+                                if (activeGroup && activeGroup.groupId > -1 && activeGroup.groupId === group.groupId && activeGroup.userId === id) {
+                                    group.userId = id
                                 }
                             })
                         })
