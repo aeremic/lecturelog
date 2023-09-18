@@ -8,6 +8,7 @@ import { SubjectsDto } from 'src/core/dtos/responses/subjects.dto';
 import { ProfessorsGroupsUseCases } from '../professors-groups/professors-groups.use-case';
 import { StudentsGroupsUseCases } from '../students-groups/students-groups.use-case';
 import { LectureUseCases } from '../lecture/lecture.use-case';
+import { ActiveLectureEntity } from 'src/core/entities/active-lecture.entity';
 
 @Injectable()
 export class SubjectUseCases extends GenericUseCases<SubjectEntity>{
@@ -135,9 +136,9 @@ export class SubjectUseCases extends GenericUseCases<SubjectEntity>{
         return result;
     }
 
-    async getActiveGroups(): Promise<Map<string, Set<string>>> {
+    async getActiveGroups(): Promise<ActiveLectureEntity[]> {
         try {
-            return this.lectureUseCases.getAllLectures();
+            return this.lectureUseCases.getActiveLectures();
         } catch (error) {
             this.loggerUseCases.log(ErrorConstants.GetMethodError, error?.message, error?.stack);
         }

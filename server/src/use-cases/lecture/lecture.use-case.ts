@@ -6,6 +6,7 @@ import { CodeEnum } from "src/core/common/enums/code,enum";
 import { Encoding } from "src/core/common/encoding";
 import { LectureEntity } from "src/core/entities/lecture.entity";
 import { RedisService } from "src/services/redis.service";
+import { ActiveLectureEntity } from "src/core/entities/active-lecture.entity";
 
 @Injectable()
 export class LectureUseCases {
@@ -18,8 +19,42 @@ export class LectureUseCases {
     @Inject(LoggerUseCases)
     private loggerUseCases: LoggerUseCases;
 
-    async getAllLectures(): Promise<Map<string, Set<string>>> {
-        return this.messagingGetaway.getAllRooms();
+    getActiveLectures(): ActiveLectureEntity[] {
+        return [...this.messagingGetaway.getAllRooms().keys()]
+            .map(function (key) {
+                try {
+                    return JSON.parse(key);
+                } catch {
+                    return null;
+                }
+            });
+    }
+
+    async saveLecture(group: string) {
+        try {
+            let groups: string[] = JSON.parse(await this.redisService.get("groups"))
+            if (!groups) {
+                groups = []
+            }
+
+            groups.push(group);
+            await this.redisService.set('groups', groups);
+        } catch (error) {
+            this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
+        }
+    }
+
+    async removeLecture(group: string) {
+        try {
+            let groups = JSON.parse(await this.redisService.get("groups"))
+            if (groups) {
+                groups = groups.filter(element => element != group);
+
+                await this.redisService.set('groups', groups);
+            }
+        } catch (error) {
+            this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
+        }
     }
 
     async getLastCodeEventByGroup(group: any): Promise<CodeEnum> {

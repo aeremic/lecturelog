@@ -12,12 +12,15 @@ import {
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import {
   connect,
+  dispose,
+  initialize,
+  listening,
   onStartSession,
   onStopSession,
-  socket,
 } from "../../../../services/Messaging";
 import ActiveGroups from "./ActiveGroups";
 import { ISessionData } from "../../../../modelHelpers/SessionData";
+import { MessagingEvent } from "../../../../models/Enums";
 
 export const Content = () => {
   const navigate = useNavigate();
@@ -55,16 +58,18 @@ export const Content = () => {
   }, [userId, groupsLoaded, lecturesChangeEvents]);
 
   useEffect(() => {
+    connect();
+    initialize(activeGroups);
+
     function onLecturesChange(value: any) {
       setLecturesChangeEvents(lecturesChangeEvents.concat(value));
     }
-
-    socket.on("lecturesChange", onLecturesChange);
+    listening(MessagingEvent.LecturesChange, onLecturesChange);
 
     return () => {
-      socket.off("lecturesChange", onLecturesChange);
+      dispose(MessagingEvent.LecturesChange, onLecturesChange);
     };
-  }, [lecturesChangeEvents]);
+  }, [lecturesChangeEvents, activeGroups]);
 
   const handleStartSession = (groupId: number) => {
     const sessionData: ISessionData = {

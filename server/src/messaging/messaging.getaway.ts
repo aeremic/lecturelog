@@ -34,9 +34,26 @@ export class MessagingGetaway implements OnGatewayConnection, OnGatewayDisconnec
         return this.server.sockets.adapter.rooms;
     }
 
+    @SubscribeMessage(MessagingConstants.InitializeMessage)
+    initialize(@MessageBody() roomIds: any, @ConnectedSocket() client: Socket) {
+        try {
+            // if (roomIds) {
+            //     roomIds.forEach((roomId: string) => {
+            //         client.join(roomId);
+            //     });
+            // }
+        }
+        catch (error) {
+            this.loggerUseCases.log(ErrorConstants.MessagingGetawayError, error?.message, error?.stack);
+        }
+        return undefined;
+    }
+
     @SubscribeMessage(MessagingConstants.CreateLectureMessage)
     createRoom(@MessageBody() roomId: any, @ConnectedSocket() client: Socket) {
         try {
+            this.lectureUseCases.saveLecture(roomId);
+
             client.join(roomId);
             client.broadcast.emit(MessagingConstants.LecturesChangeMessage, { 'lecturesChangeData': roomId })
 
@@ -51,6 +68,9 @@ export class MessagingGetaway implements OnGatewayConnection, OnGatewayDisconnec
     @SubscribeMessage(MessagingConstants.EndLectureMessage)
     endRoom(@MessageBody() roomId: any, @ConnectedSocket() client: Socket) {
         try {
+            this.lectureUseCases.removeLectureWork(roomId);
+            this.lectureUseCases.removeLecture(roomId);
+
             client.broadcast.emit(MessagingConstants.LecturesChangeMessage, { 'lecturesChangeData': roomId })
             client.leave(roomId);
         } catch (error) {

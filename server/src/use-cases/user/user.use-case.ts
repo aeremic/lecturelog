@@ -11,17 +11,14 @@ import { EmailVerificationUseCases } from '../emailverification/email-verificati
 import { EmailVerificationEntity } from 'src/core/entities';
 import { EmailRegistrationDto } from 'src/core/dtos';
 import { ConfigService } from '@nestjs/config';
-import { AuthService } from 'src/auth';
 import { StudentsDto } from 'src/core/dtos/responses/students.dto';
 import { RoleEnum } from 'src/core/common/enums/role.enum';
 import { AllUsersExceptAdminDto } from 'src/core/dtos/responses/all-users-except-admin.dto';
 import { AssignedGroupDto } from 'src/core/dtos/responses/assigned-group.dto';
 import { SubjectUseCases } from '../subject/subject.use-case';
 import { CodeEnum } from 'src/core/common/enums/code,enum';
-import { RedisService } from 'src/services/redis.service';
 import { LectureUseCases } from '../lecture/lecture.use-case';
 import { AvailableGroupDto } from 'src/core/dtos/responses/available-group.dto';
-import { ActiveSubjectGroup } from 'src/core/dtos/responses/active-subject-room.dto';
 
 @Injectable()
 export class UserUseCases extends GenericUseCases<UserEntity>{
@@ -279,10 +276,8 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
                 if (result.length) {
                     let activeSubjectRooms = await this.subjectUseCases.getActiveGroups();
                     if (activeSubjectRooms) {
-                        let parsedActiveSubjectGroups = this.parseActiveSubjectGroups(activeSubjectRooms);
-
                         result = result
-                            .filter(element => !parsedActiveSubjectGroups
+                            .filter(element => !activeSubjectRooms
                                 .map(function (item) {
                                     if (item && item.groupId > -1) {
                                         return item.groupId;
@@ -316,10 +311,8 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
                 if (result.length) {
                     let activeSubjectRooms = await this.subjectUseCases.getActiveGroups();
                     if (activeSubjectRooms) {
-                        let parsedActiveSubjectGroups = this.parseActiveSubjectGroups(activeSubjectRooms);
-
                         result = result
-                            .filter(element => parsedActiveSubjectGroups
+                            .filter(element => activeSubjectRooms
                                 .map(function (activeGroup) {
                                     if (activeGroup && activeGroup.groupId > -1) {
                                         return activeGroup.groupId;
@@ -327,7 +320,7 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
                                 }).includes(element.groupId));
 
                         result.forEach(group => {
-                            parsedActiveSubjectGroups.forEach(activeGroup => {
+                            activeSubjectRooms.forEach(activeGroup => {
                                 if (activeGroup && activeGroup.groupId > -1 && activeGroup.groupId === group.groupId && activeGroup.userId === id) {
                                     group.userId = id
                                 }
@@ -360,10 +353,8 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
                 if (result.length) {
                     let activeSubjectRooms = await this.subjectUseCases.getActiveGroups();
                     if (activeSubjectRooms) {
-                        let parsedActiveSubjectGroups = this.parseActiveSubjectGroups(activeSubjectRooms);
-
                         result = result
-                            .filter(element => !parsedActiveSubjectGroups
+                            .filter(element => !activeSubjectRooms
                                 .map(function (item) {
                                     if (item && item.groupId > -1) {
                                         return item.groupId;
@@ -377,17 +368,6 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
         }
 
         return result;
-    }
-
-    parseActiveSubjectGroups(activeSubjectRooms: Map<string, Set<string>>): ActiveSubjectGroup[] {
-        return [...activeSubjectRooms.keys()]
-            .map(function (key) {
-                try {
-                    return JSON.parse(key);
-                } catch {
-                    return null;
-                }
-            });
     }
 
     async getLastCodeEventByGroup(group: any): Promise<CodeEnum> {

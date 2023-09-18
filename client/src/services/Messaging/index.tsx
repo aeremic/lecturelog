@@ -4,7 +4,7 @@ import { MessagingEnum } from "../../models/Enums";
 import { ISessionData } from "../../modelHelpers/SessionData";
 
 export const socket = io(BASE_URL, {
-  autoConnect: true,
+  autoConnect: false,
 });
 
 export const connect = () => {
@@ -18,6 +18,30 @@ export const connect = () => {
 export const disconnect = () => {
   try {
     socket.disconnect();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const initialize = (activeGroups: any) => {
+  try {
+    socket.emit(MessagingEnum.Initialize, JSON.stringify(activeGroups));
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const listening = (event: string, callback: any) => {
+  try {
+    socket.on(event, callback);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const dispose = (event: string, callback: any) => {
+  try {
+    socket.off(event, callback);
   } catch (err) {
     console.log(err);
   }

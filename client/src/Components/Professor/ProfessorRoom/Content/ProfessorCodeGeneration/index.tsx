@@ -21,9 +21,10 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useEffect, useState } from "react";
 import { CodeGenerationState } from "../../../../../models/Enums";
 import {
+  dispose,
+  listening,
   onCancelLectureWork,
   onStartLectureWork,
-  socket,
 } from "../../../../../services/Messaging";
 import { useSearchParams } from "react-router-dom";
 import { HttpStatusCode } from "axios";
@@ -32,6 +33,10 @@ import {
   getCodeGeneratedState,
 } from "../../../../../services/ProfessorsService";
 import { ISessionData } from "../../../../../modelHelpers/SessionData";
+import {
+  MessagingEvent,
+  LectureTimerEventType,
+} from "../../../../../models/Enums/index";
 
 const ProfessorCodeGeneration = () => {
   const [queryParameters] = useSearchParams();
@@ -86,23 +91,18 @@ const ProfessorCodeGeneration = () => {
       if (value && value.session) {
         const sessionData: ISessionData = JSON.parse(value.session);
         if (sessionData.userId === userId && sessionData.groupId === groupId) {
-          if (value.lectureTimerEventType === "tick") {
+          if (value.lectureTimerEventType === LectureTimerEventType.Tick) {
             setTimer(value.lectureTimerCount);
-          } else if (value.lectureTimerEventType === "stop") {
+          } else if (
+            value.lectureTimerEventType === LectureTimerEventType.Stop
+          ) {
             setTimer("");
           }
         }
       }
     }
+    listening(MessagingEvent.LectureTimerEvent, onTimerEvent);
 
-    socket.on("lectureTimerEvent", onTimerEvent);
-
-    return () => {
-      socket.off("lectureTimerEvent", onTimerEvent);
-    };
-  }, [groupId, timer, userId]);
-
-  useEffect(() => {
     function onCodeEvent(value: any) {
       if (value && value.session) {
         const sessionData: ISessionData = JSON.parse(value.session);
@@ -112,13 +112,13 @@ const ProfessorCodeGeneration = () => {
         }
       }
     }
-
-    socket.on("lectureCodeEvent", onCodeEvent);
+    listening(MessagingEvent.LectureCodeEvent, onCodeEvent);
 
     return () => {
-      socket.off("lectureCodeEvent", onCodeEvent);
+      dispose(MessagingEvent.LectureTimerEvent, onTimerEvent);
+      dispose(MessagingEvent.LectureCodeEvent, onCodeEvent);
     };
-  }, [groupId, userId]);
+  }, [groupId, timer, userId]);
 
   const handleGenerateCodeClick = () => {
     const sessionData: ISessionData = {
