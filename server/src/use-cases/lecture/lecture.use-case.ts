@@ -55,7 +55,7 @@ export class LectureUseCases {
         try {
             let groupsParsed = JSON.parse(groups);
 
-            if (groupsParsed) {
+            if (groupsParsed && groupsParsed.length > 0) {
                 groupsParsed.forEach(group => {
                     let lecture: ActiveLectureEntity = {
                         groupId: group.groupId,

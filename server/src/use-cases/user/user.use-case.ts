@@ -354,7 +354,7 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
                     let activeSubjectRooms = await this.subjectUseCases.getActiveGroups();
                     if (activeSubjectRooms) {
                         result = result
-                            .filter(element => !activeSubjectRooms
+                            .filter(element => activeSubjectRooms
                                 .map(function (item) {
                                     if (item && item.groupId > -1) {
                                         return item.groupId;

@@ -50,6 +50,19 @@ export class MessagingGetaway implements OnGatewayConnection, OnGatewayDisconnec
         return undefined;
     }
 
+    @SubscribeMessage(MessagingConstants.InitializeActiveLectureMessage)
+    initializeActiveLecture(@MessageBody() roomId: any, @ConnectedSocket() client: Socket) {
+        try {
+            if (roomId) {
+                client.join(roomId);
+            }
+        }
+        catch (error) {
+            this.loggerUseCases.log(ErrorConstants.MessagingGetawayError, error?.message, error?.stack);
+        }
+        return undefined;
+    }
+
     @SubscribeMessage(MessagingConstants.CreateLectureMessage)
     createRoom(@MessageBody() roomId: any, @ConnectedSocket() client: Socket) {
         try {

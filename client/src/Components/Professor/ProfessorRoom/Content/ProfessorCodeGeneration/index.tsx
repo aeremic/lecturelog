@@ -24,6 +24,7 @@ import {
   dispose,
   listening,
   onCancelLectureWork,
+  onInitActiveSession,
   onStartLectureWork,
 } from "../../../../../services/MessagingService";
 import { useSearchParams } from "react-router-dom";
@@ -50,13 +51,15 @@ const ProfessorCodeGeneration = () => {
   const [currentCodeState, setCurrentCodeState] = useState<CodeGenerationState>(
     CodeGenerationState.notGenerated
   );
+  const [code, setCode] = useState<string>();
+  // TODO: Refactor below method to use only one method for getting code state and code
   useEffect(() => {
-    const initCodeGeneratedState = async () => {
-      const sessionData: ISessionData = {
-        userId: userId,
-        groupId: groupId,
-      };
+    const sessionData: ISessionData = {
+      userId: userId,
+      groupId: groupId,
+    };
 
+    const initCodeGeneratedState = async () => {
       await getCodeGeneratedState(sessionData).then((res: any) => {
         if (res && res.status === HttpStatusCode.Created && res.data) {
           setCurrentCodeState(res.data);
@@ -64,17 +67,7 @@ const ProfessorCodeGeneration = () => {
       });
     };
 
-    initCodeGeneratedState();
-  }, [currentCodeState, groupId, userId]);
-
-  const [code, setCode] = useState<string>();
-  useEffect(() => {
     const initCode = async () => {
-      const sessionData: ISessionData = {
-        userId: userId,
-        groupId: groupId,
-      };
-
       await getCode(sessionData).then((res: any) => {
         if (res && res.status === HttpStatusCode.Created && res.data) {
           setCode(res.data);
@@ -82,8 +75,10 @@ const ProfessorCodeGeneration = () => {
       });
     };
 
+    initCodeGeneratedState();
     initCode();
-  }, [code, groupId, userId]);
+    onInitActiveSession(sessionData);
+  }, [currentCodeState, code, groupId, userId]);
 
   const [timer, setTimer] = useState<string>("");
   useEffect(() => {

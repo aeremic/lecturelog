@@ -13,7 +13,7 @@ import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import {
   connect,
   dispose,
-  initializeActiveSessions,
+  onInitActiveSessions,
   listening,
   onStartSession,
   onStopSession,
@@ -59,7 +59,7 @@ export const Content = () => {
 
   useEffect(() => {
     connect();
-    initializeActiveSessions(activeGroups);
+    onInitActiveSessions(activeGroups);
 
     function onLecturesChange(value: any) {
       setLecturesChangeEvents(lecturesChangeEvents.concat(value));

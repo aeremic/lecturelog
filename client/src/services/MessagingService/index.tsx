@@ -39,12 +39,20 @@ export const dispose = (event: string, callback: any) => {
   }
 };
 
-export const initializeActiveSessions = (activeGroups: any) => {
+export const onInitActiveSessions = (activeGroups: any) => {
   try {
     socket.emit(
       MessagingEnum.InitializeActiveLectures,
       JSON.stringify(activeGroups)
     );
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const onInitActiveSession = (data: ISessionData) => {
+  try {
+    socket.emit(MessagingEnum.InitializeActiveLecture, JSON.stringify(data));
   } catch (err) {
     console.log(err);
   }
