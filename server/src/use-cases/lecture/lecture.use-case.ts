@@ -22,10 +22,10 @@ export class LectureUseCases {
         return this.messagingGetaway.getAllRooms();
     }
 
-    async getLastCodeEventByGroupId(groupId: number): Promise<CodeEnum> {
+    async getLastCodeEventByGroup(group: any): Promise<CodeEnum> {
         let result: CodeEnum = CodeEnum.notGenerated;
         try {
-            let lecture = JSON.parse(await this.redisService.get(groupId));
+            let lecture = JSON.parse(await this.redisService.get(JSON.stringify(group)));
             if (lecture) {
                 result = CodeEnum.generated;
             }
@@ -36,10 +36,10 @@ export class LectureUseCases {
         return result;
     }
 
-    async getCodeByGroupId(groupId: number): Promise<string> {
+    async getCodeByGroup(group: any): Promise<string> {
         let result: undefined;
         try {
-            let lecture = JSON.parse(await this.redisService.get(groupId));
+            let lecture = JSON.parse(await this.redisService.get(JSON.stringify(group)));
             if (lecture) {
                 result = lecture.code;
             }

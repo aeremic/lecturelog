@@ -9,15 +9,15 @@ export class RedisService {
         @InjectRedis() private readonly redis: Redis
     ) { }
 
-    get(id: number): Promise<any> {
+    get(id: string): Promise<any> {
         return this.redis.call(RedisCommands.GET, id);
     }
 
-    set(id: number, object: any): Promise<any> {
+    set(id: string, object: any): Promise<any> {
         return this.redis.call(RedisCommands.SET, id, '$', JSON.stringify(object));
     }
 
-    delete(id: number): Promise<any> {
+    delete(id: string): Promise<any> {
         return this.redis.call(RedisCommands.DELETE, id);
     }
 }

@@ -1,4 +1,5 @@
-import { get, getById } from "../Common/ServiceBase";
+import { ISessionData } from "../../modelHelpers/SessionData";
+import { get, getById, post } from "../Common/ServiceBase";
 
 const URL = "/professor";
 
@@ -26,17 +27,17 @@ export const getActiveAssignedGroups = async (id: number) => {
   }
 };
 
-export const getCodeGeneratedState = async (groupId: number) => {
+export const getCodeGeneratedState = async (group: ISessionData) => {
   try {
-    return await getById(`${URL}/getLastCodeEventByGroupId`, groupId);
+    return await post(`${URL}/getLastCodeEventByGroup`, group);
   } catch (err) {
     console.log(err); // TODO: Fix for PROD.
   }
 };
 
-export const getCode = async (groupId: number) => {
+export const getCode = async (group: ISessionData) => {
   try {
-    return await getById(`${URL}/getCodeByGroupId`, groupId);
+    return await post(`${URL}/getCodeByGroup`, group);
   } catch (err) {
     console.log(err); // TODO: Fix for PROD.
   }

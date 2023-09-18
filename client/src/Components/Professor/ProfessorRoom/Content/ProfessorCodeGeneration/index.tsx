@@ -45,14 +45,40 @@ const ProfessorCodeGeneration = () => {
   const [currentCodeState, setCurrentCodeState] = useState<CodeGenerationState>(
     CodeGenerationState.notGenerated
   );
-  const initCodeGeneratedState = async () => {
-    await getCodeGeneratedState(groupId).then((res: any) => {
-      if (res && res.status === HttpStatusCode.Ok && res.data) {
-        setCurrentCodeState(res.data);
-      }
-    });
-  };
-  initCodeGeneratedState();
+  useEffect(() => {
+    const initCodeGeneratedState = async () => {
+      const sessionData: ISessionData = {
+        userId: userId,
+        groupId: groupId,
+      };
+
+      await getCodeGeneratedState(sessionData).then((res: any) => {
+        if (res && res.status === HttpStatusCode.Created && res.data) {
+          setCurrentCodeState(res.data);
+        }
+      });
+    };
+
+    initCodeGeneratedState();
+  }, [currentCodeState, groupId, userId]);
+
+  const [code, setCode] = useState<string>();
+  useEffect(() => {
+    const initCode = async () => {
+      const sessionData: ISessionData = {
+        userId: userId,
+        groupId: groupId,
+      };
+
+      await getCode(sessionData).then((res: any) => {
+        if (res && res.status === HttpStatusCode.Created && res.data) {
+          setCode(res.data);
+        }
+      });
+    };
+
+    initCode();
+  }, [code, groupId, userId]);
 
   const [timer, setTimer] = useState<string>("");
   useEffect(() => {
@@ -76,16 +102,6 @@ const ProfessorCodeGeneration = () => {
     };
   }, [groupId, timer, userId]);
 
-  const [code, setCode] = useState<string>();
-  const initCode = async () => {
-    await getCode(groupId).then((res: any) => {
-      if (res && res.status === HttpStatusCode.Ok && res.data) {
-        setCode(res.data);
-      }
-    });
-  };
-  initCode();
-
   useEffect(() => {
     function onCodeEvent(value: any) {
       if (value && value.session) {
@@ -102,7 +118,7 @@ const ProfessorCodeGeneration = () => {
     return () => {
       socket.off("lectureCodeEvent", onCodeEvent);
     };
-  }, [groupId, code, userId]);
+  }, [groupId, userId]);
 
   const handleGenerateCodeClick = () => {
     const sessionData: ISessionData = {
@@ -110,7 +126,7 @@ const ProfessorCodeGeneration = () => {
       groupId: groupId,
     };
 
-    onStartLectureWork(JSON.stringify(sessionData));
+    onStartLectureWork(sessionData);
   };
 
   const handleCancelGenerateCodeClick = () => {
@@ -119,7 +135,7 @@ const ProfessorCodeGeneration = () => {
       groupId: groupId,
     };
 
-    onCancelLectureWork(JSON.stringify(sessionData));
+    onCancelLectureWork(sessionData);
   };
 
   return (

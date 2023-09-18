@@ -390,11 +390,11 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
             });
     }
 
-    async getLastCodeEventByGroupId(id: number): Promise<CodeEnum> {
-        return await this.lectureUseCases.getLastCodeEventByGroupId(id);
+    async getLastCodeEventByGroup(group: any): Promise<CodeEnum> {
+        return await this.lectureUseCases.getLastCodeEventByGroup(group);
     }
 
-    async getCodeByGroupId(id: number): Promise<string> {
-        return await this.lectureUseCases.getCodeByGroupId(id);
+    async getCodeByGroup(group: any): Promise<string> {
+        return await this.lectureUseCases.getCodeByGroup(group);
     }
 }

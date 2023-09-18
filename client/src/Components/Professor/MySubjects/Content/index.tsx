@@ -72,7 +72,7 @@ export const Content = () => {
       groupId: groupId,
     };
 
-    onStartSession(JSON.stringify(sessionData));
+    onStartSession(sessionData);
     navigate(`/professor/room?userId=${userId}&groupId=${groupId}`);
   };
 
@@ -82,7 +82,7 @@ export const Content = () => {
       groupId: groupId,
     };
 
-    onStopSession(JSON.stringify(sessionData));
+    onStopSession(sessionData);
     setGroupsLoaded(false);
   };
 

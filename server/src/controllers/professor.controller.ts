@@ -35,15 +35,15 @@ export class ProfessorController {
 
     @Roles('professor')
     @UseGuards(RoleGuard)
-    @Get('/getLastCodeEventByGroupId/:id')
-    getLastCodeEventByGroupId(@Param('id', ParseIntPipe) id: number): Promise<CodeEnum> {
-        return this.userUseCases.getLastCodeEventByGroupId(id);
+    @Post('/getLastCodeEventByGroup')
+    getLastCodeEventByGroup(@Body() request: any): Promise<CodeEnum> {
+        return this.userUseCases.getLastCodeEventByGroup(request);
     }
 
     @Roles('professor')
     @UseGuards(RoleGuard)
-    @Get('/getCodeByGroupId/:id')
-    getCodeByGroupId(@Param('id', ParseIntPipe) id: number): Promise<string> {
-        return this.userUseCases.getCodeByGroupId(id);
+    @Post('/getCodeByGroup')
+    getCodeByGroup(@Body() request: any): Promise<string> {
+        return this.userUseCases.getCodeByGroup(request);
     }
 }

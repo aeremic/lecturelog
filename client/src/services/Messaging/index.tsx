@@ -1,6 +1,7 @@
 import { io } from "socket.io-client";
 import { BASE_URL } from "../Common";
 import { MessagingEnum } from "../../models/Enums";
+import { ISessionData } from "../../modelHelpers/SessionData";
 
 export const socket = io(BASE_URL, {
   autoConnect: true,
@@ -22,41 +23,41 @@ export const disconnect = () => {
   }
 };
 
-export const onStartSession = (data: any) => {
+export const onStartSession = (data: ISessionData) => {
   try {
-    socket.emit(MessagingEnum.CreateLecture, data);
+    socket.emit(MessagingEnum.CreateLecture, JSON.stringify(data));
   } catch (err) {
     console.log(err);
   }
 };
 
-export const onStopSession = (data: any) => {
+export const onStopSession = (data: ISessionData) => {
   try {
-    socket.emit(MessagingEnum.EndLecture, data);
+    socket.emit(MessagingEnum.EndLecture, JSON.stringify(data));
   } catch (err) {
     console.log(err);
   }
 };
 
-export const onJoinLecture = (data: any) => {
+export const onJoinLecture = (data: ISessionData) => {
   try {
-    socket.emit(MessagingEnum.JoinLecture, data);
+    socket.emit(MessagingEnum.JoinLecture, JSON.stringify(data));
   } catch (err) {
     console.log(err);
   }
 };
 
-export const onStartLectureWork = (data: any) => {
+export const onStartLectureWork = (data: ISessionData) => {
   try {
-    socket.emit(MessagingEnum.StartLectureWork, data);
+    socket.emit(MessagingEnum.StartLectureWork, JSON.stringify(data));
   } catch (err) {
     console.log(err);
   }
 };
 
-export const onCancelLectureWork = (data: any) => {
+export const onCancelLectureWork = (data: ISessionData) => {
   try {
-    socket.emit(MessagingEnum.CancelLectureWork, data);
+    socket.emit(MessagingEnum.CancelLectureWork, JSON.stringify(data));
   } catch (err) {
     console.log(err);
   }
