@@ -138,6 +138,6 @@ export class SubjectUseCases extends GenericUseCases<SubjectEntity>{
     }
 
     async getActiveGroups(): Promise<ActiveLectureEntity[]> {
-        return this.lectureUseCases.getActiveLecturesFromCache();
+        return this.lectureUseCases.getActiveLecturesFromExternalCache();
     }
 }

@@ -19,7 +19,7 @@ export class LectureUseCases {
     @Inject(LoggerUseCases)
     private loggerUseCases: LoggerUseCases;
 
-    getActiveLectures(): ActiveLectureEntity[] {
+    getActiveLecturesFromCache(): ActiveLectureEntity[] {
         return [...this.messagingGetaway.getAllRooms().keys()]
             .map(function (key) {
                 try {
@@ -30,7 +30,7 @@ export class LectureUseCases {
             });
     }
 
-    async getActiveLecturesFromCache(): Promise<ActiveLectureEntity[]> {
+    async getActiveLecturesFromExternalCache(): Promise<ActiveLectureEntity[]> {
         let result: ActiveLectureEntity[] = [];
         try {
             let activeLectures = JSON.parse(await this.redisService.get("groups"));
@@ -68,7 +68,7 @@ export class LectureUseCases {
         try {
             let groups = JSON.parse(await this.redisService.get("groups"))
             if (groups) {
-                groups = groups.filter(element => element != group);
+                groups = groups.filter((element: string) => element != group);
 
                 await this.redisService.set('groups', groups);
             }
