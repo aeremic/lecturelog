@@ -22,6 +22,10 @@ export class MessagingGetaway {
     @Inject(LoggerUseCases)
     private loggerUseCases: LoggerUseCases;
 
+    /**
+     * Get all currently active rooms from server's cache
+     * @returns Currently active rooms as Map<string, Set<string>>
+     */
     getAllRooms() {
         return this.server.sockets.adapter.rooms;
     }
@@ -82,8 +86,6 @@ export class MessagingGetaway {
 
             client.join(group);
             client.broadcast.emit(MessagingConstants.LecturesChangeMessage, { 'lecturesChangeData': group })
-
-            console.log(this.getAllRooms()); // TODO: Remove for PROD.
         }
         catch (error) {
             this.loggerUseCases.log(ErrorConstants.MessagingGetawayError, error?.message, error?.stack);

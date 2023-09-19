@@ -20,7 +20,7 @@ export class LectureUseCases {
     private loggerUseCases: LoggerUseCases;
 
     /**
-     * Gets all active lectures from servers cache
+     * Gets all active lectures from server's cache
      * @returns ActiveLEctureEntity[]
      */
     getActiveLecturesFromCache(): ActiveLectureEntity[] {
