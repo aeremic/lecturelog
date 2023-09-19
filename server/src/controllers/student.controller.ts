@@ -22,6 +22,6 @@ export class StudentController {
     @UseGuards(RoleGuard)
     @Get('/getAvailableGroups/:id')
     getAvailableGroups(@Param('id', ParseIntPipe) id: number): Promise<AvailableGroupDto[]> {
-        return this.userUseCases.getStudentAvailableGroups(id);
+        return this.userUseCases.getStudentAvailableSubjects(id);
     }
 }       

@@ -1,5 +1,6 @@
-import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { SubjectGroup } from './subjectgroup.model';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from './user.model';
+import { StudentsSubjects } from '.';
 
 @Entity()
 export class Subject {
@@ -9,6 +10,9 @@ export class Subject {
     @Column({ type: 'varchar', length: 120 })
     public name: string;
 
-    @OneToMany(() => SubjectGroup, subjectGroup => subjectGroup.subject, { nullable: true, cascade: true })
-    public subjectGroups: SubjectGroup[];
+    @ManyToOne(() => User, professor => professor.subject, { onDelete: 'CASCADE' })
+    public professor: User;
+
+    @OneToMany(() => StudentsSubjects, studentsSubjects => studentsSubjects.subject, { nullable: true })
+    public studentsSubjects!: StudentsSubjects[];
 }

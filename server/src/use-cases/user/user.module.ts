@@ -1,6 +1,6 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ProfessorsSubjectGroups, StudentsSubjectGroups, User, EmailVerification } from 'src/infrastructure/data/models';
+import { User, EmailVerification, StudentsSubjects } from 'src/infrastructure/data/models';
 import { UserUseCases } from './user.use-case';
 import { UserRepository } from 'src/infrastructure/data/repositories/user.repository';
 import { UserRepositoryAbstract } from 'src/core/abstracts/repositories/user.repository.abstract';
@@ -15,7 +15,7 @@ import { LectureModule } from '../lecture/lecture.module';
 import { BcryptModule } from 'src/services/cryptography/bcrypt.module';
 
 @Module({
-    imports: [forwardRef(() => SubjectModule), LoggerModule, MailModule, EmailVerificationModule, BcryptModule, LectureModule, TypeOrmModule.forFeature([User, EmailVerification, StudentsSubjectGroups, ProfessorsSubjectGroups])],
+    imports: [forwardRef(() => SubjectModule), LoggerModule, MailModule, EmailVerificationModule, BcryptModule, LectureModule, TypeOrmModule.forFeature([User, EmailVerification, StudentsSubjects])],
     providers: [
         UserUseCases,
         {

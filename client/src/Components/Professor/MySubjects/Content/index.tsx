@@ -1,14 +1,9 @@
 import { Container, Grid, Typography } from "@mui/material";
 import { MySubjects } from "../../../../resources/Typography";
 import { useEffect, useState } from "react";
-import AssignedGroups from "./AssignedGroups";
-import { IGroup } from "../../../../modelHelpers/Group";
+import { IAssignedSubject } from "../../../../modelHelpers/AssignedSubject";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { HttpStatusCode } from "axios";
-import {
-  getActiveAssignedGroups,
-  getAssignedGroups,
-} from "../../../../services/HttpService/ProfessorsService";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import {
   connect,
@@ -18,9 +13,14 @@ import {
   onStartSession,
   onStopSession,
 } from "../../../../services/MessagingService";
-import ActiveGroups from "./ActiveGroups";
 import { ISessionData } from "../../../../modelHelpers/SessionData";
 import { MessagingEvent } from "../../../../modelHelpers/Enums";
+import ActiveSubjects from "./ActiveSubjects";
+import AssignedSubject from "./AssignedSubjects";
+import {
+  getActiveAssignedSubjects,
+  getAssignedSubjects,
+} from "../../../../services/HttpService/ProfessorsService";
 
 export const Content = () => {
   const navigate = useNavigate();
@@ -29,37 +29,39 @@ export const Content = () => {
   const userIdParam: string | null = queryParameters.get("id");
   const userId = userIdParam != null ? parseInt(userIdParam) : -1;
 
-  const [assignedGroups, setAssignedGroups] = useState<IGroup[]>([]);
-  const [activeGroups, setActiveGroups] = useState<IGroup[]>([]);
+  const [assignedSubjects, setAssignedSubjects] = useState<IAssignedSubject[]>(
+    []
+  );
+  const [activeSubjects, setActiveSubjects] = useState<IAssignedSubject[]>([]);
 
-  const [groupsLoaded, setGroupsLoaded] = useState<boolean>(false);
+  const [SubjectsLoaded, setSubjectsLoaded] = useState<boolean>(false);
 
   const [lecturesChangeEvents, setLecturesChangeEvents] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       if (userId != -1) {
-        await getAssignedGroups(userId).then((res: any) => {
+        await getAssignedSubjects(userId).then((res: any) => {
           if (res && res.status === HttpStatusCode.Ok && res.data) {
-            setAssignedGroups(res.data);
+            setAssignedSubjects(res.data);
           }
         });
 
-        await getActiveAssignedGroups(userId).then((res: any) => {
+        await getActiveAssignedSubjects(userId).then((res: any) => {
           if (res && res.status === HttpStatusCode.Ok && res.data) {
-            setActiveGroups(res.data);
+            setActiveSubjects(res.data);
           }
         });
 
-        setGroupsLoaded(true);
+        setSubjectsLoaded(true);
       }
     };
 
     fetchData();
-  }, [userId, groupsLoaded, lecturesChangeEvents]);
+  }, [userId, SubjectsLoaded, lecturesChangeEvents]);
 
   useEffect(() => {
     connect();
-    joinActiveSessions(activeGroups);
+    joinActiveSessions(activeSubjects);
 
     function onLecturesChange(value: any) {
       setLecturesChangeEvents(lecturesChangeEvents.concat(value));
@@ -69,35 +71,37 @@ export const Content = () => {
     return () => {
       dispose(MessagingEvent.LecturesChange, onLecturesChange);
     };
-  }, [lecturesChangeEvents, activeGroups]);
+  }, [lecturesChangeEvents, activeSubjects]);
 
-  const handleStartSession = (groupId: number) => {
+  const handleStartSession = (subjectId: number) => {
     const sessionData: ISessionData = {
       userId: userId,
-      groupId: groupId,
+      subjectId: subjectId,
     };
 
     onStartSession(sessionData);
-    navigate(`/professor/room?userId=${userId}&groupId=${groupId}`);
+    navigate(`/professor/room?userId=${userId}&subjectId=${subjectId}`);
   };
 
-  const handleStopSession = (groupId: number) => {
+  const handleStopSession = (subjectId: number) => {
     const sessionData: ISessionData = {
       userId: userId,
-      groupId: groupId,
+      subjectId: subjectId,
     };
 
     onStopSession(sessionData);
-    setGroupsLoaded(false);
+    setSubjectsLoaded(false);
   };
 
   const handleSubjectClick = (subjectId: number) => {
     console.log(subjectId);
   };
 
-  const handleSessionClick = (group: IGroup) => {
-    if (group.userId === userId) {
-      navigate(`/professor/room?userId=${userId}&groupId=${group.groupId}`);
+  const handleSessionClick = (subject: IAssignedSubject) => {
+    if (subject.userId === userId) {
+      navigate(
+        `/professor/room?userId=${userId}&subjectId=${subject.subjectId}`
+      );
     }
   };
 
@@ -109,16 +113,16 @@ export const Content = () => {
       </Typography>
       <Grid container spacing={2} sx={{ mt: 2 }}>
         <Grid item xs={6} sx={{ minWidth: 350 }}>
-          <AssignedGroups
-            groupsProp={assignedGroups}
+          <AssignedSubject
+            subjectsProp={assignedSubjects}
             handleStartSession={handleStartSession}
             handleSubjectClick={handleSubjectClick}
           />
         </Grid>
         <Grid item xs={6} sx={{ minWidth: 350 }}>
-          <ActiveGroups
+          <ActiveSubjects
             userId={userId}
-            groupsProp={activeGroups}
+            subjectsProp={activeSubjects}
             handleStopSession={handleStopSession}
             handleSessionClick={handleSessionClick}
           />

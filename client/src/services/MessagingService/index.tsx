@@ -2,7 +2,7 @@ import { io } from "socket.io-client";
 import { BASE_URL } from "../Common";
 import { MessagingEnum } from "../../modelHelpers/Enums";
 import { ISessionData } from "../../modelHelpers/SessionData";
-import { IGroup } from "../../modelHelpers/Group";
+import { IAssignedSubject } from "../../modelHelpers/AssignedSubject";
 
 export const socket = io(BASE_URL, {
   autoConnect: false,
@@ -40,9 +40,9 @@ export const dispose = (event: string, callback: any) => {
   }
 };
 
-export const joinActiveSessions = (activeGroups: IGroup[]) => {
+export const joinActiveSessions = (subjects: IAssignedSubject[]) => {
   try {
-    socket.emit(MessagingEnum.JoinActiveLectures, JSON.stringify(activeGroups));
+    socket.emit(MessagingEnum.JoinActiveLectures, JSON.stringify(subjects));
   } catch (err) {
     console.log(err);
   }

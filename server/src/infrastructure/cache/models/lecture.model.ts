@@ -1,5 +1,5 @@
 export class Lecture {
-    public group: string;
+    public subject: string;
 
     public code: string;
 

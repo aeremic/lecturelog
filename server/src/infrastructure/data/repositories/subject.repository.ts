@@ -55,11 +55,10 @@ export class SubjectRepository implements SubjectRepositoryAbstract {
 
     async getSubject(id: number): Promise<SubjectEntity> {
         let result = await this.subjectModelRepository.createQueryBuilder("subject")
-            .leftJoinAndSelect("subject.subjectGroups", "subjectGroup")
-            .leftJoinAndSelect("subjectGroup.studentsSubjectGroups", "studentsSubjectGroups")
-            .leftJoinAndSelect("studentsSubjectGroups.student", "user1")
-            .leftJoinAndSelect("subjectGroup.professorsSubjectGroups", "professorsSubjectGroups")
-            .leftJoinAndSelect("professorsSubjectGroups.professor", "user2")
+            .leftJoinAndSelect("subject.professor", "professor")
+            .leftJoinAndSelect("professor", "user1")
+            .leftJoinAndSelect("subject.studentsSubjects", "studentsSubjects")
+            .leftJoinAndSelect("studentsSubjects.student", "user2")
             .where("subject.id = :id", { id: id })
             .printSql()
             .getOne()
@@ -68,15 +67,16 @@ export class SubjectRepository implements SubjectRepositoryAbstract {
         return SubjectMapper.ToEntity({
             id: result.id,
             name: result.name,
-            subjectGroups: result.subjectGroups
+            professor: result.professor,
+            studentsSubjects: result.studentsSubjects,
         });
     }
 
     async getSubjectsByProfessorId(id: number): Promise<SubjectEntity[]> {
         let result = await this.subjectModelRepository.createQueryBuilder("subject")
-            .innerJoinAndSelect("subject.subjectGroups", "subjectGroup")
-            .innerJoinAndSelect("subjectGroup.professorsSubjectGroups", "professorsSubjectGroups")
-            .where("professorsSubjectGroups.professorId = :id", { id: id })
+            .leftJoinAndSelect("subject.professor", "professor")
+            .leftJoinAndSelect("professor", "user")
+            .where("user.id = :id", { id: id })
             .printSql()
             .getMany()
 
@@ -85,9 +85,9 @@ export class SubjectRepository implements SubjectRepositoryAbstract {
 
     async getSubjectsByStudentId(id: number): Promise<SubjectEntity[]> {
         let result = await this.subjectModelRepository.createQueryBuilder("subject")
-            .innerJoinAndSelect("subject.subjectGroups", "subjectGroup")
-            .innerJoinAndSelect("subjectGroup.studentsSubjectGroups", "studentsSubjectGroups")
-            .where("studentsSubjectGroups.studentId = :id", { id: id })
+            .innerJoinAndSelect("subject.studentsSubjects", "studentsSubjects")
+            .leftJoinAndSelect("studentsSubjects.student", "user1")
+            .where("user1.id = :id", { id: id })
             .printSql()
             .getMany()
 

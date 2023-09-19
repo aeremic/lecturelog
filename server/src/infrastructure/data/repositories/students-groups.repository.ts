@@ -1,37 +1,37 @@
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
-import { StudentsSubjectGroups } from "../models";
-import { StudentsSubjectGroupsEntity } from "src/core/entities";
-import { StudentsGroupsRepositoryAbstract } from "src/core/abstracts/repositories/students-groups.repository.abstract";
-import { StudentsSubjectGroupsMapper } from "../mappers/students-subjectgroups.mapper";
+import { StudentsSubjectsRepositoryAbstract } from "src/core/abstracts/repositories/students-subjects.repository.abstract";
+import { StudentsSubjects } from "../models";
+import { StudentsSubjectsEntity } from "src/core/entities/students-subjects.entity";
+import { StudentsSubjectsMapper } from "../mappers/students-subjects.mapper";
 
-export class StudentsGroupsRepository implements StudentsGroupsRepositoryAbstract {
-    @InjectRepository(StudentsSubjectGroups)
-    private readonly studentsGroupsRepository: Repository<StudentsSubjectGroups>
+export class StudentsSubjectsRepository implements StudentsSubjectsRepositoryAbstract {
+    @InjectRepository(StudentsSubjects)
+    private readonly StudentsSubjectsRepository: Repository<StudentsSubjects>
 
     //#region Implementation of Generic repository   
 
-    async get(): Promise<StudentsSubjectGroupsEntity[]> {
-        let result = await this.studentsGroupsRepository.find();
+    async get(): Promise<StudentsSubjectsEntity[]> {
+        let result = await this.StudentsSubjectsRepository.find();
 
-        return StudentsSubjectGroupsMapper.ToEntities(result);
+        return StudentsSubjectsMapper.ToEntities(result);
     }
 
-    async getById(id: number): Promise<StudentsSubjectGroupsEntity> {
-        let result = await this.studentsGroupsRepository.findOneBy({ id: id })
+    async getById(id: number): Promise<StudentsSubjectsEntity> {
+        let result = await this.StudentsSubjectsRepository.findOneBy({ id: id })
 
-        return StudentsSubjectGroupsMapper.ToEntity(result);
+        return StudentsSubjectsMapper.ToEntity(result);
     }
 
-    async createOrUpdate(studentsSubjectGroupsEntity: StudentsSubjectGroupsEntity): Promise<StudentsSubjectGroupsEntity> {
-        let studentsSubjectGroupsModel: StudentsSubjectGroups = StudentsSubjectGroupsMapper.ToModel(studentsSubjectGroupsEntity);
-        let result = await this.studentsGroupsRepository.save(studentsSubjectGroupsModel);
+    async createOrUpdate(studentsSubjectsEntity: StudentsSubjectsEntity): Promise<StudentsSubjectsEntity> {
+        let studentsSubjectsModel: StudentsSubjects = StudentsSubjectsMapper.ToModel(studentsSubjectsEntity);
+        let result = await this.StudentsSubjectsRepository.save(studentsSubjectsModel);
 
-        return StudentsSubjectGroupsMapper.ToEntity(result);
+        return StudentsSubjectsMapper.ToEntity(result);
     }
 
     async delete(id: number): Promise<number> {
-        let result = await this.studentsGroupsRepository.delete({ id: id });
+        let result = await this.StudentsSubjectsRepository.delete({ id: id });
 
         return result.affected;
     }

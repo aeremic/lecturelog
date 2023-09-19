@@ -6,7 +6,7 @@ export class LectureMapper {
 
     public static ToEntity(lectureModel: Lecture): LectureEntity {
         let lectureEntity: LectureEntity = {
-            group: lectureModel.group,
+            subject: lectureModel.subject,
             code: lectureModel?.code,
             timer: lectureModel?.timer
         };
@@ -27,7 +27,7 @@ export class LectureMapper {
 
     public static ToModel(lectureEntity: LectureEntity): Lecture {
         let lectureModel: Lecture = {
-            group: lectureEntity.group,
+            subject: lectureEntity.subject,
             code: lectureEntity?.code,
             timer: lectureEntity?.timer,
         };

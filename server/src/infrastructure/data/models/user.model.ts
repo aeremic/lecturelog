@@ -1,8 +1,7 @@
-import { IsString, MaxLength, MinLength } from '@nestjs/class-validator';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { StudentsSubjectGroups } from './students-subjectgroups.model';
-import { ProfessorsSubjectGroups } from './professors-subjectgroups.model';
 import { EmailVerification } from './emailverification.model';
+import { Subject } from './subject.model';
+import { StudentsSubjects } from './students-subjects.model';
 
 @Entity()
 export class User {
@@ -33,11 +32,11 @@ export class User {
   @Column({ type: 'smallint' })
   public role: number
 
-  @OneToMany(() => StudentsSubjectGroups, studentsSubjectGroups => studentsSubjectGroups.student, { nullable: true })
-  public studentsSubjectGroups!: StudentsSubjectGroups[];
+  @OneToMany(() => StudentsSubjects, studentsSubjects => studentsSubjects.student, { nullable: true })
+  public studentsSubjects!: StudentsSubjects[];
 
-  @OneToMany(() => ProfessorsSubjectGroups, professorsSubjectGroups => professorsSubjectGroups.professor, { nullable: true })
-  public professorsSubjectGroups!: ProfessorsSubjectGroups[];
+  @OneToMany(() => Subject, subject => subject.professor, { nullable: true })
+  public subject!: Subject[];
 
   @OneToMany(() => EmailVerification, emailVerification => emailVerification.user, { nullable: true })
   public emailVerifications!: EmailVerification[];

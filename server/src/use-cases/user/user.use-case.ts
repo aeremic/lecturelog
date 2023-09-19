@@ -14,7 +14,7 @@ import { ConfigService } from '@nestjs/config';
 import { StudentsDto } from 'src/core/dtos/responses/students.dto';
 import { RoleEnum } from 'src/core/common/enums/role.enum';
 import { AllUsersExceptAdminDto } from 'src/core/dtos/responses/all-users-except-admin.dto';
-import { AssignedGroupDto } from 'src/core/dtos/responses/assigned-group.dto';
+import { AssignedSubjectDto } from 'src/core/dtos/responses/assigned-group.dto';
 import { SubjectUseCases } from '../subject/subject.use-case';
 import { CodeEnum } from 'src/core/common/enums/code,enum';
 import { LectureUseCases } from '../lecture/lecture.use-case';
@@ -260,30 +260,28 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
         return result;
     }
 
-    async getProfessorAssignedGroups(id: number): Promise<AssignedGroupDto[]> {
-        let result: AssignedGroupDto[];
+    async getProfessorAssignedSubjects(id: number): Promise<AssignedSubjectDto[]> {
+        let result: AssignedSubjectDto[];
         try {
             let subjects = await this.subjectUseCases.getSubjectsByProfessorId(id);
             if (subjects) {
                 result = [];
                 subjects.forEach(subject => {
-                    if (subject.subjectGroups) {
-                        subject.subjectGroups.forEach(group => {
-                            result.push({ subjectId: subject.id, name: subject.name, groupId: group.id, groupNo: group.groupNo, userId: -1 });
-                        });
+                    if (subject) {
+                        result.push({ subjectId: subject.id, name: subject.name, userId: -1 });
                     }
                 });
 
                 if (result.length) {
-                    let activeSubjectRooms = await this.subjectUseCases.getActiveGroups();
+                    let activeSubjectRooms = await this.subjectUseCases.getActiveSubjects();
                     if (activeSubjectRooms) {
                         result = result
                             .filter(element => !activeSubjectRooms
                                 .map(function (item) {
-                                    if (item && item.groupId > -1) {
-                                        return item.groupId;
+                                    if (item && item.subjectId > -1) {
+                                        return item.subjectId;
                                     }
-                                }).includes(element.groupId));
+                                }).includes(element.subjectId));
                     }
                 }
             }
@@ -295,34 +293,32 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
     }
 
     // TODO: Refactor below method to reduce number of array iterations!
-    async getProfessorActiveAssignedGroups(id: number): Promise<AssignedGroupDto[]> {
-        let result: AssignedGroupDto[];
+    async getProfessorActiveAssignedSubjects(id: number): Promise<AssignedSubjectDto[]> {
+        let result: AssignedSubjectDto[];
         try {
             let subjects = await this.subjectUseCases.getSubjectsByProfessorId(id);
             if (subjects) {
                 result = [];
                 subjects.forEach(subject => {
-                    if (subject.subjectGroups) {
-                        subject.subjectGroups.forEach(group => {
-                            result.push({ subjectId: subject.id, name: subject.name, groupId: group.id, groupNo: group.groupNo, userId: -1 });
-                        });
+                    if (subject) {
+                        result.push({ subjectId: subject.id, name: subject.name, userId: -1 });
                     }
                 });
 
                 if (result.length) {
-                    let activeSubjectRooms = await this.subjectUseCases.getActiveGroups();
+                    let activeSubjectRooms = await this.subjectUseCases.getActiveSubjects();
                     if (activeSubjectRooms) {
                         result = result
                             .filter(element => activeSubjectRooms
                                 .map(function (activeGroup) {
-                                    if (activeGroup && activeGroup.groupId > -1) {
-                                        return activeGroup.groupId;
+                                    if (activeGroup && activeGroup.subjectId > -1) {
+                                        return activeGroup.subjectId;
                                     }
-                                }).includes(element.groupId));
+                                }).includes(element.subjectId));
 
                         result.forEach(group => {
                             activeSubjectRooms.forEach(activeGroup => {
-                                if (activeGroup && activeGroup.groupId > -1 && activeGroup.groupId === group.groupId && activeGroup.userId === id) {
+                                if (activeGroup && activeGroup.subjectId > -1 && activeGroup.subjectId === group.subjectId && activeGroup.userId === id) {
                                     group.userId = id
                                 }
                             })
@@ -337,30 +333,28 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
         return result;
     }
 
-    async getStudentAvailableGroups(id: number): Promise<AvailableGroupDto[]> {
+    async getStudentAvailableSubjects(id: number): Promise<AvailableGroupDto[]> {
         let result: AvailableGroupDto[];
         try {
             let subjects = await this.subjectUseCases.getSubjectsByStudentId(id);
             if (subjects) {
                 result = [];
                 subjects.forEach(subject => {
-                    if (subject.subjectGroups) {
-                        subject.subjectGroups.forEach(group => {
-                            result.push({ subjectId: subject.id, name: subject.name, groupId: group.id, groupNo: group.groupNo });
-                        });
+                    if (subject) {
+                        result.push({ subjectId: subject.id, name: subject.name });
                     }
                 });
 
                 if (result.length) {
-                    let activeSubjectRooms = await this.subjectUseCases.getActiveGroups();
+                    let activeSubjectRooms = await this.subjectUseCases.getActiveSubjects();
                     if (activeSubjectRooms) {
                         result = result
                             .filter(element => activeSubjectRooms
                                 .map(function (item) {
-                                    if (item && item.groupId > -1) {
-                                        return item.groupId;
+                                    if (item && item.subjectId > -1) {
+                                        return item.subjectId;
                                     }
-                                }).includes(element.groupId));
+                                }).includes(element.subjectId));
                     }
                 }
             }
@@ -371,11 +365,11 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
         return result;
     }
 
-    async getCodeEventByGroup(group: ActiveLectureEntity): Promise<CodeEnum> {
-        return await this.lectureUseCases.getCodeEventByGroup(group);
+    async getCodeEventByActiveLecture(activeLecture: ActiveLectureEntity): Promise<CodeEnum> {
+        return await this.lectureUseCases.getCodeEventByActiveLecture(activeLecture);
     }
 
-    async getCodeByGroup(group: ActiveLectureEntity): Promise<string> {
-        return await this.lectureUseCases.getCodeByGroup(group);
+    async getCodeByActiveLecture(activeLecture: ActiveLectureEntity): Promise<string> {
+        return await this.lectureUseCases.getCodeByActiveLecture(activeLecture);
     }
 }

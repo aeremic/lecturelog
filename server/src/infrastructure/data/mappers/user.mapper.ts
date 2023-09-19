@@ -48,8 +48,8 @@ export class UserMapper {
             isActivated: userEntity?.isActivated,
             role: userType,
 
-            studentsSubjectGroups: undefined,
-            professorsSubjectGroups: undefined,
+            subject: undefined,
+            studentsSubjects: undefined,
             emailVerifications: undefined
         };
 

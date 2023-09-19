@@ -25,10 +25,10 @@ import convertToRoman from "../../../../functionHelpers/ConvertToRoman";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { IGroup } from "../../../../modelHelpers/Group";
+import { IAssignedSubject } from "../../../../modelHelpers/AssignedSubject";
 import { HttpStatusCode } from "axios";
 import { socket } from "../../../../services/MessagingService";
-import { getAvailableGroups } from "../../../../services/HttpService/StudentsService";
+import { getAvailableSubjects } from "../../../../services/HttpService/StudentsService";
 
 export const Content = () => {
   const navigate = useNavigate();
@@ -37,25 +37,27 @@ export const Content = () => {
   const userIdParam: string | null = queryParameters.get("id");
   const userId = userIdParam != null ? parseInt(userIdParam) : -1;
 
-  const [availableGroups, setAvailableGroups] = useState<IGroup[]>([]);
-  const [groupsLoaded, setGroupsLoaded] = useState<boolean>(false);
+  const [availableSubjects, setAvailableSubjects] = useState<
+    IAssignedSubject[]
+  >([]);
+  const [subjectsLoaded, setSubjectsLoaded] = useState<boolean>(false);
   const [lecturesChangeEvents, setLecturesChangeEvents] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       if (userId != -1) {
-        await getAvailableGroups(userId).then((res: any) => {
+        await getAvailableSubjects(userId).then((res: any) => {
           if (res && res.status === HttpStatusCode.Ok && res.data) {
-            setAvailableGroups(res.data);
+            setAvailableSubjects(res.data);
           }
         });
 
-        setGroupsLoaded(true);
+        setSubjectsLoaded(true);
       }
     };
 
     fetchData();
-  }, [userId, groupsLoaded, lecturesChangeEvents]);
+  }, [userId, subjectsLoaded, lecturesChangeEvents]);
 
   useEffect(() => {
     function onLecturesChange(value: any) {
@@ -69,8 +71,8 @@ export const Content = () => {
     };
   }, [lecturesChangeEvents]);
 
-  const handleSessionClick = (groupId: number) => {
-    console.log(groupId);
+  const handleSessionClick = (subjectId: number) => {
+    console.log(subjectId);
   };
 
   return (
@@ -81,7 +83,7 @@ export const Content = () => {
       sx={{ mt: 2, flexGrow: 1 }}
     >
       <Container component="main">
-        {availableGroups.length > 0 ? (
+        {availableSubjects.length > 0 ? (
           <Stack direction="column">
             <Typography variant="h6">
               <LibraryBooksIcon fontSize="small" sx={{ mr: 0.5 }} />
@@ -113,20 +115,17 @@ export const Content = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {availableGroups.map((group, index) => (
+                  {availableSubjects.map((subject, index) => (
                     <TableRow
                       key={index}
                       hover
-                      onClick={(e) => handleSessionClick(group.groupId)}
+                      onClick={(e) => handleSessionClick(subject.subjectId)}
                       sx={{
                         "&:last-child td, &:last-child th": { border: 0 },
                         cursor: "pointer",
                       }}
                     >
-                      <TableCell align="center">{group.name}</TableCell>
-                      <TableCell align="center">
-                        {convertToRoman(group.groupNo)}
-                      </TableCell>
+                      <TableCell align="center">{subject.name}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

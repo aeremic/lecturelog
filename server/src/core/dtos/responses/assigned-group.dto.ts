@@ -1,7 +1,5 @@
-export class AssignedGroupDto {
+export class AssignedSubjectDto {
     public subjectId: number;
     public name: string;
-    public groupId: number;
-    public groupNo: number;
     public userId: number;
 }

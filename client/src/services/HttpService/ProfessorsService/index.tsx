@@ -11,33 +11,33 @@ export const getProfessors = async (query: string) => {
   }
 };
 
-export const getAssignedGroups = async (id: number) => {
+export const getAssignedSubjects = async (id: number) => {
   try {
-    return await getById(`${URL}/getAssignedGroups`, id);
+    return await getById(`${URL}/getAssignedSubjects`, id);
   } catch (err) {
     console.log(err); // TODO: Fix for PROD.
   }
 };
 
-export const getActiveAssignedGroups = async (id: number) => {
+export const getActiveAssignedSubjects = async (id: number) => {
   try {
-    return await getById(`${URL}/getActiveAssignedGroups`, id);
+    return await getById(`${URL}/getActiveAssignedSubjects`, id);
   } catch (err) {
     console.log(err); // TODO: Fix for PROD.
   }
 };
 
-export const getCodeGeneratedState = async (group: ISessionData) => {
+export const getCodeGeneratedState = async (sessionData: ISessionData) => {
   try {
-    return await post(`${URL}/getCodeEventByGroup`, group);
+    return await post(`${URL}/getCodeEventByActiveLecture`, sessionData);
   } catch (err) {
     console.log(err); // TODO: Fix for PROD.
   }
 };
 
-export const getCode = async (group: ISessionData) => {
+export const getCode = async (sessionData: ISessionData) => {
   try {
-    return await post(`${URL}/getCodeByGroup`, group);
+    return await post(`${URL}/getCodeByActiveLecture`, sessionData);
   } catch (err) {
     console.log(err); // TODO: Fix for PROD.
   }

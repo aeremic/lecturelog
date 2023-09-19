@@ -17,16 +17,15 @@ import TextFieldsIcon from "@mui/icons-material/TextFields";
 import NumbersIcon from "@mui/icons-material/Numbers";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import SmartDisplayIcon from "@mui/icons-material/SmartDisplay";
-import { IAssignedGroupsProps } from "../../../../../modelHelpers/AssignedGroupsProps";
-import { IGroup } from "../../../../../modelHelpers/Group";
-import convertToRoman from "../../../../../functionHelpers/ConvertToRoman";
+import { IAssignedSubject } from "../../../../../modelHelpers/AssignedSubject";
+import { IAssignedSubjectsProps } from "../../../../../modelHelpers/AssignedSubjectsProps";
 
-const AssignedGroups: React.FC<IAssignedGroupsProps> = ({
-  groupsProp,
+const AssignedSubject: React.FC<IAssignedSubjectsProps> = ({
+  subjectsProp,
   handleStartSession,
   handleSubjectClick,
 }) => {
-  const groups: IGroup[] = groupsProp;
+  const subject: IAssignedSubject[] = subjectsProp;
 
   return (
     <Card sx={{ mt: 1 }}>
@@ -65,25 +64,22 @@ const AssignedGroups: React.FC<IAssignedGroupsProps> = ({
               </TableRow>
             </TableHead>
             <TableBody>
-              {groups.map((group, index) => (
+              {subject.map((subject, index) => (
                 <TableRow
                   key={index}
                   hover
-                  onClick={(e) => handleSubjectClick(group.subjectId)}
+                  onClick={(e) => handleSubjectClick(subject.subjectId)}
                   sx={{
                     "&:last-child td, &:last-child th": { border: 0 },
                     cursor: "pointer",
                   }}
                 >
-                  <TableCell align="center">{group.name}</TableCell>
-                  <TableCell align="center">
-                    {convertToRoman(group.groupNo)}
-                  </TableCell>
+                  <TableCell align="center">{subject.name}</TableCell>
                   <TableCell align="center">
                     <Button
                       onClick={(e) => {
                         e.stopPropagation();
-                        handleStartSession(group.groupId);
+                        handleStartSession(subject.subjectId);
                       }}
                       variant="contained"
                       color="success"
@@ -102,4 +98,4 @@ const AssignedGroups: React.FC<IAssignedGroupsProps> = ({
   );
 };
 
-export default AssignedGroups;
+export default AssignedSubject;

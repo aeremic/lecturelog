@@ -14,24 +14,23 @@ import {
 } from "@mui/material";
 import { LiveLectures } from "../../../../../resources/Typography";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
-import NumbersIcon from "@mui/icons-material/Numbers";
 import StopCircleIcon from "@mui/icons-material/StopCircle";
 import PauseIcon from "@mui/icons-material/Pause";
-import { IActiveGroupsProps } from "../../../../../modelHelpers/ActiveGroupsProps";
-import { IGroup } from "../../../../../modelHelpers/Group";
+import { IAssignedSubject } from "../../../../../modelHelpers/AssignedSubject";
 import convertToRoman from "../../../../../functionHelpers/ConvertToRoman";
+import { IActiveSubjectsProps } from "../../../../../modelHelpers/ActiveSubjectsProps";
 
-const ActiveGroups: React.FC<IActiveGroupsProps> = ({
+const ActiveSubjects: React.FC<IActiveSubjectsProps> = ({
   userId,
-  groupsProp,
+  subjectsProp,
   handleStopSession,
   handleSessionClick,
 }) => {
-  const groups: IGroup[] = groupsProp;
+  const subjects: IAssignedSubject[] = subjectsProp;
 
   return (
     <>
-      {groups.length > 0 ? (
+      {subjects.length > 0 ? (
         <Card sx={{ mt: 1 }}>
           <CardContent>
             <Typography variant="h6">{LiveLectures}</Typography>
@@ -56,42 +55,33 @@ const ActiveGroups: React.FC<IActiveGroupsProps> = ({
                     <TableCell align="center">
                       {
                         // @ts-ignore
-                        <NumbersIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
-                      }
-                    </TableCell>
-                    <TableCell align="center">
-                      {
-                        // @ts-ignore
                         <StopCircleIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
                       }
                     </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {groups.map((group, index) => (
+                  {subjects.map((subject, index) => (
                     <TableRow
                       key={index}
                       hover
-                      onClick={(e) => handleSessionClick(group)}
+                      onClick={(e) => handleSessionClick(subject)}
                       sx={{
                         "&:last-child td, &:last-child th": { border: 0 },
                         cursor: "pointer",
                       }}
                     >
-                      <TableCell align="center">{group.name}</TableCell>
-                      <TableCell align="center">
-                        {convertToRoman(group.groupNo)}
-                      </TableCell>
+                      <TableCell align="center">{subject.name}</TableCell>
                       <TableCell align="center">
                         <Button
                           onClick={(e) => {
                             e.stopPropagation();
-                            handleStopSession(group.groupId);
+                            handleStopSession(subject.subjectId);
                           }}
                           variant="contained"
                           color="error"
                           size="small"
-                          disabled={group.userId != userId}
+                          disabled={subject.userId != userId}
                         >
                           <PauseIcon fontSize="small" />
                         </Button>
@@ -110,4 +100,4 @@ const ActiveGroups: React.FC<IActiveGroupsProps> = ({
   );
 };
 
-export default ActiveGroups;
+export default ActiveSubjects;

@@ -45,8 +45,8 @@ const ProfessorCodeGeneration = () => {
   const userIdParam: string | null = queryParameters.get("userId");
   const userId = userIdParam != null ? parseInt(userIdParam) : -1;
 
-  const groupIdParam: string | null = queryParameters.get("groupId");
-  const groupId = groupIdParam != null ? parseInt(groupIdParam) : -1;
+  const subjectIdParam: string | null = queryParameters.get("subjectId");
+  const subjectId = subjectIdParam != null ? parseInt(subjectIdParam) : -1;
 
   const [currentCodeState, setCurrentCodeState] = useState<CodeGenerationState>(
     CodeGenerationState.notGenerated
@@ -56,7 +56,7 @@ const ProfessorCodeGeneration = () => {
   useEffect(() => {
     const sessionData: ISessionData = {
       userId: userId,
-      groupId: groupId,
+      subjectId: subjectId,
     };
 
     const initCodeGeneratedState = async () => {
@@ -78,14 +78,17 @@ const ProfessorCodeGeneration = () => {
     initCodeGeneratedState();
     initCode();
     joinActiveSession(sessionData);
-  }, [currentCodeState, code, groupId, userId]);
+  }, [currentCodeState, code, subjectId, userId]);
 
   const [timer, setTimer] = useState<string>("");
   useEffect(() => {
     function onTimerEvent(value: any) {
       if (value && value.session) {
         const sessionData: ISessionData = JSON.parse(value.session);
-        if (sessionData.userId === userId && sessionData.groupId === groupId) {
+        if (
+          sessionData.userId === userId &&
+          sessionData.subjectId === subjectId
+        ) {
           if (value.lectureTimerEventType === LectureTimerEventType.Tick) {
             setTimer(value.lectureTimerCount);
           } else if (
@@ -101,7 +104,10 @@ const ProfessorCodeGeneration = () => {
     function onCodeEvent(value: any) {
       if (value && value.session) {
         const sessionData: ISessionData = JSON.parse(value.session);
-        if (sessionData.userId === userId && sessionData.groupId === groupId) {
+        if (
+          sessionData.userId === userId &&
+          sessionData.subjectId === subjectId
+        ) {
           setCode(value.lectureCodeValue);
           setCurrentCodeState(value.lectureCodeEventType);
         }
@@ -113,12 +119,12 @@ const ProfessorCodeGeneration = () => {
       dispose(MessagingEvent.LectureTimerEvent, onTimerEvent);
       dispose(MessagingEvent.LectureCodeEvent, onCodeEvent);
     };
-  }, [groupId, timer, userId]);
+  }, [subjectId, timer, userId]);
 
   const handleGenerateCodeClick = () => {
     const sessionData: ISessionData = {
       userId: userId,
-      groupId: groupId,
+      subjectId: subjectId,
     };
 
     onStartLectureWork(sessionData);
@@ -127,7 +133,7 @@ const ProfessorCodeGeneration = () => {
   const handleCancelGenerateCodeClick = () => {
     const sessionData: ISessionData = {
       userId: userId,
-      groupId: groupId,
+      subjectId: subjectId,
     };
 
     onCancelLectureWork(sessionData);

@@ -10,9 +10,9 @@ export const getStudents = async (query: string) => {
   }
 };
 
-export const getAvailableGroups = async (id: number) => {
+export const getAvailableSubjects = async (id: number) => {
   try {
-    return await getById(`${URL}/getAvailableGroups`, id);
+    return await getById(`${URL}/getAvailableSubjects`, id);
   } catch (err) {
     console.log(err); // TODO: Fix for PROD.
   }

@@ -3,7 +3,7 @@ import { UserUseCases } from 'src/use-cases';
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RoleGuard } from 'src/auth/guards/role.guard';
-import { AssignedGroupDto } from 'src/core/dtos/responses/assigned-group.dto';
+import { AssignedSubjectDto } from 'src/core/dtos/responses/assigned-group.dto';
 import { CodeEnum } from 'src/core/common/enums/code,enum';
 
 @UseGuards(AuthGuard('jwt'))
@@ -21,29 +21,29 @@ export class ProfessorController {
 
     @Roles('professor')
     @UseGuards(RoleGuard)
-    @Get('/getAssignedGroups/:id')
-    getAssignedGroups(@Param('id', ParseIntPipe) id: number): Promise<AssignedGroupDto[]> {
-        return this.userUseCases.getProfessorAssignedGroups(id);
+    @Get('/getAssignedSubjects/:id')
+    getAssignedSubjects(@Param('id', ParseIntPipe) id: number): Promise<AssignedSubjectDto[]> {
+        return this.userUseCases.getProfessorAssignedSubjects(id);
     }
 
     @Roles('professor')
     @UseGuards(RoleGuard)
-    @Get('/getActiveAssignedGroups/:id')
-    getActiveAssignedGroups(@Param('id', ParseIntPipe) id: number): Promise<AssignedGroupDto[]> {
-        return this.userUseCases.getProfessorActiveAssignedGroups(id);
+    @Get('/getActiveAssignedSubjects/:id')
+    getActiveAssignedSubjects(@Param('id', ParseIntPipe) id: number): Promise<AssignedSubjectDto[]> {
+        return this.userUseCases.getProfessorActiveAssignedSubjects(id);
     }
 
     @Roles('professor')
     @UseGuards(RoleGuard)
-    @Post('/getCodeEventByGroup')
-    getCodeEventByGroup(@Body() request: any): Promise<CodeEnum> {
-        return this.userUseCases.getCodeEventByGroup(request);
+    @Post('/getCodeEventByActiveLecture')
+    getCodeEventBySubjectKey(@Body() request: any): Promise<CodeEnum> {
+        return this.userUseCases.getCodeEventByActiveLecture(request);
     }
 
     @Roles('professor')
     @UseGuards(RoleGuard)
-    @Post('/getCodeByGroup')
-    getCodeByGroup(@Body() request: any): Promise<string> {
-        return this.userUseCases.getCodeByGroup(request);
+    @Post('/getCodeByActiveLecture')
+    getCodeByActiveLecture(@Body() request: any): Promise<string> {
+        return this.userUseCases.getCodeByActiveLecture(request);
     }
 }

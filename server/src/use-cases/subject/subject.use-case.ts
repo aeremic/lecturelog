@@ -5,8 +5,7 @@ import { GenericUseCases } from '../generic.use-case';
 import { LoggerUseCases } from '../logger/logger.use-case';
 import { ErrorConstants } from 'src/core/common/constants/error.constant';
 import { SubjectsDto } from 'src/core/dtos/responses/subjects.dto';
-import { ProfessorsGroupsUseCases } from '../professors-groups/professors-groups.use-case';
-import { StudentsGroupsUseCases } from '../students-groups/students-groups.use-case';
+import { StudentsSubjectsUseCases } from '../students-subjects/students-subjects.use-case';
 import { LectureUseCases } from '../lecture/lecture.use-case';
 import { ActiveLectureEntity } from 'src/core/entities/active-lecture.entity';
 
@@ -15,11 +14,8 @@ export class SubjectUseCases extends GenericUseCases<SubjectEntity>{
     @Inject(SubjectRepositoryAbstract)
     private subjectRepository: SubjectRepositoryAbstract
 
-    @Inject(ProfessorsGroupsUseCases)
-    private professorsGroupsUseCases: ProfessorsGroupsUseCases;
-
-    @Inject(StudentsGroupsUseCases)
-    private studentsGroupsUseCases: StudentsGroupsUseCases;
+    @Inject(StudentsSubjectsUseCases)
+    private studentsSubjectsUseCases: StudentsSubjectsUseCases;
 
     @Inject(LectureUseCases)
     private lectureUseCases: LectureUseCases;
@@ -70,24 +66,13 @@ export class SubjectUseCases extends GenericUseCases<SubjectEntity>{
         try {
             if (subjectEntity) {
                 result = await super.createOrUpdate(this.subjectRepository, this.loggerUseCases, subjectEntity);
-                if (result.id && result.subjectGroups) {
-                    result.subjectGroups.forEach(group => {
-                        if (group.professors) {
-                            group.professors.forEach(async element => {
-                                await this.professorsGroupsUseCases.createOrUpdate({
-                                    professor: element.professor,
-                                    subjectGroup: group
-                                });
-                            });
-                        }
-
-                        if (group.students) {
-                            group.students.forEach(async element => {
-                                await this.studentsGroupsUseCases.createOrUpdate({
-                                    student: element.student,
-                                    subjectGroup: group,
-                                    sumOfPresencePoints: element.sumOfPresencePoints,
-                                });
+                if (result.id && result.studentsSubjects) {
+                    result.studentsSubjects.forEach(async item => {
+                        if (item) {
+                            await this.studentsSubjectsUseCases.createOrUpdate({
+                                subject: item.subject,
+                                student: item.student,
+                                sumOfPresencePoints: item.sumOfPresencePoints,
                             });
                         }
                     });
@@ -136,7 +121,7 @@ export class SubjectUseCases extends GenericUseCases<SubjectEntity>{
         return result;
     }
 
-    async getActiveGroups(): Promise<ActiveLectureEntity[]> {
+    async getActiveSubjects(): Promise<ActiveLectureEntity[]> {
         return this.lectureUseCases.getActiveLecturesFromExternalCache();
     }
 }

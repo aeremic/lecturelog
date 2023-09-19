@@ -31,17 +31,17 @@ export class MessagingGetaway {
     }
 
     /**
-     * Method for joining given groups
-     * @param stringOfGroups Groups as a string
+     * Method for joining given rooms
+     * @param stringOfSubjectKeys subjects as a string
      * @param client Main object for interacting with a client, provided by Socket.IO
      * @returns undefined
      */
-    @SubscribeMessage(MessagingConstants.JoinActiveLecturesMessage)
-    joinActiveLectures(@MessageBody() stringOfGroups: string, @ConnectedSocket() client: Socket) {
+    @SubscribeMessage(MessagingConstants.JoinActiveRoomsMessage)
+    joinActiveRooms(@MessageBody() stringOfSubjectKeys: string, @ConnectedSocket() client: Socket) {
         try {
-            if (stringOfGroups) {
-                let groups = this.lectureUseCases.parseGroupsToLectures(stringOfGroups);
-                groups.forEach((group) => {
+            if (stringOfSubjectKeys) {
+                let subjects = this.lectureUseCases.parseSubjectKeysToLectures(stringOfSubjectKeys);
+                subjects.forEach((group) => {
                     if (group) {
                         client.join(JSON.stringify(group));
                     }
@@ -55,16 +55,16 @@ export class MessagingGetaway {
     }
 
     /**
-     * Method for joining given group
-     * @param group Group as a string
+     * Method for joining given room
+     * @param room Room as a string
      * @param client Main object for interacting with a client, provided by Socket.IO
      * @returns undefined
      */
-    @SubscribeMessage(MessagingConstants.JoinActiveLectureMessage)
-    async joinActiveLecture(@MessageBody() group: string, @ConnectedSocket() client: Socket) {
+    @SubscribeMessage(MessagingConstants.JoinActiveRoomMessage)
+    async joinActiveRoom(@MessageBody() room: string, @ConnectedSocket() client: Socket) {
         try {
-            if (group) {
-                client.join(group);
+            if (room) {
+                client.join(room);
             }
         }
         catch (error) {
@@ -74,18 +74,18 @@ export class MessagingGetaway {
     }
 
     /**
-     * Create a new group
-     * @param group Group as a string
+     * Create a new room
+     * @param room Room as a string
      * @param client Main object for interacting with a client, provided by Socket.IO
      * @returns undefined
      */
-    @SubscribeMessage(MessagingConstants.CreateLectureMessage)
-    createGroup(@MessageBody() group: string, @ConnectedSocket() client: Socket) {
+    @SubscribeMessage(MessagingConstants.CreateRoomMessage)
+    createRoom(@MessageBody() room: string, @ConnectedSocket() client: Socket) {
         try {
-            this.lectureUseCases.saveLecture(group);
+            this.lectureUseCases.saveLecture(room);
 
-            client.join(group);
-            client.broadcast.emit(MessagingConstants.LecturesChangeMessage, { 'lecturesChangeData': group })
+            client.join(room);
+            client.broadcast.emit(MessagingConstants.LecturesChangeMessage, { 'lecturesChangeData': room })
         }
         catch (error) {
             this.loggerUseCases.log(ErrorConstants.MessagingGetawayError, error?.message, error?.stack);
@@ -94,19 +94,19 @@ export class MessagingGetaway {
     }
 
     /**
-     * Leave a group
-     * @param group Group as a string
+     * Leave a room
+     * @param room Room as a string
      * @param client Main object for interacting with a client, provided by Socket.IO
      * @returns undefined
      */
-    @SubscribeMessage(MessagingConstants.EndLectureMessage)
-    endGroup(@MessageBody() group: string, @ConnectedSocket() client: Socket) {
+    @SubscribeMessage(MessagingConstants.EndRoomMessage)
+    endRoom(@MessageBody() room: string, @ConnectedSocket() client: Socket) {
         try {
-            this.lectureUseCases.removeLectureWork(group);
-            this.lectureUseCases.removeLecture(group);
+            this.lectureUseCases.removeLectureWork(room);
+            this.lectureUseCases.removeLecture(room);
 
-            client.broadcast.emit(MessagingConstants.LecturesChangeMessage, { 'lecturesChangeData': group })
-            client.leave(group);
+            client.broadcast.emit(MessagingConstants.LecturesChangeMessage, { 'lecturesChangeData': room })
+            client.leave(room);
         } catch (error) {
             this.loggerUseCases.log(ErrorConstants.MessagingGetawayError, error?.message, error?.stack);
         }
@@ -114,15 +114,15 @@ export class MessagingGetaway {
     }
 
     /**
-     * Join a group
-     * @param group Group as a string
+     * Join a room
+     * @param room Room as a string
      * @param client Main object for interacting with a client, provided by Socket.IO
      * @returns undefined
      */
-    @SubscribeMessage(MessagingConstants.JoinLectureMessage)
-    joinGroup(@MessageBody() group: string, @ConnectedSocket() client: Socket) {
+    @SubscribeMessage(MessagingConstants.JoinRoomMessage)
+    joinRoom(@MessageBody() room: string, @ConnectedSocket() client: Socket) {
         try {
-            client.join(group);
+            client.join(room);
         }
         catch (error) {
             this.loggerUseCases.log(ErrorConstants.MessagingGetawayError, error?.message, error?.stack);
@@ -132,33 +132,33 @@ export class MessagingGetaway {
 
     /**
      * Trigger lecture work
-     * @param group Group as a string
+     * @param room Room as a string
      * @param client Main object for interacting with a client, provided by Socket.IO
      */
-    @SubscribeMessage(MessagingConstants.StartLectureWorkMessage)
-    startLectureWork(@MessageBody() group: string, @ConnectedSocket() client: Socket) {
-        this.lectureUseCases.doLectureWork(group);
+    @SubscribeMessage(MessagingConstants.StartRoomWorkMessage)
+    startRoomWork(@MessageBody() room: string, @ConnectedSocket() client: Socket) {
+        this.lectureUseCases.doLectureWork(room);
     }
 
     /**
      * Cancell lecture work
-     * @param group Group as a string
+     * @param room Room as a string
      * @param client Main object for interacting with a client, provided by Socket.IO
      */
-    @SubscribeMessage(MessagingConstants.CancelLectureWorkMessage)
-    cancelLectureWork(@MessageBody() group: string, @ConnectedSocket() client: Socket) {
-        this.lectureUseCases.removeLectureWork(group);
+    @SubscribeMessage(MessagingConstants.CancelRoomWorkMessage)
+    cancelRoomWork(@MessageBody() room: string, @ConnectedSocket() client: Socket) {
+        this.lectureUseCases.removeLectureWork(room);
     }
 
     /**
-     * Send code event to clients in given group
-     * @param group Group as a string
+     * Send code event to clients in given room
+     * @param room Room as a string
      * @param client Main object for interacting with a client, provided by Socket.IO
      * @returns undefined
      */
-    sendCodeEventToGroup(group: string, codeEvent: number, code: string = null) {
+    sendCodeEventToRoom(room: string, codeEvent: number, code: string = null) {
         try {
-            this.server.in(group).emit(MessagingConstants.LectureCodeEventMessage, { 'session': group, 'lectureCodeEventType': codeEvent, 'lectureCodeValue': code ?? '' });
+            this.server.in(room).emit(MessagingConstants.LectureCodeEventMessage, { 'session': room, 'lectureCodeEventType': codeEvent, 'lectureCodeValue': code ?? '' });
         } catch (error) {
             this.loggerUseCases.log(ErrorConstants.MessagingGetawayError, error?.message, error?.stack);
         }
@@ -166,14 +166,14 @@ export class MessagingGetaway {
     }
 
     /**
-     * Send timer event to clients in given group
-     * @param group Group as a string
+     * Send timer event to clients in given room
+     * @param room Room as a string
      * @param client Main object for interacting with a client, provided by Socket.IO
      * @returns undefined
      */
-    sendTimerEventToGroup(group: string, timerEvent: string, counter: number = null) {
+    sendTimerEventToRoom(room: string, timerEvent: string, counter: number = null) {
         try {
-            this.server.in(group).emit(MessagingConstants.LectureTimerEventMessage, { 'session': group, 'lectureTimerEventType': timerEvent, 'lectureTimerCount': counter ?? -1 });
+            this.server.in(room).emit(MessagingConstants.LectureTimerEventMessage, { 'session': room, 'lectureTimerEventType': timerEvent, 'lectureTimerCount': counter ?? -1 });
         } catch (error) {
             this.loggerUseCases.log(ErrorConstants.MessagingGetawayError, error?.message, error?.stack);
         }

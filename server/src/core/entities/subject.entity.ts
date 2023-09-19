@@ -1,9 +1,12 @@
-import { SubjectGroupEntity } from "./subjectgroup.entity";
+import { StudentsSubjectsEntity } from "./students-subjects.entity";
+import { UserEntity } from "./user.entity";
 
 export class SubjectEntity {
     public id?: number;
 
     public name: string;
 
-    public subjectGroups: SubjectGroupEntity[];
+    public professor: UserEntity;
+
+    public studentsSubjects: StudentsSubjectsEntity[];
 }

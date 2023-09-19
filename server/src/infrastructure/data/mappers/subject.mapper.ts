@@ -1,6 +1,7 @@
 import { SubjectEntity } from "src/core/entities";
 import { Subject } from "../models";
-import { SubjectGroupMapper } from "./subjectgroup.mapper";
+import { UserMapper } from './user.mapper';
+import { StudentsSubjectsMapper } from "./students-subjects.mapper";
 
 export class SubjectMapper {
 
@@ -8,7 +9,8 @@ export class SubjectMapper {
         let subjectEntity: SubjectEntity = {
             id: subjectModel?.id,
             name: subjectModel?.name,
-            subjectGroups: SubjectGroupMapper.ToEntities(subjectModel?.subjectGroups),
+            professor: UserMapper.ToEntity(subjectModel?.professor),
+            studentsSubjects: StudentsSubjectsMapper.ToEntities(subjectModel?.studentsSubjects),
         };
 
         return subjectEntity;
@@ -29,7 +31,8 @@ export class SubjectMapper {
         let subjectModel: Subject = {
             id: subjectEntity?.id,
             name: subjectEntity?.name,
-            subjectGroups: SubjectGroupMapper.ToModels(subjectEntity?.subjectGroups)
+            professor: UserMapper.ToModel(subjectEntity?.professor),
+            studentsSubjects: StudentsSubjectsMapper.ToModels(subjectEntity?.studentsSubjects)
         };
 
         return subjectModel;

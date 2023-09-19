@@ -40,7 +40,7 @@ export class LectureUseCases {
     async getActiveLecturesFromExternalCache(): Promise<ActiveLectureEntity[]> {
         let result: ActiveLectureEntity[] = [];
         try {
-            let activeLectures = JSON.parse(await this.externalCache.get("groups"));
+            let activeLectures = JSON.parse(await this.externalCache.get("subjects"));
             if (activeLectures) {
                 result = activeLectures.map(function (element: string) {
                     try {
@@ -58,20 +58,20 @@ export class LectureUseCases {
     }
 
     /**
-     * Parse given groups to active lecture entities
-     * @param groups List of groups as a string type
+     * Parse given subjects to active lecture entities
+     * @param subjectKeys List of subjects as a string type
      * @returns 
      */
-    parseGroupsToLectures(groups: string): ActiveLectureEntity[] {
+    parseSubjectKeysToLectures(subjectKeys: string): ActiveLectureEntity[] {
         let result: ActiveLectureEntity[] = []
         try {
-            let groupsParsed = JSON.parse(groups);
+            let subjectsParsed = JSON.parse(subjectKeys);
 
-            if (groupsParsed && groupsParsed.length > 0) {
-                groupsParsed.forEach(group => {
+            if (subjectsParsed && subjectsParsed.length > 0) {
+                subjectsParsed.forEach(subject => {
                     let lecture: ActiveLectureEntity = {
-                        groupId: group.groupId,
-                        userId: group.userId
+                        subjectId: subject.subjectId,
+                        userId: subject.userId
                     }
 
                     result.push(lecture);
@@ -86,17 +86,17 @@ export class LectureUseCases {
 
     /**
      * Save active lecture to external cache
-     * @param group 
+     * @param subjectKey 
      */
-    async saveLecture(group: string) {
+    async saveLecture(subjectKey: string) {
         try {
-            let groups: string[] = JSON.parse(await this.externalCache.get("groups"))
-            if (!groups) {
-                groups = []
+            let subjectKeys: string[] = JSON.parse(await this.externalCache.get("subjects"))
+            if (!subjectKeys) {
+                subjectKeys = []
             }
 
-            groups.push(group);
-            await this.externalCache.set('groups', groups);
+            subjectKeys.push(subjectKey);
+            await this.externalCache.set('subjects', subjectKeys);
         } catch (error) {
             this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
         }
@@ -104,15 +104,15 @@ export class LectureUseCases {
 
     /**
      * Remove active lecture from external cache
-     * @param group 
+     * @param subjectKey 
      */
-    async removeLecture(group: string) {
+    async removeLecture(subjectKey: string) {
         try {
-            let groups = JSON.parse(await this.externalCache.get("groups"))
-            if (groups) {
-                groups = groups.filter((element: string) => element != group);
+            let subjectKeys = JSON.parse(await this.externalCache.get("subjects"))
+            if (subjectKeys) {
+                subjectKeys = subjectKeys.filter((element: string) => element != subjectKey);
 
-                await this.externalCache.set('groups', groups);
+                await this.externalCache.set('subjects', subjectKeys);
             }
         } catch (error) {
             this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
@@ -121,19 +121,19 @@ export class LectureUseCases {
 
     /**
      * Save active lecture work to external cache
-     * @param group 
+     * @param subjectKey 
      * @param code 
      * @param timerId 
      */
-    async saveLectureWork(group: string, code: string, timerId: number) {
+    async saveLectureWork(subjectKey: string, code: string, timerId: number) {
         try {
             let lecture: LectureEntity = {
-                group: group,
+                subject: subjectKey,
                 code: code,
                 timer: timerId
             }
 
-            await this.externalCache.set(group, lecture);
+            await this.externalCache.set(subjectKey, lecture);
         } catch (error) {
             this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
         }
@@ -141,20 +141,20 @@ export class LectureUseCases {
 
     /**
      * Remove active lecture work from external cache
-     * @param group 
+     * @param subjectKey 
      */
-    async removeLectureWork(group: string) {
+    async removeLectureWork(subjectKey: string) {
         try {
-            let lecture = JSON.parse(await this.externalCache.get(group));
+            let lecture = JSON.parse(await this.externalCache.get(subjectKey));
             if (lecture) {
                 if (lecture.timer) {
                     clearInterval(lecture.timer);
                 }
-                await this.externalCache.delete(group);
+                await this.externalCache.delete(subjectKey);
             }
 
-            this.messagingGetaway.sendCodeEventToGroup(group, CodeEnum.notGenerated);
-            this.messagingGetaway.sendTimerEventToGroup(group, TimerEnum.stop);
+            this.messagingGetaway.sendCodeEventToRoom(subjectKey, CodeEnum.notGenerated);
+            this.messagingGetaway.sendTimerEventToRoom(subjectKey, TimerEnum.stop);
         } catch (error) {
             this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
         }
@@ -162,28 +162,28 @@ export class LectureUseCases {
 
     /**
      * Lecture work processing method
-     * @param group 
+     * @param subjectKey 
      */
-    async doLectureWork(group: string) {
+    async doLectureWork(subjectKey: string) {
         try {
-            await this.removeLectureWork(group);
+            await this.removeLectureWork(subjectKey);
 
             var code = Encoding.generateRandomCode();
-            this.messagingGetaway.sendTimerEventToGroup(group, TimerEnum.start);
-            this.messagingGetaway.sendCodeEventToGroup(group, CodeEnum.generated, code);
+            this.messagingGetaway.sendTimerEventToRoom(subjectKey, TimerEnum.start);
+            this.messagingGetaway.sendCodeEventToRoom(subjectKey, CodeEnum.generated, code);
 
             var counter = 60;
             var timer = setInterval(() => {
                 if (counter > 0) {
-                    this.messagingGetaway.sendTimerEventToGroup(group, TimerEnum.tick, counter);
+                    this.messagingGetaway.sendTimerEventToRoom(subjectKey, TimerEnum.tick, counter);
                     counter--;
                 } else if (counter == 0) {
-                    this.removeLectureWork(group);
+                    this.removeLectureWork(subjectKey);
                     counter--;
                 }
             }, 1000);
 
-            this.saveLectureWork(group, code, timer[Symbol.toPrimitive]());
+            this.saveLectureWork(subjectKey, code, timer[Symbol.toPrimitive]());
         } catch (error) {
             this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
         }
@@ -191,13 +191,13 @@ export class LectureUseCases {
 
     /**
      * Get last code event by given active lecture entity
-     * @param group Active lecture for matching code event
+     * @param activeLecture Active lecture for matching code event
      * @returns Promise<CodeEnum>
      */
-    async getCodeEventByGroup(group: ActiveLectureEntity): Promise<CodeEnum> {
+    async getCodeEventByActiveLecture(activeLecture: ActiveLectureEntity): Promise<CodeEnum> {
         let result: CodeEnum = CodeEnum.notGenerated;
         try {
-            let lecture = JSON.parse(await this.externalCache.get(JSON.stringify(group)));
+            let lecture = JSON.parse(await this.externalCache.get(JSON.stringify(activeLecture)));
             if (lecture) {
                 result = CodeEnum.generated;
             }
@@ -210,13 +210,13 @@ export class LectureUseCases {
 
     /**
      * Get last code by given active lecture entity
-     * @param group Active lecture for matching code
+     * @param activeLecture Active lecture for matching code
      * @returns Promise<stirng>
      */
-    async getCodeByGroup(group: ActiveLectureEntity): Promise<string> {
+    async getCodeByActiveLecture(activeLecture: ActiveLectureEntity): Promise<string> {
         let result: undefined;
         try {
-            let lecture = JSON.parse(await this.externalCache.get(JSON.stringify(group)));
+            let lecture = JSON.parse(await this.externalCache.get(JSON.stringify(activeLecture)));
             if (lecture) {
                 result = lecture.code;
             }
