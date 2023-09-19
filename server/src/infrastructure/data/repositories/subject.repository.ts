@@ -55,8 +55,8 @@ export class SubjectRepository implements SubjectRepositoryAbstract {
 
     async getSubject(id: number): Promise<SubjectEntity> {
         let result = await this.subjectModelRepository.createQueryBuilder("subject")
-            .leftJoinAndSelect("subject.professor", "professor")
-            .leftJoinAndSelect("professor", "user1")
+            .innerJoinAndSelect("subject.professor", "professor")
+            .innerJoinAndSelect("professor", "user1")
             .leftJoinAndSelect("subject.studentsSubjects", "studentsSubjects")
             .leftJoinAndSelect("studentsSubjects.student", "user2")
             .where("subject.id = :id", { id: id })
@@ -74,9 +74,8 @@ export class SubjectRepository implements SubjectRepositoryAbstract {
 
     async getSubjectsByProfessorId(id: number): Promise<SubjectEntity[]> {
         let result = await this.subjectModelRepository.createQueryBuilder("subject")
-            .leftJoinAndSelect("subject.professor", "professor")
-            .leftJoinAndSelect("professor", "user")
-            .where("user.id = :id", { id: id })
+            .innerJoinAndSelect("subject.professor", "professor")
+            .where("professor.id = :id", { id: id })
             .printSql()
             .getMany()
 
@@ -85,9 +84,9 @@ export class SubjectRepository implements SubjectRepositoryAbstract {
 
     async getSubjectsByStudentId(id: number): Promise<SubjectEntity[]> {
         let result = await this.subjectModelRepository.createQueryBuilder("subject")
-            .innerJoinAndSelect("subject.studentsSubjects", "studentsSubjects")
-            .leftJoinAndSelect("studentsSubjects.student", "user1")
-            .where("user1.id = :id", { id: id })
+            .leftJoinAndSelect("subject.studentsSubjects", "studentsSubjects")
+            .innerJoinAndSelect("studentsSubjects.student", "user")
+            .where("user.id = :id", { id: id })
             .printSql()
             .getMany()
 

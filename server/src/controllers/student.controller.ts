@@ -20,8 +20,8 @@ export class StudentController {
 
     @Roles('student')
     @UseGuards(RoleGuard)
-    @Get('/getAvailableGroups/:id')
-    getAvailableGroups(@Param('id', ParseIntPipe) id: number): Promise<AvailableGroupDto[]> {
+    @Get('/getAvailableSubjects/:id')
+    getAvailableSubjects(@Param('id', ParseIntPipe) id: number): Promise<AvailableGroupDto[]> {
         return this.userUseCases.getStudentAvailableSubjects(id);
     }
 }       
