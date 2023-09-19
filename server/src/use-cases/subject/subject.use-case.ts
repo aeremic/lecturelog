@@ -9,7 +9,6 @@ import { ProfessorsGroupsUseCases } from '../professors-groups/professors-groups
 import { StudentsGroupsUseCases } from '../students-groups/students-groups.use-case';
 import { LectureUseCases } from '../lecture/lecture.use-case';
 import { ActiveLectureEntity } from 'src/core/entities/active-lecture.entity';
-import { RedisService } from 'src/services/redis.service';
 
 @Injectable()
 export class SubjectUseCases extends GenericUseCases<SubjectEntity>{

@@ -5,19 +5,19 @@ import { TimerEnum } from "src/core/common/enums/timer.enum";
 import { CodeEnum } from "src/core/common/enums/code,enum";
 import { Encoding } from "src/core/common/encoding";
 import { LectureEntity } from "src/core/entities/lecture.entity";
-import { RedisService } from "src/services/redis.service";
 import { ActiveLectureEntity } from "src/core/entities/active-lecture.entity";
+import { ExternalCache } from "src/services/external-cache-service/external-cache.service";
 
 @Injectable()
 export class LectureUseCases {
     @Inject(forwardRef(() => MessagingGetaway))
     private messagingGetaway: MessagingGetaway;
 
-    @Inject(RedisService)
-    private redisService: RedisService;
-
     @Inject(LoggerUseCases)
     private loggerUseCases: LoggerUseCases;
+
+    constructor(private readonly externalCache: ExternalCache) {
+    }
 
     /**
      * Gets all active lectures from server's cache
@@ -41,7 +41,7 @@ export class LectureUseCases {
     async getActiveLecturesFromExternalCache(): Promise<ActiveLectureEntity[]> {
         let result: ActiveLectureEntity[] = [];
         try {
-            let activeLectures = JSON.parse(await this.redisService.get("groups"));
+            let activeLectures = JSON.parse(await this.externalCache.get("groups"));
             if (activeLectures) {
                 result = activeLectures.map(function (element: string) {
                     try {
@@ -91,13 +91,13 @@ export class LectureUseCases {
      */
     async saveLecture(group: string) {
         try {
-            let groups: string[] = JSON.parse(await this.redisService.get("groups"))
+            let groups: string[] = JSON.parse(await this.externalCache.get("groups"))
             if (!groups) {
                 groups = []
             }
 
             groups.push(group);
-            await this.redisService.set('groups', groups);
+            await this.externalCache.set('groups', groups);
         } catch (error) {
             this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
         }
@@ -109,11 +109,11 @@ export class LectureUseCases {
      */
     async removeLecture(group: string) {
         try {
-            let groups = JSON.parse(await this.redisService.get("groups"))
+            let groups = JSON.parse(await this.externalCache.get("groups"))
             if (groups) {
                 groups = groups.filter((element: string) => element != group);
 
-                await this.redisService.set('groups', groups);
+                await this.externalCache.set('groups', groups);
             }
         } catch (error) {
             this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
@@ -134,7 +134,7 @@ export class LectureUseCases {
                 timer: timerId
             }
 
-            await this.redisService.set(group, lecture);
+            await this.externalCache.set(group, lecture);
         } catch (error) {
             this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
         }
@@ -146,12 +146,12 @@ export class LectureUseCases {
      */
     async removeLectureWork(group: string) {
         try {
-            let lecture = JSON.parse(await this.redisService.get(group));
+            let lecture = JSON.parse(await this.externalCache.get(group));
             if (lecture) {
                 if (lecture.timer) {
                     clearInterval(lecture.timer);
                 }
-                await this.redisService.delete(group);
+                await this.externalCache.delete(group);
             }
 
             this.messagingGetaway.sendCodeEventToGroup(group, CodeEnum.notGenerated);
@@ -198,7 +198,7 @@ export class LectureUseCases {
     async getCodeEventByGroup(group: ActiveLectureEntity): Promise<CodeEnum> {
         let result: CodeEnum = CodeEnum.notGenerated;
         try {
-            let lecture = JSON.parse(await this.redisService.get(JSON.stringify(group)));
+            let lecture = JSON.parse(await this.externalCache.get(JSON.stringify(group)));
             if (lecture) {
                 result = CodeEnum.generated;
             }
@@ -217,7 +217,7 @@ export class LectureUseCases {
     async getCodeByGroup(group: ActiveLectureEntity): Promise<string> {
         let result: undefined;
         try {
-            let lecture = JSON.parse(await this.redisService.get(JSON.stringify(group)));
+            let lecture = JSON.parse(await this.externalCache.get(JSON.stringify(group)));
             if (lecture) {
                 result = lecture.code;
             }
