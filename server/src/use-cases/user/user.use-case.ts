@@ -19,6 +19,7 @@ import { SubjectUseCases } from '../subject/subject.use-case';
 import { CodeEnum } from 'src/core/common/enums/code,enum';
 import { LectureUseCases } from '../lecture/lecture.use-case';
 import { AvailableGroupDto } from 'src/core/dtos/responses/available-group.dto';
+import { ActiveLectureEntity } from 'src/core/entities/active-lecture.entity';
 
 @Injectable()
 export class UserUseCases extends GenericUseCases<UserEntity>{
@@ -370,11 +371,11 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
         return result;
     }
 
-    async getLastCodeEventByGroup(group: any): Promise<CodeEnum> {
-        return await this.lectureUseCases.getLastCodeEventByGroup(group);
+    async getCodeEventByGroup(group: ActiveLectureEntity): Promise<CodeEnum> {
+        return await this.lectureUseCases.getCodeEventByGroup(group);
     }
 
-    async getCodeByGroup(group: any): Promise<string> {
+    async getCodeByGroup(group: ActiveLectureEntity): Promise<string> {
         return await this.lectureUseCases.getCodeByGroup(group);
     }
 }

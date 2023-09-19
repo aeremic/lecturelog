@@ -19,6 +19,10 @@ export class LectureUseCases {
     @Inject(LoggerUseCases)
     private loggerUseCases: LoggerUseCases;
 
+    /**
+     * Gets all active lectures from servers cache
+     * @returns ActiveLEctureEntity[]
+     */
     getActiveLecturesFromCache(): ActiveLectureEntity[] {
         return [...this.messagingGetaway.getAllRooms().keys()]
             .map(function (key) {
@@ -30,6 +34,10 @@ export class LectureUseCases {
             });
     }
 
+    /**
+     * Gets all active lectures from external cache
+     * @returns Promise<ActiveLectureEntity[]>
+     */
     async getActiveLecturesFromExternalCache(): Promise<ActiveLectureEntity[]> {
         let result: ActiveLectureEntity[] = [];
         try {
@@ -50,6 +58,11 @@ export class LectureUseCases {
         return result;
     }
 
+    /**
+     * Parse given groups to active lecture entities
+     * @param groups List of groups as a string type
+     * @returns 
+     */
     parseGroupsToLectures(groups: string): ActiveLectureEntity[] {
         let result: ActiveLectureEntity[] = []
         try {
@@ -72,6 +85,10 @@ export class LectureUseCases {
         return result;
     }
 
+    /**
+     * Save active lecture to external cache
+     * @param group 
+     */
     async saveLecture(group: string) {
         try {
             let groups: string[] = JSON.parse(await this.redisService.get("groups"))
@@ -86,6 +103,10 @@ export class LectureUseCases {
         }
     }
 
+    /**
+     * Remove active lecture from external cache
+     * @param group 
+     */
     async removeLecture(group: string) {
         try {
             let groups = JSON.parse(await this.redisService.get("groups"))
@@ -99,49 +120,13 @@ export class LectureUseCases {
         }
     }
 
-    async getLastCodeEventByGroup(group: any): Promise<CodeEnum> {
-        let result: CodeEnum = CodeEnum.notGenerated;
-        try {
-            let lecture = JSON.parse(await this.redisService.get(JSON.stringify(group)));
-            if (lecture) {
-                result = CodeEnum.generated;
-            }
-        } catch (error) {
-            this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
-        }
-
-        return result;
-    }
-
-    async getCodeByGroup(group: any): Promise<string> {
-        let result: undefined;
-        try {
-            let lecture = JSON.parse(await this.redisService.get(JSON.stringify(group)));
-            if (lecture) {
-                result = lecture.code;
-            }
-        } catch (error) {
-            this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
-        }
-
-        return result;
-    }
-
-    async doesLectureExist(group: any): Promise<boolean> {
-        let result: boolean = false;
-        try {
-            let lecture = JSON.parse(await this.redisService.get(group));
-            if (lecture) {
-                result = true;
-            }
-        } catch (error) {
-            this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
-        }
-
-        return result;
-    }
-
-    async saveLectureWork(group: any, code: string, timerId: number) {
+    /**
+     * Save active lecture work to external cache
+     * @param group 
+     * @param code 
+     * @param timerId 
+     */
+    async saveLectureWork(group: string, code: string, timerId: number) {
         try {
             let lecture: LectureEntity = {
                 group: group,
@@ -155,7 +140,11 @@ export class LectureUseCases {
         }
     }
 
-    async removeLectureWork(group: any) {
+    /**
+     * Remove active lecture work from external cache
+     * @param group 
+     */
+    async removeLectureWork(group: string) {
         try {
             let lecture = JSON.parse(await this.redisService.get(group));
             if (lecture) {
@@ -165,25 +154,29 @@ export class LectureUseCases {
                 await this.redisService.delete(group);
             }
 
-            this.messagingGetaway.sendCodeEventToLecture(group, CodeEnum.notGenerated);
-            this.messagingGetaway.sendTimerEventToLecture(group, TimerEnum.stop);
+            this.messagingGetaway.sendCodeEventToGroup(group, CodeEnum.notGenerated);
+            this.messagingGetaway.sendTimerEventToGroup(group, TimerEnum.stop);
         } catch (error) {
             this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
         }
     }
 
-    async doLectureWork(group: any) {
+    /**
+     * Lecture work processing method
+     * @param group 
+     */
+    async doLectureWork(group: string) {
         try {
             await this.removeLectureWork(group);
 
             var code = Encoding.generateRandomCode();
-            this.messagingGetaway.sendTimerEventToLecture(group, TimerEnum.start);
-            this.messagingGetaway.sendCodeEventToLecture(group, CodeEnum.generated, code);
+            this.messagingGetaway.sendTimerEventToGroup(group, TimerEnum.start);
+            this.messagingGetaway.sendCodeEventToGroup(group, CodeEnum.generated, code);
 
             var counter = 60;
             var timer = setInterval(() => {
                 if (counter > 0) {
-                    this.messagingGetaway.sendTimerEventToLecture(group, TimerEnum.tick, counter);
+                    this.messagingGetaway.sendTimerEventToGroup(group, TimerEnum.tick, counter);
                     counter--;
                 } else if (counter == 0) {
                     this.removeLectureWork(group);
@@ -195,5 +188,43 @@ export class LectureUseCases {
         } catch (error) {
             this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
         }
+    }
+
+    /**
+     * Get last code event by given active lecture entity
+     * @param group Active lecture for matching code event
+     * @returns Promise<CodeEnum>
+     */
+    async getCodeEventByGroup(group: ActiveLectureEntity): Promise<CodeEnum> {
+        let result: CodeEnum = CodeEnum.notGenerated;
+        try {
+            let lecture = JSON.parse(await this.redisService.get(JSON.stringify(group)));
+            if (lecture) {
+                result = CodeEnum.generated;
+            }
+        } catch (error) {
+            this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
+        }
+
+        return result;
+    }
+
+    /**
+     * Get last code by given active lecture entity
+     * @param group Active lecture for matching code
+     * @returns Promise<stirng>
+     */
+    async getCodeByGroup(group: ActiveLectureEntity): Promise<string> {
+        let result: undefined;
+        try {
+            let lecture = JSON.parse(await this.redisService.get(JSON.stringify(group)));
+            if (lecture) {
+                result = lecture.code;
+            }
+        } catch (error) {
+            this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
+        }
+
+        return result;
     }
 }

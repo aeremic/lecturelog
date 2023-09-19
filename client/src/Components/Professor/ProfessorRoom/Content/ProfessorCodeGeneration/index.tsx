@@ -24,7 +24,7 @@ import {
   dispose,
   listening,
   onCancelLectureWork,
-  onInitActiveSession,
+  joinActiveSession,
   onStartLectureWork,
 } from "../../../../../services/MessagingService";
 import { useSearchParams } from "react-router-dom";
@@ -77,7 +77,7 @@ const ProfessorCodeGeneration = () => {
 
     initCodeGeneratedState();
     initCode();
-    onInitActiveSession(sessionData);
+    joinActiveSession(sessionData);
   }, [currentCodeState, code, groupId, userId]);
 
   const [timer, setTimer] = useState<string>("");

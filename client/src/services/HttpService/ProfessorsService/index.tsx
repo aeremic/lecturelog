@@ -29,7 +29,7 @@ export const getActiveAssignedGroups = async (id: number) => {
 
 export const getCodeGeneratedState = async (group: ISessionData) => {
   try {
-    return await post(`${URL}/getLastCodeEventByGroup`, group);
+    return await post(`${URL}/getCodeEventByGroup`, group);
   } catch (err) {
     console.log(err); // TODO: Fix for PROD.
   }

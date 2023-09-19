@@ -35,9 +35,9 @@ export class ProfessorController {
 
     @Roles('professor')
     @UseGuards(RoleGuard)
-    @Post('/getLastCodeEventByGroup')
-    getLastCodeEventByGroup(@Body() request: any): Promise<CodeEnum> {
-        return this.userUseCases.getLastCodeEventByGroup(request);
+    @Post('/getCodeEventByGroup')
+    getCodeEventByGroup(@Body() request: any): Promise<CodeEnum> {
+        return this.userUseCases.getCodeEventByGroup(request);
     }
 
     @Roles('professor')
