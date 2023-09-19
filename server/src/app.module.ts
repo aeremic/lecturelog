@@ -8,7 +8,7 @@ import { TypeOrmConfigService } from './infrastructure/data/typeorm.service';
 import { AuthModule } from './auth/auth.module';
 import { LoggerModule } from './use-cases/logger/logger.module';
 import { MailerModule } from '@nestjs-modules/mailer';
-import { MailModule } from './services/mail.module';
+import { MailModule } from './services/mailing/mail.module';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { MessagingModule } from './messaging/messaging.module';
 import { RedisModule } from '@liaoliaots/nestjs-redis';

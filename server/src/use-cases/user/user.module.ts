@@ -8,11 +8,11 @@ import { UserController } from 'src/controllers/user.controller';
 import { LoggerModule } from '../logger/logger.module';
 import { ProfessorController } from 'src/controllers/professor.controller';
 import { StudentController } from 'src/controllers/student.controller';
-import { MailModule } from 'src/services/mail.module';
+import { MailModule } from 'src/services/mailing/mail.module';
 import { EmailVerificationModule } from '../emailverification/email-verification.module';
-import { BcryptModule } from 'src/services/bcrypt.module';
 import { SubjectModule } from '../subject/subject.module';
 import { LectureModule } from '../lecture/lecture.module';
+import { BcryptModule } from 'src/services/cryptography/bcrypt.module';
 
 @Module({
     imports: [forwardRef(() => SubjectModule), LoggerModule, MailModule, EmailVerificationModule, BcryptModule, LectureModule, TypeOrmModule.forFeature([User, EmailVerification, StudentsSubjectGroups, ProfessorsSubjectGroups])],

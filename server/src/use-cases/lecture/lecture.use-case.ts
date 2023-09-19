@@ -6,7 +6,7 @@ import { CodeEnum } from "src/core/common/enums/code,enum";
 import { Encoding } from "src/core/common/encoding";
 import { LectureEntity } from "src/core/entities/lecture.entity";
 import { ActiveLectureEntity } from "src/core/entities/active-lecture.entity";
-import { ExternalCache } from "src/services/external-cache-service/external-cache.service";
+import { ExternalCacheSevice } from "src/services/external-cache/external-cache.service";
 
 @Injectable()
 export class LectureUseCases {
@@ -16,8 +16,7 @@ export class LectureUseCases {
     @Inject(LoggerUseCases)
     private loggerUseCases: LoggerUseCases;
 
-    constructor(private readonly externalCache: ExternalCache) {
-    }
+    constructor(private readonly externalCache: ExternalCacheSevice) { }
 
     /**
      * Gets all active lectures from server's cache

@@ -6,7 +6,7 @@ import { UserModule } from "../use-cases/user/user.module";
 import { LocalStrategy } from "./strategies/local.strategy";
 import { AuthService } from "./auth.service";
 import { JwtStrategy } from "./strategies/jwt.strategy";
-import { BcryptModule } from "src/services/bcrypt.module";
+import { BcryptModule } from "src/services/cryptography/bcrypt.module";
 
 @Module({
     imports: [BcryptModule, UserModule, PassportModule, JwtModule.register({

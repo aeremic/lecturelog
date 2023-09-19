@@ -2,14 +2,13 @@ import { InjectRedis } from "@liaoliaots/nestjs-redis";
 import { Injectable } from "@nestjs/common";
 import Redis from "ioredis";
 import { RedisCommands } from "src/core/common/constants/redis-commands.constant";
-import { ExternalCache } from "./external-cache.service";
+import { ExternalCacheSevice } from "./external-cache.service";
 
 @Injectable()
-export class RedisService implements ExternalCache {
+export class RedisService implements ExternalCacheSevice {
     constructor(
         @InjectRedis() private readonly redis: Redis
-    ) {
-    }
+    ) { }
 
     get(id: string): Promise<any> {
         return this.redis.call(RedisCommands.GET, id);

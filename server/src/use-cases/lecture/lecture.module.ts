@@ -1,16 +1,16 @@
-import { Module, forwardRef } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common'
 import { LectureUseCases } from './lecture.use-case';
 import { LoggerModule } from '../logger/logger.module';
 import { MessagingModule } from 'src/messaging/messaging.module';
-import { ExternalCache } from 'src/services/external-cache-service/external-cache.service';
-import { RedisService } from 'src/services/external-cache-service/redis.service';
+import { RedisService } from 'src/services/external-cache/redis.service';
+import { ExternalCacheSevice } from 'src/services/external-cache/external-cache.service';
 
 @Module({
     imports: [forwardRef(() => MessagingModule), LoggerModule],
     providers: [
         LectureUseCases,
         {
-            provide: ExternalCache,
+            provide: ExternalCacheSevice,
             useClass: RedisService,
         }],
     exports: [LectureUseCases]
