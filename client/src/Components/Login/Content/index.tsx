@@ -93,6 +93,12 @@ const Content = () => {
     }
   };
 
+  const handleRegisterClick = () => {
+    navigate("/register", {
+      replace: false,
+    });
+  };
+
   const handleCloseAlert = (
     event?: React.SyntheticEvent | Event,
     reason?: string
@@ -166,7 +172,7 @@ const Content = () => {
                   <Typography variant="body2" sx={{ mt: 0.4 }}>
                     {DontHaveAnAccount}
                   </Typography>
-                  <Button size="small" href="register">
+                  <Button size="small" onClick={handleRegisterClick}>
                     <Typography variant="body2">{RegisterHere}</Typography>
                   </Button>
                 </Stack>

@@ -18,6 +18,8 @@ import {
   WrongCredentials,
   DidntReceiveAnEmail,
   SendAgain,
+  AlertSuccessfullMessage,
+  Ok,
 } from "../../../resources/Typography";
 import { useForm } from "react-hook-form";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -30,48 +32,35 @@ import {
   getCurrentUserData,
   login,
 } from "../../../services/HttpService/AuthService";
+import { sendEmailVerification } from "../../../services/HttpService/UsersService";
+import ConfirmationDialog from "../../Common/ConfirmationDialog";
 
 const Content = () => {
   const [queryParameters] = useSearchParams();
-  const emailRegistrationSuccess: boolean =
-    queryParameters.get("success") == "true";
-
   const navigate = useNavigate();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<ILoginFormInput>();
+
+  const userIdParam: string | null = queryParameters.get("id");
+  const userId = userIdParam != null ? parseInt(userIdParam) : -1;
+
+  const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
 
   const [openAlert, setOpenAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState<AlertColor>();
 
-  const onSubmit = async (data: ILoginFormInput) => {
-    const res: any = await login(data);
-    if (res) {
-      if (res.status && res.status === HttpStatusCode.Created) {
-        const userData = getCurrentUserData();
-        if (userData.id) {
-          switch (userData.role) {
-            case RoleEnum.Admin:
-              navigate("/admin/users", { replace: true });
-              break;
-            case RoleEnum.Professor:
-              navigate(`/professor/mysubjects?id=${userData.id}`, {
-                replace: true,
-              });
-              break;
-            case RoleEnum.Student:
-              navigate(`/student/availablesubjects?id=${userData.id}`, {
-                replace: true,
-              });
-              break;
-          }
-        }
-      } else if (res.status && res.status === HttpStatusCode.Unauthorized) {
+  const handleSendEmailAgainClick = async () => {
+    if (userId != -1) {
+      const res: any = await sendEmailVerification(userId);
+      if (
+        res &&
+        res.status &&
+        res.status === HttpStatusCode.Created &&
+        res.data
+      ) {
+        setConfirmationDialogOpen(true);
+      } else {
         setAlertType("error");
-        setAlertMessage(WrongCredentials);
+        setAlertMessage(AlertFailureMessage);
         setOpenAlert(true);
       }
     } else {
@@ -79,6 +68,13 @@ const Content = () => {
       setAlertMessage(AlertFailureMessage);
       setOpenAlert(true);
     }
+  };
+
+  const handleConfirmationDialogClose = async (value?: any) => {
+    setConfirmationDialogOpen(false);
+    navigate("/login", {
+      replace: true,
+    });
   };
 
   const handleCloseAlert = (
@@ -113,11 +109,20 @@ const Content = () => {
               <Typography variant="body2" sx={{ mt: 0.4 }}>
                 {DidntReceiveAnEmail}
               </Typography>
-              <Button size="small" href="register">
+              <Button size="small" onClick={handleSendEmailAgainClick}>
                 <Typography variant="body2">{SendAgain}</Typography>
               </Button>
             </Stack>
           </Container>
+          <ConfirmationDialog
+            id="confirmation-subject-menu"
+            keepMounted
+            open={confirmationDialogOpen}
+            title={AlertSuccessfullMessage}
+            positiveAction={Ok}
+            value={-1}
+            onClose={handleConfirmationDialogClose}
+          />{" "}
           <Snackbar
             open={openAlert}
             autoHideDuration={6000}
