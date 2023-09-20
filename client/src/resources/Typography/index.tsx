@@ -46,6 +46,8 @@ export const FirstName = "First Name";
 
 export const LastName = "Last Name";
 
+export const IsActivated = "Is Activated";
+
 export const Remove = "Remove";
 
 export const RemoveUser = "Remove User";
@@ -63,6 +65,8 @@ export const Ok = "Ok";
 export const Add = "Add";
 
 export const Edit = "Edit";
+
+export const SendActivationLink = "Send Activation Link";
 
 export const AddUser = "Add User";
 

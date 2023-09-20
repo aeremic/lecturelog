@@ -22,23 +22,25 @@ import FormatListNumberedIcon from "@mui/icons-material/FormatListNumbered";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import PersonIcon from "@mui/icons-material/Person";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
-import NumbersIcon from "@mui/icons-material/Numbers";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
+import LibraryAddCheckIcon from "@mui/icons-material/LibraryAddCheck";
+import ForwardToInboxIcon from "@mui/icons-material/ForwardToInbox";
 import { getProfessors } from "../../../../../services/HttpService/ProfessorsService";
 import {
   Action,
   Add,
   AddUser,
   AlertFailureMessage,
+  AlertSuccessfullMessage,
   AreYouSure,
   Cancel,
-  Edit,
-  EditUser,
   Email,
   FirstName,
-  Id,
+  IsActivated,
   LastName,
   NoProfessorsFound,
-  Remove,
+  Ok,
   RemoveUser,
   UserAddedSuccessfully,
   UserNotAdded,
@@ -51,7 +53,10 @@ import { RoleEnum } from "../../../../../modelHelpers/Enums";
 import { IUser } from "../../../../../models/User";
 import { HttpStatusCode } from "axios";
 import { IManipulateUser } from "../../../../../modelHelpers/ManipulateUser";
-import { removeUser } from "../../../../../services/HttpService/UsersService";
+import {
+  removeUser,
+  sendEmailVerification,
+} from "../../../../../services/HttpService/UsersService";
 
 const ProfessorsTable = () => {
   const professorsTableInitialState: IUser[] = [
@@ -61,6 +66,7 @@ const ProfessorsTable = () => {
       firstname: "",
       lastname: "",
       role: RoleEnum.Default,
+      isActivated: false,
     },
   ];
 
@@ -86,6 +92,8 @@ const ProfessorsTable = () => {
   const [manipulateUserValue, setManipulateUserValue] = useState(
     manipulateUserInitialState
   );
+
+  const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
 
   const [openAlert, setOpenAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
@@ -120,6 +128,22 @@ const ProfessorsTable = () => {
       rowsPerPage: parseInt(event.target.value, 10),
       page: 0,
     });
+  };
+
+  const handleSendEmailVerificationClick = async (userId: number) => {
+    const res: any = await sendEmailVerification(userId);
+    if (
+      res &&
+      res.status &&
+      res.status === HttpStatusCode.Created &&
+      res.data
+    ) {
+      setConfirmationDialogOpen(true);
+    } else {
+      setAlertType("error");
+      setAlertMessage(AlertFailureMessage);
+      setOpenAlert(true);
+    }
   };
 
   const handleRemoveDialogClick = (index: number) => {
@@ -190,6 +214,10 @@ const ProfessorsTable = () => {
     }
   };
 
+  const handleConfirmationDialogClose = async (value?: any) => {
+    setConfirmationDialogOpen(false);
+  };
+
   const handleCloseAlert = (
     event?: React.SyntheticEvent | Event,
     reason?: string
@@ -218,7 +246,7 @@ const ProfessorsTable = () => {
       {professorsLoaded ? (
         <Box>
           <TableContainer component={Paper} sx={{ mt: 1 }}>
-            <Table size="small" sx={{ minWidth: 290 }}>
+            <Table size="small" sx={{ minWidth: 900 }}>
               <TableHead>
                 <TableRow
                   sx={{
@@ -247,6 +275,13 @@ const ProfessorsTable = () => {
                     {LastName}
                   </TableCell>
                   <TableCell align="center">
+                    <LibraryAddCheckIcon
+                      fontSize="xs"
+                      sx={{ mt: 1, mr: 0.5 }}
+                    />
+                    {IsActivated}
+                  </TableCell>
+                  <TableCell align="center" colSpan={2}>
                     <BorderColorIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
                     {Action}
                   </TableCell>
@@ -265,11 +300,38 @@ const ProfessorsTable = () => {
                     <TableCell align="center">{professor.firstname}</TableCell>
                     <TableCell align="center">{professor.lastname}</TableCell>
                     <TableCell align="center">
+                      {professor.isActivated ? (
+                        <CheckBoxIcon
+                          fontSize="small"
+                          color="primary"
+                          sx={{ mt: 1, mr: 0.5 }}
+                        />
+                      ) : (
+                        <CheckBoxOutlineBlankIcon
+                          fontSize="small"
+                          color="primary"
+                          sx={{ mt: 1, mr: 0.5 }}
+                        />
+                      )}
+                    </TableCell>
+                    <TableCell align="center">
+                      <Button
+                        onClick={() => {
+                          handleSendEmailVerificationClick(professor.id);
+                        }}
+                        variant="contained"
+                        color="info"
+                        size="small"
+                      >
+                        <ForwardToInboxIcon />
+                      </Button>
+                    </TableCell>
+                    <TableCell align="center">
                       <Button
                         onClick={() => {
                           handleRemoveDialogClick(professor.id);
                         }}
-                        variant="outlined"
+                        variant="contained"
                         color="error"
                         size="small"
                       >
@@ -295,6 +357,15 @@ const ProfessorsTable = () => {
       ) : (
         <Typography>{NoProfessorsFound}</Typography>
       )}
+      <ConfirmationDialog
+        id="confirmation-subject-menu"
+        keepMounted
+        open={confirmationDialogOpen}
+        title={AlertSuccessfullMessage}
+        positiveAction={Ok}
+        value={-1}
+        onClose={handleConfirmationDialogClose}
+      />
       <ConfirmationDialog
         id="remove-professor-menu"
         keepMounted

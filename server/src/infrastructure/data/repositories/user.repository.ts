@@ -51,17 +51,9 @@ export class UserRepository implements UserRepositoryAbstract {
         return UserMapper.ToEntity(result);
     }
 
-    async getActivatedByEmail(email: string): Promise<UserEntity> {
-        let result = await this.userModelRepository.findOneBy({
-            email: email, isActivated: true
-        });
-
-        return UserMapper.ToEntity(result);
-    }
-
-    async getActivatedByEmailOrIndex(email: string, index: number, year: number): Promise<UserEntity> {
+    async getByEmailOrIndex(email: string, index: number, year: number): Promise<UserEntity> {
         let result = await this.userModelRepository.findOne({
-            where: [{ email: email, isActivated: true }, { index: index, year: year, isActivated: true }],
+            where: [{ email: email }, { index: index, year: year }],
         });
 
         return UserMapper.ToEntity(result);
@@ -69,7 +61,7 @@ export class UserRepository implements UserRepositoryAbstract {
 
     async getProfessors(size: number, skip: number): Promise<UserEntity[]> {
         let result = await this.userModelRepository.find({
-            where: { isActivated: true, role: UserMapper.getType(RoleEnum.professor) }, order: { email: "ASC" },
+            where: { role: UserMapper.getType(RoleEnum.professor) }, order: { email: "ASC" },
             take: size,
             skip: skip
         });
@@ -79,7 +71,7 @@ export class UserRepository implements UserRepositoryAbstract {
 
     async getProfessorsCount(): Promise<number> {
         let result = await this.userModelRepository.count({
-            where: { isActivated: true, role: UserMapper.getType(RoleEnum.professor) }
+            where: { role: UserMapper.getType(RoleEnum.professor) }
         })
 
         return result;
@@ -87,7 +79,7 @@ export class UserRepository implements UserRepositoryAbstract {
 
     async getStudents(size: number, skip: number): Promise<UserEntity[]> {
         let result = await this.userModelRepository.find({
-            where: { isActivated: true, role: UserMapper.getType(RoleEnum.student) }, order: { email: "ASC" },
+            where: { role: UserMapper.getType(RoleEnum.student) }, order: { email: "ASC" },
             take: size,
             skip: skip
         });
@@ -97,7 +89,7 @@ export class UserRepository implements UserRepositoryAbstract {
 
     async getStudentsCount(): Promise<number> {
         let result = await this.userModelRepository.count({
-            where: { isActivated: true, role: UserMapper.getType(RoleEnum.student) }
+            where: { role: UserMapper.getType(RoleEnum.student) }
         })
 
         return result;
@@ -106,8 +98,8 @@ export class UserRepository implements UserRepositoryAbstract {
     async getAllExceptAdmin(): Promise<UserEntity[]> {
         let result = await this.userModelRepository.find({
             where: [
-                { isActivated: true, role: UserMapper.getType(RoleEnum.professor) },
-                { isActivated: true, role: UserMapper.getType(RoleEnum.student) }
+                { role: UserMapper.getType(RoleEnum.professor) },
+                { role: UserMapper.getType(RoleEnum.student) }
             ],
             order: { email: "ASC" }
         });

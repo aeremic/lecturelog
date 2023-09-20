@@ -8,9 +8,7 @@ export abstract class UserRepositoryAbstract extends GenericRepositoryAbstract<U
 
     abstract getByEmail(email: string): Promise<UserEntity>;
 
-    abstract getActivatedByEmail(email: string): Promise<UserEntity>;
-
-    abstract getActivatedByEmailOrIndex(email: string, index: number, year: number): Promise<UserEntity>;
+    abstract getByEmailOrIndex(email: string, index: number, year: number): Promise<UserEntity>;
 
     abstract getProfessors(size: number, skip: number): Promise<UserEntity[]>;
 

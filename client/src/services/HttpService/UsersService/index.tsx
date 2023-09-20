@@ -28,6 +28,14 @@ export const createUser = async (data: IUser) => {
   }
 };
 
+export const sendEmailVerification = async (userId: number) => {
+  try {
+    return await post(`${URL}/sendEmailVerification`, { userId: userId });
+  } catch (err) {
+    console.log(err); // TODO: Fix for PROD.
+  }
+};
+
 export const emailRegistration = async (data: IEmailRegistration) => {
   try {
     return await post(`${URL}/emailRegistration`, data);

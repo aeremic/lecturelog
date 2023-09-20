@@ -8,4 +8,5 @@ export interface IUser {
   role: RoleEnum;
   index?: number | null;
   year?: number | null;
+  isActivated: boolean;
 }

@@ -5,6 +5,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RoleGuard } from 'src/auth/guards/role.guard';
 import { EmailRegistrationDto } from 'src/core/dtos';
+import { SendEmailVerificationDto } from 'src/core/dtos/requests/send-email-verification.dto';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('api/user')
@@ -52,6 +53,13 @@ export class UserController {
     @Post('/createUser')
     createUser(@Body() userEntity: any): Promise<UserEntity> {
         return this.userUseCases.createUser(userEntity)
+    }
+
+    @Roles('admin', 'professor', 'student')
+    @UseGuards(RoleGuard)
+    @Post('/sendEmailVerification')
+    sendEmailVerification(@Body() sendEmailVerificationDto: SendEmailVerificationDto): Promise<boolean> {
+        return this.userUseCases.sendEmailVerification(sendEmailVerificationDto)
     }
 
     @Roles('admin', 'professor', 'student')

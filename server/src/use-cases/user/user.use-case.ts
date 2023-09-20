@@ -20,6 +20,7 @@ import { CodeEnum } from 'src/core/common/enums/code,enum';
 import { LectureUseCases } from '../lecture/lecture.use-case';
 import { AvailableGroupDto } from 'src/core/dtos/responses/available-group.dto';
 import { ActiveLectureEntity } from 'src/core/entities/active-lecture.entity';
+import { SendEmailVerificationDto } from '../../core/dtos/requests/send-email-verification.dto';
 
 @Injectable()
 export class UserUseCases extends GenericUseCases<UserEntity>{
@@ -96,17 +97,11 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
         return result;
     }
 
-    getActivatedAdmin = async (userEntity: UserEntity): Promise<UserEntity> =>
-        this.getActivatedByEmail(userEntity);
-
-    getActivatedProfessor = async (userEntity: UserEntity): Promise<UserEntity> =>
-        this.getActivatedByEmail(userEntity);
-
-    getActivatedStudent = async (userEntity: UserEntity): Promise<UserEntity> => {
+    async getByUserEmail(userEntity: UserEntity): Promise<UserEntity> {
         let result: UserEntity | PromiseLike<UserEntity>;
         try {
-            if (userEntity.email && userEntity.index && userEntity.year) {
-                result = await this.userRepository.getActivatedByEmailOrIndex(userEntity.email, userEntity.index, userEntity.year);
+            if (userEntity.email) {
+                result = await this.userRepository.getByEmail(userEntity.email);
             }
         } catch (error) {
             this.loggerUseCases.log(ErrorConstants.GetMethodError, error?.message, error?.stack);
@@ -115,11 +110,17 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
         return result;
     }
 
-    async getActivatedByEmail(userEntity: UserEntity): Promise<UserEntity> {
+    getAdmin = async (userEntity: UserEntity): Promise<UserEntity> =>
+        this.getByUserEmail(userEntity);
+
+    getProfessor = async (userEntity: UserEntity): Promise<UserEntity> =>
+        this.getByUserEmail(userEntity);
+
+    getStudent = async (userEntity: UserEntity): Promise<UserEntity> => {
         let result: UserEntity | PromiseLike<UserEntity>;
         try {
-            if (userEntity.email) {
-                result = await this.userRepository.getActivatedByEmail(userEntity.email);
+            if (userEntity.email && userEntity.index && userEntity.year) {
+                result = await this.userRepository.getByEmailOrIndex(userEntity.email, userEntity.index, userEntity.year);
             }
         } catch (error) {
             this.loggerUseCases.log(ErrorConstants.GetMethodError, error?.message, error?.stack);
@@ -170,22 +171,34 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
         return result;
     }
 
-    async getActivatedUser(userEntity: UserEntity, getActivatedUserFunc: (userEntity: UserEntity) => Promise<UserEntity>): Promise<UserEntity> {
-        return await getActivatedUserFunc(userEntity);
+    async getUser(userEntity: UserEntity, getUserFunc: (userEntity: UserEntity) => Promise<UserEntity>): Promise<UserEntity> {
+        return await getUserFunc(userEntity);
     }
 
-    async checkIfActiveUserNotFound(userEntity: UserEntity): Promise<Boolean> {
-        let activatedUserInDb: UserEntity = null;
+    async checkIfUserExist(userEntity: UserEntity): Promise<Boolean> {
+        let userInDb: UserEntity = null;
 
         if (userEntity.role === RoleEnum.student) {
-            activatedUserInDb = await this.getActivatedUser(userEntity, this.getActivatedStudent);
+            userInDb = await this.getUser(userEntity, this.getStudent);
         } else if (userEntity.role === RoleEnum.professor) {
-            activatedUserInDb = await this.getActivatedUser(userEntity, this.getActivatedProfessor);
+            userInDb = await this.getUser(userEntity, this.getProfessor);
         } else if (userEntity.role === RoleEnum.admin) {
-            activatedUserInDb = await this.getActivatedUser(userEntity, this.getActivatedAdmin);
+            userInDb = await this.getUser(userEntity, this.getAdmin);
         }
 
-        return !this.isFound(activatedUserInDb);
+        return this.isFound(userInDb);
+    }
+
+    async generateAndSendEmailVerificationCode(userEntity: UserEntity) {
+        if (this.isFound(userEntity)) {
+            let code = Encoding.generateRandomPassword();
+
+            // TODO: Remove comment for PROD
+            // await this.mailService.sendRegistrationMail(userEntity.id, userEntity.email, userEntity.firstname, code);
+
+            await this.emailVerificationUseCases.invalidPreviousEmailValidation(userEntity.email);
+            await this.emailVerificationUseCases.createValidation(userEntity.id, userEntity.email, code);
+        }
     }
 
     async createUser(userEntity: UserEntity): Promise<UserEntity> {
@@ -193,22 +206,29 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
         let result: UserEntity | PromiseLike<UserEntity>;
 
         try {
-            if (await this.checkIfActiveUserNotFound(userEntity)) {
+            if (!await this.checkIfUserExist(userEntity)) {
                 userEntity.isActivated = false;
+
                 result = await super.createOrUpdate(this.userRepository, this.loggerUseCases, userEntity);
-
-                if (this.isFound(result)) {
-                    let code = Encoding.generateRandomPassword();
-
-                    // TODO: Remove comment for PROD
-                    // await this.mailService.sendRegistrationMail(result.id, result.email, result.firstname, code);
-
-                    await this.emailVerificationUseCases.invalidPreviousEmailValidation(result.email);
-                    await this.emailVerificationUseCases.createValidation(result.id, result.email, code);
-                }
+                this.generateAndSendEmailVerificationCode(result);
             }
         } catch (error) {
             this.loggerUseCases.log(ErrorConstants.GetMethodError, error?.message, error?.stack);
+        }
+
+        return result;
+    }
+
+    async sendEmailVerification(sendEmailVerificationDto: SendEmailVerificationDto): Promise<boolean> {
+        let result: boolean | PromiseLike<boolean> = false;
+
+        try {
+            let userInDb = await this.getById(sendEmailVerificationDto.userId);
+            this.generateAndSendEmailVerificationCode(userInDb);
+
+            result = true;
+        } catch (error) {
+            this.loggerUseCases.log(ErrorConstants.PostMethodError, error?.message, error?.stack);
         }
 
         return result;

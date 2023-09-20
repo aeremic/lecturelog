@@ -21,14 +21,18 @@ import {
   Add,
   AddUser,
   AlertFailureMessage,
+  AlertSuccessfullMessage,
   AreYouSure,
   Cancel,
   Email,
   FirstName,
   Index,
+  IsActivated,
   LastName,
   NoStudentsFound,
+  Ok,
   RemoveUser,
+  SendActivationLink,
   UserAddedSuccessfully,
   UserNotAdded,
   UserSuccessfullyRemoved,
@@ -46,9 +50,16 @@ import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import PersonIcon from "@mui/icons-material/Person";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import ContactPageIcon from "@mui/icons-material/ContactPage";
+import LibraryAddCheckIcon from "@mui/icons-material/LibraryAddCheck";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
+import ForwardToInboxIcon from "@mui/icons-material/ForwardToInbox";
 import { IManipulateUser } from "../../../../../modelHelpers/ManipulateUser";
 import { getStudents } from "../../../../../services/HttpService/StudentsService";
-import { removeUser } from "../../../../../services/HttpService/UsersService";
+import {
+  removeUser,
+  sendEmailVerification,
+} from "../../../../../services/HttpService/UsersService";
 
 const StudentsTable = () => {
   const studentsTablleInitialState: IUser[] = [
@@ -60,6 +71,7 @@ const StudentsTable = () => {
       role: RoleEnum.Default,
       index: null,
       year: null,
+      isActivated: false,
     },
   ];
 
@@ -84,6 +96,8 @@ const StudentsTable = () => {
   const [manipulateUserValue, setManipulateUserValue] = useState(
     manipulateUserInitialState
   );
+
+  const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
 
   const [openAlert, setOpenAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
@@ -118,6 +132,22 @@ const StudentsTable = () => {
       rowsPerPage: parseInt(event.target.value, 10),
       page: 0,
     });
+  };
+
+  const handleSendEmailVerificationClick = async (userId: number) => {
+    const res: any = await sendEmailVerification(userId);
+    if (
+      res &&
+      res.status &&
+      res.status === HttpStatusCode.Created &&
+      res.data
+    ) {
+      setConfirmationDialogOpen(true);
+    } else {
+      setAlertType("error");
+      setAlertMessage(AlertFailureMessage);
+      setOpenAlert(true);
+    }
   };
 
   const handleRemoveDialogClick = (index: number) => {
@@ -173,6 +203,10 @@ const StudentsTable = () => {
     }
   };
 
+  const handleConfirmationDialogClose = async (value?: any) => {
+    setConfirmationDialogOpen(false);
+  };
+
   const handleCloseAlert = (
     event?: React.SyntheticEvent | Event,
     reason?: string
@@ -201,7 +235,7 @@ const StudentsTable = () => {
       {studentsLoaded ? (
         <Box>
           <TableContainer component={Paper} sx={{ mt: 1 }}>
-            <Table sx={{ minWidth: 290 }} size="small">
+            <Table sx={{ minWidth: 900 }} size="small">
               <TableHead>
                 <TableRow
                   sx={{
@@ -234,6 +268,13 @@ const StudentsTable = () => {
                     {LastName}
                   </TableCell>
                   <TableCell align="center">
+                    <LibraryAddCheckIcon
+                      fontSize="xs"
+                      sx={{ mt: 1, mr: 0.5 }}
+                    />
+                    {IsActivated}
+                  </TableCell>
+                  <TableCell align="center" colSpan={2}>
                     <BorderColorIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
                     {Action}
                   </TableCell>
@@ -255,11 +296,38 @@ const StudentsTable = () => {
                     <TableCell align="center">{student.firstname}</TableCell>
                     <TableCell align="center">{student.lastname}</TableCell>
                     <TableCell align="center">
+                      {student.isActivated ? (
+                        <CheckBoxIcon
+                          fontSize="small"
+                          color="primary"
+                          sx={{ mt: 1, mr: 0.5 }}
+                        />
+                      ) : (
+                        <CheckBoxOutlineBlankIcon
+                          fontSize="small"
+                          color="primary"
+                          sx={{ mt: 1, mr: 0.5 }}
+                        />
+                      )}
+                    </TableCell>
+                    <TableCell align="center">
+                      <Button
+                        onClick={() => {
+                          handleSendEmailVerificationClick(student.id);
+                        }}
+                        variant="contained"
+                        color="info"
+                        size="small"
+                      >
+                        <ForwardToInboxIcon />
+                      </Button>
+                    </TableCell>
+                    <TableCell align="center">
                       <Button
                         onClick={() => {
                           handleRemoveDialogClick(student.id);
                         }}
-                        variant="outlined"
+                        variant="contained"
                         color="error"
                         size="small"
                       >
@@ -295,6 +363,15 @@ const StudentsTable = () => {
         positiveAction={Yes}
         value={removeIndexValue}
         onClose={handleRemoveDialogClose}
+      />
+      <ConfirmationDialog
+        id="confirmation-subject-menu"
+        keepMounted
+        open={confirmationDialogOpen}
+        title={AlertSuccessfullMessage}
+        positiveAction={Ok}
+        value={-1}
+        onClose={handleConfirmationDialogClose}
       />
       <ManipulateUserDialog
         id="add-student-menu"
