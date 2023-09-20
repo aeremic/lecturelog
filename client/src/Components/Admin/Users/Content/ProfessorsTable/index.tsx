@@ -26,6 +26,7 @@ import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import LibraryAddCheckIcon from "@mui/icons-material/LibraryAddCheck";
 import ForwardToInboxIcon from "@mui/icons-material/ForwardToInbox";
+import UploadIcon from "@mui/icons-material/Upload";
 import { getProfessors } from "../../../../../services/HttpService/ProfessorsService";
 import {
   Action,
@@ -214,6 +215,28 @@ const ProfessorsTable = () => {
     }
   };
 
+  const handleUploadUsersDialogClick = (addUser: IManipulateUser) => {
+    setManipulateUserValue(addUser);
+    setAddUserDialogOpen(true);
+  };
+
+  const handleUploadUsersDialogClose = async (newValue?: any) => {
+    setAddUserDialogOpen(false);
+    if (newValue) {
+      setManipulateUserValue(newValue);
+
+      setAlertType("success");
+      setAlertMessage(UserAddedSuccessfully);
+      setOpenAlert(true);
+
+      setProfessorsLoaded(false);
+    } else {
+      setAlertType("error");
+      setAlertMessage(UserNotAdded);
+      setOpenAlert(true);
+    }
+  };
+
   const handleConfirmationDialogClose = async (value?: any) => {
     setConfirmationDialogOpen(false);
   };
@@ -241,6 +264,17 @@ const ProfessorsTable = () => {
           sx={{ mb: 1 }}
         >
           <AddIcon />
+        </Button>
+        <Button
+          onClick={() => {
+            handleUploadUsersDialogClick({ id: 0, actionResult: false });
+          }}
+          variant="contained"
+          color="success"
+          size="small"
+          sx={{ mb: 1, ml: 2 }}
+        >
+          <UploadIcon />
         </Button>
       </Stack>
       {professorsLoaded ? (

@@ -16,6 +16,8 @@ export const AllStudents = "All Students";
 
 export const LogIn = "Log In";
 
+export const ImportViaCSV = "Import";
+
 export const Email = "Email";
 
 export const Password = "Password";
