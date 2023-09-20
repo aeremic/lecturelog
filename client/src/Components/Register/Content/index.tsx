@@ -70,7 +70,12 @@ const Content = () => {
 
     const res: any = await registerStudent(modelToPost);
     if (res) {
-      if (res.status && res.status === HttpStatusCode.Created) {
+      if (
+        res.status &&
+        res.status === HttpStatusCode.Created &&
+        res.data &&
+        res.data.id
+      ) {
         if (res.data.errorMessage) {
           setAlertType("error");
           setAlertMessage(res.data.errorMessage);

@@ -6,5 +6,5 @@ export class ErrorConstants {
 }
 
 export class ErrorMessageConstants {
-    public static UserExists: string = "User already exists.";
+    public static UserExists: string = "User already exists";
 }

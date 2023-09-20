@@ -95,6 +95,7 @@ const ManipulateUserDialog = (props: IManipulateUserDialogRawProps) => {
       role: data.role,
       index: data.index,
       year: data.year,
+      isActivated: false,
     };
 
     const res: any = await createUser(user);
@@ -105,8 +106,12 @@ const ManipulateUserDialog = (props: IManipulateUserDialogRawProps) => {
       res.data &&
       res.data.id
     ) {
-      setValue({ id: res.data.id, actionResult: true });
-      handleOk();
+      if (res.data.errorMessage) {
+        handleCancel();
+      } else if (res.data.id > 0) {
+        setValue({ id: res.data.id, actionResult: true });
+        handleOk();
+      }
     } else {
       handleCancel();
     }
