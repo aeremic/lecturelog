@@ -1,13 +1,11 @@
 import {
   Alert,
-  AlertColor,
   Box,
   Button,
   Card,
   CardContent,
   Container,
   Divider,
-  Snackbar,
   Stack,
   Typography,
 } from "@mui/material";
@@ -15,27 +13,24 @@ import {
   NewAccountSuccess,
   AlertFailureMessage,
   NewAccountAddedSuccessfull,
-  WrongCredentials,
   DidntReceiveAnEmail,
   SendAgain,
   AlertSuccessfullMessage,
   Ok,
 } from "../../../resources/Typography";
-import { useForm } from "react-hook-form";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { HttpStatusCode } from "axios";
 import { useState } from "react";
 import CheckIcon from "@mui/icons-material/Check";
-import { RoleEnum } from "../../../modelHelpers/Enums";
-import { ILoginFormInput } from "../../../modelHelpers/LoginFormInput";
-import {
-  getCurrentUserData,
-  login,
-} from "../../../services/HttpService/AuthService";
 import { sendEmailVerification } from "../../../services/HttpService/UsersService";
 import ConfirmationDialog from "../../Common/ConfirmationDialog";
+import { IContentProps } from "../../../modelHelpers/ContentProps";
 
-const Content = () => {
+const Content: React.FC<IContentProps> = ({
+  setOpenAlert,
+  setAlertMessage,
+  setAlertType,
+}) => {
   const [queryParameters] = useSearchParams();
   const navigate = useNavigate();
 
@@ -43,10 +38,6 @@ const Content = () => {
   const userId = userIdParam != null ? parseInt(userIdParam) : -1;
 
   const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
-
-  const [openAlert, setOpenAlert] = useState(false);
-  const [alertMessage, setAlertMessage] = useState("");
-  const [alertType, setAlertType] = useState<AlertColor>();
 
   const handleSendEmailAgainClick = async () => {
     if (userId != -1) {
@@ -75,16 +66,6 @@ const Content = () => {
     navigate("/login", {
       replace: true,
     });
-  };
-
-  const handleCloseAlert = (
-    event?: React.SyntheticEvent | Event,
-    reason?: string
-  ) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setOpenAlert(false);
   };
 
   return (
@@ -122,20 +103,7 @@ const Content = () => {
             positiveAction={Ok}
             value={-1}
             onClose={handleConfirmationDialogClose}
-          />{" "}
-          <Snackbar
-            open={openAlert}
-            autoHideDuration={6000}
-            onClose={handleCloseAlert}
-          >
-            <Alert
-              onClose={handleCloseAlert}
-              severity={alertType}
-              sx={{ width: "100%" }}
-            >
-              {alertMessage}
-            </Alert>
-          </Snackbar>
+          />
         </CardContent>
       </Card>
     </Box>
