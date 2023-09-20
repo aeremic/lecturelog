@@ -71,7 +71,15 @@ const Content = () => {
     const res: any = await registerStudent(modelToPost);
     if (res) {
       if (res.status && res.status === HttpStatusCode.Created) {
-        navigate("/registerconfirmation", { replace: true });
+        if (res.data.errorMessage) {
+          setAlertType("error");
+          setAlertMessage(res.data.errorMessage);
+          setOpenAlert(true);
+        } else if (res.data.id > 0) {
+          navigate(`/registerconfirmation?id=${res.data.id}`, {
+            replace: true,
+          });
+        }
       } else if (res.status && res.status === HttpStatusCode.Unauthorized) {
         setAlertType("error");
         setAlertMessage(WrongCredentials);

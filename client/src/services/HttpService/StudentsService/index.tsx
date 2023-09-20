@@ -22,7 +22,7 @@ export const getAvailableSubjects = async (id: number) => {
 
 export const registerStudent = async (data: IRegisterStudent) => {
   try {
-    return await post(`${URL}/registerStudent`, data);
+    return await post(`${URL}/createStudent`, data);
   } catch (err) {
     console.log(err); // TODO: Fix for PROD.
   }

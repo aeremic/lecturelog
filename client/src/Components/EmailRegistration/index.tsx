@@ -14,7 +14,7 @@ const EmailRegistration = () => {
           display="flex"
           justifyContent="center"
           alignItems="center"
-          sx={{ mt: 20, flexGrow: 1 }}
+          sx={{ mt: 8, flexGrow: 1 }}
         >
           <Card variant="outlined">
             <CardContent>

@@ -3,7 +3,7 @@ import { UserRepositoryAbstract } from 'src/core/abstracts/repositories/user.rep
 import { UserEntity } from 'src/core/entities/user.entity';
 import { GenericUseCases } from '../generic.use-case';
 import { LoggerUseCases } from '../logger/logger.use-case';
-import { ErrorConstants } from 'src/core/common/constants/error.constant';
+import { ErrorConstants, ErrorMessageConstants } from 'src/core/common/constants/error.constant';
 import { ProfessorsDto } from 'src/core/dtos/responses/professors.dto';
 import { BcryptService, MailService } from 'src/services';
 import { Encoding } from 'src/core/common/encoding';
@@ -21,7 +21,8 @@ import { LectureUseCases } from '../lecture/lecture.use-case';
 import { AvailableGroupDto } from 'src/core/dtos/responses/available-group.dto';
 import { ActiveLectureEntity } from 'src/core/entities/active-lecture.entity';
 import { SendEmailVerificationDto } from '../../core/dtos/requests/send-email-verification.dto';
-import { RegisterStudentDto } from '../../core/dtos/requests/register-student.dto';
+import { CreateStudentRequestDto } from '../../core/dtos/requests/create-student-request.dto';
+import { CreateUserResponseDto } from 'src/core/dtos/responses/create-user-response.dto';
 
 @Injectable()
 export class UserUseCases extends GenericUseCases<UserEntity>{
@@ -202,29 +203,33 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
         }
     }
 
-    async registerStudent(registerStudentDto: RegisterStudentDto): Promise<UserEntity> {
+    async createStudent(createStudentRequestDto: CreateStudentRequestDto): Promise<CreateUserResponseDto> {
         let user: UserEntity = {
-            id: registerStudentDto.id,
-            firstname: registerStudentDto.firstname,
-            lastname: registerStudentDto.lastname,
-            email: registerStudentDto.email,
-            index: registerStudentDto.index,
-            year: registerStudentDto.year,
-            role: registerStudentDto.role,
+            id: createStudentRequestDto.id,
+            firstname: createStudentRequestDto.firstname,
+            lastname: createStudentRequestDto.lastname,
+            email: createStudentRequestDto.email,
+            index: createStudentRequestDto.index,
+            year: createStudentRequestDto.year,
+            role: createStudentRequestDto.role,
             isActivated: false
         }
 
         return await this.createUser(user);
     }
 
-    async createUser(userEntity: UserEntity): Promise<UserEntity> {
+    async createUser(userEntity: UserEntity): Promise<CreateUserResponseDto> {
         // TODO: Return some type of response if user already exist with that email!
-        let result: UserEntity | PromiseLike<UserEntity>;
+        let result = new CreateUserResponseDto;
 
         try {
             if (!await this.checkIfUserExist(userEntity)) {
-                result = await super.createOrUpdate(this.userRepository, this.loggerUseCases, userEntity);
-                this.generateAndSendEmailVerificationCode(result);
+                let userInDb = await super.createOrUpdate(this.userRepository, this.loggerUseCases, userEntity);
+                this.generateAndSendEmailVerificationCode(userInDb);
+
+                result.id = userInDb.id;
+            } else {
+                result.errorMessage = ErrorMessageConstants.UserExists;
             }
         } catch (error) {
             this.loggerUseCases.log(ErrorConstants.GetMethodError, error?.message, error?.stack);

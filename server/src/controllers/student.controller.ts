@@ -4,8 +4,8 @@ import { AuthGuard } from '@nestjs/passport';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RoleGuard } from 'src/auth/guards/role.guard';
 import { AvailableGroupDto } from 'src/core/dtos/responses/available-group.dto';
-import { UserEntity } from 'src/core/entities';
-import { RegisterStudentDto } from 'src/core/dtos/requests/register-student.dto';
+import { CreateStudentRequestDto } from 'src/core/dtos/requests/create-student-request.dto';
+import { CreateUserResponseDto } from 'src/core/dtos/responses/create-user-response.dto';
 
 @Controller('api/student')
 export class StudentController {
@@ -26,8 +26,8 @@ export class StudentController {
         return this.userUseCases.getStudentAvailableSubjects(id);
     }
 
-    @Post('/registerStudent')
-    registerStudent(@Body() registerStudentDto: RegisterStudentDto): Promise<UserEntity> {
-        return this.userUseCases.registerStudent(registerStudentDto)
+    @Post('/createStudent')
+    createStudent(@Body() createStudentRequestDto: CreateStudentRequestDto): Promise<CreateUserResponseDto> {
+        return this.userUseCases.createStudent(createStudentRequestDto)
     }
 }       

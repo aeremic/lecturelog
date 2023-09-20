@@ -32,6 +32,7 @@ import { useState } from "react";
 import PasswordIcon from "@mui/icons-material/Password";
 import VpnKeyIcon from "@mui/icons-material/VpnKey";
 import EmailIcon from "@mui/icons-material/Email";
+import LoginIcon from "@mui/icons-material/Login";
 import { emailRegistration } from "../../../services/HttpService/UsersService";
 
 const Content = () => {
@@ -85,8 +86,10 @@ const Content = () => {
           {RegistrationWithEmail}
         </Typography>
         <Divider sx={{ m: 2 }} />
-        <Typography variant="body1">{EmailRegistrationSubtitle}</Typography>
-        <FormControl fullWidth sx={{ minWidth: "300px" }}>
+        <Typography variant="body1" sx={{ width: 270 }}>
+          {EmailRegistrationSubtitle}
+        </Typography>
+        <FormControl fullWidth sx={{ width: 300 }}>
           <form onSubmit={handleSubmit(onSubmit)}>
             <FormGroup sx={{ mt: 2 }}>
               <FormLabel>
@@ -138,6 +141,10 @@ const Content = () => {
             </FormGroup>
             <FormGroup sx={{ mt: 2 }}>
               <Button variant="contained" size="large" type="submit">
+                {
+                  // @ts-ignore
+                  <LoginIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                }
                 {Register}
               </Button>
             </FormGroup>

@@ -6,6 +6,7 @@ import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RoleGuard } from 'src/auth/guards/role.guard';
 import { EmailRegistrationDto } from 'src/core/dtos';
 import { SendEmailVerificationDto } from 'src/core/dtos/requests/send-email-verification.dto';
+import { CreateUserResponseDto } from 'src/core/dtos/responses/create-user-response.dto';
 
 @Controller('api/user')
 export class UserController {
@@ -50,7 +51,7 @@ export class UserController {
     @Roles('admin')
     @UseGuards(AuthGuard('jwt'), RoleGuard)
     @Post('/createUser')
-    createUser(@Body() userEntity: any): Promise<UserEntity> {
+    createUser(@Body() userEntity: any): Promise<CreateUserResponseDto> {
         return this.userUseCases.createUser(userEntity)
     }
 
@@ -59,8 +60,6 @@ export class UserController {
         return this.userUseCases.sendEmailVerification(sendEmailVerificationDto)
     }
 
-    @Roles('admin', 'professor', 'student')
-    @UseGuards(AuthGuard('jwt'), RoleGuard)
     @Post('/emailRegistration')
     emailRegistration(@Body() emailRegistrationDto: EmailRegistrationDto): Promise<boolean> {
         return this.userUseCases.emailRegistration(emailRegistrationDto)

@@ -1,7 +1,7 @@
 import { IsEmail, IsNotEmpty, IsNumber, IsString } from "class-validator";
 import { RoleEnum } from "../../common/enums/role.enum";
 
-export class RegisterStudentDto {
+export class CreateStudentRequestDto {
     @IsNumber()
     public id: number;
 

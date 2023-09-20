@@ -4,3 +4,7 @@ export class ErrorConstants {
     public static DeleteMethodError: number = 2;
     public static MessagingGetawayError: number = 3;
 }
+
+export class ErrorMessageConstants {
+    public static UserExists: string = "User already exists.";
+}
