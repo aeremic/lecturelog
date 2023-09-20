@@ -88,7 +88,7 @@ export const Student = "Student";
 
 export const Admin = "Admin";
 
-export const UploadUsers = "Upload Users";
+export const UploadProfessors = "Upload Professors";
 
 export const Upload = "Upload";
 

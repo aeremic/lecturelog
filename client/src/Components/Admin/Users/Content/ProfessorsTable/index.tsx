@@ -44,7 +44,7 @@ import {
   Ok,
   RemoveUser,
   Upload,
-  UploadUsers,
+  UploadProfessors,
   UserAddedSuccessfully,
   UserNotAdded,
   UserSuccessfullyRemoved,
@@ -429,7 +429,7 @@ const ProfessorsTable = () => {
         id="upload-users-menu"
         keepMounted
         open={uploadUsersDialogOpen}
-        title={UploadUsers}
+        title={UploadProfessors}
         negativeAction={Cancel}
         positiveAction={Upload}
         onClose={handleUploadUsersDialogClose}
