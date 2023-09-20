@@ -21,6 +21,7 @@ import { LectureUseCases } from '../lecture/lecture.use-case';
 import { AvailableGroupDto } from 'src/core/dtos/responses/available-group.dto';
 import { ActiveLectureEntity } from 'src/core/entities/active-lecture.entity';
 import { SendEmailVerificationDto } from '../../core/dtos/requests/send-email-verification.dto';
+import { RegisterStudentDto } from '../../core/dtos/requests/register-student.dto';
 
 @Injectable()
 export class UserUseCases extends GenericUseCases<UserEntity>{
@@ -190,7 +191,7 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
     }
 
     async generateAndSendEmailVerificationCode(userEntity: UserEntity) {
-        if (this.isFound(userEntity)) {
+        if (this.isFound(userEntity) && !userEntity.isActivated) {
             let code = Encoding.generateRandomPassword();
 
             // TODO: Remove comment for PROD
@@ -201,14 +202,27 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
         }
     }
 
+    async registerStudent(registerStudentDto: RegisterStudentDto): Promise<UserEntity> {
+        let user: UserEntity = {
+            id: registerStudentDto.id,
+            firstname: registerStudentDto.firstname,
+            lastname: registerStudentDto.lastname,
+            email: registerStudentDto.email,
+            index: registerStudentDto.index,
+            year: registerStudentDto.year,
+            role: registerStudentDto.role,
+            isActivated: false
+        }
+
+        return await this.createUser(user);
+    }
+
     async createUser(userEntity: UserEntity): Promise<UserEntity> {
         // TODO: Return some type of response if user already exist with that email!
         let result: UserEntity | PromiseLike<UserEntity>;
 
         try {
             if (!await this.checkIfUserExist(userEntity)) {
-                userEntity.isActivated = false;
-
                 result = await super.createOrUpdate(this.userRepository, this.loggerUseCases, userEntity);
                 this.generateAndSendEmailVerificationCode(result);
             }

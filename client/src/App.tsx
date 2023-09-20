@@ -11,6 +11,8 @@ import MySubjects from "./components/Professor/MySubjects";
 import Profile from "./components/User/Profile";
 import ProfessorRoom from "./components/Professor/ProfessorRoom";
 import AvailableSubjects from "./components/Student/AvailableSubjects";
+import Register from "./components/Register";
+import RegisterConfirmation from "./components/RegisterConfirmation";
 
 const App = () => {
   return (
@@ -21,6 +23,12 @@ const App = () => {
           <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />
           <Route path="/emailregistration" element={<EmailRegistration />} />
+          /**Register flow routes */
+          <Route path="/register" element={<Register />} />
+          <Route
+            path="/registerconfirmation"
+            element={<RegisterConfirmation />}
+          />
           /**User routes */
           <Route path="/user/profile" element={<Profile />} />
           /**Admin routes */

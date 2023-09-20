@@ -318,6 +318,7 @@ const StudentsTable = () => {
                         variant="contained"
                         color="info"
                         size="small"
+                        disabled={student.isActivated}
                       >
                         <ForwardToInboxIcon />
                       </Button>

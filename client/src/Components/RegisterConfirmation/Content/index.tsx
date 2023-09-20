@@ -10,7 +10,6 @@ import {
   FormControl,
   FormGroup,
   FormLabel,
-  Link,
   Snackbar,
   Stack,
   TextField,
@@ -106,7 +105,7 @@ const Content = () => {
       display="flex"
       justifyContent="center"
       alignItems="center"
-      sx={{ mt: 8, flexGrow: 1 }}
+      sx={{ mt: 20, flexGrow: 1 }}
     >
       <Card variant="outlined">
         <CardContent>
@@ -124,7 +123,7 @@ const Content = () => {
             ) : (
               <></>
             )}
-            <FormControl fullWidth sx={{ width: 300 }}>
+            <FormControl fullWidth sx={{ minWidth: "300px" }}>
               <form onSubmit={handleSubmit(onSubmit)}>
                 <FormGroup sx={{ mt: 2 }}>
                   <FormLabel>

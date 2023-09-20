@@ -322,6 +322,7 @@ const ProfessorsTable = () => {
                         variant="contained"
                         color="info"
                         size="small"
+                        disabled={professor.isActivated}
                       >
                         <ForwardToInboxIcon />
                       </Button>

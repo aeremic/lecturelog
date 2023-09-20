@@ -5,7 +5,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import ErrorComponent from "../Common/ErrorComponent";
 import Header from "../Common/Header";
 
-const Login = () => {
+const Register = () => {
   return (
     <ThemeProvider theme={theme}>
       <Header />
@@ -16,4 +16,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
