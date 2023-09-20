@@ -88,6 +88,10 @@ export const Student = "Student";
 
 export const Admin = "Admin";
 
+export const UploadUsers = "Upload Users";
+
+export const Upload = "Upload";
+
 export const UserSuccessfullyRemoved = "User successfully removed";
 
 export const UserAddedSuccessfully = "User added successfully";

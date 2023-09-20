@@ -93,7 +93,6 @@ const StudentsTable = () => {
   const [removeIndexValue, setRemoveIndexValue] = useState(0);
 
   const [addUserDialogOpen, setAddUserDialogOpen] = useState(false);
-
   const [manipulateUserValue, setManipulateUserValue] = useState(
     manipulateUserInitialState
   );

@@ -43,6 +43,8 @@ import {
   NoProfessorsFound,
   Ok,
   RemoveUser,
+  Upload,
+  UploadUsers,
   UserAddedSuccessfully,
   UserNotAdded,
   UserSuccessfullyRemoved,
@@ -58,6 +60,7 @@ import {
   removeUser,
   sendEmailVerification,
 } from "../../../../../services/HttpService/UsersService";
+import UploadUsersDialog from "../../../UploadUsersDialog";
 
 const ProfessorsTable = () => {
   const professorsTableInitialState: IUser[] = [
@@ -88,11 +91,13 @@ const ProfessorsTable = () => {
   const [removeIndexValue, setRemoveIndexValue] = useState(0);
 
   const [editUserDialogOpen, setEditUserDialogOpen] = useState(false);
-  const [addUserDialogOpen, setAddUserDialogOpen] = useState(false);
 
+  const [addUserDialogOpen, setAddUserDialogOpen] = useState(false);
   const [manipulateUserValue, setManipulateUserValue] = useState(
     manipulateUserInitialState
   );
+
+  const [uploadUsersDialogOpen, setUploadUsersDialogOpen] = useState(false);
 
   const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
 
@@ -215,16 +220,13 @@ const ProfessorsTable = () => {
     }
   };
 
-  const handleUploadUsersDialogClick = (addUser: IManipulateUser) => {
-    setManipulateUserValue(addUser);
-    setAddUserDialogOpen(true);
+  const handleUploadUsersDialogClick = () => {
+    setUploadUsersDialogOpen(true);
   };
 
   const handleUploadUsersDialogClose = async (newValue?: any) => {
-    setAddUserDialogOpen(false);
+    setUploadUsersDialogOpen(false);
     if (newValue) {
-      setManipulateUserValue(newValue);
-
       setAlertType("success");
       setAlertMessage(UserAddedSuccessfully);
       setOpenAlert(true);
@@ -422,6 +424,15 @@ const ProfessorsTable = () => {
         defaultRoleEnum={RoleEnum.Professor}
         value={manipulateUserValue}
         onClose={handleAddUserDialogClose}
+      />
+      <UploadUsersDialog
+        id="upload-users-menu"
+        keepMounted
+        open={uploadUsersDialogOpen}
+        title={UploadUsers}
+        negativeAction={Cancel}
+        positiveAction={Upload}
+        onClose={handleUploadUsersDialogClose}
       />
       {/* <ManipulateUserDialog
         id="edit-professor-menu"
