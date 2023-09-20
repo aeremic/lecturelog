@@ -7,32 +7,23 @@ import {
   CardContent,
   Container,
   Divider,
-  FormControl,
-  FormGroup,
-  FormLabel,
   Snackbar,
   Stack,
-  TextField,
   Typography,
 } from "@mui/material";
 import {
+  NewAccountSuccess,
   AlertFailureMessage,
-  Email,
-  EmailRegistrationSuccess,
-  LogIn,
-  Password,
-  PleaseEnterYourEmail,
-  PleaseEnterYourPassword,
+  NewAccountAddedSuccessfull,
   WrongCredentials,
+  DidntReceiveAnEmail,
+  SendAgain,
 } from "../../../resources/Typography";
 import { useForm } from "react-hook-form";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { HttpStatusCode } from "axios";
 import { useState } from "react";
-import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
-import PasswordIcon from "@mui/icons-material/Password";
-import LoginIcon from "@mui/icons-material/Login";
-import LockOpenIcon from "@mui/icons-material/LockOpen";
+import CheckIcon from "@mui/icons-material/Check";
 import { RoleEnum } from "../../../modelHelpers/Enums";
 import { ILoginFormInput } from "../../../modelHelpers/LoginFormInput";
 import {
@@ -105,77 +96,27 @@ const Content = () => {
       display="flex"
       justifyContent="center"
       alignItems="center"
-      sx={{ mt: 20, flexGrow: 1 }}
+      sx={{ mt: 8, flexGrow: 1 }}
     >
-      <Card variant="outlined">
+      <Card variant="outlined" sx={{ width: 365 }}>
         <CardContent>
           <Container component="main">
-            <Typography textAlign="center" variant="h3">
-              Logo
-            </Typography>
             <Typography component="h1" variant="h5">
-              <LockOpenIcon fontSize="small" sx={{ mr: 0.5 }} />
-              {LogIn}
+              <CheckIcon fontSize="small" sx={{ mr: 0.5 }} />
+              {NewAccountAddedSuccessfull}
             </Typography>
             <Divider sx={{ m: 2 }} />
-            {emailRegistrationSuccess ? (
-              <Alert severity="success">{EmailRegistrationSuccess}</Alert>
-            ) : (
-              <></>
-            )}
-            <FormControl fullWidth sx={{ minWidth: "300px" }}>
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <FormGroup sx={{ mt: 2 }}>
-                  <FormLabel>
-                    {
-                      // @ts-ignore
-                      <AlternateEmailIcon fontSize="xs" sx={{ mr: 0.5 }} />
-                    }
-                    {Email}
-                  </FormLabel>
-                  <TextField
-                    label={PleaseEnterYourEmail}
-                    variant="outlined"
-                    type="email"
-                    {...register("email", { required: true })}
-                    sx={{ mt: 0.8 }}
-                  ></TextField>
-                </FormGroup>
-                <FormGroup sx={{ mt: 2 }}>
-                  <FormLabel>
-                    {
-                      // @ts-ignore
-                      <PasswordIcon fontSize="xs" sx={{ mr: 0.5 }} />
-                    }
-                    {Password}
-                  </FormLabel>
-                  <TextField
-                    label={PleaseEnterYourPassword}
-                    variant="outlined"
-                    type="password"
-                    {...register("password", { required: true })}
-                    sx={{ mt: 0.8 }}
-                  ></TextField>
-                </FormGroup>
-                <Stack direction={"row"} sx={{ mt: 0.4 }}>
-                  <Typography variant="body2" sx={{ mt: 0.4 }}>
-                    Don't have an account?
-                  </Typography>
-                  <Button size="small" href="register">
-                    <Typography variant="body2">Register here!</Typography>
-                  </Button>
-                </Stack>
-                <FormGroup sx={{ mt: 2 }}>
-                  <Button variant="contained" size="large" type="submit">
-                    {
-                      // @ts-ignore
-                      <LoginIcon fontSize="xs" sx={{ mr: 0.5 }} />
-                    }
-                    <Typography>{LogIn}</Typography>
-                  </Button>
-                </FormGroup>
-              </form>
-            </FormControl>
+            <Alert severity="success" sx={{ width: 270 }}>
+              {NewAccountSuccess}
+            </Alert>
+            <Stack direction={"row"} sx={{ mt: 0.4 }}>
+              <Typography variant="body2" sx={{ mt: 0.4 }}>
+                {DidntReceiveAnEmail}
+              </Typography>
+              <Button size="small" href="register">
+                <Typography variant="body2">{SendAgain}</Typography>
+              </Button>
+            </Stack>
           </Container>
           <Snackbar
             open={openAlert}

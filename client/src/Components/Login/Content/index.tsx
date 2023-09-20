@@ -18,12 +18,14 @@ import {
 } from "@mui/material";
 import {
   AlertFailureMessage,
+  DontHaveAnAccount,
   Email,
   EmailRegistrationSuccess,
   LogIn,
   Password,
   PleaseEnterYourEmail,
   PleaseEnterYourPassword,
+  RegisterHere,
   WrongCredentials,
 } from "../../../resources/Typography";
 import { useForm } from "react-hook-form";
@@ -120,7 +122,9 @@ const Content = () => {
             </Typography>
             <Divider sx={{ m: 2 }} />
             {emailRegistrationSuccess ? (
-              <Alert severity="success">{EmailRegistrationSuccess}</Alert>
+              <Alert severity="success" sx={{ width: 270 }}>
+                {EmailRegistrationSuccess}
+              </Alert>
             ) : (
               <></>
             )}
@@ -160,10 +164,10 @@ const Content = () => {
                 </FormGroup>
                 <Stack direction={"row"} sx={{ mt: 0.4 }}>
                   <Typography variant="body2" sx={{ mt: 0.4 }}>
-                    Don't have an account?
+                    {DontHaveAnAccount}
                   </Typography>
                   <Button size="small" href="register">
-                    <Typography variant="body2">Register here!</Typography>
+                    <Typography variant="body2">{RegisterHere}</Typography>
                   </Button>
                 </Stack>
                 <FormGroup sx={{ mt: 2 }}>

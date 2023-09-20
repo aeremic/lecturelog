@@ -113,10 +113,23 @@ export const EmailRegistrationSubtitle =
 
 export const WrongCredentials = "Wrong credentials";
 
+export const DontHaveAnAccount = "Don't have an account?";
+
+export const RegisterHere = "Register here!";
+
+export const NewAccountAddedSuccessfull = "New Account Added";
+
 export const EmailRegistrationSuccess =
   "Account successfully activated. Please log in with your new password.";
 
+export const NewAccountSuccess =
+  "New account has been successfully added. We sended you an email with an instructions on how to proceed with a registration, please check it.";
+
 export const ActivationFailed = "Activation failed";
+
+export const DidntReceiveAnEmail = "Didn't receive an email?";
+
+export const SendAgain = "Send Again";
 
 export const Year = "Year";
 
