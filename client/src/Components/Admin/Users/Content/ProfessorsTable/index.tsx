@@ -215,7 +215,7 @@ const ProfessorsTable = () => {
       setProfessorsLoaded(false);
     } else {
       setAlertType("error");
-      setAlertMessage(t("UserNotAdded"));
+      setAlertMessage(t("UsersNotAdded"));
       setOpenAlert(true);
     }
   };

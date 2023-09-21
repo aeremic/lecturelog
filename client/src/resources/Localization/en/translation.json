@@ -49,6 +49,7 @@
     "UserSuccessfullyRemoved": "User successfully removed",
     "UserAddedSuccessfully": "User added successfully",
     "UserNotAdded": "User not added",
+    "UsersNotAdded": "Users not added",
     "AlertFailureMessage": "Something went wrong! :(",
     "AlertSuccessfullMessage": "Successfull",
     "RegistrationWithEmail": "Registration with email",
