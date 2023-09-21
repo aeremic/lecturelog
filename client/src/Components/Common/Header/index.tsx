@@ -3,10 +3,12 @@ import Button from "@mui/material/Button";
 
 import Logo from "../Logo";
 import TemporaryDrawer from "../TemporaryDrawer";
-import { Logout } from "../../../resources/Typography/index";
 import LogoutIcon from "@mui/icons-material/Logout";
+import { useTranslation } from "react-i18next";
 
 const Header = () => {
+  const { t } = useTranslation();
+
   return (
     <Box sx={{ flexGrow: 1, bgcolor: "background.paper" }}>
       <AppBar position="static">
@@ -24,7 +26,7 @@ const Header = () => {
           </Typography>
           <Button color="inherit">
             <LogoutIcon fontSize="xs" sx={{ mr: 0.5 }} />
-            <Typography>{Logout}</Typography>
+            <Typography>{t("Logout")}</Typography>
           </Button>
         </Toolbar>
       </AppBar>

@@ -8,14 +8,6 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import {
-  AccessCodeGeneration,
-  Cancel,
-  GenerateAccessCode,
-  PleaseGenerateAccessCodeForStudentsToEnter,
-  StudentsShouldEnterBelowCode,
-  TimeRemaining,
-} from "../../../../../resources/Typography";
 import PinIcon from "@mui/icons-material/Pin";
 import CloseIcon from "@mui/icons-material/Close";
 import { useEffect, useState } from "react";
@@ -38,8 +30,10 @@ import {
   MessagingEvent,
   LectureTimerEventType,
 } from "../../../../../modelHelpers/Enums/index";
+import { useTranslation } from "react-i18next";
 
 const ProfessorCodeGeneration = () => {
+  const { t } = useTranslation();
   const [queryParameters] = useSearchParams();
 
   const userIdParam: string | null = queryParameters.get("userId");
@@ -142,14 +136,14 @@ const ProfessorCodeGeneration = () => {
   return (
     <Card sx={{ mt: 1 }}>
       <CardContent>
-        <Typography variant="h6">{AccessCodeGeneration}</Typography>
+        <Typography variant="h6">{t("AccessCodeGeneration")}</Typography>
         <Divider sx={{ mb: 2 }} />
         <Stack direction="column" spacing={4}>
           {currentCodeState === CodeGenerationState.notGenerated ? (
             <>
               <Box display="flex" justifyContent="center" alignItems="center">
                 <Typography>
-                  {PleaseGenerateAccessCodeForStudentsToEnter}
+                  {t("PleaseGenerateAccessCodeForStudentsToEnter")}
                 </Typography>
               </Box>
               <Box display="flex" justifyContent="center" alignItems="center">
@@ -163,14 +157,14 @@ const ProfessorCodeGeneration = () => {
                     // @ts-ignore
                     <PinIcon fontSize="xs" sx={{ mr: 0.5 }} />
                   }
-                  {GenerateAccessCode}
+                  {t("GenerateAccessCode")}
                 </Button>
               </Box>
             </>
           ) : (
             <>
               <Box display="flex" justifyContent="center" alignItems="center">
-                <Typography>{StudentsShouldEnterBelowCode}</Typography>
+                <Typography>{t("StudentsShouldEnterBelowCode")}</Typography>
               </Box>
               <Box display="flex" justifyContent="center" alignItems="center">
                 {timer && code && (
@@ -192,7 +186,7 @@ const ProfessorCodeGeneration = () => {
                             alignItems="center"
                           >
                             <Typography>
-                              {TimeRemaining}
+                              {t("TimeRemaining")}
                               {`${timer}s`}
                             </Typography>
                           </Box>
@@ -214,7 +208,7 @@ const ProfessorCodeGeneration = () => {
                     // @ts-ignore
                     <CloseIcon fontSize="xs" sx={{ mr: 0.5 }} />
                   }
-                  {Cancel}
+                  {t("Cancel")}
                 </Button>
               </Box>
             </>

@@ -10,24 +10,12 @@ import {
   FormControl,
   FormGroup,
   FormLabel,
-  Link,
   Snackbar,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
-import {
-  AlertFailureMessage,
-  DontHaveAnAccount,
-  Email,
-  EmailRegistrationSuccess,
-  LogIn,
-  Password,
-  PleaseEnterYourEmail,
-  PleaseEnterYourPassword,
-  RegisterHere,
-  WrongCredentials,
-} from "../../../resources/Typography";
+import { Email } from "../../../resources/Typography";
 import { useForm } from "react-hook-form";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { HttpStatusCode } from "axios";
@@ -42,9 +30,12 @@ import {
   getCurrentUserData,
   login,
 } from "../../../services/HttpService/AuthService";
+import { useTranslation } from "react-i18next";
 
 const Content = () => {
   const [queryParameters] = useSearchParams();
+  const { t } = useTranslation();
+
   const emailRegistrationSuccess: boolean =
     queryParameters.get("success") == "true";
 
@@ -83,12 +74,12 @@ const Content = () => {
         }
       } else if (res.status && res.status === HttpStatusCode.Unauthorized) {
         setAlertType("error");
-        setAlertMessage(WrongCredentials);
+        setAlertMessage(t("WrongCredentials"));
         setOpenAlert(true);
       }
     } else {
       setAlertType("error");
-      setAlertMessage(AlertFailureMessage);
+      setAlertMessage(t("AlertFailureMessage"));
       setOpenAlert(true);
     }
   };
@@ -124,12 +115,12 @@ const Content = () => {
             </Typography>
             <Typography component="h1" variant="h5">
               <LockOpenIcon fontSize="small" sx={{ mr: 0.5 }} />
-              {LogIn}
+              {t("LogIn")}
             </Typography>
             <Divider sx={{ m: 2 }} />
             {emailRegistrationSuccess ? (
               <Alert severity="success" sx={{ width: 270 }}>
-                {EmailRegistrationSuccess}
+                {t("EmailRegistrationSuccess")}
               </Alert>
             ) : (
               <></>
@@ -145,7 +136,7 @@ const Content = () => {
                     {Email}
                   </FormLabel>
                   <TextField
-                    label={PleaseEnterYourEmail}
+                    label={t("PleaseEnterYourEmail")}
                     variant="outlined"
                     type="email"
                     {...register("email", { required: true })}
@@ -158,10 +149,10 @@ const Content = () => {
                       // @ts-ignore
                       <PasswordIcon fontSize="xs" sx={{ mr: 0.5 }} />
                     }
-                    {Password}
+                    {t("Password")}
                   </FormLabel>
                   <TextField
-                    label={PleaseEnterYourPassword}
+                    label={t("PleaseEnterYourPassword")}
                     variant="outlined"
                     type="password"
                     {...register("password", { required: true })}
@@ -170,10 +161,10 @@ const Content = () => {
                 </FormGroup>
                 <Stack direction={"row"} sx={{ mt: 0.4 }}>
                   <Typography variant="body2" sx={{ mt: 0.4 }}>
-                    {DontHaveAnAccount}
+                    {t("DontHaveAnAccount")}
                   </Typography>
                   <Button size="small" onClick={handleRegisterClick}>
-                    <Typography variant="body2">{RegisterHere}</Typography>
+                    <Typography variant="body2">{t("RegisterHere")}</Typography>
                   </Button>
                 </Stack>
                 <FormGroup sx={{ mt: 2 }}>
@@ -182,7 +173,7 @@ const Content = () => {
                       // @ts-ignore
                       <LoginIcon fontSize="xs" sx={{ mr: 0.5 }} />
                     }
-                    <Typography>{LogIn}</Typography>
+                    <Typography>{t("LogIn")}</Typography>
                   </Button>
                 </FormGroup>
               </form>

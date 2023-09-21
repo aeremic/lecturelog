@@ -9,18 +9,14 @@ import {
 } from "@mui/material";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
-import {
-  AvailableSubjects,
-  MyProfile,
-  MySubjects,
-  Subjects,
-  Users,
-} from "../../../resources/Typography";
 import { Link } from "react-router-dom";
 import { RoleEnum } from "../../../modelHelpers/Enums";
 import { getCurrentUserData } from "../../../services/HttpService/AuthService";
+import { useTranslation } from "react-i18next";
 
 const Menu = () => {
+  const { t } = useTranslation();
+
   // TODO: Hide menu when logged off.
   const userData = getCurrentUserData();
   return (
@@ -34,7 +30,7 @@ const Menu = () => {
                   <ListItemIcon>
                     <PeopleAltIcon />
                   </ListItemIcon>
-                  <ListItemText primary={Users} />
+                  <ListItemText primary={t("Users")} />
                 </ListItemButton>
               </ListItem>
               <ListItem>
@@ -42,7 +38,7 @@ const Menu = () => {
                   <ListItemIcon>
                     <LibraryBooksIcon />
                   </ListItemIcon>
-                  <ListItemText primary={Subjects} />
+                  <ListItemText primary={t("Subjects")} />
                 </ListItemButton>
               </ListItem>
             </>
@@ -62,7 +58,7 @@ const Menu = () => {
                   <ListItemIcon>
                     <PeopleAltIcon />
                   </ListItemIcon>
-                  <ListItemText primary={MyProfile} />
+                  <ListItemText primary={t("MyProfile")} />
                 </ListItemButton>
               </ListItem>
               <Divider />
@@ -77,7 +73,7 @@ const Menu = () => {
                   <ListItemIcon>
                     <LibraryBooksIcon />
                   </ListItemIcon>
-                  <ListItemText primary={MySubjects} />
+                  <ListItemText primary={t("MySubjects")} />
                 </ListItemButton>
               </ListItem>
             </>
@@ -97,7 +93,7 @@ const Menu = () => {
                   <ListItemIcon>
                     <PeopleAltIcon />
                   </ListItemIcon>
-                  <ListItemText primary={MyProfile} />
+                  <ListItemText primary={t("MyProfile")} />
                 </ListItemButton>
               </ListItem>
               <Divider />
@@ -113,7 +109,7 @@ const Menu = () => {
                   <ListItemIcon>
                     <LibraryBooksIcon />
                   </ListItemIcon>
-                  <ListItemText primary={AvailableSubjects} />
+                  <ListItemText primary={t("AvailableSubjects")} />
                 </ListItemButton>
               </ListItem>
             </>

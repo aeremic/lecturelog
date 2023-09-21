@@ -1,5 +1,4 @@
 import { Container, Grid, Typography } from "@mui/material";
-import { MySubjects } from "../../../../resources/Typography";
 import { useEffect, useState } from "react";
 import { IAssignedSubject } from "../../../../modelHelpers/AssignedSubject";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -21,8 +20,10 @@ import {
   getActiveAssignedSubjects,
   getAssignedSubjects,
 } from "../../../../services/HttpService/ProfessorsService";
+import { useTranslation } from "react-i18next";
 
 export const Content = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [queryParameters] = useSearchParams();
 
@@ -109,7 +110,7 @@ export const Content = () => {
     <Container sx={{ mt: 4 }}>
       <Typography variant="h5">
         <LibraryBooksIcon fontSize="small" sx={{ mr: 0.5 }} />
-        {MySubjects}
+        {t("MySubjects")}
       </Typography>
       <Grid container spacing={2} sx={{ mt: 2 }}>
         <Grid item xs={6} sx={{ minWidth: 350 }}>

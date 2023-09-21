@@ -12,13 +12,12 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { LiveLectures } from "../../../../../resources/Typography";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
 import StopCircleIcon from "@mui/icons-material/StopCircle";
 import PauseIcon from "@mui/icons-material/Pause";
 import { IAssignedSubject } from "../../../../../modelHelpers/AssignedSubject";
-import convertToRoman from "../../../../../functionHelpers/ConvertToRoman";
 import { IActiveSubjectsProps } from "../../../../../modelHelpers/ActiveSubjectsProps";
+import { useTranslation } from "react-i18next";
 
 const ActiveSubjects: React.FC<IActiveSubjectsProps> = ({
   userId,
@@ -26,6 +25,8 @@ const ActiveSubjects: React.FC<IActiveSubjectsProps> = ({
   handleStopSession,
   handleSessionClick,
 }) => {
+  const { t } = useTranslation();
+
   const subjects: IAssignedSubject[] = subjectsProp;
 
   return (
@@ -33,7 +34,7 @@ const ActiveSubjects: React.FC<IActiveSubjectsProps> = ({
       {subjects.length > 0 ? (
         <Card sx={{ mt: 1 }}>
           <CardContent>
-            <Typography variant="h6">{LiveLectures}</Typography>
+            <Typography variant="h6">{t("LiveLectures")}</Typography>
             <Divider sx={{ mb: 2 }} />
             <TableContainer component={Paper} sx={{ mt: 1 }}>
               <Table sx={{ minWidth: 290 }} size="small">

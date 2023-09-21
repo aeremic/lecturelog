@@ -16,28 +16,6 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import {
-  Action,
-  Add,
-  AddUser,
-  AlertFailureMessage,
-  AlertSuccessfullMessage,
-  AreYouSure,
-  Cancel,
-  Email,
-  FirstName,
-  Index,
-  IsActivated,
-  LastName,
-  NoStudentsFound,
-  Ok,
-  RemoveUser,
-  SendActivationLink,
-  UserAddedSuccessfully,
-  UserNotAdded,
-  UserSuccessfullyRemoved,
-  Yes,
-} from "../../../../../resources/Typography";
 import { RoleEnum } from "../../../../../modelHelpers/Enums";
 import { IUser } from "../../../../../models/User";
 import { HttpStatusCode } from "axios";
@@ -57,12 +35,15 @@ import ForwardToInboxIcon from "@mui/icons-material/ForwardToInbox";
 import UploadIcon from "@mui/icons-material/Upload";
 import { IManipulateUser } from "../../../../../modelHelpers/ManipulateUser";
 import { getStudents } from "../../../../../services/HttpService/StudentsService";
+import { useTranslation } from "react-i18next";
 import {
   removeUser,
   sendEmailVerification,
 } from "../../../../../services/HttpService/UsersService";
 
 const StudentsTable = () => {
+  const { t } = useTranslation();
+
   const studentsTablleInitialState: IUser[] = [
     {
       id: 0,
@@ -113,7 +94,7 @@ const StudentsTable = () => {
           setStudentsLoaded(true);
         } else {
           setAlertType("error");
-          setAlertMessage(AlertFailureMessage);
+          setAlertMessage(t("AlertFailureMessage"));
           setOpenAlert(true);
         }
       }
@@ -145,7 +126,7 @@ const StudentsTable = () => {
       setConfirmationDialogOpen(true);
     } else {
       setAlertType("error");
-      setAlertMessage(AlertFailureMessage);
+      setAlertMessage(t("AlertFailureMessage"));
       setOpenAlert(true);
     }
   };
@@ -168,13 +149,13 @@ const StudentsTable = () => {
         res.data > 0
       ) {
         setAlertType("success");
-        setAlertMessage(UserSuccessfullyRemoved);
+        setAlertMessage(t("UserSuccessfullyRemoved"));
         setOpenAlert(true);
 
         setStudentsLoaded(false);
       } else {
         setAlertType("error");
-        setAlertMessage(AlertFailureMessage);
+        setAlertMessage(t("AlertFailureMessage"));
         setOpenAlert(true);
       }
     }
@@ -192,13 +173,13 @@ const StudentsTable = () => {
       setManipulateUserValue(newValue);
 
       setAlertType("success");
-      setAlertMessage(UserAddedSuccessfully);
+      setAlertMessage(t("UserAddedSuccessfully"));
       setOpenAlert(true);
 
       setStudentsLoaded(false);
     } else {
       setAlertType("error");
-      setAlertMessage(UserNotAdded);
+      setAlertMessage(t("UserNotAdded"));
       setOpenAlert(true);
     }
   };
@@ -214,13 +195,13 @@ const StudentsTable = () => {
       setManipulateUserValue(newValue);
 
       setAlertType("success");
-      setAlertMessage(UserAddedSuccessfully);
+      setAlertMessage(t("UserAddedSuccessfully"));
       setOpenAlert(true);
 
       setStudentsLoaded(false);
     } else {
       setAlertType("error");
-      setAlertMessage(UserNotAdded);
+      setAlertMessage(t("UserNotAdded"));
       setOpenAlert(true);
     }
   };
@@ -287,30 +268,30 @@ const StudentsTable = () => {
                   </TableCell>
                   <TableCell align="center">
                     <ContactPageIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
-                    {Index}
+                    {t("Index")}
                   </TableCell>
                   <TableCell align="center">
                     <AlternateEmailIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
-                    {Email}
+                    {t("Email")}
                   </TableCell>
                   <TableCell align="center">
                     <PersonIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
-                    {FirstName}
+                    {t("FirstName")}
                   </TableCell>
                   <TableCell align="center">
                     <PersonIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
-                    {LastName}
+                    {t("LastName")}
                   </TableCell>
                   <TableCell align="center">
                     <LibraryAddCheckIcon
                       fontSize="xs"
                       sx={{ mt: 1, mr: 0.5 }}
                     />
-                    {IsActivated}
+                    {t("IsActivated")}
                   </TableCell>
                   <TableCell align="center" colSpan={2}>
                     <BorderColorIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
-                    {Action}
+                    {t("Action")}
                   </TableCell>
                 </TableRow>
               </TableHead>
@@ -386,16 +367,16 @@ const StudentsTable = () => {
           </Box>
         </Box>
       ) : (
-        <Typography>{NoStudentsFound}</Typography>
+        <Typography>{t("NoStudentsFound")}</Typography>
       )}
       <ConfirmationDialog
         id="remove-student-menu"
         keepMounted
         open={removeDialogOpen}
-        title={RemoveUser}
-        content={AreYouSure}
-        negativeAction={Cancel}
-        positiveAction={Yes}
+        title={t("RemoveUser")}
+        content={t("AreYouSure")}
+        negativeAction={t("Cancel")}
+        positiveAction={t("Yes")}
         value={removeIndexValue}
         onClose={handleRemoveDialogClose}
       />
@@ -403,8 +384,8 @@ const StudentsTable = () => {
         id="confirmation-subject-menu"
         keepMounted
         open={confirmationDialogOpen}
-        title={AlertSuccessfullMessage}
-        positiveAction={Ok}
+        title={t("AlertSuccessfullMessage")}
+        positiveAction={t("Ok")}
         value={-1}
         onClose={handleConfirmationDialogClose}
       />
@@ -412,9 +393,9 @@ const StudentsTable = () => {
         id="add-student-menu"
         keepMounted
         open={addUserDialogOpen}
-        title={AddUser}
-        negativeAction={Cancel}
-        positiveAction={Add}
+        title={t("AddUser")}
+        negativeAction={t("Cancel")}
+        positiveAction={t("Add")}
         defaultRoleEnum={RoleEnum.Student}
         value={manipulateUserValue}
         onClose={handleAddUserDialogClose}

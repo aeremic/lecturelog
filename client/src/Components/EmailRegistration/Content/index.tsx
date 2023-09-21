@@ -14,19 +14,6 @@ import {
 import { HttpStatusCode } from "axios";
 import { useForm } from "react-hook-form";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import {
-  ActivationFailed,
-  AlertFailureMessage,
-  Code,
-  EmailRegistrationSubtitle,
-  Password,
-  PleaseEnterYourCode,
-  PleaseEnterYourNewPassword,
-  PleaseRepeatYourNewPassword,
-  Register,
-  RegistrationWithEmail,
-  RepeatPassword,
-} from "../../../resources/Typography";
 import { IEmailRegistration } from "../../../models/EmailRegistration";
 import { useState } from "react";
 import PasswordIcon from "@mui/icons-material/Password";
@@ -34,9 +21,11 @@ import VpnKeyIcon from "@mui/icons-material/VpnKey";
 import EmailIcon from "@mui/icons-material/Email";
 import LoginIcon from "@mui/icons-material/Login";
 import { emailRegistration } from "../../../services/HttpService/UsersService";
+import { useTranslation } from "react-i18next";
 
 const Content = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [queryParameters] = useSearchParams();
   const {
     register,
@@ -58,12 +47,12 @@ const Content = () => {
         navigate(`/login?success=${res.data}`, { replace: true });
       } else {
         setAlertType("error");
-        setAlertMessage(ActivationFailed);
+        setAlertMessage(t("ActivationFailed"));
         setOpenAlert(true);
       }
     } else {
       setAlertType("error");
-      setAlertMessage(AlertFailureMessage);
+      setAlertMessage(t("AlertFailureMessage"));
       setOpenAlert(true);
     }
   };
@@ -83,11 +72,11 @@ const Content = () => {
       <Container component="main">
         <Typography component="h1" variant="h5">
           <EmailIcon fontSize="small" sx={{ mr: 0.5 }} />
-          {RegistrationWithEmail}
+          {t("RegistrationWithEmail")}
         </Typography>
         <Divider sx={{ m: 2 }} />
         <Typography variant="body1" sx={{ width: 270 }}>
-          {EmailRegistrationSubtitle}
+          {t("EmailRegistrationSubtitle")}
         </Typography>
         <FormControl fullWidth sx={{ width: 300 }}>
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -97,10 +86,10 @@ const Content = () => {
                   // @ts-ignore
                   <VpnKeyIcon fontSize="xs" sx={{ mr: 0.5 }} />
                 }
-                {Code}
+                {t("Code")}
               </FormLabel>
               <TextField
-                label={PleaseEnterYourCode}
+                label={t("PleaseEnterYourCode")}
                 variant="outlined"
                 type="text"
                 {...register("code", { required: true })}
@@ -113,10 +102,10 @@ const Content = () => {
                   // @ts-ignore
                   <PasswordIcon fontSize="xs" sx={{ mr: 0.5 }} />
                 }
-                {Password}
+                {t("Password")}
               </FormLabel>
               <TextField
-                label={PleaseEnterYourNewPassword}
+                label={t("PleaseEnterYourNewPassword")}
                 variant="outlined"
                 type="password"
                 {...register("password", { required: true })}
@@ -129,10 +118,10 @@ const Content = () => {
                   // @ts-ignore
                   <PasswordIcon fontSize="xs" sx={{ mr: 0.5 }} />
                 }
-                {RepeatPassword}
+                {t("RepeatPassword")}
               </FormLabel>
               <TextField
-                label={PleaseRepeatYourNewPassword}
+                label={t("PleaseRepeatYourNewPassword")}
                 variant="outlined"
                 type="password"
                 {...register("repeatedPassword", { required: true })}
@@ -145,7 +134,7 @@ const Content = () => {
                   // @ts-ignore
                   <LoginIcon fontSize="xs" sx={{ mr: 0.5 }} />
                 }
-                {Register}
+                {t("Register")}
               </Button>
             </FormGroup>
           </form>

@@ -12,25 +12,27 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { AssignedSubjects } from "../../../../../resources/Typography";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
 import NumbersIcon from "@mui/icons-material/Numbers";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import SmartDisplayIcon from "@mui/icons-material/SmartDisplay";
 import { IAssignedSubject } from "../../../../../modelHelpers/AssignedSubject";
 import { IAssignedSubjectsProps } from "../../../../../modelHelpers/AssignedSubjectsProps";
+import { useTranslation } from "react-i18next";
 
 const AssignedSubject: React.FC<IAssignedSubjectsProps> = ({
   subjectsProp,
   handleStartSession,
   handleSubjectClick,
 }) => {
+  const { t } = useTranslation();
+
   const subject: IAssignedSubject[] = subjectsProp;
 
   return (
     <Card sx={{ mt: 1 }}>
       <CardContent>
-        <Typography variant="h6">{AssignedSubjects}</Typography>
+        <Typography variant="h6">{t("AssignedSubjects")}</Typography>
         <Divider sx={{ mb: 2 }} />
         <TableContainer component={Paper} sx={{ mt: 1 }}>
           <Table sx={{ minWidth: 290 }} size="small">

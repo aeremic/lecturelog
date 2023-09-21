@@ -9,15 +9,6 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import {
-  NewAccountSuccess,
-  AlertFailureMessage,
-  NewAccountAddedSuccessfull,
-  DidntReceiveAnEmail,
-  SendAgain,
-  AlertSuccessfullMessage,
-  Ok,
-} from "../../../resources/Typography";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { HttpStatusCode } from "axios";
 import { useState } from "react";
@@ -25,12 +16,14 @@ import CheckIcon from "@mui/icons-material/Check";
 import { sendEmailVerification } from "../../../services/HttpService/UsersService";
 import ConfirmationDialog from "../../Common/ConfirmationDialog";
 import { IContentProps } from "../../../modelHelpers/ContentProps";
+import { useTranslation } from "react-i18next";
 
 const Content: React.FC<IContentProps> = ({
   setOpenAlert,
   setAlertMessage,
   setAlertType,
 }) => {
+  const { t } = useTranslation();
   const [queryParameters] = useSearchParams();
   const navigate = useNavigate();
 
@@ -51,12 +44,12 @@ const Content: React.FC<IContentProps> = ({
         setConfirmationDialogOpen(true);
       } else {
         setAlertType("error");
-        setAlertMessage(AlertFailureMessage);
+        setAlertMessage(t("AlertFailureMessage"));
         setOpenAlert(true);
       }
     } else {
       setAlertType("error");
-      setAlertMessage(AlertFailureMessage);
+      setAlertMessage(t("AlertFailureMessage"));
       setOpenAlert(true);
     }
   };
@@ -80,18 +73,18 @@ const Content: React.FC<IContentProps> = ({
           <Container component="main">
             <Typography component="h1" variant="h5">
               <CheckIcon fontSize="small" sx={{ mr: 0.5 }} />
-              {NewAccountAddedSuccessfull}
+              {t("NewAccountAddedSuccessfull")}
             </Typography>
             <Divider sx={{ m: 2 }} />
             <Alert severity="success" sx={{ width: 270 }}>
-              {NewAccountSuccess}
+              {t("NewAccountSuccess")}
             </Alert>
             <Stack direction={"row"} sx={{ mt: 0.4 }}>
               <Typography variant="body2" sx={{ mt: 0.4 }}>
-                {DidntReceiveAnEmail}
+                {t("DidntReceiveAnEmail")}
               </Typography>
               <Button size="small" onClick={handleSendEmailAgainClick}>
-                <Typography variant="body2">{SendAgain}</Typography>
+                <Typography variant="body2">{t("SendAgain")}</Typography>
               </Button>
             </Stack>
           </Container>
@@ -99,8 +92,8 @@ const Content: React.FC<IContentProps> = ({
             id="confirmation-subject-menu"
             keepMounted
             open={confirmationDialogOpen}
-            title={AlertSuccessfullMessage}
-            positiveAction={Ok}
+            title={t("AlertSuccessfullMessage")}
+            positiveAction={t("Ok")}
             value={-1}
             onClose={handleConfirmationDialogClose}
           />

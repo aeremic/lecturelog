@@ -1,7 +1,10 @@
 import { Box, Card, CardContent, Divider, Typography } from "@mui/material";
 import SentimentDissatisfiedIcon from "@mui/icons-material/SentimentDissatisfied";
+import { useTranslation } from "react-i18next";
 
 const ErrorComponent = () => {
+  const { t } = useTranslation();
+
   return (
     <Box
       display="flex"
@@ -15,7 +18,7 @@ const ErrorComponent = () => {
             <SentimentDissatisfiedIcon />
           </Box>
           <Divider sx={{ mt: 1, mb: 1 }} />
-          <Typography variant="h6">Something went wrong!</Typography>
+          <Typography variant="h6">{t("SomethingWentWrong")}</Typography>
         </CardContent>
       </Card>
     </Box>

@@ -28,28 +28,6 @@ import LibraryAddCheckIcon from "@mui/icons-material/LibraryAddCheck";
 import ForwardToInboxIcon from "@mui/icons-material/ForwardToInbox";
 import UploadIcon from "@mui/icons-material/Upload";
 import { getProfessors } from "../../../../../services/HttpService/ProfessorsService";
-import {
-  Action,
-  Add,
-  AddUser,
-  AlertFailureMessage,
-  AlertSuccessfullMessage,
-  AreYouSure,
-  Cancel,
-  Email,
-  FirstName,
-  IsActivated,
-  LastName,
-  NoProfessorsFound,
-  Ok,
-  RemoveUser,
-  Upload,
-  UploadProfessors,
-  UserAddedSuccessfully,
-  UserNotAdded,
-  UserSuccessfullyRemoved,
-  Yes,
-} from "../../../../../resources/Typography";
 import ConfirmationDialog from "../../../../Common/ConfirmationDialog";
 import ManipulateUserDialog from "../../../ManipulateUserDialog";
 import { RoleEnum } from "../../../../../modelHelpers/Enums";
@@ -61,8 +39,11 @@ import {
   sendEmailVerification,
 } from "../../../../../services/HttpService/UsersService";
 import UploadUsersDialog from "../../../UploadUsersDialog";
+import { useTranslation } from "react-i18next";
 
 const ProfessorsTable = () => {
+  const { t } = useTranslation();
+
   const professorsTableInitialState: IUser[] = [
     {
       id: 0,
@@ -116,7 +97,7 @@ const ProfessorsTable = () => {
         setProfessorsLoaded(true);
       } else {
         setAlertType("error");
-        setAlertMessage(AlertFailureMessage);
+        setAlertMessage(t("AlertFailureMessage"));
         setOpenAlert(true);
       }
     });
@@ -147,7 +128,7 @@ const ProfessorsTable = () => {
       setConfirmationDialogOpen(true);
     } else {
       setAlertType("error");
-      setAlertMessage(AlertFailureMessage);
+      setAlertMessage(t("AlertFailureMessage"));
       setOpenAlert(true);
     }
   };
@@ -170,13 +151,13 @@ const ProfessorsTable = () => {
         res.data > 0
       ) {
         setAlertType("success");
-        setAlertMessage(UserSuccessfullyRemoved);
+        setAlertMessage(t("UserSuccessfullyRemoved"));
         setOpenAlert(true);
 
         setProfessorsLoaded(false);
       } else {
         setAlertType("error");
-        setAlertMessage(AlertFailureMessage);
+        setAlertMessage(t("AlertFailureMessage"));
         setOpenAlert(true);
       }
     }
@@ -209,13 +190,13 @@ const ProfessorsTable = () => {
       setManipulateUserValue(newValue);
 
       setAlertType("success");
-      setAlertMessage(UserAddedSuccessfully);
+      setAlertMessage(t("UserAddedSuccessfully"));
       setOpenAlert(true);
 
       setProfessorsLoaded(false);
     } else {
       setAlertType("error");
-      setAlertMessage(UserNotAdded);
+      setAlertMessage(t("UserNotAdded"));
       setOpenAlert(true);
     }
   };
@@ -228,13 +209,13 @@ const ProfessorsTable = () => {
     setUploadUsersDialogOpen(false);
     if (newValue) {
       setAlertType("success");
-      setAlertMessage(UserAddedSuccessfully);
+      setAlertMessage(t("UserAddedSuccessfully"));
       setOpenAlert(true);
 
       setProfessorsLoaded(false);
     } else {
       setAlertType("error");
-      setAlertMessage(UserNotAdded);
+      setAlertMessage(t("UserNotAdded"));
       setOpenAlert(true);
     }
   };
@@ -300,26 +281,26 @@ const ProfessorsTable = () => {
                   </TableCell>
                   <TableCell align="center">
                     <AlternateEmailIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
-                    {Email}
+                    {t("Email")}
                   </TableCell>
                   <TableCell align="center">
                     <PersonIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
-                    {FirstName}
+                    {t("FirstName")}
                   </TableCell>
                   <TableCell align="center">
                     <PersonIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
-                    {LastName}
+                    {t("LastName")}
                   </TableCell>
                   <TableCell align="center">
                     <LibraryAddCheckIcon
                       fontSize="xs"
                       sx={{ mt: 1, mr: 0.5 }}
                     />
-                    {IsActivated}
+                    {t("IsActivated")}
                   </TableCell>
                   <TableCell align="center" colSpan={2}>
                     <BorderColorIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
-                    {Action}
+                    {t("Action")}
                   </TableCell>
                 </TableRow>
               </TableHead>
@@ -392,14 +373,14 @@ const ProfessorsTable = () => {
           </Box>
         </Box>
       ) : (
-        <Typography>{NoProfessorsFound}</Typography>
+        <Typography>{t("NoProfessorsFound")}</Typography>
       )}
       <ConfirmationDialog
         id="confirmation-subject-menu"
         keepMounted
         open={confirmationDialogOpen}
-        title={AlertSuccessfullMessage}
-        positiveAction={Ok}
+        title={t("AlertSuccessfullMessage")}
+        positiveAction={t("Ok")}
         value={-1}
         onClose={handleConfirmationDialogClose}
       />
@@ -407,10 +388,10 @@ const ProfessorsTable = () => {
         id="remove-professor-menu"
         keepMounted
         open={removeDialogOpen}
-        title={RemoveUser}
-        content={AreYouSure}
-        negativeAction={Cancel}
-        positiveAction={Yes}
+        title={t("RemoveUser")}
+        content={t("AreYouSure")}
+        negativeAction={t("Cancel")}
+        positiveAction={t("Yes")}
         value={removeIndexValue}
         onClose={handleRemoveDialogClose}
       />
@@ -418,9 +399,9 @@ const ProfessorsTable = () => {
         id="add-professor-menu"
         keepMounted
         open={addUserDialogOpen}
-        title={AddUser}
-        negativeAction={Cancel}
-        positiveAction={Add}
+        title={t("AddUser")}
+        negativeAction={t("Cancel")}
+        positiveAction={t("Add")}
         defaultRoleEnum={RoleEnum.Professor}
         value={manipulateUserValue}
         onClose={handleAddUserDialogClose}
@@ -429,9 +410,9 @@ const ProfessorsTable = () => {
         id="upload-users-menu"
         keepMounted
         open={uploadUsersDialogOpen}
-        title={UploadProfessors}
-        negativeAction={Cancel}
-        positiveAction={Upload}
+        title={t("UploadProfessors")}
+        negativeAction={t("Cancel")}
+        positiveAction={t("Upload")}
         onClose={handleUploadUsersDialogClose}
       />
       {/* <ManipulateUserDialog

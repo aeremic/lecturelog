@@ -8,15 +8,13 @@ import {
   Typography,
 } from "@mui/material";
 import ProfessorsTable from "./ProfessorsTable";
-import {
-  AllProfessors,
-  AllStudents,
-  Users,
-} from "../../../../resources/Typography";
 import StudentsTable from "./StudentsTable";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
+import { useTranslation } from "react-i18next";
 
 const Content = () => {
+  const { t } = useTranslation();
+
   return (
     <>
       <Container sx={{ mt: 2 }}>
@@ -25,7 +23,7 @@ const Content = () => {
             <Box sx={{ mt: 2 }}>
               <Typography variant="h5">
                 <PeopleAltIcon fontSize="small" sx={{ mr: 0.5 }} />
-                {Users}
+                {t("Users")}
               </Typography>
             </Box>
           </Grid>
@@ -33,7 +31,7 @@ const Content = () => {
           <Grid item xs={12}>
             <Card variant="outlined">
               <CardContent>
-                <Typography variant="h6">{AllProfessors}</Typography>
+                <Typography variant="h6">{t("AllProfessors")}</Typography>
                 <Divider sx={{ mb: 2 }} />
                 <ProfessorsTable />
               </CardContent>
@@ -42,7 +40,7 @@ const Content = () => {
           <Grid item xs={12}>
             <Card variant="outlined">
               <CardContent>
-                <Typography variant="h6">{AllStudents}</Typography>
+                <Typography variant="h6">{t("AllStudents")}</Typography>
                 <Divider sx={{ mb: 2 }} />
                 <StudentsTable />
               </CardContent>

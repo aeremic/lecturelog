@@ -15,21 +15,6 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import {
-  AlertFailureMessage,
-  Email,
-  FirstName,
-  Index,
-  LastName,
-  PleaseEnterEmail,
-  PleaseEnterFirstName,
-  PleaseEnterLastName,
-  PleaseEnterStudentIndex,
-  PleaseEnterStudentYear,
-  Register,
-  WrongCredentials,
-  Year,
-} from "../../../resources/Typography";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { HttpStatusCode } from "axios";
@@ -44,8 +29,10 @@ import { RoleEnum } from "../../../modelHelpers/Enums";
 import { IRegisterFormInput } from "../../../modelHelpers/IRegisterFormInput";
 import { registerStudent } from "../../../services/HttpService/StudentsService";
 import { IRegisterStudent } from "../../../modelHelpers/RegisterStudent";
+import { useTranslation } from "react-i18next";
 
 const Content = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const {
     register,
@@ -87,12 +74,12 @@ const Content = () => {
         }
       } else if (res.status && res.status === HttpStatusCode.Unauthorized) {
         setAlertType("error");
-        setAlertMessage(WrongCredentials);
+        setAlertMessage(t("WrongCredentials"));
         setOpenAlert(true);
       }
     } else {
       setAlertType("error");
-      setAlertMessage(AlertFailureMessage);
+      setAlertMessage(t("AlertFailureMessage"));
       setOpenAlert(true);
     }
   };
@@ -122,7 +109,7 @@ const Content = () => {
             </Typography>
             <Typography component="h1" variant="h5">
               <LockOpenIcon fontSize="small" sx={{ mr: 0.5 }} />
-              {Register}
+              {t("Register")}
             </Typography>
             <Divider sx={{ m: 2 }} />
             <FormControl fullWidth sx={{ width: 300 }}>
@@ -133,10 +120,10 @@ const Content = () => {
                       // @ts-ignore
                       <PersonIcon fontSize="xs" sx={{ mr: 0.5 }} />
                     }
-                    {FirstName}
+                    {t("FirstName")}
                   </FormLabel>
                   <TextField
-                    label={PleaseEnterFirstName}
+                    label={t("PleaseEnterFirstName")}
                     variant="outlined"
                     type="text"
                     {...register("firstname", { required: true })}
@@ -149,10 +136,10 @@ const Content = () => {
                       // @ts-ignore
                       <PersonIcon fontSize="xs" sx={{ mr: 0.5 }} />
                     }
-                    {LastName}
+                    {t("LastName")}
                   </FormLabel>
                   <TextField
-                    label={PleaseEnterLastName}
+                    label={t("PleaseEnterLastName")}
                     variant="outlined"
                     type="text"
                     {...register("lastname", { required: true })}
@@ -165,10 +152,10 @@ const Content = () => {
                       // @ts-ignore
                       <AlternateEmailIcon fontSize="xs" sx={{ mr: 0.5 }} />
                     }
-                    {Email}
+                    {t("Email")}
                   </FormLabel>
                   <TextField
-                    label={PleaseEnterEmail}
+                    label={t("PleaseEnterEmail")}
                     variant="outlined"
                     type="email"
                     {...register("email", { required: true })}
@@ -182,10 +169,10 @@ const Content = () => {
                         // @ts-ignore
                         <ContactPageIcon fontSize="xs" sx={{ mr: 0.5 }} />
                       }
-                      {Index}
+                      {t("Index")}
                     </FormLabel>
                     <TextField
-                      label={PleaseEnterStudentIndex}
+                      label={t("PleaseEnterStudentIndex")}
                       variant="outlined"
                       type="number"
                       {...register("index", {
@@ -202,10 +189,10 @@ const Content = () => {
                         // @ts-ignore
                         <CalendarMonthIcon fontSize="xs" sx={{ mr: 0.5 }} />
                       }
-                      {Year}
+                      {t("Year")}
                     </FormLabel>
                     <TextField
-                      label={PleaseEnterStudentYear}
+                      label={t("PleaseEnterStudentYear")}
                       variant="outlined"
                       type="number"
                       {...register("year", {
@@ -223,7 +210,7 @@ const Content = () => {
                       // @ts-ignore
                       <LoginIcon fontSize="xs" sx={{ mr: 0.5 }} />
                     }
-                    <Typography>{Register}</Typography>
+                    <Typography>{t("Register")}</Typography>
                   </Button>
                 </FormGroup>
               </form>
