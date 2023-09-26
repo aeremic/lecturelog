@@ -5,14 +5,13 @@ import {
   DialogContent,
   DialogTitle,
 } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { RoleEnum } from "../../../modelHelpers/Enums";
-import { IUser } from "../../../models/User";
-import { HttpStatusCode } from "axios";
+import { useState } from "react";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
-import { createUser } from "../../../services/HttpService/UsersService";
+import { Typography } from "@mui/material";
+import { useTranslation } from "react-i18next";
+import { MuiFileInput } from "mui-file-input";
+import { HttpStatusCode } from "axios";
 
 export interface IUploadUsersDialogRawProps {
   id: string;
@@ -28,12 +27,30 @@ const UploadUsersDialog = (props: IUploadUsersDialogRawProps) => {
   const { onClose, open, title, negativeAction, positiveAction, ...other } =
     props;
 
+  const { t } = useTranslation();
+
+  const [fileValue, setFileValue] = useState();
+
   const handleCancel = () => {
     onClose();
   };
 
-  const handleOk = () => {
-    onClose();
+  const handleOk = async () => {
+    if (fileValue) {
+      const formData = new FormData();
+      formData.append("fileChooser", fileValue);
+
+      const res: any = await uploadUsers(formData);
+      if (res && res.status == HttpStatusCode.Created && res.data) {
+        debugger;
+        onClose(fileValue);
+      }
+    }
+  };
+
+  const handleUploadUsersChange = (newFileValue: any) => {
+    setFileValue(newFileValue);
+    debugger;
   };
 
   return (
@@ -44,7 +61,10 @@ const UploadUsersDialog = (props: IUploadUsersDialogRawProps) => {
       {...other}
     >
       <DialogTitle>{title}</DialogTitle>
-      <DialogContent dividers></DialogContent>
+      <DialogContent dividers>
+        <Typography>{t("UploadCSVFileToAddMoreUsers")}</Typography>
+        <MuiFileInput value={fileValue} onChange={handleUploadUsersChange} />
+      </DialogContent>
       <DialogActions>
         <Button
           autoFocus
@@ -58,12 +78,11 @@ const UploadUsersDialog = (props: IUploadUsersDialogRawProps) => {
           }
           {negativeAction}
         </Button>
-        <Button variant="contained" color="success" type="submit">
+        <Button variant="contained" color="success" onClick={handleOk}>
           {
             // @ts-ignore
             <CheckIcon fontSize="xs" sx={{ mr: 0.5 }} />
           }
-
           {positiveAction}
         </Button>
       </DialogActions>

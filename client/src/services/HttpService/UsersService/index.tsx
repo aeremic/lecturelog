@@ -59,3 +59,11 @@ export const getAllExceptAdmin = async () => {
     console.log(err); // TODO: Fix for PROD.
   }
 };
+
+export const uploadUsers = async (data: any) => {
+  try {
+    return await post(`${URL}/uploadUsers`, data);
+  } catch (err) {
+    console.log(err); // TODO: Fix for PROD.
+  }
+};

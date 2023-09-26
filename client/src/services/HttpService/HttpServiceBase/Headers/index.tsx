@@ -6,8 +6,8 @@ export const AuthHeader = () => {
   }
 
   if (parsedAccessToken) {
-    return { Authorization: "Bearer " + parsedAccessToken };
+    return "Bearer " + parsedAccessToken;
   } else {
-    return { Authorization: "" };
+    return "";
   }
 };
