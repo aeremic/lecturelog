@@ -12,6 +12,7 @@ import { Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { MuiFileInput } from "mui-file-input";
 import { HttpStatusCode } from "axios";
+import { uploadUsers } from "../../../services/HttpService/UsersService";
 
 export interface IUploadUsersDialogRawProps {
   id: string;
@@ -38,11 +39,11 @@ const UploadUsersDialog = (props: IUploadUsersDialogRawProps) => {
   const handleOk = async () => {
     if (fileValue) {
       const formData = new FormData();
-      formData.append("fileChooser", fileValue);
+      formData.append("file", fileValue, fileValue.name);
 
+      debugger;
       const res: any = await uploadUsers(formData);
       if (res && res.status == HttpStatusCode.Created && res.data) {
-        debugger;
         onClose(fileValue);
       }
     }
@@ -50,7 +51,6 @@ const UploadUsersDialog = (props: IUploadUsersDialogRawProps) => {
 
   const handleUploadUsersChange = (newFileValue: any) => {
     setFileValue(newFileValue);
-    debugger;
   };
 
   return (

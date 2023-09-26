@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Inject, Param, ParseIntPipe, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, FileTypeValidator, Get, Inject, MaxFileSizeValidator, Param, ParseFilePipe, ParseIntPipe, Post, Put, UploadedFile, UseGuards } from '@nestjs/common';
 import { UserUseCases } from 'src/use-cases';
 import { UserEntity } from '../core/entities/user.entity';
 import { AuthGuard } from '@nestjs/passport';
@@ -70,5 +70,20 @@ export class UserController {
     @Get('/getAllExceptAdmin')
     getAllExceptAdmin() {
         return this.userUseCases.getAllExceptAdmin();
+    }
+
+    @Roles('admin')
+    @UseGuards(AuthGuard('jwt'), RoleGuard)
+    @Post('/uploadUsers')
+    uploadUsers(@UploadedFile(
+        //     new ParseFilePipe({
+        //     validators: [
+        //         new MaxFileSizeValidator({ maxSize: 100000 }),
+        //         new FileTypeValidator({ fileType: 'csv' }),
+        //     ]
+        // })
+    ) file: Express.Multer.File): Promise<string> {
+        console.log(file);
+        return undefined;
     }
 }

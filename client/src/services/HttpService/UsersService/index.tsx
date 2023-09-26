@@ -62,7 +62,7 @@ export const getAllExceptAdmin = async () => {
 
 export const uploadUsers = async (data: any) => {
   try {
-    return await post(`${URL}/uploadUsers`, data);
+    return await post(`${URL}/uploadUsers`, data, true, "multipart/form-data");
   } catch (err) {
     console.log(err); // TODO: Fix for PROD.
   }
