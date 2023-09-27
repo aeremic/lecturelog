@@ -2,7 +2,7 @@ import { Inject, Injectable, forwardRef } from "@nestjs/common";
 import { MessagingGetaway } from "src/messaging/messaging.getaway";
 import { LoggerUseCases } from "../logger/logger.use-case";
 import { TimerEnum } from "src/core/common/enums/timer.enum";
-import { CodeEnum } from "src/core/common/enums/code,enum";
+import { CodeEnum } from "src/core/common/enums/code.enum";
 import { Encoding } from "src/core/common/encoding";
 import { LectureEntity } from "src/core/entities/lecture.entity";
 import { ActiveLectureEntity } from "src/core/entities/active-lecture.entity";

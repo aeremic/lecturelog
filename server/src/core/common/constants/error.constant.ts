@@ -8,3 +8,7 @@ export class ErrorConstants {
 export class ErrorMessageConstants {
     public static UserExists: string = "User already exists";
 }
+
+export class CsvParseErrorConstants {
+    public static UnsuccessfullUpload = "Upload was not successfull.";
+}

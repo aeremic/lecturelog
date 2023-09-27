@@ -3,7 +3,7 @@ import { UserRepositoryAbstract } from 'src/core/abstracts/repositories/user.rep
 import { UserEntity } from 'src/core/entities/user.entity';
 import { GenericUseCases } from '../generic.use-case';
 import { LoggerUseCases } from '../logger/logger.use-case';
-import { ErrorConstants, ErrorMessageConstants } from 'src/core/common/constants/error.constant';
+import { CsvParseErrorConstants, ErrorConstants, ErrorMessageConstants } from 'src/core/common/constants/error.constant';
 import { ProfessorsDto } from 'src/core/dtos/responses/professors.dto';
 import { BcryptService, MailService } from 'src/services';
 import { Encoding } from 'src/core/common/encoding';
@@ -16,7 +16,7 @@ import { RoleEnum } from 'src/core/common/enums/role.enum';
 import { AllUsersExceptAdminDto } from 'src/core/dtos/responses/all-users-except-admin.dto';
 import { AssignedSubjectDto } from 'src/core/dtos/responses/assigned-group.dto';
 import { SubjectUseCases } from '../subject/subject.use-case';
-import { CodeEnum } from 'src/core/common/enums/code,enum';
+import { CodeEnum } from 'src/core/common/enums/code.enum';
 import { LectureUseCases } from '../lecture/lecture.use-case';
 import { AvailableGroupDto } from 'src/core/dtos/responses/available-group.dto';
 import { ActiveLectureEntity } from 'src/core/entities/active-lecture.entity';
@@ -25,6 +25,7 @@ import { CreateStudentRequestDto } from '../../core/dtos/requests/create-student
 import { CreateUserResponseDto } from 'src/core/dtos/responses/create-user-response.dto';
 import { UploadUsersDto } from 'src/core/dtos/responses/upload-users.dto';
 import { parse } from 'papaparse';
+import { CsvParseResult } from 'src/core/common/enums/csv-parse.enum';
 
 @Injectable()
 export class UserUseCases extends GenericUseCases<UserEntity>{
@@ -415,13 +416,19 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
     }
 
     async uploadUsers(file: Express.Multer.File): Promise<UploadUsersDto> {
-        let result: UploadUsersDto;
+        let result: UploadUsersDto = { result: CsvParseResult.unsucessfull, message: CsvParseErrorConstants.UnsuccessfullUpload };
 
-        const csvFile = file.buffer.toString();
-        const parsedCsv = parse(csvFile, {
-            header: true,
-            delimiter: ','
-        })
+        try {
+            const csvFile = file.buffer.toString();
+            const parsedCsv = parse(csvFile, {
+                header: true,
+                delimiter: ','
+            })
+        }
+        catch (error) {
+            this.loggerUseCases.log(ErrorConstants.GetMethodError, error?.message, error?.stack);
+        }
+
         return result;
     }
 }

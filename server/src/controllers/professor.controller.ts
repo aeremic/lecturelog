@@ -4,7 +4,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RoleGuard } from 'src/auth/guards/role.guard';
 import { AssignedSubjectDto } from 'src/core/dtos/responses/assigned-group.dto';
-import { CodeEnum } from 'src/core/common/enums/code,enum';
+import { CodeEnum } from 'src/core/common/enums/code.enum';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('api/professor')
