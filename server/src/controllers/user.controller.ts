@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, FileTypeValidator, Get, Inject, MaxFileSizeValidator, Param, ParseFilePipe, ParseIntPipe, Post, Put, UploadedFile, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, FileTypeValidator, Get, Inject, MaxFileSizeValidator, Param, ParseFilePipe, ParseIntPipe, Post, Put, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { UserUseCases } from 'src/use-cases';
 import { UserEntity } from '../core/entities/user.entity';
 import { AuthGuard } from '@nestjs/passport';
@@ -7,6 +7,7 @@ import { RoleGuard } from 'src/auth/guards/role.guard';
 import { EmailRegistrationDto } from 'src/core/dtos';
 import { SendEmailVerificationDto } from 'src/core/dtos/requests/send-email-verification.dto';
 import { CreateUserResponseDto } from 'src/core/dtos/responses/create-user-response.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('api/user')
 export class UserController {
@@ -75,13 +76,14 @@ export class UserController {
     @Roles('admin')
     @UseGuards(AuthGuard('jwt'), RoleGuard)
     @Post('/uploadUsers')
+    @UseInterceptors(FileInterceptor('file'))
     uploadUsers(@UploadedFile(
-        //     new ParseFilePipe({
-        //     validators: [
-        //         new MaxFileSizeValidator({ maxSize: 100000 }),
-        //         new FileTypeValidator({ fileType: 'csv' }),
-        //     ]
-        // })
+        new ParseFilePipe({
+            validators: [
+                new MaxFileSizeValidator({ maxSize: 100000 }),
+                new FileTypeValidator({ fileType: new RegExp("application\/vnd.ms-excel|csv") }),
+            ]
+        })
     ) file: Express.Multer.File): Promise<string> {
         console.log(file);
         return undefined;

@@ -11,7 +11,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { MuiFileInput } from "mui-file-input";
-import { HttpStatusCode } from "axios";
+import axios, { HttpStatusCode } from "axios";
 import { uploadUsers } from "../../../services/HttpService/UsersService";
 
 export interface IUploadUsersDialogRawProps {
@@ -39,9 +39,8 @@ const UploadUsersDialog = (props: IUploadUsersDialogRawProps) => {
   const handleOk = async () => {
     if (fileValue) {
       const formData = new FormData();
-      formData.append("file", fileValue, fileValue.name);
+      formData.append("file", fileValue);
 
-      debugger;
       const res: any = await uploadUsers(formData);
       if (res && res.status == HttpStatusCode.Created && res.data) {
         onClose(fileValue);
