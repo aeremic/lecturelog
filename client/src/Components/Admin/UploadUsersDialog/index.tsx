@@ -11,7 +11,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { MuiFileInput } from "mui-file-input";
-import axios, { HttpStatusCode } from "axios";
+import { HttpStatusCode } from "axios";
 import { uploadUsers } from "../../../services/HttpService/UsersService";
 
 export interface IUploadUsersDialogRawProps {

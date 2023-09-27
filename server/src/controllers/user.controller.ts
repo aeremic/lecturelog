@@ -85,7 +85,6 @@ export class UserController {
             ]
         })
     ) file: Express.Multer.File): Promise<string> {
-        console.log(file);
         return undefined;
     }
 }
