@@ -23,6 +23,8 @@ import { ActiveLectureEntity } from 'src/core/entities/active-lecture.entity';
 import { SendEmailVerificationDto } from '../../core/dtos/requests/send-email-verification.dto';
 import { CreateStudentRequestDto } from '../../core/dtos/requests/create-student-request.dto';
 import { CreateUserResponseDto } from 'src/core/dtos/responses/create-user-response.dto';
+import { UploadUsersDto } from 'src/core/dtos/responses/upload-users.dto';
+import { parse } from 'papaparse';
 
 @Injectable()
 export class UserUseCases extends GenericUseCases<UserEntity>{
@@ -410,5 +412,16 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
 
     async getCodeByActiveLecture(activeLecture: ActiveLectureEntity): Promise<string> {
         return await this.lectureUseCases.getCodeByActiveLecture(activeLecture);
+    }
+
+    async uploadUsers(file: Express.Multer.File): Promise<UploadUsersDto> {
+        let result: UploadUsersDto;
+
+        const csvFile = file.buffer.toString();
+        const parsedCsv = parse(csvFile, {
+            header: true,
+            delimiter: ','
+        })
+        return result;
     }
 }

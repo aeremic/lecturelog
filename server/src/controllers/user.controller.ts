@@ -8,6 +8,7 @@ import { EmailRegistrationDto } from 'src/core/dtos';
 import { SendEmailVerificationDto } from 'src/core/dtos/requests/send-email-verification.dto';
 import { CreateUserResponseDto } from 'src/core/dtos/responses/create-user-response.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { UploadUsersDto } from 'src/core/dtos/responses/upload-users.dto';
 
 @Controller('api/user')
 export class UserController {
@@ -84,7 +85,7 @@ export class UserController {
                 new FileTypeValidator({ fileType: new RegExp("application\/vnd.ms-excel|csv") }),
             ]
         })
-    ) file: Express.Multer.File): Promise<string> {
-        return undefined;
+    ) file: Express.Multer.File): Promise<UploadUsersDto> {
+        return this.userUseCases.uploadUsers(file);
     }
 }
