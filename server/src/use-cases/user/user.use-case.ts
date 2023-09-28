@@ -292,6 +292,7 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
                 if (userEntity.email !== userInDb.email) {
                     userEntity.hash = null;
                     userEntity.isActivated = false;
+
                     isEmailChanged = true;
                 }
 
@@ -440,13 +441,18 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
     }
 
     async uploadUsers(file: Express.Multer.File): Promise<UploadUsersDto> {
-        let result: UploadUsersDto = { result: CsvParseResult.unsucessfull, message: CsvParseErrorConstants.UnsuccessfullUpload };
+        let uploadResult: UploadUsersDto = {
+            result: CsvParseResult.unsucessfull,
+            errors: []
+        }
+
         try {
             const header: string[] = ['id', 'email', 'firstname', 'lastname'];
             const parsedCsv = parse(file.buffer.toString(), {
                 header: true,
                 delimiter: ','
             });
+
             const fields = parsedCsv.meta.fields;
             const data: any = parsedCsv.data;
 
@@ -454,36 +460,53 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
                 const isHeaderValid = fields.length === header.length
                     && fields.every((element, index) => element === header[index]);
                 if (isHeaderValid) {
-                    await data.forEach(async (item: any) => {
-                        if (item) {
-                            if (item.id == undefined) {
-                                // log err to msg and continue
+                    for (let i = 0; i < data.length; i++) {
+                        if (data[i] && data[i].id != undefined) {
+                            let dataId: number = Number(data[i].id);
+                            if (Number.isNaN(dataId)) {
+                                uploadResult.errors.push(`${CsvParseErrorConstants.IdentifierUndefined} at position [${i}].`);
                             } else {
                                 let user: UserEntity = {
-                                    id: Number(item.id),
-                                    email: item.email,
-                                    firstname: item.firstname,
-                                    lastname: item.lastname,
+                                    id: dataId,
+                                    email: data[i].email,
+                                    firstname: data[i].firstname,
+                                    lastname: data[i].lastname,
                                     isActivated: false,
                                     role: RoleEnum.professor
                                 }
 
-                                if (item.id == 0) {
-                                    await this.createUser(user);
+                                if (data[i].id == 0) {
+                                    let createResult = await this.createUser(user);
+                                    if (createResult.id === -1) {
+                                        uploadResult.errors.push(`${CsvParseErrorConstants.UserNotCreated} at position [${i}] 
+                                            ${createResult.errorMessage}`);
+                                    }
                                 } else {
-                                    await this.updateUser(user);
+                                    let updateResult = await this.updateUser(user);
+                                    if (updateResult.id === -1) {
+                                        uploadResult.errors.push(`${CsvParseErrorConstants.UserNotUpdated} at position [${i}] 
+                                            ${updateResult.errorMessage}`);
+                                    }
                                 }
                             }
+                        } else {
+                            uploadResult.errors.push(`${CsvParseErrorConstants.DataNotValid} at position [${i}]`);
                         }
-                    })
-                    console.log(parsedCsv)
+                    }
+
+                    uploadResult.result = data.length > uploadResult.errors ? CsvParseResult.successfull : CsvParseResult.notFullyCompleted;
+                } else {
+                    uploadResult.errors.push(`${CsvParseErrorConstants.HeaderNotValid}.`);
                 }
+            } else {
+                uploadResult.errors.push(`${CsvParseErrorConstants.DataNotValid}.`);
             }
         }
         catch (error) {
             this.loggerUseCases.log(ErrorConstants.PostMethodError, error?.message, error?.stack);
+            uploadResult.errors.push(`${CsvParseErrorConstants.DataNotValid}`);
         }
 
-        return result;
+        return uploadResult;
     }
 }

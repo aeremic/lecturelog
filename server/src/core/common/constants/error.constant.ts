@@ -12,4 +12,9 @@ export class ErrorMessageConstants {
 
 export class CsvParseErrorConstants {
     public static UnsuccessfullUpload = "Upload was not successfull.";
+    public static DataNotValid = "Data not valid";
+    public static HeaderNotValid = "Header not valid";
+    public static IdentifierUndefined = "Identifier cannot be undefined";
+    public static UserNotCreated = "User not uploaded";
+    public static UserNotUpdated = "User not changed on upload"
 }
