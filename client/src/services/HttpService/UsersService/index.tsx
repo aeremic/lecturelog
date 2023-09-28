@@ -1,6 +1,7 @@
 import { IEmailRegistration } from "../../../models/EmailRegistration";
 import { IUser } from "../../../models/User";
 import { get, getById, post, remove } from "../HttpServiceBase";
+import { RoleEnum } from "../../../modelHelpers/Enums/index";
 
 const URL = "/user";
 
@@ -55,14 +56,6 @@ export const removeUser = async (id: number) => {
 export const getAllExceptAdmin = async () => {
   try {
     return await get(`${URL}/getAllExceptAdmin`);
-  } catch (err) {
-    console.log(err); // TODO: Fix for PROD.
-  }
-};
-
-export const uploadUsers = async (data: any) => {
-  try {
-    return await post(`${URL}/uploadUsers`, data, true, "multipart/form-data");
   } catch (err) {
     console.log(err); // TODO: Fix for PROD.
   }

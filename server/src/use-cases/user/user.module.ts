@@ -13,9 +13,10 @@ import { EmailVerificationModule } from '../emailverification/email-verification
 import { SubjectModule } from '../subject/subject.module';
 import { LectureModule } from '../lecture/lecture.module';
 import { BcryptModule } from 'src/services/cryptography/bcrypt.module';
+import { ParserModule } from 'src/services/csv/parser.module';
 
 @Module({
-    imports: [forwardRef(() => SubjectModule), LoggerModule, MailModule, EmailVerificationModule, BcryptModule, LectureModule, TypeOrmModule.forFeature([User, EmailVerification, StudentsSubjects])],
+    imports: [forwardRef(() => SubjectModule), LoggerModule, MailModule, EmailVerificationModule, BcryptModule, LectureModule, ParserModule, TypeOrmModule.forFeature([User, EmailVerification, StudentsSubjects])],
     providers: [
         UserUseCases,
         {

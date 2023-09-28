@@ -42,3 +42,17 @@ export const getCode = async (sessionData: ISessionData) => {
     console.log(err); // TODO: Fix for PROD.
   }
 };
+
+export const uploadProfessors = async (data: any) => {
+  try {
+        return await post(
+          `${URL}/uploadProfessors`,
+          data,
+          true,
+          "multipart/form-data"
+        );
+  
+  } catch (err) {
+    console.log(err); // TODO: Fix for PROD.
+  }
+};

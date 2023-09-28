@@ -13,20 +13,31 @@ import { useTranslation } from "react-i18next";
 import { MuiFileInput } from "mui-file-input";
 import { HttpStatusCode } from "axios";
 import { uploadUsers } from "../../../services/HttpService/UsersService";
+import { RoleEnum } from "../../../modelHelpers/Enums";
+import { uploadProfessors } from "../../../services/HttpService/ProfessorsService";
+import { uploadStudents } from "../../../services/HttpService/StudentsService";
 
 export interface IUploadUsersDialogRawProps {
   id: string;
   keepMounted: boolean;
   open: boolean;
   title: string;
+  roleType: RoleEnum;
   negativeAction: string;
   positiveAction: string;
   onClose: (value?: any) => void;
 }
 
 const UploadUsersDialog = (props: IUploadUsersDialogRawProps) => {
-  const { onClose, open, title, negativeAction, positiveAction, ...other } =
-    props;
+  const {
+    onClose,
+    open,
+    title,
+    roleType,
+    negativeAction,
+    positiveAction,
+    ...other
+  } = props;
 
   const { t } = useTranslation();
 
@@ -41,7 +52,16 @@ const UploadUsersDialog = (props: IUploadUsersDialogRawProps) => {
       const formData = new FormData();
       formData.append("file", fileValue);
 
-      const res: any = await uploadUsers(formData);
+      let res: any = undefined;
+      switch (roleType) {
+        case RoleEnum.Professor:
+          res = await uploadProfessors(formData);
+          break;
+        case RoleEnum.Student:
+          res = await uploadStudents(formData);
+          break;
+      }
+
       if (res && res.status == HttpStatusCode.Created && res.data) {
         onClose(fileValue);
       }

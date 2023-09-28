@@ -410,6 +410,7 @@ const ProfessorsTable = () => {
         id="upload-users-menu"
         keepMounted
         open={uploadUsersDialogOpen}
+        roleType={RoleEnum.Professor}
         title={t("UploadProfessors")}
         negativeAction={t("Cancel")}
         positiveAction={t("Upload")}

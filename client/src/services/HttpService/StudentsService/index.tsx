@@ -27,3 +27,17 @@ export const registerStudent = async (data: IRegisterStudent) => {
     console.log(err); // TODO: Fix for PROD.
   }
 };
+
+export const uploadStudents = async (data: any) => {
+  try {
+        return await post(
+          `${URL}/uploadStudents`,
+          data,
+          true,
+          "multipart/form-data"
+        );
+  
+  } catch (err) {
+    console.log(err); // TODO: Fix for PROD.
+  }
+};

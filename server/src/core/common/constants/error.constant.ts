@@ -14,7 +14,11 @@ export class CsvParseErrorConstants {
     public static UnsuccessfullUpload = "Upload was not successfull.";
     public static DataNotValid = "Data not valid";
     public static HeaderNotValid = "Header not valid";
-    public static IdentifierUndefined = "Identifier cannot be undefined";
+}
+
+export class CsvParseUserErrorConstants {
+    public static IdentifierNotValid = "User identifier is not valid";
     public static UserNotCreated = "User not uploaded";
     public static UserNotUpdated = "User not changed on upload"
+    public static UserDataNotValid = "User data not valid"
 }

@@ -8,7 +8,6 @@ import { EmailRegistrationDto } from 'src/core/dtos';
 import { SendEmailVerificationDto } from 'src/core/dtos/requests/send-email-verification.dto';
 import { CreateUpdateUserResponseDto } from 'src/core/dtos/responses/create-update-user-response.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { UploadUsersDto } from 'src/core/dtos/responses/upload-users.dto';
 
 @Controller('api/user')
 export class UserController {
@@ -72,20 +71,5 @@ export class UserController {
     @Get('/getAllExceptAdmin')
     getAllExceptAdmin() {
         return this.userUseCases.getAllExceptAdmin();
-    }
-
-    @Roles('admin')
-    @UseGuards(AuthGuard('jwt'), RoleGuard)
-    @Post('/uploadUsers')
-    @UseInterceptors(FileInterceptor('file'))
-    uploadUsers(@UploadedFile(
-        new ParseFilePipe({
-            validators: [
-                new MaxFileSizeValidator({ maxSize: 100000 }),
-                new FileTypeValidator({ fileType: new RegExp("application\/vnd.ms-excel|csv") }),
-            ]
-        })
-    ) file: Express.Multer.File): Promise<UploadUsersDto> {
-        return this.userUseCases.uploadUsers(file);
     }
 }
