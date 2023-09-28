@@ -5,7 +5,7 @@ import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RoleGuard } from 'src/auth/guards/role.guard';
 import { AvailableGroupDto } from 'src/core/dtos/responses/available-group.dto';
 import { CreateStudentRequestDto } from 'src/core/dtos/requests/create-student-request.dto';
-import { CreateUserResponseDto } from 'src/core/dtos/responses/create-user-response.dto';
+import { CreateUpdateUserResponseDto } from 'src/core/dtos/responses/create-update-user-response.dto';
 
 @Controller('api/student')
 export class StudentController {
@@ -27,7 +27,7 @@ export class StudentController {
     }
 
     @Post('/createStudent')
-    createStudent(@Body() createStudentRequestDto: CreateStudentRequestDto): Promise<CreateUserResponseDto> {
+    createStudent(@Body() createStudentRequestDto: CreateStudentRequestDto): Promise<CreateUpdateUserResponseDto> {
         return this.userUseCases.createStudent(createStudentRequestDto)
     }
 }       

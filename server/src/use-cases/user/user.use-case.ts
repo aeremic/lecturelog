@@ -1,4 +1,4 @@
-import { Inject, Injectable, forwardRef } from '@nestjs/common';
+import { Inject, Injectable, forwardRef, Post } from '@nestjs/common';
 import { UserRepositoryAbstract } from 'src/core/abstracts/repositories/user.repository.abstract';
 import { UserEntity } from 'src/core/entities/user.entity';
 import { GenericUseCases } from '../generic.use-case';
@@ -22,7 +22,7 @@ import { AvailableGroupDto } from 'src/core/dtos/responses/available-group.dto';
 import { ActiveLectureEntity } from 'src/core/entities/active-lecture.entity';
 import { SendEmailVerificationDto } from '../../core/dtos/requests/send-email-verification.dto';
 import { CreateStudentRequestDto } from '../../core/dtos/requests/create-student-request.dto';
-import { CreateUserResponseDto } from 'src/core/dtos/responses/create-user-response.dto';
+import { CreateUpdateUserResponseDto } from 'src/core/dtos/responses/create-update-user-response.dto';
 import { UploadUsersDto } from 'src/core/dtos/responses/upload-users.dto';
 import { parse } from 'papaparse';
 import { CsvParseResult } from 'src/core/common/enums/csv-parse.enum';
@@ -182,7 +182,6 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
 
     async checkIfUserExist(userEntity: UserEntity): Promise<Boolean> {
         let userInDb: UserEntity = null;
-
         if (userEntity.role === RoleEnum.student) {
             userInDb = await this.getUser(userEntity, this.getStudent);
         } else if (userEntity.role === RoleEnum.professor) {
@@ -206,7 +205,7 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
         }
     }
 
-    async createStudent(createStudentRequestDto: CreateStudentRequestDto): Promise<CreateUserResponseDto> {
+    async createStudent(createStudentRequestDto: CreateStudentRequestDto): Promise<CreateUpdateUserResponseDto> {
         let user: UserEntity = {
             id: createStudentRequestDto.id,
             firstname: createStudentRequestDto.firstname,
@@ -221,10 +220,8 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
         return await this.createUser(user);
     }
 
-    async createUser(userEntity: UserEntity): Promise<CreateUserResponseDto> {
-        // TODO: Return some type of response if user already exist with that email!
-        let result = new CreateUserResponseDto;
-
+    async createUser(userEntity: UserEntity): Promise<CreateUpdateUserResponseDto> {
+        let result = new CreateUpdateUserResponseDto;
         try {
             if (!await this.checkIfUserExist(userEntity)) {
                 let userInDb = await super.createOrUpdate(this.userRepository, this.loggerUseCases, userEntity);
@@ -235,7 +232,7 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
                 result.errorMessage = ErrorMessageConstants.UserExists;
             }
         } catch (error) {
-            this.loggerUseCases.log(ErrorConstants.GetMethodError, error?.message, error?.stack);
+            this.loggerUseCases.log(ErrorConstants.PostMethodError, error?.message, error?.stack);
         }
 
         return result;
@@ -243,7 +240,6 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
 
     async sendEmailVerification(sendEmailVerificationDto: SendEmailVerificationDto): Promise<boolean> {
         let result: boolean | PromiseLike<boolean> = false;
-
         try {
             let userInDb = await this.getById(sendEmailVerificationDto.userId);
             this.generateAndSendEmailVerificationCode(userInDb);
@@ -279,6 +275,23 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
                         }
                     }
                 }
+            }
+        } catch (error) {
+            this.loggerUseCases.log(ErrorConstants.PostMethodError, error?.message, error?.stack);
+        }
+
+        return result;
+    }
+
+    async updateUser(userEntity: UserEntity): Promise<CreateUpdateUserResponseDto> {
+        let result = new CreateUpdateUserResponseDto;
+        try {
+            if (await this.checkIfUserExist(userEntity)) {
+                let userInDb = await super.createOrUpdate(this.userRepository, this.loggerUseCases, userEntity);
+
+                result.id = userInDb.id;
+            } else {
+                result.errorMessage = ErrorMessageConstants.UserDoesntExists;
             }
         } catch (error) {
             this.loggerUseCases.log(ErrorConstants.PostMethodError, error?.message, error?.stack);
@@ -417,16 +430,45 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
 
     async uploadUsers(file: Express.Multer.File): Promise<UploadUsersDto> {
         let result: UploadUsersDto = { result: CsvParseResult.unsucessfull, message: CsvParseErrorConstants.UnsuccessfullUpload };
-
         try {
-            const csvFile = file.buffer.toString();
-            const parsedCsv = parse(csvFile, {
+            const header: string[] = ['id', 'email', 'firstname', 'lastname'];
+            const parsedCsv = parse(file.buffer.toString(), {
                 header: true,
                 delimiter: ','
-            })
+            });
+            const fields = parsedCsv.meta.fields;
+            const data: any = parsedCsv.data;
+
+            if (fields && data) {
+                const isHeaderValid = fields.length === header.length
+                    && fields.every((element, index) => element === header[index]);
+                if (isHeaderValid) {
+                    await data.forEach(async (item: any) => {
+                        if (item.id == undefined) {
+                            // log err to msg and continue
+                        } else {
+                            let user: UserEntity = {
+                                id: item.id,
+                                email: item.email,
+                                firstname: item.firstname,
+                                lastname: item.lastname,
+                                isActivated: false,
+                                role: RoleEnum.professor
+                            }
+
+                            if (item.id == 0) {
+                                await this.createUser(user);
+                            } else {
+                                await this.updateUser(user);
+                            }
+                        }
+                    })
+                    console.log(parsedCsv)
+                }
+            }
         }
         catch (error) {
-            this.loggerUseCases.log(ErrorConstants.GetMethodError, error?.message, error?.stack);
+            this.loggerUseCases.log(ErrorConstants.PostMethodError, error?.message, error?.stack);
         }
 
         return result;

@@ -6,7 +6,7 @@ import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RoleGuard } from 'src/auth/guards/role.guard';
 import { EmailRegistrationDto } from 'src/core/dtos';
 import { SendEmailVerificationDto } from 'src/core/dtos/requests/send-email-verification.dto';
-import { CreateUserResponseDto } from 'src/core/dtos/responses/create-user-response.dto';
+import { CreateUpdateUserResponseDto } from 'src/core/dtos/responses/create-update-user-response.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadUsersDto } from 'src/core/dtos/responses/upload-users.dto';
 
@@ -53,7 +53,7 @@ export class UserController {
     @Roles('admin')
     @UseGuards(AuthGuard('jwt'), RoleGuard)
     @Post('/createUser')
-    createUser(@Body() userEntity: any): Promise<CreateUserResponseDto> {
+    createUser(@Body() userEntity: any): Promise<CreateUpdateUserResponseDto> {
         return this.userUseCases.createUser(userEntity)
     }
 

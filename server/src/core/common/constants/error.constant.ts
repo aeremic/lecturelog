@@ -7,6 +7,7 @@ export class ErrorConstants {
 
 export class ErrorMessageConstants {
     public static UserExists: string = "User already exists";
+    public static UserDoesntExists: string = "User doesn't exists";
 }
 
 export class CsvParseErrorConstants {
