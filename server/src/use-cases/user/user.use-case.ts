@@ -218,7 +218,6 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
             index: createStudentRequestDto.index,
             year: createStudentRequestDto.year,
             role: createStudentRequestDto.role,
-            isActivated: false
         }
 
         return await this.createUser(user);
@@ -228,7 +227,9 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
         let result = new CreateUpdateUserResponseDto;
         try {
             if (!await this.checkIfUserExist(userEntity)) {
-                let userInDb = await super.createOrUpdate(this.userRepository, this.loggerUseCases, userEntity);
+                userEntity.isActivated = false;
+
+                let userInDb = await this.createOrUpdate(userEntity);
                 this.generateAndSendEmailVerificationCode(userInDb);
 
                 result.id = userInDb.id;
@@ -271,8 +272,8 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
                         let hashedPassword: any = await this.bcryptService.createUserPassword(emailRegistrationDto.password, emailRegistrationDto.repeatedPassword);
 
                         if (hashedPassword) {
-                            userInDb.isActivated = true;
                             userInDb.hash = hashedPassword;
+                            userInDb.isActivated = true;
 
                             await this.createOrUpdate(userInDb);
                             result = true;
@@ -292,15 +293,18 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
         try {
             let userInDb = await this.getById(userEntity.id);
             if (this.isFound(userInDb)) {
-                let isEmailChanged: Boolean = false;
+                let isEmailChanged: Boolean;
                 if (userEntity.email !== userInDb.email) {
                     userEntity.hash = null;
                     userEntity.isActivated = false;
 
                     isEmailChanged = true;
+                } else {
+                    userEntity.isActivated = userInDb.isActivated;
+                    isEmailChanged = false;
                 }
 
-                await super.createOrUpdate(this.userRepository, this.loggerUseCases, userEntity);
+                await this.createOrUpdate(userEntity);
                 if (isEmailChanged) {
                     this.generateAndSendEmailVerificationCode(userEntity);
                 }
@@ -463,7 +467,6 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
                             email: data[i].email,
                             firstname: data[i].firstname,
                             lastname: data[i].lastname,
-                            isActivated: false,
                             role: RoleEnum.professor
                         }
 
@@ -513,7 +516,6 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
                             lastname: data[i].lastname,
                             index: data[i].index,
                             year: data[i].year,
-                            isActivated: false,
                             role: RoleEnum.student
                         }
 

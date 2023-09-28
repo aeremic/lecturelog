@@ -13,10 +13,11 @@ export class UserMapper {
             index: userModel?.index,
             year: userModel?.year,
             hash: userModel?.hash,
-            isActivated: userModel?.isActivated
+            isActivated: userModel?.isActivated,
+            role: RoleEnum.invalid
         };
 
-        userEntity.role = userEntity.id ? this.getRoleEnum(userModel?.role) : undefined;
+        userEntity.role = userEntity.id ? this.getRoleEnum(userModel?.role) : RoleEnum.invalid;
 
         return userEntity;
     }
