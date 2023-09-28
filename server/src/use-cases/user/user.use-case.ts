@@ -286,10 +286,21 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
     async updateUser(userEntity: UserEntity): Promise<CreateUpdateUserResponseDto> {
         let result = new CreateUpdateUserResponseDto;
         try {
-            if (await this.checkIfUserExist(userEntity)) {
-                let userInDb = await super.createOrUpdate(this.userRepository, this.loggerUseCases, userEntity);
+            let userInDb = await this.getById(userEntity.id);
+            if (this.isFound(userInDb)) {
+                let isEmailChanged: Boolean = false;
+                if (userEntity.email !== userInDb.email) {
+                    userEntity.hash = null;
+                    userEntity.isActivated = false;
+                    isEmailChanged = true;
+                }
 
-                result.id = userInDb.id;
+                await super.createOrUpdate(this.userRepository, this.loggerUseCases, userEntity);
+                if (isEmailChanged) {
+                    this.generateAndSendEmailVerificationCode(userEntity);
+                }
+
+                result.id = userEntity.id;
             } else {
                 result.errorMessage = ErrorMessageConstants.UserDoesntExists;
             }
@@ -444,22 +455,24 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
                     && fields.every((element, index) => element === header[index]);
                 if (isHeaderValid) {
                     await data.forEach(async (item: any) => {
-                        if (item.id == undefined) {
-                            // log err to msg and continue
-                        } else {
-                            let user: UserEntity = {
-                                id: item.id,
-                                email: item.email,
-                                firstname: item.firstname,
-                                lastname: item.lastname,
-                                isActivated: false,
-                                role: RoleEnum.professor
-                            }
-
-                            if (item.id == 0) {
-                                await this.createUser(user);
+                        if (item) {
+                            if (item.id == undefined) {
+                                // log err to msg and continue
                             } else {
-                                await this.updateUser(user);
+                                let user: UserEntity = {
+                                    id: Number(item.id),
+                                    email: item.email,
+                                    firstname: item.firstname,
+                                    lastname: item.lastname,
+                                    isActivated: false,
+                                    role: RoleEnum.professor
+                                }
+
+                                if (item.id == 0) {
+                                    await this.createUser(user);
+                                } else {
+                                    await this.updateUser(user);
+                                }
                             }
                         }
                     })
