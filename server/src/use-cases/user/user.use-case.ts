@@ -24,9 +24,9 @@ import { SendEmailVerificationDto } from '../../core/dtos/requests/send-email-ve
 import { CreateStudentRequestDto } from '../../core/dtos/requests/create-student-request.dto';
 import { CreateUpdateUserResponseDto } from 'src/core/dtos/responses/create-update-user-response.dto';
 import { CsvUploadResultDto } from 'src/core/dtos/responses/csv-upload-result.dto';
-import { parse } from 'papaparse';
 import { CsvParseResult } from 'src/core/common/enums/csv-parse.enum';
 import { ParserService } from 'src/services/csv/parser.service';
+import { RegexPattern } from 'src/core/common/constants/regex.constant';
 
 @Injectable()
 export class UserUseCases extends GenericUseCases<UserEntity>{
@@ -231,6 +231,11 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
                 return result;
             }
 
+            if (!this.isEmailPatternValid(userEntity.email)) {
+                result.errorMessage = ErrorMessageConstants.EmailNotValid;
+                return result;
+            }
+
             userEntity.isActivated = false;
             let userInDb = await this.createOrUpdate(userEntity);
             this.generateAndSendEmailVerificationCode(userInDb);
@@ -302,6 +307,11 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
             if (userEntity.email !== userInDb.email) {
                 if (this.isFound(await this.getByEmail(userEntity.email))) {
                     result.errorMessage = ErrorMessageConstants.UserExists;
+                    return result;
+                }
+
+                if (!this.isEmailPatternValid(userEntity.email)) {
+                    result.errorMessage = ErrorMessageConstants.EmailNotValid;
                     return result;
                 }
 
@@ -550,5 +560,10 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
         }
 
         return uploadResult;
+    }
+
+    private isEmailPatternValid(email: string): boolean {
+        const emailRegex = new RegExp(RegexPattern.Email);
+        return email.match(emailRegex) != null ? true : false;
     }
 }

@@ -248,7 +248,7 @@ const ProfessorsTable = () => {
         </Button>
         <Button
           onClick={() => {
-            handleUploadUsersDialogClick({ id: 0, actionResult: false });
+            handleUploadUsersDialogClick();
           }}
           variant="contained"
           color="success"
