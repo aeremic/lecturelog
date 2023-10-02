@@ -230,6 +230,7 @@ const StudentsTable = () => {
           variant="contained"
           color="success"
           size="small"
+          disabled={true}
           sx={{ mb: 1 }}
         >
           <AddIcon />
