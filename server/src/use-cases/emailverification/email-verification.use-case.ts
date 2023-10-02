@@ -6,11 +6,17 @@ import { EmailVerificationEntity } from 'src/core/entities';
 
 @Injectable()
 export class EmailVerificationUseCases extends GenericUseCases<EmailVerificationEntity>{
+    //#region Properties
+
     @Inject(EmailVerificationRepositoryAbstract)
     private emailVerificationRepository: EmailVerificationRepositoryAbstract
 
     @Inject(LoggerUseCases)
     private loggerUseCases: LoggerUseCases;
+
+    //#endregion
+
+    //#region Public methods
 
     async get(): Promise<EmailVerificationEntity[]> {
         return super.get(this.emailVerificationRepository, this.loggerUseCases);
@@ -51,4 +57,6 @@ export class EmailVerificationUseCases extends GenericUseCases<EmailVerification
     async getLatestEmailVerificationByUserId(userId: number, code: string): Promise<EmailVerificationEntity> {
         return this.emailVerificationRepository.getLatestEmailVerificationByUserId(userId, code);
     }
+
+    //#endregion
 }

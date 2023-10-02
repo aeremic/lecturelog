@@ -5,8 +5,14 @@ import { LoggerRepositoryAbstract } from 'src/core/abstracts/repositories/logger
 
 @Injectable()
 export class LoggerUseCases {
+    //#region Properties
+
     @Inject(LoggerRepositoryAbstract)
     private loggerRepository: LoggerRepositoryAbstract
+
+    //#endregion
+
+    //#region Public methods
 
     async create(loggerEntity: LoggerEntity): Promise<LoggerEntity> {
         return this.loggerRepository.createOrUpdate(loggerEntity);
@@ -35,4 +41,6 @@ export class LoggerUseCases {
             this.create(loggerEntity);
         } catch { }
     }
+
+    //#endregion
 }

@@ -11,6 +11,8 @@ import { ActiveLectureEntity } from 'src/core/entities/active-lecture.entity';
 
 @Injectable()
 export class SubjectUseCases extends GenericUseCases<SubjectEntity>{
+    //#region Properties
+
     @Inject(SubjectRepositoryAbstract)
     private subjectRepository: SubjectRepositoryAbstract
 
@@ -22,6 +24,10 @@ export class SubjectUseCases extends GenericUseCases<SubjectEntity>{
 
     @Inject(LoggerUseCases)
     private loggerUseCases: LoggerUseCases;
+
+    //#endregion
+
+    //#region Public methods
 
     async get(): Promise<SubjectEntity[]> {
         return super.get(this.subjectRepository, this.loggerUseCases);
@@ -124,4 +130,6 @@ export class SubjectUseCases extends GenericUseCases<SubjectEntity>{
     async getActiveSubjects(): Promise<ActiveLectureEntity[]> {
         return this.lectureUseCases.getActiveLecturesFromExternalCache();
     }
+
+    //#endregion
 }

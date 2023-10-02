@@ -30,6 +30,8 @@ import { RegexPattern } from 'src/core/common/constants/regex.constant';
 
 @Injectable()
 export class UserUseCases extends GenericUseCases<UserEntity>{
+    //#region Properties
+
     @Inject(UserRepositoryAbstract)
     private userRepository: UserRepositoryAbstract;
 
@@ -56,6 +58,10 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
 
     @Inject()
     private readonly config: ConfigService;
+
+    //#endregion
+
+    //#region Public methods
 
     async get(): Promise<UserEntity[]> {
         return super.get(this.userRepository, this.loggerUseCases);
@@ -119,25 +125,6 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
         return result;
     }
 
-    getAdmin = async (userEntity: UserEntity): Promise<UserEntity> =>
-        this.getByUserEmail(userEntity);
-
-    getProfessor = async (userEntity: UserEntity): Promise<UserEntity> =>
-        this.getByUserEmail(userEntity);
-
-    getStudent = async (userEntity: UserEntity): Promise<UserEntity> => {
-        let result: UserEntity | PromiseLike<UserEntity>;
-        try {
-            if (userEntity.email && userEntity.index && userEntity.year) {
-                result = await this.userRepository.getByEmailOrIndex(userEntity.email, userEntity.index, userEntity.year);
-            }
-        } catch (error) {
-            this.loggerUseCases.log(ErrorConstants.GetMethodError, error?.message, error?.stack);
-        }
-
-        return result;
-    }
-
     async getProfessors(page: number, size: number): Promise<ProfessorsDto> {
         let result: ProfessorsDto | PromiseLike<ProfessorsDto>;
         let professors: UserEntity[] | PromiseLike<UserEntity[]>;
@@ -178,35 +165,6 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
         }
 
         return result;
-    }
-
-    async getUser(userEntity: UserEntity, getUserFunc: (userEntity: UserEntity) => Promise<UserEntity>): Promise<UserEntity> {
-        return await getUserFunc(userEntity);
-    }
-
-    async checkIfUserExist(userEntity: UserEntity): Promise<Boolean> {
-        let userInDb: UserEntity = null;
-        if (userEntity.role === RoleEnum.student) {
-            userInDb = await this.getUser(userEntity, this.getStudent);
-        } else if (userEntity.role === RoleEnum.professor) {
-            userInDb = await this.getUser(userEntity, this.getProfessor);
-        } else if (userEntity.role === RoleEnum.admin) {
-            userInDb = await this.getUser(userEntity, this.getAdmin);
-        }
-
-        return this.isFound(userInDb);
-    }
-
-    async generateAndSendEmailVerificationCode(userEntity: UserEntity) {
-        if (this.isFound(userEntity) && !userEntity.isActivated) {
-            let code = Encoding.generateRandomPassword();
-
-            // TODO: Remove comment for PROD
-            // await this.mailService.sendRegistrationMail(userEntity.id, userEntity.email, userEntity.firstname, code);
-
-            await this.emailVerificationUseCases.invalidPreviousEmailValidation(userEntity.email);
-            await this.emailVerificationUseCases.createValidation(userEntity.id, userEntity.email, code);
-        }
     }
 
     async createStudent(createStudentRequestDto: CreateStudentRequestDto): Promise<CreateUpdateUserResponseDto> {
@@ -562,8 +520,62 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
         return uploadResult;
     }
 
+    //#endregion
+
+    //#region Private methods
+
+    private getAdmin = async (userEntity: UserEntity): Promise<UserEntity> =>
+        this.getByUserEmail(userEntity);
+
+    private getProfessor = async (userEntity: UserEntity): Promise<UserEntity> =>
+        this.getByUserEmail(userEntity);
+
+    private getStudent = async (userEntity: UserEntity): Promise<UserEntity> => {
+        let result: UserEntity | PromiseLike<UserEntity>;
+        try {
+            if (userEntity.email && userEntity.index && userEntity.year) {
+                result = await this.userRepository.getByEmailOrIndex(userEntity.email, userEntity.index, userEntity.year);
+            }
+        } catch (error) {
+            this.loggerUseCases.log(ErrorConstants.GetMethodError, error?.message, error?.stack);
+        }
+
+        return result;
+    }
+
+    private async getUser(userEntity: UserEntity, getUserFunc: (userEntity: UserEntity) => Promise<UserEntity>): Promise<UserEntity> {
+        return await getUserFunc(userEntity);
+    }
+
+    private async checkIfUserExist(userEntity: UserEntity): Promise<Boolean> {
+        let userInDb: UserEntity = null;
+        if (userEntity.role === RoleEnum.student) {
+            userInDb = await this.getUser(userEntity, this.getStudent);
+        } else if (userEntity.role === RoleEnum.professor) {
+            userInDb = await this.getUser(userEntity, this.getProfessor);
+        } else if (userEntity.role === RoleEnum.admin) {
+            userInDb = await this.getUser(userEntity, this.getAdmin);
+        }
+
+        return this.isFound(userInDb);
+    }
+
+    private async generateAndSendEmailVerificationCode(userEntity: UserEntity) {
+        if (this.isFound(userEntity) && !userEntity.isActivated) {
+            let code = Encoding.generateRandomPassword();
+
+            // TODO: Remove comment for PROD
+            // await this.mailService.sendRegistrationMail(userEntity.id, userEntity.email, userEntity.firstname, code);
+
+            await this.emailVerificationUseCases.invalidPreviousEmailValidation(userEntity.email);
+            await this.emailVerificationUseCases.createValidation(userEntity.id, userEntity.email, code);
+        }
+    }
+
     private isEmailPatternValid(email: string): boolean {
         const emailRegex = new RegExp(RegexPattern.Email);
         return email.match(emailRegex) != null ? true : false;
     }
+
+    //#endregion
 }

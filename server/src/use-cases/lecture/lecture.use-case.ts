@@ -10,13 +10,23 @@ import { ExternalCacheSevice } from "src/services/external-cache/external-cache.
 
 @Injectable()
 export class LectureUseCases {
+    //#region Properties
+
     @Inject(forwardRef(() => MessagingGetaway))
     private messagingGetaway: MessagingGetaway;
 
     @Inject(LoggerUseCases)
     private loggerUseCases: LoggerUseCases;
 
+    //#endregion
+
+    //#region Constructors
+
     constructor(private readonly externalCache: ExternalCacheSevice) { }
+
+    //#endregion
+
+    //#region Public methods
 
     /**
      * Gets all active lectures from server's cache
@@ -226,4 +236,6 @@ export class LectureUseCases {
 
         return result;
     }
+
+    //#endregion
 }
