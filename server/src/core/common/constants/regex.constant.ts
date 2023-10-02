@@ -1,3 +1,3 @@
 export class RegexPattern {
-    public static Email = "^[^\s@]+@[^\s@]+\.[^\s@]+$";
+    public static Email = "^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$";
 }

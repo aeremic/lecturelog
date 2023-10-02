@@ -33,20 +33,7 @@ const Menu = () => {
                   <ListItemText primary={t("Users")} />
                 </ListItemButton>
               </ListItem>
-              <ListItem>
-                <ListItemButton component={Link} to="/admin/subjects">
-                  <ListItemIcon>
-                    <LibraryBooksIcon />
-                  </ListItemIcon>
-                  <ListItemText primary={t("Subjects")} />
-                </ListItemButton>
-              </ListItem>
-            </>
-          ) : (
-            <></>
-          )}
-          {userData.role == RoleEnum.Professor ? (
-            <>
+              <Divider />
               <ListItem>
                 <ListItemButton
                   component={Link}
@@ -61,7 +48,12 @@ const Menu = () => {
                   <ListItemText primary={t("MyProfile")} />
                 </ListItemButton>
               </ListItem>
-              <Divider />
+            </>
+          ) : (
+            <></>
+          )}
+          {userData.role == RoleEnum.Professor ? (
+            <>
               <ListItem>
                 <ListItemButton
                   component={Link}
@@ -76,12 +68,7 @@ const Menu = () => {
                   <ListItemText primary={t("MySubjects")} />
                 </ListItemButton>
               </ListItem>
-            </>
-          ) : (
-            <></>
-          )}
-          {userData.role == RoleEnum.Student ? (
-            <>
+              <Divider />
               <ListItem>
                 <ListItemButton
                   component={Link}
@@ -96,8 +83,12 @@ const Menu = () => {
                   <ListItemText primary={t("MyProfile")} />
                 </ListItemButton>
               </ListItem>
-              <Divider />
-              <Divider />
+            </>
+          ) : (
+            <></>
+          )}
+          {userData.role == RoleEnum.Student ? (
+            <>
               <ListItem>
                 <ListItemButton
                   component={Link}
@@ -110,6 +101,21 @@ const Menu = () => {
                     <LibraryBooksIcon />
                   </ListItemIcon>
                   <ListItemText primary={t("AvailableSubjects")} />
+                </ListItemButton>
+              </ListItem>
+              <Divider />
+              <ListItem>
+                <ListItemButton
+                  component={Link}
+                  to={{
+                    pathname: `/user/profile`,
+                    search: `?id=${userData.id}`,
+                  }}
+                >
+                  <ListItemIcon>
+                    <PeopleAltIcon />
+                  </ListItemIcon>
+                  <ListItemText primary={t("MyProfile")} />
                 </ListItemButton>
               </ListItem>
             </>
