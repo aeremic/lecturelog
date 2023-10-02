@@ -8,6 +8,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
+import PersonIcon from "@mui/icons-material/Person";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import { Link } from "react-router-dom";
 import { RoleEnum } from "../../../modelHelpers/Enums";
@@ -43,7 +44,7 @@ const Menu = () => {
                   }}
                 >
                   <ListItemIcon>
-                    <PeopleAltIcon />
+                    <PersonIcon />
                   </ListItemIcon>
                   <ListItemText primary={t("MyProfile")} />
                 </ListItemButton>
@@ -78,7 +79,7 @@ const Menu = () => {
                   }}
                 >
                   <ListItemIcon>
-                    <PeopleAltIcon />
+                    <PersonIcon />
                   </ListItemIcon>
                   <ListItemText primary={t("MyProfile")} />
                 </ListItemButton>
@@ -113,7 +114,7 @@ const Menu = () => {
                   }}
                 >
                   <ListItemIcon>
-                    <PeopleAltIcon />
+                    <PersonIcon />
                   </ListItemIcon>
                   <ListItemText primary={t("MyProfile")} />
                 </ListItemButton>
