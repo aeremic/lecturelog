@@ -5,9 +5,18 @@ import Logo from "../Logo";
 import TemporaryDrawer from "../TemporaryDrawer";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useTranslation } from "react-i18next";
+import { logout } from "../../../services/HttpService/AuthService";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
+  const navigate = useNavigate();
+
   const { t } = useTranslation();
+
+  const handleLogoutClick = () => {
+    logout();
+    navigate("/", { replace: true });
+  };
 
   return (
     <Box sx={{ flexGrow: 1, bgcolor: "background.paper" }}>
@@ -24,8 +33,11 @@ const Header = () => {
           <Typography variant="subtitle2" component="div" sx={{ flexGrow: 1 }}>
             <Logo />
           </Typography>
-          <Button color="inherit">
-            <LogoutIcon fontSize="xs" sx={{ mr: 0.5 }} />
+          <Button color="inherit" onClick={handleLogoutClick}>
+            {
+              // @ts-ignore
+              <LogoutIcon fontSize="xs" sx={{ mr: 0.5 }} />
+            }
             <Typography>{t("Logout")}</Typography>
           </Button>
         </Toolbar>

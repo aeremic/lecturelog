@@ -55,7 +55,7 @@ const Content = () => {
     if (res) {
       if (res.status && res.status === HttpStatusCode.Created) {
         const userData = getCurrentUserData();
-        if (userData.id) {
+        if (userData && userData.id) {
           switch (userData.role) {
             case RoleEnum.Admin:
               navigate("/admin/users", { replace: true });
