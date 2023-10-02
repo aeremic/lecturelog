@@ -32,3 +32,9 @@ export enum LectureTimerEventType {
   Tick = "tick",
   Stop = "stop",
 }
+
+export enum UploadUsersResult {
+  successfull = 1,
+  unsucessfull = 2,
+  notFullyCompleted = 3,
+}

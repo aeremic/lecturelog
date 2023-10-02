@@ -226,16 +226,17 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
     async createUser(userEntity: UserEntity): Promise<CreateUpdateUserResponseDto> {
         let result = new CreateUpdateUserResponseDto;
         try {
-            if (!await this.checkIfUserExist(userEntity)) {
-                userEntity.isActivated = false;
-
-                let userInDb = await this.createOrUpdate(userEntity);
-                this.generateAndSendEmailVerificationCode(userInDb);
-
-                result.id = userInDb.id;
-            } else {
+            if (await this.checkIfUserExist(userEntity)) {
                 result.errorMessage = ErrorMessageConstants.UserExists;
+                return result;
             }
+
+            userEntity.isActivated = false;
+            let userInDb = await this.createOrUpdate(userEntity);
+            this.generateAndSendEmailVerificationCode(userInDb);
+
+            result.id = userInDb.id;
+
         } catch (error) {
             this.loggerUseCases.log(ErrorConstants.PostMethodError, error?.message, error?.stack);
         }
@@ -292,27 +293,32 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
         let result = new CreateUpdateUserResponseDto;
         try {
             let userInDb = await this.getById(userEntity.id);
-            if (this.isFound(userInDb)) {
-                let isEmailChanged: Boolean;
-                if (userEntity.email !== userInDb.email) {
-                    userEntity.hash = null;
-                    userEntity.isActivated = false;
-
-                    isEmailChanged = true;
-                } else {
-                    userEntity.isActivated = userInDb.isActivated;
-                    isEmailChanged = false;
-                }
-
-                await this.createOrUpdate(userEntity);
-                if (isEmailChanged) {
-                    this.generateAndSendEmailVerificationCode(userEntity);
-                }
-
-                result.id = userEntity.id;
-            } else {
+            if (!this.isFound(userInDb)) {
                 result.errorMessage = ErrorMessageConstants.UserDoesntExists;
+                return result;
             }
+
+            let isEmailChanged: Boolean;
+            if (userEntity.email !== userInDb.email) {
+                if (this.isFound(await this.getByEmail(userEntity.email))) {
+                    result.errorMessage = ErrorMessageConstants.UserExists;
+                    return result;
+                }
+
+                userEntity.hash = null;
+                userEntity.isActivated = false;
+                isEmailChanged = true;
+            } else {
+                userEntity.isActivated = userInDb.isActivated;
+                isEmailChanged = false;
+            }
+
+            await this.createOrUpdate(userEntity);
+            if (isEmailChanged) {
+                this.generateAndSendEmailVerificationCode(userEntity);
+            }
+
+            result.id = userEntity.id;
         } catch (error) {
             this.loggerUseCases.log(ErrorConstants.PostMethodError, error?.message, error?.stack);
         }
@@ -486,6 +492,8 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
                     uploadResult.errors.push(`${CsvParseUserErrorConstants.UserDataNotValid} at position [${i}].`);
                 }
             }
+
+            uploadResult.result = uploadResult.errors.length == 0 ? CsvParseResult.successfull : CsvParseResult.unsucessfull;
         } catch (error) {
             this.loggerUseCases.log(ErrorConstants.PostMethodError, error?.message, error?.stack);
             uploadResult.errors.push(`${CsvParseUserErrorConstants.UserDataNotValid}[${error}].`);
@@ -493,7 +501,6 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
 
         return uploadResult;
     }
-
 
     async uploadStudents(file: Express.Multer.File): Promise<CsvUploadResultDto> {
         let uploadResult: CsvUploadResultDto = {
@@ -535,6 +542,8 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
                     uploadResult.errors.push(`${CsvParseUserErrorConstants.UserDataNotValid} at position [${i}].`);
                 }
             }
+
+            uploadResult.result = uploadResult.errors.length == 0 ? CsvParseResult.successfull : CsvParseResult.unsucessfull;
         } catch (error) {
             this.loggerUseCases.log(ErrorConstants.PostMethodError, error?.message, error?.stack);
             uploadResult.errors.push(`${CsvParseUserErrorConstants.UserDataNotValid}: ${error}`);

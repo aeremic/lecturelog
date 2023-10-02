@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
@@ -16,6 +17,7 @@ import { uploadUsers } from "../../../services/HttpService/UsersService";
 import { RoleEnum } from "../../../modelHelpers/Enums";
 import { uploadProfessors } from "../../../services/HttpService/ProfessorsService";
 import { uploadStudents } from "../../../services/HttpService/StudentsService";
+import { UploadUsersResult } from "../../../modelHelpers/Enums/index";
 
 export interface IUploadUsersDialogRawProps {
   id: string;
@@ -42,6 +44,7 @@ const UploadUsersDialog = (props: IUploadUsersDialogRawProps) => {
   const { t } = useTranslation();
 
   const [fileValue, setFileValue] = useState();
+  const [errorMessages, setErrorMessages] = useState<string[]>([]);
 
   const handleCancel = () => {
     onClose();
@@ -63,7 +66,15 @@ const UploadUsersDialog = (props: IUploadUsersDialogRawProps) => {
       }
 
       if (res && res.status == HttpStatusCode.Created && res.data) {
-        onClose(fileValue);
+        if (res.data.errors.length > 0) {
+          setErrorMessages(res.data.errors);
+        }
+
+        if (res.data.result == UploadUsersResult.successfull) {
+          onClose(true);
+        }
+      } else {
+        onClose(false);
       }
     }
   };
@@ -74,15 +85,31 @@ const UploadUsersDialog = (props: IUploadUsersDialogRawProps) => {
 
   return (
     <Dialog
-      sx={{ "& .MuiDialog-paper": { width: "100%", maxHeight: 700 } }}
+      sx={{ "& .MuiDialog-paper": { width: "100%", maxHeight: 500 } }}
       maxWidth="xs"
       open={open}
       {...other}
     >
       <DialogTitle>{title}</DialogTitle>
       <DialogContent dividers>
-        <Typography>{t("UploadCSVFileToAddMoreUsers")}</Typography>
-        <MuiFileInput value={fileValue} onChange={handleUploadUsersChange} />
+        <Box sx={{ mb: 1 }}>
+          <Typography>{t("UploadCSVFileToAddMoreUsers")}</Typography>
+        </Box>
+        <Box sx={{ mb: 1 }}>
+          <MuiFileInput value={fileValue} onChange={handleUploadUsersChange} />
+        </Box>
+        {errorMessages.length > 0 ? (
+          <Box sx={{ mb: 1 }}>
+            <Typography>Errors:</Typography>
+            {errorMessages.map((errorMessage, index) => (
+              <Typography variant="body2">
+                {index + 1}. {errorMessage}
+              </Typography>
+            ))}
+          </Box>
+        ) : (
+          <></>
+        )}
       </DialogContent>
       <DialogActions>
         <Button

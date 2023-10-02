@@ -205,18 +205,16 @@ const ProfessorsTable = () => {
     setUploadUsersDialogOpen(true);
   };
 
-  const handleUploadUsersDialogClose = async (newValue?: any) => {
+  const handleUploadUsersDialogClose = async (isSuccess?: boolean) => {
     setUploadUsersDialogOpen(false);
-    if (newValue) {
+    if (isSuccess) {
       setAlertType("success");
-      setAlertMessage(t("UserAddedSuccessfully"));
+      setAlertMessage(t("UsersAddedSuccessfully"));
       setOpenAlert(true);
 
       setProfessorsLoaded(false);
     } else {
-      setAlertType("error");
-      setAlertMessage(t("UsersNotAdded"));
-      setOpenAlert(true);
+      setProfessorsLoaded(false);
     }
   };
 
