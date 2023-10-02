@@ -1,3 +1,8 @@
+import {
+  getFromLocalStorage,
+  removeFromLocalStorage,
+  setToLocalStorage,
+} from "../../../store/LocalStorage";
 import { post } from "../HttpServiceBase";
 
 const URL = "/auth";
@@ -11,7 +16,7 @@ export const login = async (data: ILogin) => {
   try {
     const res = await post(`${URL}/login`, data, false);
     if (res && res.data && res.data.accessToken) {
-      localStorage.setItem("accessToken", JSON.stringify(res.data.accessToken));
+      setToLocalStorage("accessToken", JSON.stringify(res.data.accessToken));
     }
 
     return res;
@@ -22,22 +27,17 @@ export const login = async (data: ILogin) => {
 };
 
 export const logout = () => {
-  localStorage.removeItem("accessToken");
+  removeFromLocalStorage("accessToken");
 };
 
 export const getCurrentUserData = () => {
-  const token = getAuthorizationToken();
-  return token != "" ? parseJwt(token) : undefined;
-};
-
-const getAuthorizationToken = () => {
-  const accessToken = localStorage.getItem("accessToken");
-  let parsedAccessToken = "";
-  if (accessToken) {
-    parsedAccessToken = JSON.parse(accessToken);
+  const token = getFromLocalStorage("accessToken");
+  let parsedToken = undefined;
+  if (token) {
+    parsedToken = JSON.parse(token);
   }
 
-  return parsedAccessToken;
+  return parsedToken != undefined ? parseJwt(parsedToken) : undefined;
 };
 
 const parseJwt = (token: string) => {
