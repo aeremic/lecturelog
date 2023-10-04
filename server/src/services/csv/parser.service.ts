@@ -1,7 +1,9 @@
+import { Parser } from '@json2csv/plainjs';
 import { Injectable } from '@nestjs/common';
 import { Exception } from 'handlebars';
 import { parse } from 'papaparse';
 import { CsvParseErrorConstants } from 'src/core/common/constants/error.constant';
+import { Readable } from 'stream';
 
 @Injectable()
 export class ParserService {
@@ -24,5 +26,11 @@ export class ParserService {
         } else {
             throw new Exception(CsvParseErrorConstants.DataNotValid);
         }
+    }
+
+    async generateTemplate(header: string[]): Promise<any> {
+        const parser = new Parser({ fields: header });
+
+        return parser.parse([]);
     }
 }

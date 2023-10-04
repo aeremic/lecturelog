@@ -106,5 +106,8 @@
     "CodeWillBeShownHere": "Code will be shown here",
     "TimeRemaining": "Time remaining: ",
     "SomethingWentWrong": "Something went wrong!",
-    "UploadCSVFileToAddMoreUsers": "Upload CSV file to add more users"
+    "UploadCSVFileToAddMoreUsers": "Upload CSV file to add more users or",
+    "ToDownloadFileTemplate": " to download file template",
+    "ClickHere": "Click here",
+    "DownloadFileTemplate": "Download File Template"
 }

@@ -20,6 +20,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@json2csv/plainjs": "^7.0.3",
     "@liaoliaots/nestjs-redis": "^9.0.5",
     "@nestjs-modules/mailer": "^1.8.1",
     "@nestjs/class-validator": "^0.13.1",
@@ -46,6 +47,7 @@
     "pg": "^8.10.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
+    "stream-handbook": "^1.0.0",
     "typeorm": "^0.3.12"
   },
   "devDependencies": {

@@ -470,6 +470,16 @@ export class UserUseCases extends GenericUseCases<UserEntity>{
         return uploadResult;
     }
 
+    async generateUploadTemplate(): Promise<Buffer> {
+        try {
+            const template = await this.parserService.generateTemplate(['id', 'email', 'firstname', 'lastname']);
+            return Buffer.from(template, 'utf-8');
+        } catch (error) {
+            this.loggerUseCases.log(ErrorConstants.PostMethodError, error?.message, error?.stack);
+            return Buffer.from([].toString(), 'utf-8');
+        }
+    }
+
     async uploadStudents(file: Express.Multer.File): Promise<CsvUploadResultDto> {
         let uploadResult: CsvUploadResultDto = {
             result: CsvParseResult.unsucessfull,

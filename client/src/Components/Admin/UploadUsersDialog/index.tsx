@@ -5,6 +5,8 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Divider,
+  Stack,
 } from "@mui/material";
 import { useState } from "react";
 import CheckIcon from "@mui/icons-material/Check";
@@ -15,7 +17,10 @@ import { MuiFileInput } from "mui-file-input";
 import { HttpStatusCode } from "axios";
 import { uploadUsers } from "../../../services/HttpService/UsersService";
 import { RoleEnum } from "../../../modelHelpers/Enums";
-import { uploadProfessors } from "../../../services/HttpService/ProfessorsService";
+import {
+  generateTemplateFile,
+  uploadProfessors,
+} from "../../../services/HttpService/ProfessorsService";
 import { uploadStudents } from "../../../services/HttpService/StudentsService";
 import { UploadUsersResult } from "../../../modelHelpers/Enums/index";
 
@@ -83,9 +88,18 @@ const UploadUsersDialog = (props: IUploadUsersDialogRawProps) => {
     setFileValue(newFileValue);
   };
 
+  const handleGenerateTemplateFileClick = async () => {
+    const res: any = await generateTemplateFile();
+    if (res && res.status == HttpStatusCode.Ok && res.data) {
+      debugger;
+    }
+  };
+
   return (
     <Dialog
-      sx={{ "& .MuiDialog-paper": { width: "100%", maxHeight: 500 } }}
+      sx={{
+        "& .MuiDialog-paper": { width: "100%", maxHeight: 500, minWidth: 300 },
+      }}
       maxWidth="xs"
       open={open}
       {...other}
@@ -95,8 +109,22 @@ const UploadUsersDialog = (props: IUploadUsersDialogRawProps) => {
         <Box sx={{ mb: 1 }}>
           <Typography>{t("UploadCSVFileToAddMoreUsers")}</Typography>
         </Box>
-        <Box sx={{ mb: 1 }}>
-          <MuiFileInput value={fileValue} onChange={handleUploadUsersChange} />
+        <Stack direction={"row"} sx={{ mb: 1 }}>
+          <Button
+            variant="outlined"
+            size="small"
+            onClick={handleGenerateTemplateFileClick}
+          >
+            <Typography variant="body2">{t("DownloadFileTemplate")}</Typography>
+          </Button>
+        </Stack>
+        <Divider />
+        <Box sx={{ mt: 1, mb: 1 }}>
+          <MuiFileInput
+            fullWidth
+            value={fileValue}
+            onChange={handleUploadUsersChange}
+          />
         </Box>
         {errorMessages.length > 0 ? (
           <Box sx={{ mb: 1 }}>

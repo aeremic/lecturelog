@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, FileTypeValidator, Get, Inject, MaxFileSizeValidator, Param, ParseFilePipe, ParseIntPipe, Post, Put, Query, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, FileTypeValidator, Get, Header, Inject, MaxFileSizeValidator, Param, ParseFilePipe, ParseIntPipe, Post, Put, Query, Req, Res, StreamableFile, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { UserUseCases } from 'src/use-cases';
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from 'src/auth/decorators/roles.decorator';
@@ -7,6 +7,7 @@ import { AssignedSubjectDto } from 'src/core/dtos/responses/assigned-group.dto';
 import { CodeEnum } from 'src/core/common/enums/code.enum';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CsvUploadResultDto } from 'src/core/dtos/responses/csv-upload-result.dto';
+import { Response } from 'express';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('api/professor')
@@ -50,7 +51,7 @@ export class ProfessorController {
     }
 
     @Roles('admin')
-    @UseGuards(AuthGuard('jwt'), RoleGuard)
+    @UseGuards(RoleGuard)
     @Post('/uploadProfessors')
     @UseInterceptors(FileInterceptor('file'))
     uploadUsers(@UploadedFile(
@@ -62,5 +63,15 @@ export class ProfessorController {
         })
     ) file: Express.Multer.File): Promise<CsvUploadResultDto> {
         return this.userUseCases.uploadProfessors(file);
+    }
+
+    @Roles('admin')
+    @UseGuards(RoleGuard)
+    @Get('/generateUploadTemplate')
+    @Header('Content-Type', 'text/csv')
+    @Header('Content-Disposition', 'attachment; filename=upload_template.csv')
+    async generateUploadTemplate(@Res({ passthrough: true }) res: Response): Promise<StreamableFile> {
+        const file = await this.userUseCases.generateUploadTemplate();
+        return new StreamableFile(file);
     }
 }

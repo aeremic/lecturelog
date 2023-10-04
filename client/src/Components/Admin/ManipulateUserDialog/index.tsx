@@ -107,7 +107,9 @@ const ManipulateUserDialog = (props: IManipulateUserDialogRawProps) => {
 
   return (
     <Dialog
-      sx={{ "& .MuiDialog-paper": { width: "100%", maxHeight: 700 } }}
+      sx={{
+        "& .MuiDialog-paper": { width: "100%", maxHeight: 700, minWidth: 300 },
+      }}
       maxWidth="xs"
       open={open}
       {...other}
