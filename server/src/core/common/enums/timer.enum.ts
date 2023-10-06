@@ -1,5 +1,5 @@
 export enum TimerEnum {
-    start = 'start',
-    stop = 'stop',
-    tick = 'tick'
+  start = 'start',
+  stop = 'stop',
+  tick = 'tick',
 }

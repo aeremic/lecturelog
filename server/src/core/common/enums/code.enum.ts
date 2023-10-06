@@ -1,5 +1,5 @@
 export enum CodeEnum {
-    notGenerated,
-    generated,
-    canceled,
+  notGenerated,
+  generated,
+  canceled,
 }

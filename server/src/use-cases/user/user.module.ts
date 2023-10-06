@@ -1,6 +1,10 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User, EmailVerification, StudentsSubjects } from 'src/infrastructure/data/models';
+import {
+  User,
+  EmailVerification,
+  StudentsSubjects,
+} from 'src/infrastructure/data/models';
 import { UserUseCases } from './user.use-case';
 import { UserRepository } from 'src/infrastructure/data/repositories/user.repository';
 import { UserRepositoryAbstract } from 'src/core/abstracts/repositories/user.repository.abstract';
@@ -16,15 +20,24 @@ import { BcryptModule } from 'src/services/cryptography/bcrypt.module';
 import { ParserModule } from 'src/services/csv/parser.module';
 
 @Module({
-    imports: [forwardRef(() => SubjectModule), LoggerModule, MailModule, EmailVerificationModule, BcryptModule, LectureModule, ParserModule, TypeOrmModule.forFeature([User, EmailVerification, StudentsSubjects])],
-    providers: [
-        UserUseCases,
-        {
-            provide: UserRepositoryAbstract,
-            useClass: UserRepository
-        },
-    ],
-    controllers: [UserController, ProfessorController, StudentController],
-    exports: [UserUseCases]
+  imports: [
+    forwardRef(() => SubjectModule),
+    LoggerModule,
+    MailModule,
+    EmailVerificationModule,
+    BcryptModule,
+    LectureModule,
+    ParserModule,
+    TypeOrmModule.forFeature([User, EmailVerification, StudentsSubjects]),
+  ],
+  providers: [
+    UserUseCases,
+    {
+      provide: UserRepositoryAbstract,
+      useClass: UserRepository,
+    },
+  ],
+  controllers: [UserController, ProfessorController, StudentController],
+  exports: [UserUseCases],
 })
-export class UserModule { }
+export class UserModule {}

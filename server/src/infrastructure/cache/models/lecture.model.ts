@@ -1,7 +1,7 @@
 export class Lecture {
-    public subject: string;
+  public subject: string;
 
-    public code: string;
+  public code: string;
 
-    public timer?: number;
+  public timer?: number;
 }

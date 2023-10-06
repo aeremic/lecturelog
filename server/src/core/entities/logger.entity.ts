@@ -1,11 +1,11 @@
-export class LoggerEntity{
-    public id?: number;
-    
-    public code: number;
+export class LoggerEntity {
+  public id?: number;
 
-    public description?: string;
+  public code: number;
 
-    public stackTrace?: string;
+  public description?: string;
 
-    public dateLogged?: Date;
+  public stackTrace?: string;
+
+  public dateLogged?: Date;
 }

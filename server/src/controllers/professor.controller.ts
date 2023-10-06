@@ -1,4 +1,25 @@
-import { Body, Controller, Delete, FileTypeValidator, Get, Header, Inject, MaxFileSizeValidator, Param, ParseFilePipe, ParseIntPipe, Post, Put, Query, Req, Res, StreamableFile, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  FileTypeValidator,
+  Get,
+  Header,
+  Inject,
+  MaxFileSizeValidator,
+  Param,
+  ParseFilePipe,
+  ParseIntPipe,
+  Post,
+  Put,
+  Query,
+  Req,
+  Res,
+  StreamableFile,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { UserUseCases } from 'src/use-cases';
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from 'src/auth/decorators/roles.decorator';
@@ -12,66 +33,80 @@ import { Response } from 'express';
 @UseGuards(AuthGuard('jwt'))
 @Controller('api/professor')
 export class ProfessorController {
-    @Inject(UserUseCases)
-    private readonly userUseCases: UserUseCases
+  @Inject(UserUseCases)
+  private readonly userUseCases: UserUseCases;
 
-    @Roles('admin')
-    @UseGuards(RoleGuard)
-    @Get('/getprofessors')
-    getProfessors(@Query('page', ParseIntPipe) page: number, @Query('size', ParseIntPipe) size: number) {
-        return this.userUseCases.getProfessors(page, size);
-    }
+  @Roles('admin')
+  @UseGuards(RoleGuard)
+  @Get('/getprofessors')
+  getProfessors(
+    @Query('page', ParseIntPipe) page: number,
+    @Query('size', ParseIntPipe) size: number,
+  ) {
+    return this.userUseCases.getProfessors(page, size);
+  }
 
-    @Roles('professor')
-    @UseGuards(RoleGuard)
-    @Get('/getAssignedSubjects/:id')
-    getAssignedSubjects(@Param('id', ParseIntPipe) id: number): Promise<AssignedSubjectDto[]> {
-        return this.userUseCases.getProfessorAssignedSubjects(id);
-    }
+  @Roles('professor')
+  @UseGuards(RoleGuard)
+  @Get('/getAssignedSubjects/:id')
+  getAssignedSubjects(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<AssignedSubjectDto[]> {
+    return this.userUseCases.getProfessorAssignedSubjects(id);
+  }
 
-    @Roles('professor')
-    @UseGuards(RoleGuard)
-    @Get('/getActiveAssignedSubjects/:id')
-    getActiveAssignedSubjects(@Param('id', ParseIntPipe) id: number): Promise<AssignedSubjectDto[]> {
-        return this.userUseCases.getProfessorActiveAssignedSubjects(id);
-    }
+  @Roles('professor')
+  @UseGuards(RoleGuard)
+  @Get('/getActiveAssignedSubjects/:id')
+  getActiveAssignedSubjects(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<AssignedSubjectDto[]> {
+    return this.userUseCases.getProfessorActiveAssignedSubjects(id);
+  }
 
-    @Roles('professor')
-    @UseGuards(RoleGuard)
-    @Post('/getCodeEventByActiveLecture')
-    getCodeEventBySubjectKey(@Body() request: any): Promise<CodeEnum> {
-        return this.userUseCases.getCodeEventByActiveLecture(request);
-    }
+  @Roles('professor')
+  @UseGuards(RoleGuard)
+  @Post('/getCodeEventByActiveLecture')
+  getCodeEventBySubjectKey(@Body() request: any): Promise<CodeEnum> {
+    return this.userUseCases.getCodeEventByActiveLecture(request);
+  }
 
-    @Roles('professor')
-    @UseGuards(RoleGuard)
-    @Post('/getCodeByActiveLecture')
-    getCodeByActiveLecture(@Body() request: any): Promise<string> {
-        return this.userUseCases.getCodeByActiveLecture(request);
-    }
+  @Roles('professor')
+  @UseGuards(RoleGuard)
+  @Post('/getCodeByActiveLecture')
+  getCodeByActiveLecture(@Body() request: any): Promise<string> {
+    return this.userUseCases.getCodeByActiveLecture(request);
+  }
 
-    @Roles('admin')
-    @UseGuards(RoleGuard)
-    @Post('/uploadProfessors')
-    @UseInterceptors(FileInterceptor('file'))
-    uploadUsers(@UploadedFile(
-        new ParseFilePipe({
-            validators: [
-                new MaxFileSizeValidator({ maxSize: 100000 }),
-                new FileTypeValidator({ fileType: new RegExp("application\/vnd.ms-excel|csv") }),
-            ]
-        })
-    ) file: Express.Multer.File): Promise<CsvUploadResultDto> {
-        return this.userUseCases.uploadProfessors(file);
-    }
+  @Roles('admin')
+  @UseGuards(RoleGuard)
+  @Post('/uploadProfessors')
+  @UseInterceptors(FileInterceptor('file'))
+  uploadUsers(
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({ maxSize: 100000 }),
+          new FileTypeValidator({
+            fileType: new RegExp('application/vnd.ms-excel|csv'),
+          }),
+        ],
+      }),
+    )
+    file: Express.Multer.File,
+  ): Promise<CsvUploadResultDto> {
+    return this.userUseCases.uploadProfessors(file);
+  }
 
-    @Roles('admin')
-    @UseGuards(RoleGuard)
-    @Get('/generateUploadTemplate')
-    @Header('Content-Type', 'text/csv')
-    @Header('Content-Disposition', 'attachment; filename=upload_template.csv')
-    async generateUploadTemplate(@Res({ passthrough: true }) res: Response): Promise<StreamableFile> {
-        const file = await this.userUseCases.generateUploadTemplate();
-        return new StreamableFile(file);
-    }
+  @Roles('admin')
+  @UseGuards(RoleGuard)
+  @Get('/generateUploadTemplate')
+  @Header('Content-Type', 'text/csv')
+  @Header('Content-Disposition', 'attachment; filename=upload_template.csv')
+  async generateUploadTemplate(
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<StreamableFile> {
+    const file = await this.userUseCases.generateUploadTemplate();
+    return new StreamableFile(file);
+  }
 }

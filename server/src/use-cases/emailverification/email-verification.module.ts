@@ -7,14 +7,14 @@ import { EmailVerificationRepository } from 'src/infrastructure/data/repositorie
 import { LoggerModule } from '../logger/logger.module';
 
 @Module({
-    imports: [LoggerModule, TypeOrmModule.forFeature([EmailVerification])],
-    providers: [
-        EmailVerificationUseCases,
-        {
-            provide: EmailVerificationRepositoryAbstract,
-            useClass: EmailVerificationRepository
-        }
-    ],
-    exports: [EmailVerificationUseCases]
+  imports: [LoggerModule, TypeOrmModule.forFeature([EmailVerification])],
+  providers: [
+    EmailVerificationUseCases,
+    {
+      provide: EmailVerificationRepositoryAbstract,
+      useClass: EmailVerificationRepository,
+    },
+  ],
+  exports: [EmailVerificationUseCases],
 })
-export class EmailVerificationModule { }
+export class EmailVerificationModule {}

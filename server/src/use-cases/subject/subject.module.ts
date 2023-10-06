@@ -11,15 +11,21 @@ import { StudentsSubjectsModule } from '../students-subjects/students-subjects.m
 import { StudentsSubjects, Subject } from 'src/infrastructure/data/models';
 
 @Module({
-    imports: [forwardRef(() => UserModule), LectureModule, LoggerModule, StudentsSubjectsModule, TypeOrmModule.forFeature([Subject, StudentsSubjects])],
-    providers: [
-        SubjectUseCases,
-        {
-            provide: SubjectRepositoryAbstract,
-            useClass: SubjectRepository
-        }
-    ],
-    controllers: [SubjectController],
-    exports: [SubjectUseCases]
+  imports: [
+    forwardRef(() => UserModule),
+    LectureModule,
+    LoggerModule,
+    StudentsSubjectsModule,
+    TypeOrmModule.forFeature([Subject, StudentsSubjects]),
+  ],
+  providers: [
+    SubjectUseCases,
+    {
+      provide: SubjectRepositoryAbstract,
+      useClass: SubjectRepository,
+    },
+  ],
+  controllers: [SubjectController],
+  exports: [SubjectUseCases],
 })
-export class SubjectModule { }
+export class SubjectModule {}

@@ -5,42 +5,42 @@ import { LoggerRepositoryAbstract } from 'src/core/abstracts/repositories/logger
 
 @Injectable()
 export class LoggerUseCases {
-    //#region Properties
+  //#region Properties
 
-    @Inject(LoggerRepositoryAbstract)
-    private loggerRepository: LoggerRepositoryAbstract
+  @Inject(LoggerRepositoryAbstract)
+  private loggerRepository: LoggerRepositoryAbstract;
 
-    //#endregion
+  //#endregion
 
-    //#region Public methods
+  //#region Public methods
 
-    async create(loggerEntity: LoggerEntity): Promise<LoggerEntity> {
-        return this.loggerRepository.createOrUpdate(loggerEntity);
-    }
+  async create(loggerEntity: LoggerEntity): Promise<LoggerEntity> {
+    return this.loggerRepository.createOrUpdate(loggerEntity);
+  }
 
-    async log(code?: number, description?: string, stackTrace?: string) {
-        try {
-            let loggerEntity: LoggerEntity = {
-                code: code,
-                description: description,
-                stackTrace: stackTrace
-            };
+  async log(code?: number, description?: string, stackTrace?: string) {
+    try {
+      const loggerEntity: LoggerEntity = {
+        code: code,
+        description: description,
+        stackTrace: stackTrace,
+      };
 
-            this.create(loggerEntity);
-        } catch { }
-    }
+      await this.create(loggerEntity);
+    } catch {}
+  }
 
-    async logWithoutCode(description?: string, stackTrace?: string) {
-        try {
-            let loggerEntity: LoggerEntity = {
-                code: 0,
-                description: description,
-                stackTrace: stackTrace
-            };
+  async logWithoutCode(description?: string, stackTrace?: string) {
+    try {
+      const loggerEntity: LoggerEntity = {
+        code: 0,
+        description: description,
+        stackTrace: stackTrace,
+      };
 
-            this.create(loggerEntity);
-        } catch { }
-    }
+      await this.create(loggerEntity);
+    } catch {}
+  }
 
-    //#endregion
+  //#endregion
 }

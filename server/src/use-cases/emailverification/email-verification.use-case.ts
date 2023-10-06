@@ -5,58 +5,83 @@ import { GenericUseCases } from '../generic.use-case';
 import { EmailVerificationEntity } from 'src/core/entities';
 
 @Injectable()
-export class EmailVerificationUseCases extends GenericUseCases<EmailVerificationEntity>{
-    //#region Properties
+export class EmailVerificationUseCases extends GenericUseCases<EmailVerificationEntity> {
+  //#region Properties
 
-    @Inject(EmailVerificationRepositoryAbstract)
-    private emailVerificationRepository: EmailVerificationRepositoryAbstract
+  @Inject(EmailVerificationRepositoryAbstract)
+  private emailVerificationRepository: EmailVerificationRepositoryAbstract;
 
-    @Inject(LoggerUseCases)
-    private loggerUseCases: LoggerUseCases;
+  @Inject(LoggerUseCases)
+  private loggerUseCases: LoggerUseCases;
 
-    //#endregion
+  //#endregion
 
-    //#region Public methods
+  //#region Public methods
 
-    async get(): Promise<EmailVerificationEntity[]> {
-        return super.get(this.emailVerificationRepository, this.loggerUseCases);
+  async get(): Promise<EmailVerificationEntity[]> {
+    return super.get(this.emailVerificationRepository, this.loggerUseCases);
+  }
+
+  async getById(id: number): Promise<EmailVerificationEntity> {
+    return super.getById(
+      this.emailVerificationRepository,
+      this.loggerUseCases,
+      id,
+    );
+  }
+
+  async createOrUpdate(
+    EmailVerificationEntity: EmailVerificationEntity,
+  ): Promise<EmailVerificationEntity> {
+    return super.createOrUpdate(
+      this.emailVerificationRepository,
+      this.loggerUseCases,
+      EmailVerificationEntity,
+    );
+  }
+
+  async delete(id: number): Promise<number> {
+    return super.delete(
+      this.emailVerificationRepository,
+      this.loggerUseCases,
+      id,
+    );
+  }
+
+  async createValidation(
+    userId: number,
+    email: string,
+    code: string,
+  ): Promise<EmailVerificationEntity> {
+    const emailVerification: EmailVerificationEntity = {
+      userId: userId,
+      email: email,
+      sentOn: new Date(Date.now()),
+      code: code,
+      notValid: false,
+    };
+
+    return this.createOrUpdate(emailVerification);
+  }
+
+  async invalidPreviousEmailValidation(email: string): Promise<void> {
+    const previousEmailValidation =
+      await this.emailVerificationRepository.getPreviousEmailValidation(email);
+    if (this.isFound(previousEmailValidation)) {
+      previousEmailValidation.notValid = true;
+      this.createOrUpdate(previousEmailValidation);
     }
+  }
 
-    async getById(id: number): Promise<EmailVerificationEntity> {
-        return super.getById(this.emailVerificationRepository, this.loggerUseCases, id);
-    }
+  async getLatestEmailVerificationByUserId(
+    userId: number,
+    code: string,
+  ): Promise<EmailVerificationEntity> {
+    return this.emailVerificationRepository.getLatestEmailVerificationByUserId(
+      userId,
+      code,
+    );
+  }
 
-    async createOrUpdate(EmailVerificationEntity: EmailVerificationEntity): Promise<EmailVerificationEntity> {
-        return super.createOrUpdate(this.emailVerificationRepository, this.loggerUseCases, EmailVerificationEntity);
-    }
-
-    async delete(id: number): Promise<number> {
-        return super.delete(this.emailVerificationRepository, this.loggerUseCases, id);
-    }
-
-    async createValidation(userId: number, email: string, code: string): Promise<EmailVerificationEntity> {
-        let emailVerification: EmailVerificationEntity = {
-            userId: userId,
-            email: email,
-            sentOn: new Date(Date.now()),
-            code: code,
-            notValid: false
-        };
-
-        return this.createOrUpdate(emailVerification);
-    }
-
-    async invalidPreviousEmailValidation(email: string): Promise<void> {
-        let previousEmailValidation = await this.emailVerificationRepository.getPreviousEmailValidation(email);
-        if (this.isFound(previousEmailValidation)) {
-            previousEmailValidation.notValid = true;
-            this.createOrUpdate(previousEmailValidation);
-        }
-    }
-
-    async getLatestEmailVerificationByUserId(userId: number, code: string): Promise<EmailVerificationEntity> {
-        return this.emailVerificationRepository.getLatestEmailVerificationByUserId(userId, code);
-    }
-
-    //#endregion
+  //#endregion
 }

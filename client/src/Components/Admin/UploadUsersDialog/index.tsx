@@ -15,7 +15,6 @@ import { Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { MuiFileInput } from "mui-file-input";
 import { HttpStatusCode } from "axios";
-import { uploadUsers } from "../../../services/HttpService/UsersService";
 import { RoleEnum } from "../../../modelHelpers/Enums";
 import {
   generateTemplateFile,
@@ -91,7 +90,6 @@ const UploadUsersDialog = (props: IUploadUsersDialogRawProps) => {
   const handleGenerateTemplateFileClick = async () => {
     const res: any = await generateTemplateFile();
     if (res && res.status == HttpStatusCode.Ok && res.data) {
-      debugger;
     }
   };
 

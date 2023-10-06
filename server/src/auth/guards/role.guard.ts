@@ -1,4 +1,9 @@
-import { CanActivate, ExecutionContext, Inject, Injectable } from '@nestjs/common';
+import {
+  CanActivate,
+  ExecutionContext,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
 import { UserUseCases } from 'src/use-cases';
@@ -26,10 +31,10 @@ export class RoleGuard implements CanActivate {
   }
 
   private matchRoles(roles: string[], id: number): Promise<boolean> {
-    let result = new Promise<boolean>((resolve, reject) => {
+    const result = new Promise<boolean>((resolve, reject) => {
       this.userUseCases.getById(id).then((user) => {
         if (this.userUseCases.isFound(user)) {
-          let res = roles.some((role) => role === user.role);
+          const res = roles.some((role) => role === user.role);
           resolve(res);
         } else {
           reject();
