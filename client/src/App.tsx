@@ -6,13 +6,13 @@ import Login from "./components/Login";
 import Users from "./components/Admin/Users";
 import Subjects from "./components/Admin/Subjects";
 import EmailRegistration from "./components/EmailRegistration";
-import Subject from "./components/Admin/Subjects/Content/Subject";
 import MySubjects from "./components/Professor/MySubjects";
 import Profile from "./components/User/Profile";
 import ProfessorRoom from "./components/Professor/ProfessorRoom";
 import AvailableSubjects from "./components/Student/AvailableSubjects";
 import Register from "./components/Register";
 import RegisterConfirmation from "./components/RegisterConfirmation";
+import Subject from "./components/Professor/Subject";
 
 const App = () => {
   return (
@@ -34,9 +34,9 @@ const App = () => {
           /**Admin routes */
           <Route path="/admin/users" element={<Users />} />
           <Route path="/admin/subjects" element={<Subjects />} />
-          <Route path="/admin/subjects/subject" element={<Subject />} />
           /**Professor routes */
           <Route path="/professor/mysubjects" element={<MySubjects />} />
+          <Route path="/professor/subject" element={<Subject />} />
           <Route path="/professor/room" element={<ProfessorRoom />} />
           /**Student routes */
           <Route

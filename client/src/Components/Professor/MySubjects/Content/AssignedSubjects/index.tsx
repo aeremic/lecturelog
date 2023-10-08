@@ -4,6 +4,7 @@ import {
   CardContent,
   Divider,
   Paper,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -19,11 +20,13 @@ import SmartDisplayIcon from "@mui/icons-material/SmartDisplay";
 import { IAssignedSubject } from "../../../../../modelHelpers/AssignedSubject";
 import { IAssignedSubjectsProps } from "../../../../../modelHelpers/AssignedSubjectsProps";
 import { useTranslation } from "react-i18next";
+import AddIcon from "@mui/icons-material/Add";
 
 const AssignedSubject: React.FC<IAssignedSubjectsProps> = ({
   subjectsProp,
   handleStartSession,
   handleSubjectClick,
+  handleAddSubjectDialogClick,
 }) => {
   const { t } = useTranslation();
 
@@ -34,6 +37,20 @@ const AssignedSubject: React.FC<IAssignedSubjectsProps> = ({
       <CardContent>
         <Typography variant="h6">{t("AssignedSubjects")}</Typography>
         <Divider sx={{ mb: 2 }} />
+
+        <Stack direction="row">
+          <Button
+            onClick={() => {
+              handleAddSubjectDialogClick();
+            }}
+            variant="contained"
+            color="success"
+            size="small"
+            sx={{ mb: 1 }}
+          >
+            <AddIcon />
+          </Button>
+        </Stack>
         <TableContainer component={Paper} sx={{ mt: 1 }}>
           <Table sx={{ minWidth: 290 }} size="small">
             <TableHead>

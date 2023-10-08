@@ -95,7 +95,11 @@ export const Content = () => {
   };
 
   const handleSubjectClick = (subjectId: number) => {
-    console.log(subjectId);
+    navigate(`/professor/subject?id=${subjectId}`);
+  };
+
+  const handleAddSubjectDialogClick = () => {
+    navigate(`/professor/subject`);
   };
 
   const handleSessionClick = (subject: IAssignedSubject) => {
@@ -118,6 +122,7 @@ export const Content = () => {
             subjectsProp={assignedSubjects}
             handleStartSession={handleStartSession}
             handleSubjectClick={handleSubjectClick}
+            handleAddSubjectDialogClick={handleAddSubjectDialogClick}
           />
         </Grid>
         <Grid item xs={6} sx={{ minWidth: 350 }}>
