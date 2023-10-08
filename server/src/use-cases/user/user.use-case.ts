@@ -30,6 +30,7 @@ import { CsvUploadResultDto } from 'src/core/dtos/responses/csv-upload-result.dt
 import { CsvParseResult } from 'src/core/common/enums/csv-parse.enum';
 import { ParserService } from 'src/services/csv/parser.service';
 import { RegexPattern } from 'src/core/common/constants/regex.constant';
+import { UserMapper } from 'src/infrastructure/data/mappers/user.mapper';
 
 @Injectable()
 export class UserUseCases extends GenericUseCases<UserEntity> {
@@ -240,6 +241,7 @@ export class UserUseCases extends GenericUseCases<UserEntity> {
         error?.message,
         error?.stack,
       );
+      result.errorMessage = error?.message;
     }
 
     return result;

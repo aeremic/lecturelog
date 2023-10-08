@@ -9,6 +9,7 @@ export class ErrorMessageConstants {
   public static UserExists = 'User already exists';
   public static UserDoesntExists = "User doesn't exists";
   public static EmailNotValid = 'Email is not valid';
+  public static PropertiesNotValid = 'Invalid user data';
 }
 
 export class CsvParseErrorConstants {

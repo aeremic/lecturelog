@@ -1,4 +1,4 @@
-import { RoleEnum } from "../common/enums/role.enum";
+import { RoleEnum } from '../common/enums/role.enum';
 
 export class UserEntity {
   public id?: number;
@@ -17,5 +17,5 @@ export class UserEntity {
 
   public isActivated?: boolean;
 
-  public role: RoleEnum
+  public role: RoleEnum;
 }
