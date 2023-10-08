@@ -1,5 +1,5 @@
 import { ISessionData } from "../../../modelHelpers/SessionData";
-import { get, getById, post } from "../HttpServiceBase";
+import { get, getById, getFile, post } from "../HttpServiceBase";
 
 const URL = "/professor";
 
@@ -58,7 +58,7 @@ export const uploadProfessors = async (data: any) => {
 
 export const generateTemplateFile = async () => {
   try {
-    return await get(`${URL}/generateUploadTemplate`);
+    return await getFile(`${URL}/generateUploadTemplate`);
   } catch (err) {
     console.log(err); // TODO: Fix for PROD.
   }
