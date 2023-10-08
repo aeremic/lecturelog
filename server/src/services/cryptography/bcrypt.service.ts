@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
-import bcrypt from 'bcrypt';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const bcrypt = require('bcrypt');
 const saltRounds = 10;
 @Injectable()
 export class BcryptService {
