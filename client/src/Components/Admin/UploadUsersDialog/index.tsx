@@ -22,6 +22,7 @@ import {
 } from "../../../services/HttpService/ProfessorsService";
 import { uploadStudents } from "../../../services/HttpService/StudentsService";
 import { UploadUsersResult } from "../../../modelHelpers/Enums/index";
+import fileDownload from "js-file-download";
 
 export interface IUploadUsersDialogRawProps {
   id: string;
@@ -90,6 +91,7 @@ const UploadUsersDialog = (props: IUploadUsersDialogRawProps) => {
   const handleGenerateTemplateFileClick = async () => {
     const res: any = await generateTemplateFile();
     if (res && res.status == HttpStatusCode.Ok && res.data) {
+      fileDownload(res.data, "upload_template.csv");
     }
   };
 

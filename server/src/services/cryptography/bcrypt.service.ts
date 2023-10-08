@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
+
 @Injectable()
 export class BcryptService {
   async createUserPassword(
