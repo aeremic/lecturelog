@@ -109,5 +109,7 @@
     "UploadCSVFileToAddMoreUsers": "Upload CSV file to add more users or",
     "ToDownloadFileTemplate": " to download file template",
     "ClickHere": "Click here",
-    "DownloadFileTemplate": "Download File Template"
+    "DownloadFileTemplate": "Download File Template",
+    "SubjectSuccessfullyAdded": "Subject has been successfully added.",
+    "SubjectSuccessfullyUpdated": "Subject has been successfully updated."
 }

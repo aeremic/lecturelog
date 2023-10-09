@@ -14,9 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
-import NumbersIcon from "@mui/icons-material/Numbers";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import SmartDisplayIcon from "@mui/icons-material/SmartDisplay";
 import { IAssignedSubject } from "../../../../../modelHelpers/AssignedSubject";
 import { IAssignedSubjectsProps } from "../../../../../modelHelpers/AssignedSubjectsProps";
 import { useTranslation } from "react-i18next";
@@ -37,7 +35,6 @@ const AssignedSubject: React.FC<IAssignedSubjectsProps> = ({
       <CardContent>
         <Typography variant="h6">{t("AssignedSubjects")}</Typography>
         <Divider sx={{ mb: 2 }} />
-
         <Stack direction="row">
           <Button
             onClick={() => {
@@ -45,7 +42,7 @@ const AssignedSubject: React.FC<IAssignedSubjectsProps> = ({
             }}
             variant="contained"
             color="success"
-            size="small"
+            size="large"
             sx={{ mb: 1 }}
           >
             <AddIcon />
@@ -68,18 +65,7 @@ const AssignedSubject: React.FC<IAssignedSubjectsProps> = ({
                     <TextFieldsIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
                   }
                 </TableCell>
-                <TableCell align="center">
-                  {
-                    // @ts-ignore
-                    <NumbersIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
-                  }
-                </TableCell>
-                <TableCell align="center">
-                  {
-                    // @ts-ignore
-                    <SmartDisplayIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
-                  }
-                </TableCell>
+                <TableCell align="right"></TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -94,7 +80,7 @@ const AssignedSubject: React.FC<IAssignedSubjectsProps> = ({
                   }}
                 >
                   <TableCell align="center">{subject.name}</TableCell>
-                  <TableCell align="center">
+                  <TableCell align="right">
                     <Button
                       onClick={(e) => {
                         e.stopPropagation();
@@ -102,7 +88,7 @@ const AssignedSubject: React.FC<IAssignedSubjectsProps> = ({
                       }}
                       variant="contained"
                       color="success"
-                      size="small"
+                      size="large"
                     >
                       <PlayArrowIcon fontSize="small" />
                     </Button>

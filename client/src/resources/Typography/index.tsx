@@ -153,7 +153,7 @@ export const OperationSuccessfull = "Operation Successfull";
 
 export const Subject = "Subject";
 
-export const SubjectName = "Subject Name";
+export const SubjectName = "Subject Information";
 
 export const PleaseEnterSubjectName = "Please enter name";
 

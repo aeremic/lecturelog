@@ -38,3 +38,8 @@ export enum UploadUsersResult {
   unsucessfull = 2,
   notFullyCompleted = 3,
 }
+
+export enum SubjectManipulationType {
+  creating,
+  updating,
+}

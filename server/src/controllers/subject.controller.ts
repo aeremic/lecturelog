@@ -14,6 +14,7 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RoleGuard } from 'src/auth/guards/role.guard';
+import { CreateUpdateSubjectResponseDto } from 'src/core/dtos/responses/create-update-subject-response.dto';
 import { SubjectEntity } from 'src/core/entities';
 import { SubjectUseCases } from 'src/use-cases';
 
@@ -61,14 +62,16 @@ export class SubjectController {
     return this.subjectUseCases.getSubjects(page, size);
   }
 
-  @Roles('admin')
+  @Roles('admin', 'professor')
   @UseGuards(RoleGuard)
   @Post('/createOrUpdateSubject')
-  createOrUpdateSubject(@Body() request: any): Promise<SubjectEntity> {
+  createOrUpdateSubject(
+    @Body() request: any,
+  ): Promise<CreateUpdateSubjectResponseDto> {
     return this.subjectUseCases.createOrUpdateSubject(request);
   }
 
-  @Roles('admin')
+  @Roles('admin', 'professor')
   @UseGuards(RoleGuard)
   @Get('/getSubject/:id')
   getSubject(@Param('id', ParseIntPipe) id: number): Promise<SubjectEntity> {

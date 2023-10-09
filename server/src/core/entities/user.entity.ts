@@ -3,11 +3,11 @@ import { RoleEnum } from '../common/enums/role.enum';
 export class UserEntity {
   public id?: number;
 
-  public firstname: string;
+  public firstname?: string;
 
-  public lastname: string;
+  public lastname?: string;
 
-  public email: string;
+  public email?: string;
 
   public index?: number;
 
@@ -17,5 +17,5 @@ export class UserEntity {
 
   public isActivated?: boolean;
 
-  public role: RoleEnum;
+  public role?: RoleEnum;
 }

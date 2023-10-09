@@ -1,12 +1,14 @@
-import { StudentsSubjectsEntity } from "./students-subjects.entity";
-import { UserEntity } from "./user.entity";
+import { StudentsSubjectsEntity } from './students-subjects.entity';
+import { UserEntity } from './user.entity';
 
 export class SubjectEntity {
-    public id?: number;
+  public id?: number;
 
-    public name: string;
+  public name: string;
 
-    public professor: UserEntity;
+  public pointsPerPresence: number;
 
-    public studentsSubjects: StudentsSubjectsEntity[];
+  public professor: UserEntity;
+
+  public studentsSubjects?: StudentsSubjectsEntity[];
 }

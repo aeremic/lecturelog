@@ -95,11 +95,11 @@ export const Content = () => {
   };
 
   const handleSubjectClick = (subjectId: number) => {
-    navigate(`/professor/subject?id=${subjectId}`);
+    navigate(`/professor/subject?userId=${userId}&subjectId=${subjectId}`);
   };
 
   const handleAddSubjectDialogClick = () => {
-    navigate(`/professor/subject`);
+    navigate(`/professor/subject?userId=${userId}`);
   };
 
   const handleSessionClick = (subject: IAssignedSubject) => {

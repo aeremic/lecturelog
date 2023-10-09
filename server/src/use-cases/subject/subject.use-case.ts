@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { SubjectRepositoryAbstract } from 'src/core/abstracts/repositories/subject.repository.abstract';
-import { SubjectEntity } from 'src/core/entities';
+import { SubjectEntity, UserEntity } from 'src/core/entities';
 import { GenericUseCases } from '../generic.use-case';
 import { LoggerUseCases } from '../logger/logger.use-case';
 import { ErrorConstants } from 'src/core/common/constants/error.constant';
@@ -8,6 +8,9 @@ import { SubjectsDto } from 'src/core/dtos/responses/subjects.dto';
 import { StudentsSubjectsUseCases } from '../students-subjects/students-subjects.use-case';
 import { LectureUseCases } from '../lecture/lecture.use-case';
 import { ActiveLectureEntity } from 'src/core/entities/active-lecture.entity';
+import { CreateUpdateSubjectRequestDto } from 'src/core/dtos/requests/create-update-subject-request.dto';
+import { RoleEnum } from 'src/core/common/enums/role.enum';
+import { CreateUpdateSubjectResponseDto } from '../../core/dtos/responses/create-update-subject-response.dto';
 
 @Injectable()
 export class SubjectUseCases extends GenericUseCases<SubjectEntity> {
@@ -75,28 +78,30 @@ export class SubjectUseCases extends GenericUseCases<SubjectEntity> {
   }
 
   async createOrUpdateSubject(
-    subjectEntity: SubjectEntity,
-  ): Promise<SubjectEntity> {
-    let result: SubjectEntity | PromiseLike<SubjectEntity>;
+    createUpdateSubjectRequestDto: CreateUpdateSubjectRequestDto,
+  ): Promise<CreateUpdateSubjectResponseDto> {
+    const result = new CreateUpdateSubjectResponseDto();
 
     try {
-      if (subjectEntity) {
-        result = await super.createOrUpdate(
+      if (createUpdateSubjectRequestDto) {
+        const professor: UserEntity = {
+          id: createUpdateSubjectRequestDto.professorId,
+        };
+
+        const subjectEntity: SubjectEntity = {
+          id: createUpdateSubjectRequestDto.id,
+          name: createUpdateSubjectRequestDto.name,
+          pointsPerPresence: createUpdateSubjectRequestDto.pointsPerPresence,
+          professor: professor,
+        };
+
+        const subjectInDb = await super.createOrUpdate(
           this.subjectRepository,
           this.loggerUseCases,
           subjectEntity,
         );
-        if (result.id && result.studentsSubjects) {
-          result.studentsSubjects.forEach(async (item) => {
-            if (item) {
-              await this.studentsSubjectsUseCases.createOrUpdate({
-                subject: item.subject,
-                student: item.student,
-                sumOfPresencePoints: item.sumOfPresencePoints,
-              });
-            }
-          });
-        }
+
+        result.id = subjectInDb.id;
       }
     } catch (error) {
       this.loggerUseCases.log(
@@ -104,6 +109,7 @@ export class SubjectUseCases extends GenericUseCases<SubjectEntity> {
         error?.message,
         error?.stack,
       );
+      result.errorMessage = error?.message;
     }
 
     return result;
@@ -113,7 +119,7 @@ export class SubjectUseCases extends GenericUseCases<SubjectEntity> {
     let result: SubjectEntity | PromiseLike<SubjectEntity>;
 
     try {
-      result = await this.subjectRepository.getSubject(id);
+      result = await this.getById(id);
     } catch (error) {
       this.loggerUseCases.log(
         ErrorConstants.GetMethodError,
