@@ -1,4 +1,6 @@
 import {
+  Alert,
+  AlertColor,
   Box,
   Button,
   Card,
@@ -7,6 +9,7 @@ import {
   FormGroup,
   FormLabel,
   Grid,
+  Snackbar,
   Stack,
   TextField,
 } from "@mui/material";
@@ -19,6 +22,7 @@ import { useEffect, useState } from "react";
 import {
   createOrUpdateSubject,
   getSubject,
+  removeSubject,
 } from "../../../../../services/HttpService/SubjectsService";
 import { HttpStatusCode } from "axios";
 import { ISubject } from "../../../../../modelHelpers/Subject";
@@ -52,8 +56,15 @@ export const ManipulateSubject: React.FC<IManipulateSubjectProps> = ({
   const [confirmationDialogContent, setConfirmationDialogContent] =
     useState("");
 
+  const [openAlert, setOpenAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertType, setAlertType] = useState<AlertColor>();
+
   const [subject, setSubject] =
     useState<ISubjectFormInput>(subjectInitialState);
+
+  const [removeDialogOpen, setRemoveDialogOpen] = useState(false);
+  const [removeIndexValue, setRemoveIndexValue] = useState(0);
 
   useEffect(() => {
     const getSubjectData = async () => {
@@ -65,6 +76,10 @@ export const ManipulateSubject: React.FC<IManipulateSubjectProps> = ({
             name: res.data.name,
             pointsPerPresence: res.data.pointsPerPresence,
           });
+        } else {
+          setAlertType("error");
+          setAlertMessage(t("SomethingWentWrong"));
+          setOpenAlert(true);
         }
       }
     };
@@ -108,10 +123,12 @@ export const ManipulateSubject: React.FC<IManipulateSubjectProps> = ({
         setConfirmationDialogContent(t("SubjectSuccessfullyUpdated"));
       }
       setConfirmationDialogOpen(true);
+    } else {
+      setAlertType("error");
+      setAlertMessage(t("SomethingWentWrong"));
+      setOpenAlert(true);
     }
   };
-
-  const handleRemoveDialogClick = async (subjectId: number) => {};
 
   const handleConfirmationDialogClose = async (value?: any) => {
     setConfirmationDialogOpen(false);
@@ -120,6 +137,47 @@ export const ManipulateSubject: React.FC<IManipulateSubjectProps> = ({
         replace: true,
       });
     }
+  };
+
+  const handleRemoveDialogClick = async (subjectId: number) => {
+    setRemoveIndexValue(subjectId);
+    setRemoveDialogOpen(true);
+  };
+
+  const handleRemoveDialogClose = async (newValue?: any) => {
+    setRemoveDialogOpen(false);
+    if (newValue) {
+      setRemoveIndexValue(newValue);
+
+      const res: any = await removeSubject(removeIndexValue);
+      if (
+        res &&
+        res.status &&
+        res.status === HttpStatusCode.Ok &&
+        res.data > 0
+      ) {
+        setAlertType("success");
+        setAlertMessage(t("SubjectSuccessfullyRemoved"));
+        setOpenAlert(true);
+        navigate(`/professor/mysubjects?id=${userId}`, {
+          replace: true,
+        });
+      } else {
+        setAlertType("error");
+        setAlertMessage(t("AlertFailureMessage"));
+        setOpenAlert(true);
+      }
+    }
+  };
+
+  const handleCloseAlert = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenAlert(false);
   };
 
   return (
@@ -222,6 +280,30 @@ export const ManipulateSubject: React.FC<IManipulateSubjectProps> = ({
         value={-1}
         onClose={handleConfirmationDialogClose}
       />
+      <ConfirmationDialog
+        id="remove-subject-menu"
+        keepMounted
+        open={removeDialogOpen}
+        title={t("RemoveSubject")}
+        content={t("AreYouSure")}
+        negativeAction={t("Cancel")}
+        positiveAction={t("Yes")}
+        value={removeIndexValue}
+        onClose={handleRemoveDialogClose}
+      />
+      <Snackbar
+        open={openAlert}
+        autoHideDuration={6000}
+        onClose={handleCloseAlert}
+      >
+        <Alert
+          onClose={handleCloseAlert}
+          severity={alertType}
+          sx={{ width: "100%" }}
+        >
+          {alertMessage}
+        </Alert>
+      </Snackbar>
     </>
   );
 };

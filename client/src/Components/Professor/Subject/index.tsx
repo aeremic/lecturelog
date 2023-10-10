@@ -11,14 +11,6 @@ const Subject = () => {
       <Header />
       <ErrorBoundary fallback={<ErrorComponent />}>
         <Content />
-        {/* <Wrapper>
-        <Sidebar />
-        <ErrorBoundary>
-          <React.Suspense fallback={<Loader />}>
-            <Content />
-          </React.Suspense>
-        </ErrorBoundary>
-      </Wrapper> */}
       </ErrorBoundary>
     </ThemeProvider>
   );

@@ -45,7 +45,7 @@ export class SubjectController {
     return this.subjectUseCases.createOrUpdate(subjectEntity);
   }
 
-  @Roles('admin')
+  @Roles('admin', 'professor')
   @UseGuards(RoleGuard)
   @Delete(':id')
   delete(@Param('id', ParseIntPipe) id: number): Promise<number> {
