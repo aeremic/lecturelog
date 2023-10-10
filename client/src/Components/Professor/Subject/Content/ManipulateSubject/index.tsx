@@ -183,7 +183,7 @@ export const ManipulateSubject: React.FC<IManipulateSubjectProps> = ({
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <Card sx={{ mt: 1 }}>
+        <Card sx={{ mt: 1, minHeight: 200 }}>
           <CardContent>
             <FormControl fullWidth>
               <FormGroup sx={{ mt: 2 }}>

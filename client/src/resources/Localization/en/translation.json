@@ -113,5 +113,6 @@
     "SubjectSuccessfullyAdded": "Subject has been successfully added.",
     "SubjectSuccessfullyUpdated": "Subject has been successfully updated.",
     "AssignedStudents": "Assigned Students",
-    "ResetAllPresencePoints": "Reset all presence points"
+    "ResetAllPresencePoints": "Reset all presence points",
+    "AssignedSubjectsNotAvailable":"Assigned students are not available during the creation of the subject."
 }
