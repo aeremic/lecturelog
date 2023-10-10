@@ -3,7 +3,7 @@ import { ManipulateSubject } from "./ManipulateSubject";
 import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
-import { AssignedStudents } from "./AssignedStudents/AssignedStudents";
+import { AssignedStudents } from "./AssignedStudents";
 
 export const Content = () => {
   const { t } = useTranslation();
