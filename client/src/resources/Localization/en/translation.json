@@ -111,5 +111,7 @@
     "ClickHere": "Click here",
     "DownloadFileTemplate": "Download File Template",
     "SubjectSuccessfullyAdded": "Subject has been successfully added.",
-    "SubjectSuccessfullyUpdated": "Subject has been successfully updated."
+    "SubjectSuccessfullyUpdated": "Subject has been successfully updated.",
+    "AssignedStudents": "Assigned Students",
+    "ResetAllPresencePoints": "Reset all presence points"
 }

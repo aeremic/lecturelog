@@ -18,10 +18,10 @@ const Content = () => {
         {LiveLecture}
       </Typography>
       <Grid container spacing={2} sx={{ mt: 2 }}>
-        <Grid item xs={6} sx={{ minWidth: 340 }}>
+        <Grid item xs={6} sx={{ minWidth: 350 }}>
           <ProfessorCodeGeneration />
         </Grid>
-        <Grid item xs={6} sx={{ minWidth: 340 }}>
+        <Grid item xs={6} sx={{ minWidth: 350 }}>
           <PresentStudents />
         </Grid>
       </Grid>

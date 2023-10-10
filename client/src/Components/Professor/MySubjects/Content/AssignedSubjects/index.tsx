@@ -19,6 +19,7 @@ import { IAssignedSubject } from "../../../../../modelHelpers/AssignedSubject";
 import { IAssignedSubjectsProps } from "../../../../../modelHelpers/AssignedSubjectsProps";
 import { useTranslation } from "react-i18next";
 import AddIcon from "@mui/icons-material/Add";
+import BorderColorIcon from "@mui/icons-material/BorderColor";
 
 const AssignedSubject: React.FC<IAssignedSubjectsProps> = ({
   subjectsProp,
@@ -64,8 +65,15 @@ const AssignedSubject: React.FC<IAssignedSubjectsProps> = ({
                     // @ts-ignore
                     <TextFieldsIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
                   }
+                  {t("SubjectName")}
                 </TableCell>
-                <TableCell align="right"></TableCell>
+                <TableCell align="right" colSpan={2}>
+                  {
+                    // @ts-ignore
+                    <BorderColorIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
+                  }
+                  {t("Action")}
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

@@ -183,92 +183,88 @@ export const ManipulateSubject: React.FC<IManipulateSubjectProps> = ({
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <Grid container spacing={2} sx={{ mt: 2 }}>
-          <Grid item xs={4} sx={{ minWidth: 350 }}>
-            <Card sx={{ mt: 1 }}>
-              <CardContent>
-                <FormControl fullWidth>
-                  <FormGroup sx={{ mt: 2 }}>
-                    <FormLabel>
+        <Card sx={{ mt: 1 }}>
+          <CardContent>
+            <FormControl fullWidth>
+              <FormGroup sx={{ mt: 2 }}>
+                <FormLabel>
+                  {
+                    // @ts-ignore
+                    <TextFieldsIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                  }
+                  {t("SubjectName")}
+                </FormLabel>
+                <Stack direction="row">
+                  <TextField
+                    label={t("PleaseEnterSubjectName")}
+                    value={subject.name}
+                    onChange={handleNameChange}
+                    size="small"
+                    variant="outlined"
+                    type="text"
+                    sx={{ mt: 0.8 }}
+                  ></TextField>
+                  <TextField
+                    label={t("PleaseEnterPointsPerPresence")}
+                    value={subject.pointsPerPresence}
+                    onChange={handlePoinstPerPresenceChange}
+                    size="small"
+                    variant="outlined"
+                    type="number"
+                    sx={{ mt: 0.8, ml: 1, width: 100 }}
+                  ></TextField>
+                </Stack>
+              </FormGroup>
+              <FormGroup>
+                {manipulationType === SubjectManipulationType.creating ? (
+                  <Box sx={{ mt: 1, textAlign: "right" }}>
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      size="medium"
+                      color="success"
+                      sx={{ maxWidth: "xs", mr: 0.5 }}
+                    >
                       {
                         // @ts-ignore
-                        <TextFieldsIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                        <CheckIcon fontSize="xs" sx={{ mr: 0.5 }} />
                       }
-                      {t("SubjectName")}
-                    </FormLabel>
-                    <Stack direction="row">
-                      <TextField
-                        label={t("PleaseEnterSubjectName")}
-                        value={subject.name}
-                        onChange={handleNameChange}
+                      {t("CreateSubject")}
+                    </Button>
+                  </Box>
+                ) : (
+                  <Box sx={{ mt: 1, textAlign: "right" }}>
+                    <Stack direction="row-reverse">
+                      <Button
+                        type="submit"
+                        variant="contained"
+                        size="medium"
+                        color="info"
+                        sx={{ maxWidth: "xs", ml: 1 }}
+                      >
+                        {
+                          // @ts-ignore
+                          <CheckIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                        }
+                        {t("UpdateSubject")}
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          handleRemoveDialogClick(subject.id);
+                        }}
+                        variant="contained"
+                        color="error"
                         size="small"
-                        variant="outlined"
-                        type="text"
-                        sx={{ mt: 0.8 }}
-                      ></TextField>
-                      <TextField
-                        label={t("PleaseEnterPointsPerPresence")}
-                        value={subject.pointsPerPresence}
-                        onChange={handlePoinstPerPresenceChange}
-                        size="small"
-                        variant="outlined"
-                        type="number"
-                        sx={{ mt: 0.8, ml: 1, width: 100 }}
-                      ></TextField>
+                      >
+                        <DeleteIcon />
+                      </Button>
                     </Stack>
-                  </FormGroup>
-                  <FormGroup>
-                    {manipulationType === SubjectManipulationType.creating ? (
-                      <Box sx={{ mt: 1, textAlign: "right" }}>
-                        <Button
-                          type="submit"
-                          variant="contained"
-                          size="medium"
-                          color="success"
-                          sx={{ maxWidth: "xs", mr: 0.5 }}
-                        >
-                          {
-                            // @ts-ignore
-                            <CheckIcon fontSize="xs" sx={{ mr: 0.5 }} />
-                          }
-                          {t("CreateSubject")}
-                        </Button>
-                      </Box>
-                    ) : (
-                      <Box sx={{ mt: 1, textAlign: "right" }}>
-                        <Stack direction="row-reverse">
-                          <Button
-                            type="submit"
-                            variant="contained"
-                            size="medium"
-                            color="info"
-                            sx={{ maxWidth: "xs", ml: 1 }}
-                          >
-                            {
-                              // @ts-ignore
-                              <CheckIcon fontSize="xs" sx={{ mr: 0.5 }} />
-                            }
-                            {t("UpdateSubject")}
-                          </Button>
-                          <Button
-                            onClick={() => {
-                              handleRemoveDialogClick(subject.id);
-                            }}
-                            variant="contained"
-                            color="error"
-                            size="small"
-                          >
-                            <DeleteIcon />
-                          </Button>
-                        </Stack>
-                      </Box>
-                    )}
-                  </FormGroup>
-                </FormControl>
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
+                  </Box>
+                )}
+              </FormGroup>
+            </FormControl>
+          </CardContent>
+        </Card>
       </form>
       <ConfirmationDialog
         id="confirmation-subject-created"
