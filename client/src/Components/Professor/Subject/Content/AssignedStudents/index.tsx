@@ -19,6 +19,7 @@ import ContactPageIcon from "@mui/icons-material/ContactPage";
 import PersonIcon from "@mui/icons-material/Person";
 import BlockIcon from "@mui/icons-material/Block";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
+import DownloadIcon from "@mui/icons-material/Download";
 import { SubjectManipulationType } from "../../../../../models/Enums";
 
 export const AssignedStudents: React.FC<IAssignedStudentsProps> = ({
@@ -47,6 +48,15 @@ export const AssignedStudents: React.FC<IAssignedStudentsProps> = ({
         ) : (
           <>
             <Stack direction="row">
+              <Button
+                variant="contained"
+                color="success"
+                size="medium"
+                disabled
+                sx={{ mb: 1, mr: 2 }}
+              >
+                <DownloadIcon />
+              </Button>
               <Button
                 variant="contained"
                 color="warning"

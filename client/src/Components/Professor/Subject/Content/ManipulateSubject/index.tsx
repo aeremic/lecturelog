@@ -240,7 +240,7 @@ export const ManipulateSubject: React.FC<IManipulateSubjectProps> = ({
                         variant="contained"
                         size="medium"
                         color="info"
-                        sx={{ maxWidth: "xs", ml: 1 }}
+                        sx={{ maxWidth: "xs", ml: 2 }}
                       >
                         {
                           // @ts-ignore
