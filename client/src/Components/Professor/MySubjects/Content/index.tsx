@@ -1,6 +1,6 @@
 import { Container, Grid, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { IAssignedSubject } from "../../../../modelHelpers/AssignedSubject";
+import { IAssignedSubject } from "../../../../models/IAssignedSubject";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { HttpStatusCode } from "axios";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
@@ -12,8 +12,8 @@ import {
   onStartSession,
   onStopSession,
 } from "../../../../services/MessagingService";
-import { ISessionData } from "../../../../modelHelpers/SessionData";
-import { MessagingEvent } from "../../../../modelHelpers/Enums";
+import { ISessionData } from "../../../../models/ISessionData";
+import { MessagingEvent } from "../../../../models/Enums";
 import ActiveSubjects from "./ActiveSubjects";
 import AssignedSubject from "./AssignedSubjects";
 import {

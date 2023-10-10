@@ -15,7 +15,7 @@ import { useState } from "react";
 import CheckIcon from "@mui/icons-material/Check";
 import { sendEmailVerification } from "../../../services/HttpService/UsersService";
 import ConfirmationDialog from "../../Common/ConfirmationDialog";
-import { IContentProps } from "../../../modelHelpers/ContentProps";
+import { IContentProps } from "../../../models/Props/IContentProps";
 import { useTranslation } from "react-i18next";
 
 const Content: React.FC<IContentProps> = ({

@@ -1,8 +1,8 @@
 import { io } from "socket.io-client";
 import { BASE_URL } from "../Common";
-import { MessagingEnum } from "../../modelHelpers/Enums";
-import { ISessionData } from "../../modelHelpers/SessionData";
-import { IAssignedSubject } from "../../modelHelpers/AssignedSubject";
+import { MessagingEnum } from "../../models/Enums";
+import { ISessionData } from "../../models/ISessionData";
+import { IAssignedSubject } from "../../models/IAssignedSubject";
 
 export const socket = io(BASE_URL, {
   autoConnect: false,

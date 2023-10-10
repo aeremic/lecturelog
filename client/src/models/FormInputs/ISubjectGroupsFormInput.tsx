@@ -1,5 +1,5 @@
-import { IUser } from "../../models/User";
-import { IStudentFormInput } from "../StudentFormInput";
+import { IUser } from "../IUser";
+import { IStudentFormInput } from "./IStudentFormInput";
 
 export interface ISubjectGroupsFormInput {
   professors: IUser[];

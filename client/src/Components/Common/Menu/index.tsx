@@ -11,7 +11,7 @@ import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import PersonIcon from "@mui/icons-material/Person";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import { Link } from "react-router-dom";
-import { RoleEnum } from "../../../modelHelpers/Enums";
+import { RoleEnum } from "../../../models/Enums";
 import { getCurrentUserData } from "../../../services/HttpService/AuthService";
 import { useTranslation } from "react-i18next";
 

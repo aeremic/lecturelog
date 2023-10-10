@@ -13,8 +13,8 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { RoleEnum } from "../../../modelHelpers/Enums";
-import { IUser } from "../../../models/User";
+import { RoleEnum } from "../../../models/Enums";
+import { IUser } from "../../../models/IUser";
 import { HttpStatusCode } from "axios";
 import PersonIcon from "@mui/icons-material/Person";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
@@ -23,7 +23,7 @@ import ContactPageIcon from "@mui/icons-material/ContactPage";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
-import { IManipulateUserFormInput } from "../../../modelHelpers/ManipulateUserFormInput";
+import { IManipulateUserFormInput } from "../../../models/FormInputs/IManipulateUserFormInput";
 import { createUser } from "../../../services/HttpService/UsersService";
 import { useTranslation } from "react-i18next";
 

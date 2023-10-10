@@ -25,7 +25,7 @@ import convertToRoman from "../../../../functionHelpers/ConvertToRoman";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { IAssignedSubject } from "../../../../modelHelpers/AssignedSubject";
+import { IAssignedSubject } from "../../../../models/IAssignedSubject";
 import { HttpStatusCode } from "axios";
 import { socket } from "../../../../services/MessagingService";
 import { getAvailableSubjects } from "../../../../services/HttpService/StudentsService";

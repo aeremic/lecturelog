@@ -15,8 +15,8 @@ import {
 import TextFieldsIcon from "@mui/icons-material/TextFields";
 import StopCircleIcon from "@mui/icons-material/StopCircle";
 import PauseIcon from "@mui/icons-material/Pause";
-import { IAssignedSubject } from "../../../../../modelHelpers/AssignedSubject";
-import { IActiveSubjectsProps } from "../../../../../modelHelpers/ActiveSubjectsProps";
+import { IAssignedSubject } from "../../../../../models/IAssignedSubject";
+import { IActiveSubjectsProps } from "../../../../../models/Props/IActiveSubjectsProps";
 import { useTranslation } from "react-i18next";
 
 const ActiveSubjects: React.FC<IActiveSubjectsProps> = ({

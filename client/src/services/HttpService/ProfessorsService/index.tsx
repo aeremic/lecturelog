@@ -1,4 +1,4 @@
-import { ISessionData } from "../../../modelHelpers/SessionData";
+import { ISessionData } from "../../../models/ISessionData";
 import { get, getById, getFile, post } from "../HttpServiceBase";
 
 const URL = "/professor";

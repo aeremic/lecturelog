@@ -15,13 +15,13 @@ import { Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { MuiFileInput } from "mui-file-input";
 import { HttpStatusCode } from "axios";
-import { RoleEnum } from "../../../modelHelpers/Enums";
+import { RoleEnum } from "../../../models/Enums";
 import {
   generateTemplateFile,
   uploadProfessors,
 } from "../../../services/HttpService/ProfessorsService";
 import { uploadStudents } from "../../../services/HttpService/StudentsService";
-import { UploadUsersResult } from "../../../modelHelpers/Enums/index";
+import { UploadUsersResult } from "../../../models/Enums";
 import fileDownload from "js-file-download";
 
 export interface IUploadUsersDialogRawProps {

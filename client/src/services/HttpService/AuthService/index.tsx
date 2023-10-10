@@ -2,7 +2,7 @@ import {
   getFromLocalStorage,
   removeFromLocalStorage,
   setToLocalStorage,
-} from "../../../store/LocalStorage";
+} from "../../../store/LocalStorageAccess";
 import { post } from "../HttpServiceBase";
 
 const URL = "/auth";

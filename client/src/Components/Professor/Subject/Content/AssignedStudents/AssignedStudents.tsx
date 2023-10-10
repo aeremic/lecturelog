@@ -13,7 +13,7 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { IAssignedStudentsProps } from "../../../../../modelHelpers/IAssignedStudentsProps";
+import { IAssignedStudentsProps } from "../../../../../models/Props/IAssignedStudentsProps";
 import { useTranslation } from "react-i18next";
 import ContactPageIcon from "@mui/icons-material/ContactPage";
 import PersonIcon from "@mui/icons-material/Person";

@@ -14,7 +14,7 @@ import {
 import { HttpStatusCode } from "axios";
 import { useForm } from "react-hook-form";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { IEmailRegistration } from "../../../models/EmailRegistration";
+import { IEmailRegistration } from "../../../models/IEmailRegistration";
 import { useState } from "react";
 import PasswordIcon from "@mui/icons-material/Password";
 import VpnKeyIcon from "@mui/icons-material/VpnKey";

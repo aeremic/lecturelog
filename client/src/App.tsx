@@ -4,7 +4,6 @@ import Loader from "./components/Common/Loader";
 import PrivateRoute from "./components/Common/PrivateRoute";
 import Login from "./components/Login";
 import Users from "./components/Admin/Users";
-import Subjects from "./components/Admin/Subjects";
 import EmailRegistration from "./components/EmailRegistration";
 import MySubjects from "./components/Professor/MySubjects";
 import Profile from "./components/User/Profile";
@@ -33,7 +32,6 @@ const App = () => {
           <Route path="/user/profile" element={<Profile />} />
           /**Admin routes */
           <Route path="/admin/users" element={<Users />} />
-          <Route path="/admin/subjects" element={<Subjects />} />
           /**Professor routes */
           <Route path="/professor/mysubjects" element={<MySubjects />} />
           <Route path="/professor/subject" element={<Subject />} />

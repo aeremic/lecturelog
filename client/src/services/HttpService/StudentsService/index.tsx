@@ -1,4 +1,4 @@
-import { IRegisterStudent } from "../../../modelHelpers/RegisterStudent";
+import { IRegisterStudent } from "../../../models/IRegisterStudent";
 import { get, getById } from "../HttpServiceBase";
 import { post } from "../HttpServiceBase/index";
 
@@ -30,13 +30,12 @@ export const registerStudent = async (data: IRegisterStudent) => {
 
 export const uploadStudents = async (data: any) => {
   try {
-        return await post(
-          `${URL}/uploadStudents`,
-          data,
-          true,
-          "multipart/form-data"
-        );
-  
+    return await post(
+      `${URL}/uploadStudents`,
+      data,
+      true,
+      "multipart/form-data"
+    );
   } catch (err) {
     console.log(err); // TODO: Fix for PROD.
   }

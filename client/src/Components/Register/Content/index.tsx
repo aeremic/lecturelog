@@ -25,10 +25,10 @@ import PersonIcon from "@mui/icons-material/Person";
 import ContactPageIcon from "@mui/icons-material/ContactPage";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import LoginIcon from "@mui/icons-material/Login";
-import { RoleEnum } from "../../../modelHelpers/Enums";
-import { IRegisterFormInput } from "../../../modelHelpers/IRegisterFormInput";
+import { RoleEnum } from "../../../models/Enums";
+import { IRegisterFormInput } from "../../../models/FormInputs/IRegisterFormInput";
 import { registerStudent } from "../../../services/HttpService/StudentsService";
-import { IRegisterStudent } from "../../../modelHelpers/RegisterStudent";
+import { IRegisterStudent } from "../../../models/IRegisterStudent";
 import { useTranslation } from "react-i18next";
 
 const Content = () => {

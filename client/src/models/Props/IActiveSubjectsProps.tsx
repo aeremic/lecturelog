@@ -1,4 +1,4 @@
-import { IAssignedSubject } from "../AssignedSubject";
+import { IAssignedSubject } from "../IAssignedSubject";
 
 export interface IActiveSubjectsProps {
   userId: number;

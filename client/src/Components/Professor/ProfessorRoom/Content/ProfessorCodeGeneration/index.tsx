@@ -11,7 +11,7 @@ import {
 import PinIcon from "@mui/icons-material/Pin";
 import CloseIcon from "@mui/icons-material/Close";
 import { useEffect, useState } from "react";
-import { CodeGenerationState } from "../../../../../modelHelpers/Enums";
+import { CodeGenerationState } from "../../../../../models/Enums";
 import {
   dispose,
   listening,
@@ -25,11 +25,11 @@ import {
   getCode,
   getCodeGeneratedState,
 } from "../../../../../services/HttpService/ProfessorsService";
-import { ISessionData } from "../../../../../modelHelpers/SessionData";
+import { ISessionData } from "../../../../../models/ISessionData";
 import {
   MessagingEvent,
   LectureTimerEventType,
-} from "../../../../../modelHelpers/Enums/index";
+} from "../../../../../models/Enums";
 import { useTranslation } from "react-i18next";
 
 const ProfessorCodeGeneration = () => {

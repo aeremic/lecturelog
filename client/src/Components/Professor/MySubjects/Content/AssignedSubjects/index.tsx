@@ -15,8 +15,8 @@ import {
 } from "@mui/material";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import { IAssignedSubject } from "../../../../../modelHelpers/AssignedSubject";
-import { IAssignedSubjectsProps } from "../../../../../modelHelpers/AssignedSubjectsProps";
+import { IAssignedSubject } from "../../../../../models/IAssignedSubject";
+import { IAssignedSubjectsProps } from "../../../../../models/Props/IAssignedSubjectsProps";
 import { useTranslation } from "react-i18next";
 import AddIcon from "@mui/icons-material/Add";
 import BorderColorIcon from "@mui/icons-material/BorderColor";

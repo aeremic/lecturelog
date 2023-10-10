@@ -1,7 +1,7 @@
-import { IEmailRegistration } from "../../../models/EmailRegistration";
-import { IUser } from "../../../models/User";
+import { IEmailRegistration } from "../../../models/IEmailRegistration";
+import { IUser } from "../../../models/IUser";
 import { get, getById, post, remove } from "../HttpServiceBase";
-import { RoleEnum } from "../../../modelHelpers/Enums/index";
+import { RoleEnum } from "../../../models/Enums";
 
 const URL = "/user";
 

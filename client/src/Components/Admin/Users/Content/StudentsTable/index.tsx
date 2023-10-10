@@ -16,8 +16,8 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-import { RoleEnum } from "../../../../../modelHelpers/Enums";
-import { IUser } from "../../../../../models/User";
+import { RoleEnum } from "../../../../../models/Enums";
+import { IUser } from "../../../../../models/IUser";
 import { HttpStatusCode } from "axios";
 import AddIcon from "@mui/icons-material/Add";
 import ConfirmationDialog from "../../../../Common/ConfirmationDialog";
@@ -33,7 +33,7 @@ import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import ForwardToInboxIcon from "@mui/icons-material/ForwardToInbox";
 import UploadIcon from "@mui/icons-material/Upload";
-import { IManipulateUser } from "../../../../../modelHelpers/ManipulateUser";
+import { IManipulateUser } from "../../../../../models/IManipulateUser";
 import { getStudents } from "../../../../../services/HttpService/StudentsService";
 import { useTranslation } from "react-i18next";
 import {

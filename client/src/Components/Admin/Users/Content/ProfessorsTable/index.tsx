@@ -30,10 +30,10 @@ import UploadIcon from "@mui/icons-material/Upload";
 import { getProfessors } from "../../../../../services/HttpService/ProfessorsService";
 import ConfirmationDialog from "../../../../Common/ConfirmationDialog";
 import ManipulateUserDialog from "../../../ManipulateUserDialog";
-import { RoleEnum } from "../../../../../modelHelpers/Enums";
-import { IUser } from "../../../../../models/User";
+import { RoleEnum } from "../../../../../models/Enums";
+import { IUser } from "../../../../../models/IUser";
 import { HttpStatusCode } from "axios";
-import { IManipulateUser } from "../../../../../modelHelpers/ManipulateUser";
+import { IManipulateUser } from "../../../../../models/IManipulateUser";
 import {
   removeUser,
   sendEmailVerification,

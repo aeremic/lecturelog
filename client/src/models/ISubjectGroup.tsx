@@ -1,5 +1,5 @@
-import { IProfessorsGroups } from "../ProfessorsGroups";
-import { IStudentsGroups } from "../StudentsGroups";
+import { IProfessorsGroups } from "./IProfessorsGroups";
+import { IStudentsGroups } from "./IStudentsGroups";
 
 export interface ISubjectGroup {
   id?: number;

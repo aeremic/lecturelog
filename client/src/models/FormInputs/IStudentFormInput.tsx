@@ -1,4 +1,4 @@
-import { IUser } from "../../models/User";
+import { IUser } from "../IUser";
 
 export interface IStudentFormInput {
   checked: IUser[];

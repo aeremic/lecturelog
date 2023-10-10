@@ -15,8 +15,8 @@ import {
 } from "@mui/material";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
 import CheckIcon from "@mui/icons-material/Check";
-import { ISubjectFormInput } from "../../../../../modelHelpers/SubjectFormInput";
-import { IManipulateSubjectProps } from "../../../../../modelHelpers/IManipulateSubjectProps";
+import { ISubjectFormInput } from "../../../../../models/FormInputs/ISubjectFormInput";
+import { IManipulateSubjectProps } from "../../../../../models/Props/IManipulateSubjectProps";
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import {
@@ -25,8 +25,8 @@ import {
   removeSubject,
 } from "../../../../../services/HttpService/SubjectsService";
 import { HttpStatusCode } from "axios";
-import { ISubject } from "../../../../../modelHelpers/Subject";
-import { SubjectManipulationType } from "../../../../../modelHelpers/Enums";
+import { ISubject } from "../../../../../models/ISubject";
+import { SubjectManipulationType } from "../../../../../models/Enums";
 import { useNavigate } from "react-router-dom";
 import ConfirmationDialog from "../../../../Common/ConfirmationDialog";
 import DeleteIcon from "@mui/icons-material/Delete";
