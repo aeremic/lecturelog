@@ -1,4 +1,11 @@
-import { AppBar, Box, IconButton, Toolbar, Typography } from "@mui/material";
+import {
+  AppBar,
+  Box,
+  IconButton,
+  Toolbar,
+  Typography,
+  Stack,
+} from "@mui/material";
 import Button from "@mui/material/Button";
 
 import Logo from "../Logo";
@@ -21,7 +28,7 @@ const Header = () => {
   return (
     <Box sx={{ flexGrow: 1, bgcolor: "background.paper" }}>
       <AppBar position="static">
-        <Toolbar>
+        <Toolbar sx={{ height: 65 }}>
           <TemporaryDrawer />
           <IconButton
             size="small"
@@ -29,15 +36,22 @@ const Header = () => {
             color="inherit"
             aria-label="menu"
           ></IconButton>
-          <Typography variant="subtitle2" component="div" sx={{ flexGrow: 1 }}>
-            <Logo widthProp={70} heightProp={70} />
-          </Typography>
+          <Stack
+            sx={{ flexGrow: 1 }}
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Logo widthProp={30} heightProp={30} />
+            <Typography variant="subtitle2" component="div">
+              {t("BolognApp")}
+            </Typography>
+          </Stack>
           <Button color="inherit" onClick={handleLogoutClick}>
             {
               // @ts-ignore
-              <LogoutIcon fontSize="xs" sx={{ mr: 0.5 }} />
+              <LogoutIcon fontSize="medium" sx={{ mr: 0.5 }} />
             }
-            <Typography>{t("Logout")}</Typography>
           </Button>
         </Toolbar>
       </AppBar>

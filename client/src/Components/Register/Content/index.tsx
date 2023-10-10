@@ -30,6 +30,7 @@ import { IRegisterFormInput } from "../../../models/FormInputs/IRegisterFormInpu
 import { registerStudent } from "../../../services/HttpService/StudentsService";
 import { IRegisterStudent } from "../../../models/IRegisterStudent";
 import { useTranslation } from "react-i18next";
+import Logo from "../../Common/Logo";
 
 const Content = () => {
   const { t } = useTranslation();
@@ -104,9 +105,17 @@ const Content = () => {
       <Card variant="outlined">
         <CardContent>
           <Container component="main">
-            <Typography textAlign="center" variant="h3">
-              Logo
-            </Typography>
+            <Stack
+              sx={{ flexGrow: 1, mb: 2 }}
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+            >
+              <Logo widthProp={75} heightProp={75} />
+              <Typography variant="h4" component="div">
+                {t("BolognApp")}
+              </Typography>
+            </Stack>
             <Typography component="h1" variant="h5">
               <LockOpenIcon fontSize="small" sx={{ mr: 0.5 }} />
               {t("Register")}

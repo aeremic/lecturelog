@@ -111,9 +111,17 @@ const Content = () => {
       <Card variant="outlined">
         <CardContent>
           <Container component="main">
-            <Typography textAlign="center" variant="h3">
+            <Stack
+              sx={{ flexGrow: 1, mb: 2 }}
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+            >
               <Logo widthProp={75} heightProp={75} />
-            </Typography>
+              <Typography variant="h4" component="div">
+                {t("BolognApp")}
+              </Typography>
+            </Stack>
             <Typography component="h1" variant="h5">
               <LockOpenIcon fontSize="small" sx={{ mr: 0.5 }} />
               {t("LogIn")}
