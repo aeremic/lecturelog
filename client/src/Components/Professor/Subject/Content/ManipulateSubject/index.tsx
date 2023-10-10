@@ -63,7 +63,7 @@ export const ManipulateSubject: React.FC<IManipulateSubjectProps> = ({
           setSubject({
             id: res.data.id,
             name: res.data.name,
-            pointsPerPresence: res.data.poinsPerPresence,
+            pointsPerPresence: res.data.pointsPerPresence,
           });
         }
       }
@@ -92,9 +92,11 @@ export const ManipulateSubject: React.FC<IManipulateSubjectProps> = ({
     event.preventDefault();
 
     const modelToPost: ISubject = {
-      id: subject.id,
+      id: subject.id ?? 0,
       name: subject.name,
-      pointsPerPresence: Number.parseFloat(subject.pointsPerPresence),
+      pointsPerPresence: subject.pointsPerPresence
+        ? parseFloat(subject.pointsPerPresence)
+        : 0,
       professorId: userId,
     };
 
