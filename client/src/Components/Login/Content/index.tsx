@@ -31,6 +31,7 @@ import {
   login,
 } from "../../../services/HttpService/AuthService";
 import { useTranslation } from "react-i18next";
+import Logo from "../../Common/Logo";
 
 const Content = () => {
   const [queryParameters] = useSearchParams();
@@ -111,7 +112,7 @@ const Content = () => {
         <CardContent>
           <Container component="main">
             <Typography textAlign="center" variant="h3">
-              Logo
+              <Logo widthProp={75} heightProp={75} />
             </Typography>
             <Typography component="h1" variant="h5">
               <LockOpenIcon fontSize="small" sx={{ mr: 0.5 }} />

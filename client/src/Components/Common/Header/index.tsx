@@ -28,10 +28,9 @@ const Header = () => {
             edge="start"
             color="inherit"
             aria-label="menu"
-            sx={{ mr: 2 }}
           ></IconButton>
           <Typography variant="subtitle2" component="div" sx={{ flexGrow: 1 }}>
-            <Logo />
+            <Logo widthProp={70} heightProp={70} />
           </Typography>
           <Button color="inherit" onClick={handleLogoutClick}>
             {
