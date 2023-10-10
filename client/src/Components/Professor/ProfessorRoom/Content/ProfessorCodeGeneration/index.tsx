@@ -24,7 +24,7 @@ import { HttpStatusCode } from "axios";
 import {
   getCode,
   getCodeGeneratedState,
-} from "../../../../../services/HttpService/ProfessorsService";
+} from "../../../../../services/HttpService/ProfessorService";
 import { ISessionData } from "../../../../../models/ISessionData";
 import {
   MessagingEvent,

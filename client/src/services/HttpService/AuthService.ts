@@ -2,8 +2,8 @@ import {
   getFromLocalStorage,
   removeFromLocalStorage,
   setToLocalStorage,
-} from "../../../store/LocalStorageAccess";
-import { post } from "../HttpServiceBase";
+} from "../../store/LocalStorageAccess";
+import { post } from "./HttpServiceBase";
 
 const URL = "/auth";
 

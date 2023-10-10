@@ -19,7 +19,7 @@ import { RoleEnum } from "../../../models/Enums";
 import {
   generateTemplateFile,
   uploadProfessors,
-} from "../../../services/HttpService/ProfessorsService";
+} from "../../../services/HttpService/ProfessorService";
 import { uploadStudents } from "../../../services/HttpService/StudentsService";
 import { UploadUsersResult } from "../../../models/Enums";
 import fileDownload from "js-file-download";

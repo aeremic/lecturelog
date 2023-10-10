@@ -1,5 +1,5 @@
-import { ISessionData } from "../../../models/ISessionData";
-import { get, getById, getFile, post } from "../HttpServiceBase";
+import { ISessionData } from "../../models/ISessionData";
+import { get, getById, getFile, post } from "./HttpServiceBase";
 
 const URL = "/professor";
 

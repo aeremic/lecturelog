@@ -1,6 +1,6 @@
-import { IRegisterStudent } from "../../../models/IRegisterStudent";
-import { get, getById } from "../HttpServiceBase";
-import { post } from "../HttpServiceBase/index";
+import { IRegisterStudent } from "../../models/IRegisterStudent";
+import { get, getById } from "./HttpServiceBase";
+import { post } from "./HttpServiceBase/index";
 
 const URL = "/student";
 

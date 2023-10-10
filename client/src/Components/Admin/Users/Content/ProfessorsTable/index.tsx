@@ -27,7 +27,7 @@ import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
 import LibraryAddCheckIcon from "@mui/icons-material/LibraryAddCheck";
 import ForwardToInboxIcon from "@mui/icons-material/ForwardToInbox";
 import UploadIcon from "@mui/icons-material/Upload";
-import { getProfessors } from "../../../../../services/HttpService/ProfessorsService";
+import { getProfessors } from "../../../../../services/HttpService/ProfessorService";
 import ConfirmationDialog from "../../../../Common/ConfirmationDialog";
 import ManipulateUserDialog from "../../../ManipulateUserDialog";
 import { RoleEnum } from "../../../../../models/Enums";

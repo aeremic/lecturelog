@@ -19,7 +19,7 @@ import AssignedSubject from "./AssignedSubjects";
 import {
   getActiveAssignedSubjects,
   getAssignedSubjects,
-} from "../../../../services/HttpService/ProfessorsService";
+} from "../../../../services/HttpService/ProfessorService";
 import { useTranslation } from "react-i18next";
 
 export const Content = () => {
