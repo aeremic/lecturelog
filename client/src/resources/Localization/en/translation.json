@@ -114,5 +114,6 @@
     "SubjectSuccessfullyUpdated": "Subject has been successfully updated.",
     "AssignedStudents": "Assigned Students",
     "ResetAllPresencePoints": "Reset all presence points",
-    "AssignedSubjectsNotAvailable":"Assigned students are not available during the creation of the subject."
+    "AssignedSubjectsNotAvailable":"Assigned students are not available during the creation of the subject.",
+    "EndAllLiveLectures" : "End All Live Lectures"
 }

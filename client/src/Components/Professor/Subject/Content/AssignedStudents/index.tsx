@@ -20,6 +20,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import BlockIcon from "@mui/icons-material/Block";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import DownloadIcon from "@mui/icons-material/Download";
+import StarIcon from "@mui/icons-material/Star";
 import { SubjectManipulationType } from "../../../../../models/Enums";
 
 export const AssignedStudents: React.FC<IAssignedStudentsProps> = ({
@@ -94,7 +95,21 @@ export const AssignedStudents: React.FC<IAssignedStudentsProps> = ({
                       }
                       {t("FirstName")}
                     </TableCell>
-                    <TableCell align="right" colSpan={2}>
+                    <TableCell align="center">
+                      {
+                        // @ts-ignore
+                        <PersonIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
+                      }
+                      {t("LastName")}
+                    </TableCell>
+                    <TableCell align="center">
+                      {
+                        // @ts-ignore
+                        <StarIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
+                      }
+                      {t("PointsPerPresence")}
+                    </TableCell>
+                    <TableCell align="center" colSpan={2}>
                       {
                         // @ts-ignore
                         <BorderColorIcon
@@ -102,7 +117,6 @@ export const AssignedStudents: React.FC<IAssignedStudentsProps> = ({
                           sx={{ mt: 1, mr: 0.5 }}
                         />
                       }
-                      {t("Action")}
                     </TableCell>
                   </TableRow>
                 </TableHead>
@@ -115,7 +129,9 @@ export const AssignedStudents: React.FC<IAssignedStudentsProps> = ({
                   >
                     <TableCell align="center">111/2013</TableCell>
                     <TableCell align="center">FirstnameFirstname</TableCell>
-                    <TableCell align="right">
+                    <TableCell align="center">Lastnamelastname</TableCell>
+                    <TableCell align="center">3.2</TableCell>
+                    <TableCell align="center">
                       <Button variant="contained" color="warning" size="medium">
                         <BlockIcon />
                       </Button>

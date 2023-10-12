@@ -4,9 +4,11 @@ import { LoggerUseCases } from '../logger/logger.use-case';
 import { TimerEnum } from 'src/core/common/enums/timer.enum';
 import { CodeEnum } from 'src/core/common/enums/code.enum';
 import { Encoding } from 'src/core/common/encoding';
-import { LectureEntity } from 'src/core/entities/lecture.entity';
 import { ActiveLectureEntity } from 'src/core/entities/active-lecture.entity';
+import { ActiveLectureIdentity } from 'src/core/entities/active-lecture-identity.entity';
 import { ExternalCacheSevice } from 'src/services/external-cache/external-cache.service';
+import { CacheKeys } from 'src/core/common/constants/cache.constants';
+import { ActiveLecturesEntity } from 'src/core/entities/active-lectures.entity';
 
 @Injectable()
 export class LectureUseCases {
@@ -29,14 +31,14 @@ export class LectureUseCases {
   //#region Public methods
 
   /**
-   * Gets all active lectures from external cache
-   * @returns Promise<ActiveLectureEntity[]>
+   * Gets all lectures from external cache
+   * @returns Promise<ActiveLectureIdentity[]>
    */
-  async getActiveLecturesFromExternalCache(): Promise<ActiveLectureEntity[]> {
-    let result: ActiveLectureEntity[] = [];
+  async getActiveLecturesFromExternalCache(): Promise<ActiveLectureIdentity[]> {
+    let result: ActiveLectureIdentity[] = [];
     try {
       const activeLectures = JSON.parse(
-        await this.externalCache.get('subjects'),
+        await this.externalCache.get(CacheKeys.Lectures, null),
       );
       if (activeLectures) {
         result = activeLectures.map(function (element: string) {
@@ -55,20 +57,20 @@ export class LectureUseCases {
   }
 
   /**
-   * Parse given subjects to active lecture entities
-   * @param subjectKeys List of subjects as a string type
+   * Parse given subjects to lecture entities
+   * @param lectureKeys List of subjects as a string type
    * @returns
    */
-  async parseSubjectKeysToLectures(
-    subjectKeys: string,
-  ): Promise<ActiveLectureEntity[]> {
-    const result: ActiveLectureEntity[] = [];
+  async parseLectureKeysToLectures(
+    lectureKeys: string,
+  ): Promise<ActiveLectureIdentity[]> {
+    const result: ActiveLectureIdentity[] = [];
     try {
-      const subjectsParsed = JSON.parse(subjectKeys);
+      const subjectsParsed = JSON.parse(lectureKeys);
 
       if (subjectsParsed && subjectsParsed.length > 0) {
         subjectsParsed.forEach((subject) => {
-          const lecture: ActiveLectureEntity = {
+          const lecture: ActiveLectureIdentity = {
             subjectId: subject.subjectId,
             userId: subject.userId,
           };
@@ -84,38 +86,40 @@ export class LectureUseCases {
   }
 
   /**
-   * Save active lecture to external cache
-   * @param subjectKey
+   * Save lecture to external cache
+   * @param lectureKey
    */
-  async saveLecture(subjectKey: string) {
+  async saveLecture(lectureKey: string) {
     try {
-      let subjectKeys: string[] = JSON.parse(
-        await this.externalCache.get('subjects'),
+      let lectureKeys: string[] = JSON.parse(
+        await this.externalCache.get(CacheKeys.Lectures, null),
       );
-      if (!subjectKeys) {
-        subjectKeys = [];
+      if (!lectureKeys) {
+        lectureKeys = [];
       }
 
-      subjectKeys.push(subjectKey);
-      await this.externalCache.set('subjects', subjectKeys);
+      lectureKeys.push(lectureKey);
+      await this.externalCache.set(CacheKeys.Lectures, lectureKeys);
     } catch (error) {
       await this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
     }
   }
 
   /**
-   * Remove active lecture from external cache
-   * @param subjectKey
+   * Remove lecture from external cache
+   * @param lectureKey
    */
-  async removeLecture(subjectKey: string) {
+  async removeLecture(lectureKey: string) {
     try {
-      let subjectKeys = JSON.parse(await this.externalCache.get('subjects'));
-      if (subjectKeys) {
-        subjectKeys = subjectKeys.filter(
-          (element: string) => element != subjectKey,
+      let lectureKeys = JSON.parse(
+        await this.externalCache.get(CacheKeys.Lectures, null),
+      );
+      if (lectureKeys) {
+        lectureKeys = lectureKeys.filter(
+          (element: string) => element != lectureKey,
         );
 
-        await this.externalCache.set('subjects', subjectKeys);
+        await this.externalCache.set(CacheKeys.Lectures, lectureKeys);
       }
     } catch (error) {
       await this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
@@ -124,19 +128,33 @@ export class LectureUseCases {
 
   /**
    * Save active lecture work to external cache
-   * @param subjectKey
+   * @param lectureKey Identifier as a string
    * @param code
    * @param timerId
    */
-  async saveLectureWork(subjectKey: string, code: string, timerId: number) {
+  async saveLectureWork(lectureKey: string, code: string, timerId: number) {
     try {
-      const lecture: LectureEntity = {
-        subject: subjectKey,
+      const lectureIdentity: ActiveLectureIdentity = JSON.parse(lectureKey);
+
+      const lecture: ActiveLectureEntity = {
+        userId: lectureIdentity.userId,
+        subjectId: lectureIdentity.subjectId,
         code: code,
-        timer: timerId,
+        timerId: timerId,
       };
 
-      await this.externalCache.set(subjectKey, lecture);
+      let lecturesEntity: ActiveLecturesEntity = JSON.parse(
+        await this.externalCache.get(CacheKeys.ActiveLectures, null),
+      );
+
+      if (!lecturesEntity) {
+        lecturesEntity = new ActiveLecturesEntity();
+        lecturesEntity.ActiveLectures = [];
+      }
+
+      lecturesEntity.ActiveLectures.push(lecture);
+
+      await this.externalCache.set(CacheKeys.ActiveLectures, lecturesEntity);
     } catch (error) {
       await this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
     }
@@ -144,23 +162,47 @@ export class LectureUseCases {
 
   /**
    * Remove active lecture work from external cache
-   * @param subjectKey
+   * @param lectureKey
    */
-  async removeLectureWork(subjectKey: string) {
+  async removeLectureWork(lectureKey: string) {
     try {
-      const lecture = JSON.parse(await this.externalCache.get(subjectKey));
-      if (lecture) {
-        if (lecture.timer) {
-          clearInterval(lecture.timer);
+      const lectureIdentity: ActiveLectureIdentity = JSON.parse(lectureKey);
+
+      const lecturesEntity: ActiveLecturesEntity = JSON.parse(
+        await this.externalCache.get(CacheKeys.ActiveLectures, null),
+      );
+
+      if (lecturesEntity && lecturesEntity.ActiveLectures.length > 0) {
+        const lectureForRemoval: ActiveLectureEntity =
+          lecturesEntity.ActiveLectures.find(
+            (element: ActiveLectureEntity) =>
+              element.userId == lectureIdentity.userId &&
+              element.subjectId == lectureIdentity.subjectId,
+          );
+
+        if (lectureForRemoval) {
+          if (lectureForRemoval.timerId) {
+            clearInterval(lectureForRemoval.timerId);
+          }
         }
-        await this.externalCache.delete(subjectKey);
+
+        lecturesEntity.ActiveLectures = lecturesEntity.ActiveLectures.filter(
+          (element: ActiveLectureEntity) =>
+            element.userId != lectureIdentity.userId ||
+            element.subjectId != lectureIdentity.subjectId,
+        );
+
+        await this.externalCache.set(CacheKeys.ActiveLectures, lecturesEntity);
       }
 
       this.messagingGetaway.sendCodeEventToRoom(
-        subjectKey,
+        JSON.stringify(lectureIdentity),
         CodeEnum.notGenerated,
       );
-      this.messagingGetaway.sendTimerEventToRoom(subjectKey, TimerEnum.stop);
+      this.messagingGetaway.sendTimerEventToRoom(
+        JSON.stringify(lectureIdentity),
+        TimerEnum.stop,
+      );
     } catch (error) {
       await this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
     }
@@ -168,16 +210,16 @@ export class LectureUseCases {
 
   /**
    * Lecture work processing method
-   * @param subjectKey
+   * @param lectureKey
    */
-  async doLectureWork(subjectKey: string) {
+  async doLectureWork(lectureKey: string) {
     try {
-      await this.removeLectureWork(subjectKey);
+      await this.removeLectureWork(lectureKey);
 
       const code = Encoding.generateRandomCode();
-      this.messagingGetaway.sendTimerEventToRoom(subjectKey, TimerEnum.start);
+      this.messagingGetaway.sendTimerEventToRoom(lectureKey, TimerEnum.start);
       this.messagingGetaway.sendCodeEventToRoom(
-        subjectKey,
+        lectureKey,
         CodeEnum.generated,
         code,
       );
@@ -186,35 +228,36 @@ export class LectureUseCases {
       const timer = setInterval(() => {
         if (counter > 0) {
           this.messagingGetaway.sendTimerEventToRoom(
-            subjectKey,
+            lectureKey,
             TimerEnum.tick,
             counter,
           );
           counter--;
         } else if (counter == 0) {
-          this.removeLectureWork(subjectKey);
+          this.removeLectureWork(lectureKey);
           counter--;
         }
       }, 1000);
 
-      await this.saveLectureWork(subjectKey, code, timer[Symbol.toPrimitive]());
+      await this.saveLectureWork(lectureKey, code, timer[Symbol.toPrimitive]());
     } catch (error) {
       await this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
     }
   }
 
+  // TODO: Key change
   /**
    * Get last code event by given active lecture entity
    * @param activeLecture Active lecture for matching code event
    * @returns Promise<CodeEnum>
    */
   async getCodeEventByActiveLecture(
-    activeLecture: ActiveLectureEntity,
+    activeLecture: ActiveLectureIdentity,
   ): Promise<CodeEnum> {
     let result: CodeEnum = CodeEnum.notGenerated;
     try {
       const lecture = JSON.parse(
-        await this.externalCache.get(JSON.stringify(activeLecture)),
+        await this.externalCache.get(CacheKeys.ActiveLectures, ``),
       );
       if (lecture) {
         result = CodeEnum.generated;
@@ -226,18 +269,19 @@ export class LectureUseCases {
     return result;
   }
 
+  // TODO: Key change
   /**
    * Get last code by given active lecture entity
-   * @param activeLecture Active lecture for matching code
+   * @param activeLecture Active lecture identifier for matching code
    * @returns Promise<stirng>
    */
   async getCodeByActiveLecture(
-    activeLecture: ActiveLectureEntity,
+    activeLecture: ActiveLectureIdentity,
   ): Promise<string> {
     let result: undefined;
     try {
       const lecture = JSON.parse(
-        await this.externalCache.get(JSON.stringify(activeLecture)),
+        await this.externalCache.get(CacheKeys.ActiveLectures, ``),
       );
       if (lecture) {
         result = lecture.code;

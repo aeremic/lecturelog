@@ -22,7 +22,7 @@ import { SubjectUseCases } from '../subject/subject.use-case';
 import { CodeEnum } from 'src/core/common/enums/code.enum';
 import { LectureUseCases } from '../lecture/lecture.use-case';
 import { AvailableGroupDto } from 'src/core/dtos/responses/available-group.dto';
-import { ActiveLectureEntity } from 'src/core/entities/active-lecture.entity';
+import { ActiveLectureIdentity } from 'src/core/entities/active-lecture-identity.entity';
 import { SendEmailVerificationDto } from '../../core/dtos/requests/send-email-verification.dto';
 import { CreateStudentRequestDto } from '../../core/dtos/requests/create-student-request.dto';
 import { CreateUpdateUserResponseDto } from 'src/core/dtos/responses/create-update-user-response.dto';
@@ -30,7 +30,6 @@ import { CsvUploadResultDto } from 'src/core/dtos/responses/csv-upload-result.dt
 import { CsvParseResult } from 'src/core/common/enums/csv-parse.enum';
 import { ParserService } from 'src/services/csv/parser.service';
 import { RegexPattern } from 'src/core/common/constants/regex.constant';
-import { UserMapper } from 'src/infrastructure/data/mappers/user.mapper';
 
 @Injectable()
 export class UserUseCases extends GenericUseCases<UserEntity> {
@@ -528,7 +527,7 @@ export class UserUseCases extends GenericUseCases<UserEntity> {
   }
 
   async getCodeEventByActiveLecture(
-    activeLecture: ActiveLectureEntity,
+    activeLecture: ActiveLectureIdentity,
   ): Promise<CodeEnum> {
     return await this.lectureUseCases.getCodeEventByActiveLecture(
       activeLecture,
@@ -536,7 +535,7 @@ export class UserUseCases extends GenericUseCases<UserEntity> {
   }
 
   async getCodeByActiveLecture(
-    activeLecture: ActiveLectureEntity,
+    activeLecture: ActiveLectureIdentity,
   ): Promise<string> {
     return await this.lectureUseCases.getCodeByActiveLecture(activeLecture);
   }

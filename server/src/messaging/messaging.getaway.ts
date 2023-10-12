@@ -2,8 +2,6 @@ import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import {
   ConnectedSocket,
   MessageBody,
-  OnGatewayConnection,
-  OnGatewayDisconnect,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
@@ -39,23 +37,24 @@ export class MessagingGetaway {
   }
 
   /**
-   * Method for joining given rooms
-   * @param stringOfSubjectKeys subjects as a string
+   * Initialization method for joining given rooms. Method used by clients to rejoin the rooms.
+   * @param stringOfKeys keys as a string
    * @param client Main object for interacting with a client, provided by Socket.IO
    * @returns undefined
    */
   @SubscribeMessage(MessagingConstants.JoinActiveRoomsMessage)
   async joinActiveRooms(
-    @MessageBody() stringOfSubjectKeys: string,
+    @MessageBody() stringOfKeys: string,
     @ConnectedSocket() client: Socket,
   ) {
     try {
-      if (stringOfSubjectKeys) {
-        const subjects =
-          await this.lectureUseCases.parseSubjectKeysToLectures(stringOfSubjectKeys);
-        subjects.forEach((group) => {
-          if (group) {
-            client.join(JSON.stringify(group));
+      if (stringOfKeys) {
+        const rooms = await this.lectureUseCases.parseLectureKeysToLectures(
+          stringOfKeys,
+        );
+        rooms.forEach((room) => {
+          if (room) {
+            client.join(JSON.stringify(room));
           }
         });
       }
@@ -70,7 +69,7 @@ export class MessagingGetaway {
   }
 
   /**
-   * Method for joining given room
+   * Initialization method for joining given room. Method used by clients to rejoin the room.
    * @param room Room as a string
    * @param client Main object for interacting with a client, provided by Socket.IO
    * @returns undefined

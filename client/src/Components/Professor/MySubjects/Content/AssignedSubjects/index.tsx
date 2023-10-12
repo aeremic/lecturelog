@@ -43,7 +43,7 @@ const AssignedSubject: React.FC<IAssignedSubjectsProps> = ({
             }}
             variant="contained"
             color="success"
-            size="large"
+            size="medium"
             sx={{ mb: 1 }}
           >
             <AddIcon />
@@ -67,12 +67,11 @@ const AssignedSubject: React.FC<IAssignedSubjectsProps> = ({
                   }
                   {t("SubjectName")}
                 </TableCell>
-                <TableCell align="right" colSpan={2}>
+                <TableCell align="center" colSpan={2}>
                   {
                     // @ts-ignore
                     <BorderColorIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
                   }
-                  {t("Action")}
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -88,7 +87,7 @@ const AssignedSubject: React.FC<IAssignedSubjectsProps> = ({
                   }}
                 >
                   <TableCell align="center">{subject.name}</TableCell>
-                  <TableCell align="right">
+                  <TableCell align="center">
                     <Button
                       onClick={(e) => {
                         e.stopPropagation();

@@ -4,6 +4,7 @@ import {
   CardContent,
   Divider,
   Paper,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -36,6 +37,20 @@ const ActiveSubjects: React.FC<IActiveSubjectsProps> = ({
           <CardContent>
             <Typography variant="h6">{t("LiveLectures")}</Typography>
             <Divider sx={{ mb: 2 }} />
+            <Stack direction="row">
+              <Button
+                variant="contained"
+                color="error"
+                size="medium"
+                sx={{ mb: 1 }}
+              >
+                {
+                  // @ts-ignore
+                  <PauseIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                }
+                {t("EndAllLiveLectures")}
+              </Button>
+            </Stack>
             <TableContainer component={Paper} sx={{ mt: 1 }}>
               <Table sx={{ minWidth: 290 }} size="small">
                 <TableHead>
@@ -52,6 +67,7 @@ const ActiveSubjects: React.FC<IActiveSubjectsProps> = ({
                         // @ts-ignore
                         <TextFieldsIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
                       }
+                      {t("SubjectName")}
                     </TableCell>
                     <TableCell align="center">
                       {
@@ -81,10 +97,10 @@ const ActiveSubjects: React.FC<IActiveSubjectsProps> = ({
                           }}
                           variant="contained"
                           color="error"
-                          size="small"
+                          size="medium"
                           disabled={subject.userId != userId}
                         >
-                          <PauseIcon fontSize="small" />
+                          <PauseIcon />
                         </Button>
                       </TableCell>
                     </TableRow>

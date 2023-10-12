@@ -1,7 +1,6 @@
-export class Lecture {
-  public subject: string;
-
+export class ActiveLecture {
+  public userId: number;
+  public subjectId: number;
   public code: string;
-
-  public timer?: number;
+  public timerId?: number;
 }

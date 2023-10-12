@@ -20,7 +20,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/utils/envs`);
       config: {
         host: 'localhost',
         port: 6379,
-      }
+      },
     }),
     MailerModule.forRootAsync({
       imports: [ConfigModule],
@@ -35,17 +35,17 @@ const envFilePath: string = getEnvPath(`${__dirname}/utils/envs`);
           },
         },
         defaults: {
-          from: 'imi.bolognapp@gmail.com'
+          from: 'imi.bolognapp@gmail.com',
         },
         template: {
           dir: __dirname,
           adapter: new HandlebarsAdapter(),
           options: {
-            strict: true
-          }
-        }
+            strict: true,
+          },
+        },
       }),
-      inject: [ConfigService]
+      inject: [ConfigService],
     }),
     ConfigModule.forRoot({ envFilePath, isGlobal: true }),
     TypeOrmModule.forRootAsync({ useClass: TypeOrmConfigService }),
@@ -54,8 +54,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/utils/envs`);
     AuthModule,
     LoggerModule,
     MailModule,
-    MessagingModule
+    MessagingModule,
   ],
 })
-export class AppModule {
-}
+export class AppModule {}

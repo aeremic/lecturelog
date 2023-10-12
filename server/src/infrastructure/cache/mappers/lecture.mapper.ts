@@ -1,19 +1,22 @@
-import { LectureEntity } from 'src/core/entities/lecture.entity';
-import { Lecture } from '../models/lecture.model';
+import { ActiveLectureEntity } from 'src/core/entities/active-lecture.entity';
+import { ActiveLecture } from '../models/lecture.model';
 
 export class LectureMapper {
-  public static ToEntity(lectureModel: Lecture): LectureEntity {
-    const lectureEntity: LectureEntity = {
-      subject: lectureModel.subject,
+  public static ToEntity(lectureModel: ActiveLecture): ActiveLectureEntity {
+    const activeLectureEntity: ActiveLectureEntity = {
+      userId: lectureModel.userId,
+      subjectId: lectureModel.subjectId,
       code: lectureModel?.code,
-      timer: lectureModel?.timer,
+      timerId: lectureModel?.timerId,
     };
 
-    return lectureEntity;
+    return activeLectureEntity;
   }
 
-  public static ToEntities(lectureModels: Lecture[]): LectureEntity[] {
-    let lectureEntities: LectureEntity[];
+  public static ToEntities(
+    lectureModels: ActiveLecture[],
+  ): ActiveLectureEntity[] {
+    let lectureEntities: ActiveLectureEntity[];
     if (lectureModels && lectureModels.length > 0) {
       lectureEntities = lectureModels.map((lectureModel) => {
         return this.ToEntity(lectureModel);
@@ -23,13 +26,16 @@ export class LectureMapper {
     return lectureEntities;
   }
 
-  public static ToModel(lectureEntity: LectureEntity): Lecture {
-    const lectureModel: Lecture = {
-      subject: lectureEntity.subject,
-      code: lectureEntity?.code,
-      timer: lectureEntity?.timer,
+  public static ToModel(
+    activeLectureEntity: ActiveLectureEntity,
+  ): ActiveLecture {
+    const activeLectureModel: ActiveLecture = {
+      userId: activeLectureEntity.userId,
+      subjectId: activeLectureEntity.subjectId,
+      code: activeLectureEntity?.code,
+      timerId: activeLectureEntity?.timerId,
     };
 
-    return lectureModel;
+    return activeLectureModel;
   }
 }

@@ -7,9 +7,8 @@ import { ErrorConstants } from 'src/core/common/constants/error.constant';
 import { SubjectsDto } from 'src/core/dtos/responses/subjects.dto';
 import { StudentsSubjectsUseCases } from '../students-subjects/students-subjects.use-case';
 import { LectureUseCases } from '../lecture/lecture.use-case';
-import { ActiveLectureEntity } from 'src/core/entities/active-lecture.entity';
+import { ActiveLectureIdentity } from 'src/core/entities/active-lecture-identity.entity';
 import { CreateUpdateSubjectRequestDto } from 'src/core/dtos/requests/create-update-subject-request.dto';
-import { RoleEnum } from 'src/core/common/enums/role.enum';
 import { CreateUpdateSubjectResponseDto } from '../../core/dtos/responses/create-update-subject-response.dto';
 
 @Injectable()
@@ -163,7 +162,7 @@ export class SubjectUseCases extends GenericUseCases<SubjectEntity> {
     return result;
   }
 
-  async getActiveSubjects(): Promise<ActiveLectureEntity[]> {
+  async getActiveSubjects(): Promise<ActiveLectureIdentity[]> {
     return this.lectureUseCases.getActiveLecturesFromExternalCache();
   }
 
