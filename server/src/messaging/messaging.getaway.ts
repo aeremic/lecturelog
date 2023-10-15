@@ -125,10 +125,13 @@ export class MessagingGetaway {
    * @returns undefined
    */
   @SubscribeMessage(MessagingConstants.EndRoomMessage)
-  endRoom(@MessageBody() room: string, @ConnectedSocket() client: Socket) {
+  async endRoom(
+    @MessageBody() room: string,
+    @ConnectedSocket() client: Socket,
+  ) {
     try {
-      this.lectureUseCases.removeLectureWork(room);
-      this.lectureUseCases.removeLecture(room);
+      await this.lectureUseCases.removeLectureWork(room);
+      await this.lectureUseCases.removeLecture(room);
 
       client.broadcast.emit(MessagingConstants.LecturesChangeMessage, {
         lecturesChangeData: room,
@@ -161,15 +164,17 @@ export class MessagingGetaway {
           stringOfKeys,
         );
 
-        rooms.forEach((room) => {
-          this.lectureUseCases.removeLectureWork(JSON.stringify(room));
-          this.lectureUseCases.removeLecture(JSON.stringify(room));
+        for (let i = 0; i < rooms.length; i++) {
+          await this.lectureUseCases.removeLectureWork(
+            JSON.stringify(rooms[i]),
+          );
+          await this.lectureUseCases.removeLecture(JSON.stringify(rooms[i]));
 
           client.broadcast.emit(MessagingConstants.LecturesChangeMessage, {
-            lecturesChangeData: room,
+            lecturesChangeData: rooms[i],
           });
-          client.leave(JSON.stringify(room));
-        });
+          client.leave(JSON.stringify(rooms[i]));
+        }
       }
     } catch (error) {
       this.loggerUseCases.log(
