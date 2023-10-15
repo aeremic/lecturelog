@@ -52,11 +52,11 @@ export class MessagingGetaway {
         const rooms = await this.lectureUseCases.parseLectureKeysToLectures(
           stringOfKeys,
         );
-        rooms.forEach((room) => {
-          if (room) {
-            client.join(JSON.stringify(room));
+        for (let i = 0; i < rooms.length; i++) {
+          if (rooms[i]) {
+            client.join(JSON.stringify(rooms[i]));
           }
-        });
+        }
       }
     } catch (error) {
       await this.loggerUseCases.log(

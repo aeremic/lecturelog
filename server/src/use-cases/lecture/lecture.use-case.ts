@@ -9,6 +9,8 @@ import { ActiveLectureIdentity } from 'src/core/entities/active-lecture-identity
 import { ExternalCacheSevice } from 'src/services/external-cache/external-cache.service';
 import { CacheKeys } from 'src/core/common/constants/cache.constants';
 import { ActiveLecturesEntity } from 'src/core/entities/active-lectures.entity';
+import { JPathQueryBuilder } from 'src/core/common/jpath-query.builder';
+import { QueryBuilder } from 'typeorm';
 
 @Injectable()
 export class LectureUseCases {
@@ -304,11 +306,16 @@ export class LectureUseCases {
     subjectId: number,
   ): Promise<ActiveLectureEntity> {
     let result = undefined;
+
+    const path = JPathQueryBuilder()
+      .addRoot()
+      .addChildOperator()
+      .addElement('activeLectures')
+      .addChildOperator()
+      .addSubscriptMatching('subjectId', subjectId);
+
     const matchedLectures: ActiveLectureEntity[] = JSON.parse(
-      await this.externalCache.get(
-        CacheKeys.ActiveLectures,
-        `$.activeLectures.[?(@.subjectId==${subjectId})]`,
-      ),
+      await this.externalCache.get(CacheKeys.ActiveLectures, path.query),
     );
 
     if (matchedLectures && matchedLectures.length > 0) {
