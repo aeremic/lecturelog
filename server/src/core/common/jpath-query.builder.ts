@@ -1,12 +1,4 @@
-export const JPathQuery = function (query: string) {
-  this.query = query;
-
-  return this;
-};
-
 export const JPathQueryBuilder = function () {
-  const query = '';
-
   return {
     addRoot: function () {
       this.query = '$';
@@ -27,9 +19,6 @@ export const JPathQueryBuilder = function () {
     addSubscriptMatchingWithString: function (key: string, value: string) {
       this.query += `[?(@.${key}=="${value}")]`;
       return this;
-    },
-    build: function () {
-      return JPathQuery(query);
     },
   };
 };
