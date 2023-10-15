@@ -72,7 +72,6 @@ export class LectureUseCases {
         subjectsParsed.forEach((subject) => {
           const lecture: ActiveLectureIdentity = {
             subjectId: subject.subjectId,
-            userId: subject.userId,
           };
 
           result.push(lecture);
@@ -137,7 +136,6 @@ export class LectureUseCases {
       const lectureIdentity: ActiveLectureIdentity = JSON.parse(lectureKey);
 
       const lecture: ActiveLectureEntity = {
-        userId: lectureIdentity.userId,
         subjectId: lectureIdentity.subjectId,
         code: code,
         timerId: timerId,
@@ -176,7 +174,6 @@ export class LectureUseCases {
         const lectureForRemoval: ActiveLectureEntity =
           lecturesEntity.ActiveLectures.find(
             (element: ActiveLectureEntity) =>
-              element.userId == lectureIdentity.userId &&
               element.subjectId == lectureIdentity.subjectId,
           );
 
@@ -188,7 +185,6 @@ export class LectureUseCases {
 
         lecturesEntity.ActiveLectures = lecturesEntity.ActiveLectures.filter(
           (element: ActiveLectureEntity) =>
-            element.userId != lectureIdentity.userId ||
             element.subjectId != lectureIdentity.subjectId,
         );
 

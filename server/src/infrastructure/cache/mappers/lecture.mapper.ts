@@ -4,7 +4,6 @@ import { ActiveLecture } from '../models/lecture.model';
 export class LectureMapper {
   public static ToEntity(lectureModel: ActiveLecture): ActiveLectureEntity {
     const activeLectureEntity: ActiveLectureEntity = {
-      userId: lectureModel.userId,
       subjectId: lectureModel.subjectId,
       code: lectureModel?.code,
       timerId: lectureModel?.timerId,
@@ -30,7 +29,6 @@ export class LectureMapper {
     activeLectureEntity: ActiveLectureEntity,
   ): ActiveLecture {
     const activeLectureModel: ActiveLecture = {
-      userId: activeLectureEntity.userId,
       subjectId: activeLectureEntity.subjectId,
       code: activeLectureEntity?.code,
       timerId: activeLectureEntity?.timerId,

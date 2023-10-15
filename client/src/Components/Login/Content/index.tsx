@@ -62,12 +62,12 @@ const Content = () => {
               navigate("/admin/users", { replace: true });
               break;
             case RoleEnum.Professor:
-              navigate(`/professor/mysubjects?id=${userData.id}`, {
+              navigate(`/professor/mysubjects`, {
                 replace: true,
               });
               break;
             case RoleEnum.Student:
-              navigate(`/student/availablesubjects?id=${userData.id}`, {
+              navigate(`/student/availablesubjects`, {
                 replace: true,
               });
               break;

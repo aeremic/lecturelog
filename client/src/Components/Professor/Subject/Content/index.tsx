@@ -4,15 +4,15 @@ import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import { AssignedStudents } from "./AssignedStudents";
+import { getCurrentUserId } from "../../../../services/HttpService/AuthService";
 
 export const Content = () => {
   const { t } = useTranslation();
   const [queryParameters] = useSearchParams();
 
-  const userIdParam: string | null = queryParameters.get("userId");
-  const userId = userIdParam != null ? parseInt(userIdParam) : -1;
+  const userId = getCurrentUserId();
 
-  const subjectIdParam: string | null = queryParameters.get("subjectId");
+  const subjectIdParam: string | null = queryParameters.get("id");
   const subjectId = subjectIdParam != null ? parseInt(subjectIdParam) : -1;
 
   return (

@@ -31,15 +31,15 @@ import {
   LectureTimerEventType,
 } from "../../../../../models/Enums";
 import { useTranslation } from "react-i18next";
+import { getCurrentUserId } from "../../../../../services/HttpService/AuthService";
 
 const ProfessorCodeGeneration = () => {
   const { t } = useTranslation();
   const [queryParameters] = useSearchParams();
 
-  const userIdParam: string | null = queryParameters.get("userId");
-  const userId = userIdParam != null ? parseInt(userIdParam) : -1;
+  const userId = getCurrentUserId();
 
-  const subjectIdParam: string | null = queryParameters.get("subjectId");
+  const subjectIdParam: string | null = queryParameters.get("id");
   const subjectId = subjectIdParam != null ? parseInt(subjectIdParam) : -1;
 
   const [currentCodeState, setCurrentCodeState] = useState<CodeGenerationState>(
@@ -49,7 +49,6 @@ const ProfessorCodeGeneration = () => {
   // TODO: Refactor below method to use only one method for getting code state and code
   useEffect(() => {
     const sessionData: ISessionData = {
-      userId: userId,
       subjectId: subjectId,
     };
 
@@ -79,10 +78,7 @@ const ProfessorCodeGeneration = () => {
     function onTimerEvent(value: any) {
       if (value && value.session) {
         const sessionData: ISessionData = JSON.parse(value.session);
-        if (
-          sessionData.userId === userId &&
-          sessionData.subjectId === subjectId
-        ) {
+        if (sessionData.subjectId === subjectId) {
           if (value.lectureTimerEventType === LectureTimerEventType.Tick) {
             setTimer(value.lectureTimerCount);
           } else if (
@@ -98,10 +94,7 @@ const ProfessorCodeGeneration = () => {
     function onCodeEvent(value: any) {
       if (value && value.session) {
         const sessionData: ISessionData = JSON.parse(value.session);
-        if (
-          sessionData.userId === userId &&
-          sessionData.subjectId === subjectId
-        ) {
+        if (sessionData.subjectId === subjectId) {
           setCode(value.lectureCodeValue);
           setCurrentCodeState(value.lectureCodeEventType);
         }
@@ -117,7 +110,6 @@ const ProfessorCodeGeneration = () => {
 
   const handleGenerateCodeClick = () => {
     const sessionData: ISessionData = {
-      userId: userId,
       subjectId: subjectId,
     };
 
@@ -126,7 +118,6 @@ const ProfessorCodeGeneration = () => {
 
   const handleCancelGenerateCodeClick = () => {
     const sessionData: ISessionData = {
-      userId: userId,
       subjectId: subjectId,
     };
 

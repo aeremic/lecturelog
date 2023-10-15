@@ -40,6 +40,15 @@ export const getCurrentUserData = () => {
   return parsedToken != undefined ? parseJwt(parsedToken) : undefined;
 };
 
+export const getCurrentUserId = () => {
+  const userData = getCurrentUserData();
+  if (userData && userData.id) {
+    return userData.id;
+  } else {
+    return -1;
+  }
+};
+
 const parseJwt = (token: string) => {
   const base64Url = token.split(".")[1];
   const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");

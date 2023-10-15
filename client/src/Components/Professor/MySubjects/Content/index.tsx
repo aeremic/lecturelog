@@ -1,7 +1,7 @@
 import { Container, Grid, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { IAssignedSubject } from "../../../../models/IAssignedSubject";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { HttpStatusCode } from "axios";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import {
@@ -21,14 +21,14 @@ import {
   getAssignedSubjects,
 } from "../../../../services/HttpService/ProfessorService";
 import { useTranslation } from "react-i18next";
+import { getCurrentUserId } from "../../../../services/HttpService/AuthService";
 
 export const Content = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
-  const [queryParameters] = useSearchParams();
 
-  const userIdParam: string | null = queryParameters.get("id");
-  const userId = userIdParam != null ? parseInt(userIdParam) : -1;
+  const navigate = useNavigate();
+
+  const userId = getCurrentUserId();
 
   const [assignedSubjects, setAssignedSubjects] = useState<IAssignedSubject[]>(
     []
@@ -76,17 +76,15 @@ export const Content = () => {
 
   const handleStartSession = (subjectId: number) => {
     const sessionData: ISessionData = {
-      userId: userId,
       subjectId: subjectId,
     };
 
     onStartSession(sessionData);
-    navigate(`/professor/room?userId=${userId}&subjectId=${subjectId}`);
+    navigate(`/professor/room?id=${subjectId}`);
   };
 
   const handleStopSession = (subjectId: number) => {
     const sessionData: ISessionData = {
-      userId: userId,
       subjectId: subjectId,
     };
 
@@ -95,18 +93,16 @@ export const Content = () => {
   };
 
   const handleSubjectClick = (subjectId: number) => {
-    navigate(`/professor/subject?userId=${userId}&subjectId=${subjectId}`);
+    navigate(`/professor/subject?id=${subjectId}`);
   };
 
   const handleAddSubjectDialogClick = () => {
-    navigate(`/professor/subject?userId=${userId}`);
+    navigate(`/professor/subject`);
   };
 
   const handleSessionClick = (subject: IAssignedSubject) => {
     if (subject.userId === userId) {
-      navigate(
-        `/professor/room?userId=${userId}&subjectId=${subject.subjectId}`
-      );
+      navigate(`/professor/room?id=${subject.subjectId}`);
     }
   };
 

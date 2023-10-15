@@ -395,21 +395,20 @@ export class UserUseCases extends GenericUseCases<UserEntity> {
             result.push({
               subjectId: subject.id,
               name: subject.name,
-              userId: -1,
+              userId: id,
             });
           }
         });
 
         if (result.length) {
-          const activeSubjectRooms =
-            await this.subjectUseCases.getActiveSubjects();
-          if (activeSubjectRooms) {
+          const activeSubjects = await this.subjectUseCases.getActiveSubjects();
+          if (activeSubjects) {
             result = result.filter(
               (element) =>
-                !activeSubjectRooms
-                  .map(function (item) {
-                    if (item && item.subjectId > -1) {
-                      return item.subjectId;
+                !activeSubjects
+                  .map(function (activeSubject) {
+                    if (activeSubject && activeSubject.subjectId > -1) {
+                      return activeSubject.subjectId;
                     }
                   })
                   .includes(element.subjectId),
@@ -428,7 +427,6 @@ export class UserUseCases extends GenericUseCases<UserEntity> {
     return result;
   }
 
-  // TODO: Refactor below method to reduce number of array iterations!
   async getProfessorActiveAssignedSubjects(
     id: number,
   ): Promise<AssignedSubjectDto[]> {
@@ -442,37 +440,23 @@ export class UserUseCases extends GenericUseCases<UserEntity> {
             result.push({
               subjectId: subject.id,
               name: subject.name,
-              userId: -1,
+              userId: id,
             });
           }
         });
 
         if (result.length) {
-          const activeSubjectRooms =
-            await this.subjectUseCases.getActiveSubjects();
-          if (activeSubjectRooms) {
+          const activeSubjects = await this.subjectUseCases.getActiveSubjects();
+          if (activeSubjects) {
             result = result.filter((element) =>
-              activeSubjectRooms
-                .map(function (activeGroup) {
-                  if (activeGroup && activeGroup.subjectId > -1) {
-                    return activeGroup.subjectId;
+              activeSubjects
+                .map(function (activeSubject) {
+                  if (activeSubject && activeSubject.subjectId > -1) {
+                    return activeSubject.subjectId;
                   }
                 })
                 .includes(element.subjectId),
             );
-
-            result.forEach((group) => {
-              activeSubjectRooms.forEach((activeGroup) => {
-                if (
-                  activeGroup &&
-                  activeGroup.subjectId > -1 &&
-                  activeGroup.subjectId === group.subjectId &&
-                  activeGroup.userId === id
-                ) {
-                  group.userId = id;
-                }
-              });
-            });
           }
         }
       }
@@ -500,14 +484,13 @@ export class UserUseCases extends GenericUseCases<UserEntity> {
         });
 
         if (result.length) {
-          const activeSubjectRooms =
-            await this.subjectUseCases.getActiveSubjects();
-          if (activeSubjectRooms) {
+          const activeSubjects = await this.subjectUseCases.getActiveSubjects();
+          if (activeSubjects) {
             result = result.filter((element) =>
-              activeSubjectRooms
-                .map(function (item) {
-                  if (item && item.subjectId > -1) {
-                    return item.subjectId;
+              activeSubjects
+                .map(function (activeSubject) {
+                  if (activeSubject && activeSubject.subjectId > -1) {
+                    return activeSubject.subjectId;
                   }
                 })
                 .includes(element.subjectId),
