@@ -66,7 +66,7 @@ const Content = () => {
               });
               break;
             case RoleEnum.Student:
-              navigate(`/student/availablesubjects`, {
+              navigate(`/student/home`, {
                 replace: true,
               });
               break;

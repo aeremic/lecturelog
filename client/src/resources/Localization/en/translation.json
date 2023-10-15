@@ -114,6 +114,14 @@
     "SubjectSuccessfullyUpdated": "Subject has been successfully updated.",
     "AssignedStudents": "Assigned Students",
     "ResetAllPresencePoints": "Reset all presence points",
-    "AssignedSubjectsNotAvailable":"Assigned students are not available during the creation of the subject.",
-    "EndAllLiveLectures" : "End All Live Lectures"
+    "AssignedSubjectsNotAvailable": "Assigned students are not available during the creation of the subject.",
+    "EndAllLiveLectures" : "End All Live Lectures",
+    "EnterLiveLecture": "Enter Live Lecture",
+    "LiveLecturePass": "Live Lecture Pass",
+    "PleaseEnterLiveLectureAccessCode": "Please enter lecture access code",
+    "AccessCode": "Access code",
+    "Home": "Home",
+    "Enter":"Enter",
+    "Send":"Send",
+    "LiveLecturePassInfo": "Enter temporary access code provided by professor to acquire access to live lecture."
 }

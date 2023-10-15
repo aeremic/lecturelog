@@ -4,21 +4,46 @@ import theme from "../../../styles";
 import Header from "../../Common/Header";
 import ErrorComponent from "../../Common/ErrorComponent";
 import { Content } from "./Content";
+import { useState } from "react";
+import { Alert, AlertColor, Snackbar } from "@mui/material";
 
 const AvailableSubjects = () => {
+  const [openAlert, setOpenAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertType, setAlertType] = useState<AlertColor>();
+
+  const handleCloseAlert = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenAlert(false);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Header />
       <ErrorBoundary fallback={<ErrorComponent />}>
-        <Content />
-        {/* <Wrapper>
-        <Sidebar />
-        <ErrorBoundary>
-          <React.Suspense fallback={<Loader />}>
-            <Content />
-          </React.Suspense>
-        </ErrorBoundary>
-      </Wrapper> */}
+        <Content
+          setOpenAlert={setOpenAlert}
+          setAlertMessage={setAlertMessage}
+          setAlertType={setAlertType}
+        />
+        <Snackbar
+          open={openAlert}
+          autoHideDuration={6000}
+          onClose={handleCloseAlert}
+        >
+          <Alert
+            onClose={handleCloseAlert}
+            severity={alertType}
+            sx={{ width: "100%" }}
+          >
+            {alertMessage}
+          </Alert>
+        </Snackbar>
       </ErrorBoundary>
     </ThemeProvider>
   );

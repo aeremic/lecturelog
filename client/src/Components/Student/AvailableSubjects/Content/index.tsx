@@ -1,145 +1,83 @@
 import {
+  Alert,
   Box,
+  Button,
   Card,
   CardContent,
   Container,
   Divider,
-  Paper,
-  Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
+  FormControl,
+  FormGroup,
+  FormLabel,
+  TextField,
   Typography,
 } from "@mui/material";
-import TextFieldsIcon from "@mui/icons-material/TextFields";
-import NumbersIcon from "@mui/icons-material/Numbers";
-import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
-import { useSearchParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { IAssignedSubject } from "../../../../models/IAssignedSubject";
-import { HttpStatusCode } from "axios";
-import { socket } from "../../../../services/MessagingService";
-import { getAvailableSubjects } from "../../../../services/HttpService/StudentsService";
 import { useTranslation } from "react-i18next";
+import { getCurrentUserId } from "../../../../services/HttpService/AuthService";
+import React from "react";
+import { IContentProps } from "../../../../models/Props/IContentProps";
+import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
+import KeyIcon from "@mui/icons-material/Key";
+import TelegramIcon from "@mui/icons-material/Telegram";
 
-export const Content = () => {
+export const Content: React.FC<IContentProps> = ({
+  setOpenAlert,
+  setAlertMessage,
+  setAlertType,
+}) => {
   const { t } = useTranslation();
 
-  const [queryParameters] = useSearchParams();
-
-  const userIdParam: string | null = queryParameters.get("id");
-  const userId = userIdParam != null ? parseInt(userIdParam) : -1;
-
-  const [availableSubjects, setAvailableSubjects] = useState<
-    IAssignedSubject[]
-  >([]);
-  const [subjectsLoaded, setSubjectsLoaded] = useState<boolean>(false);
-  const [lecturesChangeEvents, setLecturesChangeEvents] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      if (userId != -1) {
-        await getAvailableSubjects(userId).then((res: any) => {
-          if (res && res.status === HttpStatusCode.Ok && res.data) {
-            setAvailableSubjects(res.data);
-          }
-        });
-
-        setSubjectsLoaded(true);
-      }
-    };
-
-    fetchData();
-  }, [userId, subjectsLoaded, lecturesChangeEvents]);
-
-  useEffect(() => {
-    function onLecturesChange(value: any) {
-      setLecturesChangeEvents(lecturesChangeEvents.concat(value));
-    }
-
-    socket.on("lecturesChange", onLecturesChange);
-
-    return () => {
-      socket.off("lecturesChange", onLecturesChange);
-    };
-  }, [lecturesChangeEvents]);
-
-  const handleSessionClick = (subjectId: number) => {
-    console.log(subjectId);
-  };
+  const userId = getCurrentUserId();
 
   return (
     <Box
       display="flex"
       justifyContent="center"
       alignItems="center"
-      sx={{ mt: 2, flexGrow: 1 }}
+      sx={{ mt: 8, flexGrow: 1 }}
     >
-      <Container component="main">
-        {availableSubjects.length > 0 ? (
-          <Stack direction="column">
-            <Typography variant="h6">
-              <LibraryBooksIcon fontSize="small" sx={{ mr: 0.5 }} />
-              {t("LiveLectures")}
+      <Card variant="outlined">
+        <CardContent>
+          <Container component="main">
+            <Typography component="h1" variant="h5">
+              <MeetingRoomIcon fontSize="small" sx={{ mr: 0.5 }} />
+              {t("LiveLecturePass")}
             </Typography>
-            <TableContainer component={Paper} sx={{ mt: 1 }}>
-              <Table sx={{ minWidth: 340 }} size="medium">
-                <TableHead>
-                  <TableRow
-                    sx={{
-                      "& th": {
-                        backgroundColor: "secondary.light",
-                        color: "secondary.contrastText",
-                      },
-                    }}
-                  >
-                    <TableCell align="center">
-                      {
-                        // @ts-ignore
-                        <TextFieldsIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
-                      }
-                    </TableCell>
-                    <TableCell align="center">
-                      {
-                        // @ts-ignore
-                        <NumbersIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
-                      }
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {availableSubjects.map((subject, index) => (
-                    <TableRow
-                      key={index}
-                      hover
-                      onClick={(e) => handleSessionClick(subject.subjectId)}
-                      sx={{
-                        "&:last-child td, &:last-child th": { border: 0 },
-                        cursor: "pointer",
-                      }}
-                    >
-                      <TableCell align="center">{subject.name}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Stack>
-        ) : (
-          <Card>
-            <CardContent>
-              <Typography variant="h6">{t("NonActiveSubjects")}</Typography>
-              <Divider />
-              <Typography textAlign="center" variant="subtitle1" sx={{ mt: 2 }}>
-                {t("NonActiveSubjectsDescription")}
-              </Typography>
-            </CardContent>
-          </Card>
-        )}
-      </Container>
+            <Divider sx={{ m: 2 }} />
+            <Alert severity="info" sx={{ width: 270 }}>
+              {t("LiveLecturePassInfo")}
+            </Alert>
+            <FormControl fullWidth sx={{ width: 300 }}>
+              <form>
+                <FormGroup sx={{ mt: 2 }}>
+                  <FormLabel>
+                    {
+                      // @ts-ignore
+                      <KeyIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                    }
+                    {t("AccessCode")}
+                  </FormLabel>
+                  <TextField
+                    label={t("PleaseEnterLiveLectureAccessCode")}
+                    variant="outlined"
+                    type="password"
+                    sx={{ mt: 0.8 }}
+                  ></TextField>
+                </FormGroup>
+                <FormGroup sx={{ mt: 2 }}>
+                  <Button variant="contained" size="large" type="submit">
+                    {
+                      // @ts-ignore
+                      <TelegramIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                    }
+                    <Typography>{t("Send")}</Typography>
+                  </Button>
+                </FormGroup>
+              </form>
+            </FormControl>
+          </Container>
+        </CardContent>
+      </Card>
     </Box>
   );
 };

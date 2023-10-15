@@ -8,10 +8,10 @@ import EmailRegistration from "./components/EmailRegistration";
 import MySubjects from "./components/Professor/MySubjects";
 import Profile from "./components/User/Profile";
 import ProfessorRoom from "./components/Professor/ProfessorRoom";
-import AvailableSubjects from "./components/Student/AvailableSubjects";
 import Register from "./components/Register";
 import RegisterConfirmation from "./components/RegisterConfirmation";
 import Subject from "./components/Professor/Subject";
+import AvailableSubjects from "./components/Student/AvailableSubjects";
 
 const App = () => {
   return (
@@ -37,10 +37,7 @@ const App = () => {
           <Route path="/professor/subject" element={<Subject />} />
           <Route path="/professor/room" element={<ProfessorRoom />} />
           /**Student routes */
-          <Route
-            path="/student/availablesubjects"
-            element={<AvailableSubjects />}
-          />
+          <Route path="/student/home" element={<AvailableSubjects />} />
           {/* <PrivateRoute path="/">
             <Main />
           </PrivateRoute> */}

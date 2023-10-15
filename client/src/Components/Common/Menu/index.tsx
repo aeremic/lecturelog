@@ -10,6 +10,7 @@ import {
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import PersonIcon from "@mui/icons-material/Person";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
+import HomeIcon from "@mui/icons-material/Home";
 import { Link } from "react-router-dom";
 import { RoleEnum } from "../../../models/Enums";
 import { getCurrentUserData } from "../../../services/HttpService/AuthService";
@@ -94,14 +95,14 @@ const Menu = () => {
                 <ListItemButton
                   component={Link}
                   to={{
-                    pathname: `/student/availablesubjects`,
+                    pathname: `/student/home`,
                     search: `?id=${userData.id}`,
                   }}
                 >
                   <ListItemIcon>
-                    <LibraryBooksIcon />
+                    <HomeIcon />
                   </ListItemIcon>
-                  <ListItemText primary={t("AvailableSubjects")} />
+                  <ListItemText primary={t("Home")} />
                 </ListItemButton>
               </ListItem>
               <Divider />
