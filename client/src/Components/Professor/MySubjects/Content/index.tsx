@@ -10,6 +10,7 @@ import {
   joinActiveSessions,
   listening,
   onStartSession,
+  onStopAllSessions,
   onStopSession,
 } from "../../../../services/MessagingService";
 import { ISessionData } from "../../../../models/ISessionData";
@@ -62,7 +63,10 @@ export const Content = () => {
 
   useEffect(() => {
     connect();
-    joinActiveSessions(activeSubjects);
+    const sessionsData: ISessionData[] = activeSubjects.map((item) => {
+      return { subjectId: item.subjectId };
+    });
+    joinActiveSessions(sessionsData);
 
     function onLecturesChange(value: any) {
       setLecturesChangeEvents(lecturesChangeEvents.concat(value));
@@ -89,6 +93,15 @@ export const Content = () => {
     };
 
     onStopSession(sessionData);
+    setSubjectsLoaded(false);
+  };
+
+  const handleStopAllSession = () => {
+    const sessionsData: ISessionData[] = activeSubjects.map((item) => {
+      return { subjectId: item.subjectId };
+    });
+
+    onStopAllSessions(sessionsData);
     setSubjectsLoaded(false);
   };
 
@@ -126,6 +139,7 @@ export const Content = () => {
             userId={userId}
             subjectsProp={activeSubjects}
             handleStopSession={handleStopSession}
+            handleStopAllSession={handleStopAllSession}
             handleSessionClick={handleSessionClick}
           />
         </Grid>

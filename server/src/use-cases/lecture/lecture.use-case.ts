@@ -57,8 +57,8 @@ export class LectureUseCases {
   }
 
   /**
-   * Parse given subjects to lecture entities
-   * @param lectureKeys List of subjects as a string type
+   * Parse given lecure keys to lecture entities
+   * @param lectureKeys List of lecture keys as a string type
    * @returns
    */
   async parseLectureKeysToLectures(
@@ -66,12 +66,12 @@ export class LectureUseCases {
   ): Promise<ActiveLectureIdentity[]> {
     const result: ActiveLectureIdentity[] = [];
     try {
-      const subjectsParsed = JSON.parse(lectureKeys);
+      const lectureKeysParsed = JSON.parse(lectureKeys);
 
-      if (subjectsParsed && subjectsParsed.length > 0) {
-        subjectsParsed.forEach((subject) => {
+      if (lectureKeysParsed && lectureKeysParsed.length > 0) {
+        lectureKeysParsed.forEach((parsedKey) => {
           const lecture: ActiveLectureIdentity = {
-            subjectId: subject.subjectId,
+            subjectId: parsedKey.subjectId,
           };
 
           result.push(lecture);

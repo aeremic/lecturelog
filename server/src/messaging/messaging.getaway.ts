@@ -145,6 +145,43 @@ export class MessagingGetaway {
   }
 
   /**
+   * Leave all rooms
+   * @param room Rooms as a string
+   * @param client Main object for interacting with a client, provided by Socket.IO
+   * @returns undefined
+   */
+  @SubscribeMessage(MessagingConstants.EndRoomsMessage)
+  async endRooms(
+    @MessageBody() stringOfKeys: string,
+    @ConnectedSocket() client: Socket,
+  ) {
+    try {
+      if (stringOfKeys) {
+        const rooms = await this.lectureUseCases.parseLectureKeysToLectures(
+          stringOfKeys,
+        );
+
+        rooms.forEach((room) => {
+          this.lectureUseCases.removeLectureWork(JSON.stringify(room));
+          this.lectureUseCases.removeLecture(JSON.stringify(room));
+
+          client.broadcast.emit(MessagingConstants.LecturesChangeMessage, {
+            lecturesChangeData: room,
+          });
+          client.leave(JSON.stringify(room));
+        });
+      }
+    } catch (error) {
+      this.loggerUseCases.log(
+        ErrorConstants.MessagingGetawayError,
+        error?.message,
+        error?.stack,
+      );
+    }
+    return undefined;
+  }
+
+  /**
    * Join a room
    * @param room Room as a string
    * @param client Main object for interacting with a client, provided by Socket.IO

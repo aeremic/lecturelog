@@ -40,7 +40,7 @@ export const dispose = (event: string, callback: any) => {
   }
 };
 
-export const joinActiveSessions = (subjects: IAssignedSubject[]) => {
+export const joinActiveSessions = (subjects: ISessionData[]) => {
   try {
     socket.emit(MessagingEnum.JoinActiveLectures, JSON.stringify(subjects));
   } catch (err) {
@@ -67,6 +67,14 @@ export const onStartSession = (data: ISessionData) => {
 export const onStopSession = (data: ISessionData) => {
   try {
     socket.emit(MessagingEnum.EndLecture, JSON.stringify(data));
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const onStopAllSessions = (data: ISessionData[]) => {
+  try {
+    socket.emit(MessagingEnum.EndLectures, JSON.stringify(data));
   } catch (err) {
     console.log(err);
   }

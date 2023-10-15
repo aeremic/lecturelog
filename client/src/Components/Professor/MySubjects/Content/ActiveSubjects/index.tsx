@@ -24,6 +24,7 @@ const ActiveSubjects: React.FC<IActiveSubjectsProps> = ({
   userId,
   subjectsProp,
   handleStopSession,
+  handleStopAllSession,
   handleSessionClick,
 }) => {
   const { t } = useTranslation();
@@ -39,6 +40,7 @@ const ActiveSubjects: React.FC<IActiveSubjectsProps> = ({
             <Divider sx={{ mb: 2 }} />
             <Stack direction="row">
               <Button
+                onClick={handleStopAllSession}
                 variant="contained"
                 color="error"
                 size="medium"
