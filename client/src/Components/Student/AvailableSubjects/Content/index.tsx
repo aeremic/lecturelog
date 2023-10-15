@@ -14,24 +14,20 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import {
-  LiveLectures,
-  NonActiveSubjects,
-  NonActiveSubjectsDescription,
-} from "../../../../resources/Typography";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
 import NumbersIcon from "@mui/icons-material/Numbers";
-import convertToRoman from "../../../../functions/ConvertToRoman";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { IAssignedSubject } from "../../../../models/IAssignedSubject";
 import { HttpStatusCode } from "axios";
 import { socket } from "../../../../services/MessagingService";
 import { getAvailableSubjects } from "../../../../services/HttpService/StudentsService";
+import { useTranslation } from "react-i18next";
 
 export const Content = () => {
-  const navigate = useNavigate();
+  const { t } = useTranslation();
+
   const [queryParameters] = useSearchParams();
 
   const userIdParam: string | null = queryParameters.get("id");
@@ -87,7 +83,7 @@ export const Content = () => {
           <Stack direction="column">
             <Typography variant="h6">
               <LibraryBooksIcon fontSize="small" sx={{ mr: 0.5 }} />
-              {LiveLectures}
+              {t("LiveLectures")}
             </Typography>
             <TableContainer component={Paper} sx={{ mt: 1 }}>
               <Table sx={{ minWidth: 340 }} size="medium">
@@ -135,10 +131,10 @@ export const Content = () => {
         ) : (
           <Card>
             <CardContent>
-              <Typography variant="h6">{NonActiveSubjects}</Typography>
+              <Typography variant="h6">{t("NonActiveSubjects")}</Typography>
               <Divider />
               <Typography textAlign="center" variant="subtitle1" sx={{ mt: 2 }}>
-                {NonActiveSubjectsDescription}
+                {t("NonActiveSubjectsDescription")}
               </Typography>
             </CardContent>
           </Card>

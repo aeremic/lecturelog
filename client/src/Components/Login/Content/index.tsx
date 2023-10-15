@@ -15,7 +15,6 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { Email } from "../../../resources/Typography";
 import { useForm } from "react-hook-form";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { HttpStatusCode } from "axios";
@@ -142,7 +141,7 @@ const Content = () => {
                       // @ts-ignore
                       <AlternateEmailIcon fontSize="xs" sx={{ mr: 0.5 }} />
                     }
-                    {Email}
+                    {t("Email")}
                   </FormLabel>
                   <TextField
                     label={t("PleaseEnterYourEmail")}

@@ -11,21 +11,18 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import {
-  CurrentlyPresentStudents,
-  Email,
-  FirstName,
-  Index,
-} from "../../../../../resources/Typography";
 import AlternateEmailIcon from "@mui/icons-material/AlternateEmail";
 import ContactPageIcon from "@mui/icons-material/ContactPage";
 import PersonIcon from "@mui/icons-material/Person";
+import { useTranslation } from "react-i18next";
 
 const PresentStudents = () => {
+  const { t } = useTranslation();
+
   return (
     <Card sx={{ mt: 1 }}>
       <CardContent>
-        <Typography variant="h6">{CurrentlyPresentStudents}</Typography>
+        <Typography variant="h6">{t("CurrentlyPresentStudents")}</Typography>
         <Divider sx={{ mb: 2 }} />
         <TableContainer component={Paper} sx={{ mt: 1 }}>
           <Table sx={{ minWidth: 300 }} size="small">
@@ -43,21 +40,21 @@ const PresentStudents = () => {
                     // @ts-ignore
                     <ContactPageIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
                   }
-                  {Index}
+                  {t("Index")}
                 </TableCell>
                 <TableCell align="center">
                   {
                     // @ts-ignore
                     <AlternateEmailIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
                   }
-                  {Email}
+                  {t("Email")}
                 </TableCell>
                 <TableCell align="center">
                   {
                     // @ts-ignore
                     <PersonIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
                   }
-                  {FirstName}
+                  {t("FirstName")}
                 </TableCell>
               </TableRow>
             </TableHead>
