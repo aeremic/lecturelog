@@ -10,7 +10,6 @@ import { ExternalCacheSevice } from 'src/services/external-cache/external-cache.
 import { CacheKeys } from 'src/core/common/constants/cache.constants';
 import { ActiveLecturesEntity } from 'src/core/entities/active-lectures.entity';
 import { JPathQueryBuilder } from 'src/core/common/jpath-query.builder';
-import { QueryBuilder } from 'typeorm';
 
 @Injectable()
 export class LectureUseCases {

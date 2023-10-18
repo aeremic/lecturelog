@@ -1,4 +1,4 @@
-import { ISessionData } from "../../models/ISessionData";
+import { ISessionMetadata } from "../../models/ISessionMetadata";
 import { get, getById, getFile, post } from "./HttpServiceBase";
 
 const URL = "/professor";
@@ -27,7 +27,7 @@ export const getActiveAssignedSubjects = async (id: number) => {
   }
 };
 
-export const getCodeGeneratedState = async (sessionData: ISessionData) => {
+export const getCodeGeneratedState = async (sessionData: ISessionMetadata) => {
   try {
     return await post(`${URL}/getCodeEventByActiveLecture`, sessionData);
   } catch (err) {
@@ -35,7 +35,7 @@ export const getCodeGeneratedState = async (sessionData: ISessionData) => {
   }
 };
 
-export const getCode = async (sessionData: ISessionData) => {
+export const getCode = async (sessionData: ISessionMetadata) => {
   try {
     return await post(`${URL}/getCodeByActiveLecture`, sessionData);
   } catch (err) {

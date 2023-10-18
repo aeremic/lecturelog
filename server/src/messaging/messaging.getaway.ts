@@ -38,23 +38,24 @@ export class MessagingGetaway {
 
   /**
    * Initialization method for joining given rooms. Method used by clients to rejoin the rooms.
-   * @param stringOfKeys keys as a string
+   * @param keys keys as a string
    * @param client Main object for interacting with a client, provided by Socket.IO
    * @returns undefined
    */
-  @SubscribeMessage(MessagingConstants.JoinActiveRoomsMessage)
-  async joinActiveRooms(
-    @MessageBody() stringOfKeys: string,
+  @SubscribeMessage(MessagingConstants.JoinRoomsMessage)
+  async joinRooms(
+    @MessageBody() keys: string,
     @ConnectedSocket() client: Socket,
   ) {
     try {
-      if (stringOfKeys) {
-        const rooms = await this.lectureUseCases.parseLectureKeysToLectures(
-          stringOfKeys,
+      if (keys) {
+        const lectures = await this.lectureUseCases.parseLectureKeysToLectures(
+          keys,
         );
-        for (let i = 0; i < rooms.length; i++) {
-          if (rooms[i]) {
-            client.join(JSON.stringify(rooms[i]));
+        for (let i = 0; i < lectures.length; i++) {
+          if (lectures[i]) {
+            const room = JSON.stringify(lectures[i]);
+            client.join(room);
           }
         }
       }
@@ -74,8 +75,8 @@ export class MessagingGetaway {
    * @param client Main object for interacting with a client, provided by Socket.IO
    * @returns undefined
    */
-  @SubscribeMessage(MessagingConstants.JoinActiveRoomMessage)
-  async joinActiveRoom(
+  @SubscribeMessage(MessagingConstants.JoinRoomMessage)
+  async joinRoom(
     @MessageBody() room: string,
     @ConnectedSocket() client: Socket,
   ) {
@@ -155,13 +156,13 @@ export class MessagingGetaway {
    */
   @SubscribeMessage(MessagingConstants.EndRoomsMessage)
   async endRooms(
-    @MessageBody() stringOfKeys: string,
+    @MessageBody() keys: string,
     @ConnectedSocket() client: Socket,
   ) {
     try {
-      if (stringOfKeys) {
+      if (keys) {
         const rooms = await this.lectureUseCases.parseLectureKeysToLectures(
-          stringOfKeys,
+          keys,
         );
 
         for (let i = 0; i < rooms.length; i++) {
@@ -187,15 +188,19 @@ export class MessagingGetaway {
   }
 
   /**
-   * Join a room
+   * Attend a room
    * @param room Room as a string
    * @param client Main object for interacting with a client, provided by Socket.IO
    * @returns undefined
    */
-  @SubscribeMessage(MessagingConstants.JoinRoomMessage)
-  joinRoom(@MessageBody() room: string, @ConnectedSocket() client: Socket) {
+  @SubscribeMessage(MessagingConstants.AttendRoomMessage)
+  attendRoom(@MessageBody() key: string, @ConnectedSocket() client: Socket) {
     try {
-      client.join(room);
+      // let lecture = this.lectureUseCases.parseStudentKeyToLecture(key);
+      // let canJoin = this.lectureUseCases.doLectureAttending(key, lecture);
+      // if (canJoin) {
+      //   client.join(JSON.stringify(lecture));
+      // }
     } catch (error) {
       this.loggerUseCases.log(
         ErrorConstants.MessagingGetawayError,

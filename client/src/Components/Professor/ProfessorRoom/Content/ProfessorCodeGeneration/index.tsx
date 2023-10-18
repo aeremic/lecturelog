@@ -25,7 +25,7 @@ import {
   getCode,
   getCodeGeneratedState,
 } from "../../../../../services/HttpService/ProfessorService";
-import { ISessionData } from "../../../../../models/ISessionData";
+import { ISessionMetadata } from "../../../../../models/ISessionMetadata";
 import {
   MessagingEvent,
   LectureTimerEventType,
@@ -48,7 +48,7 @@ const ProfessorCodeGeneration = () => {
   const [code, setCode] = useState<string>();
   // TODO: Refactor below method to use only one method for getting code state and code
   useEffect(() => {
-    const sessionData: ISessionData = {
+    const sessionData: ISessionMetadata = {
       subjectId: subjectId,
     };
 
@@ -77,7 +77,7 @@ const ProfessorCodeGeneration = () => {
   useEffect(() => {
     function onTimerEvent(value: any) {
       if (value && value.session) {
-        const sessionData: ISessionData = JSON.parse(value.session);
+        const sessionData: ISessionMetadata = JSON.parse(value.session);
         if (sessionData.subjectId === subjectId) {
           if (value.lectureTimerEventType === LectureTimerEventType.Tick) {
             setTimer(value.lectureTimerCount);
@@ -93,7 +93,7 @@ const ProfessorCodeGeneration = () => {
 
     function onCodeEvent(value: any) {
       if (value && value.session) {
-        const sessionData: ISessionData = JSON.parse(value.session);
+        const sessionData: ISessionMetadata = JSON.parse(value.session);
         if (sessionData.subjectId === subjectId) {
           setCode(value.lectureCodeValue);
           setCurrentCodeState(value.lectureCodeEventType);
@@ -109,7 +109,7 @@ const ProfessorCodeGeneration = () => {
   }, [subjectId, timer, userId]);
 
   const handleGenerateCodeClick = () => {
-    const sessionData: ISessionData = {
+    const sessionData: ISessionMetadata = {
       subjectId: subjectId,
     };
 
@@ -117,7 +117,7 @@ const ProfessorCodeGeneration = () => {
   };
 
   const handleCancelGenerateCodeClick = () => {
-    const sessionData: ISessionData = {
+    const sessionData: ISessionMetadata = {
       subjectId: subjectId,
     };
 

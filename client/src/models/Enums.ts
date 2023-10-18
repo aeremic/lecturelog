@@ -17,10 +17,10 @@ export enum MessagingEnum {
   CreateLecture = "createLecture",
   EndLecture = "endLecture",
   EndLectures = "endLectures",
-  JoinLecture = "joinLecture",
   StartLectureWork = "startLectureWork",
   CancelLectureWork = "cancelLectureWork",
   GenerateCode = "generateCode",
+  AttendActiveLecture = "attendActiveLecture",
 }
 
 export enum MessagingEvent {

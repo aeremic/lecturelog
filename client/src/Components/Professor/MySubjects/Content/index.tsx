@@ -13,7 +13,7 @@ import {
   onStopAllSessions,
   onStopSession,
 } from "../../../../services/MessagingService";
-import { ISessionData } from "../../../../models/ISessionData";
+import { ISessionMetadata } from "../../../../models/ISessionMetadata";
 import { MessagingEvent } from "../../../../models/Enums";
 import ActiveSubjects from "./ActiveSubjects";
 import AssignedSubject from "./AssignedSubjects";
@@ -63,7 +63,7 @@ export const Content = () => {
 
   useEffect(() => {
     connect();
-    const sessionsData: ISessionData[] = activeSubjects.map((item) => {
+    const sessionsData: ISessionMetadata[] = activeSubjects.map((item) => {
       return { subjectId: item.subjectId };
     });
     joinActiveSessions(sessionsData);
@@ -79,7 +79,7 @@ export const Content = () => {
   }, [lecturesChangeEvents, activeSubjects]);
 
   const handleStartSession = (subjectId: number) => {
-    const sessionData: ISessionData = {
+    const sessionData: ISessionMetadata = {
       subjectId: subjectId,
     };
 
@@ -88,7 +88,7 @@ export const Content = () => {
   };
 
   const handleStopSession = (subjectId: number) => {
-    const sessionData: ISessionData = {
+    const sessionData: ISessionMetadata = {
       subjectId: subjectId,
     };
 
@@ -97,7 +97,7 @@ export const Content = () => {
   };
 
   const handleStopAllSession = () => {
-    const sessionsData: ISessionData[] = activeSubjects.map((item) => {
+    const sessionsData: ISessionMetadata[] = activeSubjects.map((item) => {
       return { subjectId: item.subjectId };
     });
 

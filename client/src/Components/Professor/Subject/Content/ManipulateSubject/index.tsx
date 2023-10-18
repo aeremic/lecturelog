@@ -239,7 +239,6 @@ export const ManipulateSubject: React.FC<IManipulateSubjectProps> = ({
                         type="submit"
                         variant="contained"
                         size="medium"
-                        color="info"
                         sx={{ maxWidth: "xs", ml: 2 }}
                       >
                         {

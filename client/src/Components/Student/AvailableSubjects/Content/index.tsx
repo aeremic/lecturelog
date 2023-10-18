@@ -14,11 +14,13 @@ import {
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { getCurrentUserId } from "../../../../services/HttpService/AuthService";
-import React from "react";
+import React, { useState } from "react";
 import { IContentProps } from "../../../../models/Props/IContentProps";
 import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
 import KeyIcon from "@mui/icons-material/Key";
 import TelegramIcon from "@mui/icons-material/Telegram";
+import { IAttendSessionMetadata } from "../../../../models/IAttendSessionMetadata";
+import { onAttendLecture } from "../../../../services/MessagingService";
 
 export const Content: React.FC<IContentProps> = ({
   setOpenAlert,
@@ -28,6 +30,23 @@ export const Content: React.FC<IContentProps> = ({
   const { t } = useTranslation();
 
   const userId = getCurrentUserId();
+
+  const [code, setCode] = useState("");
+
+  const handleCodeChange = (event: any) => {
+    setCode(event.target.value);
+  };
+
+  const handleSubmit = async (event: any) => {
+    event.preventDefault();
+
+    const attendSessionMetadata: IAttendSessionMetadata = {
+      studentId: userId,
+      code: code,
+    };
+
+    onAttendLecture(attendSessionMetadata);
+  };
 
   return (
     <Box
@@ -48,7 +67,7 @@ export const Content: React.FC<IContentProps> = ({
               {t("LiveLecturePassInfo")}
             </Alert>
             <FormControl fullWidth sx={{ width: 300 }}>
-              <form>
+              <form onSubmit={handleSubmit}>
                 <FormGroup sx={{ mt: 2 }}>
                   <FormLabel>
                     {
@@ -59,6 +78,7 @@ export const Content: React.FC<IContentProps> = ({
                   </FormLabel>
                   <TextField
                     label={t("PleaseEnterLiveLectureAccessCode")}
+                    onChange={handleCodeChange}
                     variant="outlined"
                     type="password"
                     sx={{ mt: 0.8 }}

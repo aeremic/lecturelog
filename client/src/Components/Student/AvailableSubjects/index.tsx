@@ -4,13 +4,18 @@ import theme from "../../../styles";
 import Header from "../../Common/Header";
 import ErrorComponent from "../../Common/ErrorComponent";
 import { Content } from "./Content";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Alert, AlertColor, Snackbar } from "@mui/material";
+import { connect } from "../../../services/MessagingService";
 
 const AvailableSubjects = () => {
   const [openAlert, setOpenAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState<AlertColor>();
+
+  useEffect(() => {
+    connect();
+  });
 
   const handleCloseAlert = (
     event?: React.SyntheticEvent | Event,
