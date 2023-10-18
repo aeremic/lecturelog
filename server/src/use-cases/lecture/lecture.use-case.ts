@@ -253,9 +253,10 @@ export class LectureUseCases {
   ): Promise<CodeEnum> {
     let result: CodeEnum = CodeEnum.notGenerated;
     try {
-      const lecture = await this.getMatchedActiveLecturesFromExternalCache(
-        activeLecture.subjectId,
-      );
+      const lecture =
+        await this.getMatchedActiveLecturesFromExternalCacheBySubjectId(
+          activeLecture.subjectId,
+        );
 
       if (lecture) {
         result = CodeEnum.generated;
@@ -278,9 +279,10 @@ export class LectureUseCases {
   ): Promise<string> {
     let result: string;
     try {
-      const lecture = await this.getMatchedActiveLecturesFromExternalCache(
-        activeLecture.subjectId,
-      );
+      const lecture =
+        await this.getMatchedActiveLecturesFromExternalCacheBySubjectId(
+          activeLecture.subjectId,
+        );
 
       if (lecture) {
         result = lecture.code;
@@ -305,20 +307,9 @@ export class LectureUseCases {
       const attendKeyParsed = JSON.parse(attendKey);
 
       if (attendKeyParsed) {
-        const path = JPathQueryBuilder()
-          .addRoot()
-          .addChildOperator()
-          .addElement('activeLectures')
-          .addChildOperator()
-          .addSubscriptMatchingWithString('code', attendKeyParsed.code);
-
-        const matchedLectures: ActiveLectureEntity[] = JSON.parse(
-          await this.externalCache.get(CacheKeys.ActiveLectures, path.query),
+        result = await this.getMatchedActiveLecturesFromExternalCacheByCode(
+          attendKeyParsed.code,
         );
-
-        if (matchedLectures && matchedLectures.length > 0) {
-          result = matchedLectures[0];
-        }
       }
     } catch (error) {
       await this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
@@ -336,7 +327,7 @@ export class LectureUseCases {
    * @param subjectId Identifier for matching active lecture
    * @returns Matched active lecture
    */
-  private async getMatchedActiveLecturesFromExternalCache(
+  private async getMatchedActiveLecturesFromExternalCacheBySubjectId(
     subjectId: number,
   ): Promise<ActiveLectureEntity> {
     let result = undefined;
@@ -347,6 +338,34 @@ export class LectureUseCases {
       .addElement('activeLectures')
       .addChildOperator()
       .addSubscriptMatching('subjectId', subjectId);
+
+    const matchedLectures: ActiveLectureEntity[] = JSON.parse(
+      await this.externalCache.get(CacheKeys.ActiveLectures, path.query),
+    );
+
+    if (matchedLectures && matchedLectures.length > 0) {
+      result = matchedLectures[0];
+    }
+
+    return result;
+  }
+
+  /**
+   * Method for getting matched active lectures from the cache. Please note that cache will return array of matched lectures.
+   * @param subjectId Identifier for matching active lecture
+   * @returns Matched active lecture
+   */
+  private async getMatchedActiveLecturesFromExternalCacheByCode(
+    code: string,
+  ): Promise<ActiveLectureEntity> {
+    let result = undefined;
+
+    const path = JPathQueryBuilder()
+      .addRoot()
+      .addChildOperator()
+      .addElement('activeLectures')
+      .addChildOperator()
+      .addSubscriptMatchingWithString('code', code);
 
     const matchedLectures: ActiveLectureEntity[] = JSON.parse(
       await this.externalCache.get(CacheKeys.ActiveLectures, path.query),
