@@ -49,9 +49,8 @@ export class MessagingGetaway {
   ) {
     try {
       if (keys) {
-        const lectures = await this.lectureUseCases.parseLectureKeysToLectures(
-          keys,
-        );
+        const lectures =
+          await this.lectureUseCases.parseLectureKeysToLectureIdentities(keys);
         for (let i = 0; i < lectures.length; i++) {
           if (lectures[i]) {
             const room = JSON.stringify(lectures[i]);
@@ -161,9 +160,8 @@ export class MessagingGetaway {
   ) {
     try {
       if (keys) {
-        const rooms = await this.lectureUseCases.parseLectureKeysToLectures(
-          keys,
-        );
+        const rooms =
+          await this.lectureUseCases.parseLectureKeysToLectureIdentities(keys);
 
         for (let i = 0; i < rooms.length; i++) {
           await this.lectureUseCases.removeLectureWork(
@@ -188,15 +186,20 @@ export class MessagingGetaway {
   }
 
   /**
-   * Attend a room
-   * @param room Room as a string
+   * Attend existing room
+   * @param key Key as a string
    * @param client Main object for interacting with a client, provided by Socket.IO
    * @returns undefined
    */
   @SubscribeMessage(MessagingConstants.AttendRoomMessage)
-  attendRoom(@MessageBody() key: string, @ConnectedSocket() client: Socket) {
+  async attendRoom(
+    @MessageBody() key: string,
+    @ConnectedSocket() client: Socket,
+  ) {
     try {
-      // let lecture = this.lectureUseCases.parseStudentKeyToLecture(key);
+      const lecture = await this.lectureUseCases.parseaAttendanceKeyToLecture(
+        key,
+      );
       // let canJoin = this.lectureUseCases.doLectureAttending(key, lecture);
       // if (canJoin) {
       //   client.join(JSON.stringify(lecture));

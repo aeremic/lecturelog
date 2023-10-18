@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { getCurrentUserId } from "../../../../services/HttpService/AuthService";
-import React, { useState } from "react";
+import React, { ChangeEvent, FormEvent, useState } from "react";
 import { IContentProps } from "../../../../models/Props/IContentProps";
 import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
 import KeyIcon from "@mui/icons-material/Key";
@@ -33,11 +33,13 @@ export const Content: React.FC<IContentProps> = ({
 
   const [code, setCode] = useState("");
 
-  const handleCodeChange = (event: any) => {
+  const handleCodeChange = (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ): void => {
     setCode(event.target.value);
   };
 
-  const handleSubmit = async (event: any) => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
 
     const attendSessionMetadata: IAttendSessionMetadata = {
@@ -46,6 +48,10 @@ export const Content: React.FC<IContentProps> = ({
     };
 
     onAttendLecture(attendSessionMetadata);
+
+    setAlertType("success");
+    setAlertMessage(t("AccessCodeSent"));
+    setOpenAlert(true);
   };
 
   return (

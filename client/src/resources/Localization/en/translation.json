@@ -123,5 +123,6 @@
     "Home": "Home",
     "Enter":"Enter",
     "Send":"Send",
-    "LiveLecturePassInfo": "Enter a temporary access code provided by a professor to acquire access to corresponding lecture."
+    "LiveLecturePassInfo": "Enter a temporary access code provided by a professor to acquire access to corresponding lecture.",
+    "AccessCodeSent" : "Access code sent"
 }

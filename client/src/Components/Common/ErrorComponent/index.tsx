@@ -10,7 +10,7 @@ const ErrorComponent = () => {
       display="flex"
       justifyContent="center"
       alignItems="center"
-      sx={{ mt: 2 }}
+      sx={{ mt: 6 }}
     >
       <Card>
         <CardContent>

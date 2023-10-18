@@ -58,11 +58,11 @@ export class LectureUseCases {
   }
 
   /**
-   * Parse given lecure keys to lecture entities
+   * Parse given lecure keys to lecture identities
    * @param lectureKeys List of lecture keys as a string type
    * @returns
    */
-  async parseLectureKeysToLectures(
+  async parseLectureKeysToLectureIdentities(
     lectureKeys: string,
   ): Promise<ActiveLectureIdentity[]> {
     const result: ActiveLectureIdentity[] = [];
@@ -284,6 +284,41 @@ export class LectureUseCases {
 
       if (lecture) {
         result = lecture.code;
+      }
+    } catch (error) {
+      await this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
+    }
+
+    return result;
+  }
+
+  /**
+   * Method for parsing attendance key to lecture entity.
+   * @param attendKey Attendence key which contains user identifier and sent code that will be used for active lecture matching
+   * @returns Matched active lecture entity if found
+   */
+  async parseaAttendanceKeyToLecture(
+    attendKey: string,
+  ): Promise<ActiveLectureEntity> {
+    let result: ActiveLectureEntity;
+    try {
+      const attendKeyParsed = JSON.parse(attendKey);
+
+      if (attendKeyParsed) {
+        const path = JPathQueryBuilder()
+          .addRoot()
+          .addChildOperator()
+          .addElement('activeLectures')
+          .addChildOperator()
+          .addSubscriptMatchingWithString('code', attendKeyParsed.code);
+
+        const matchedLectures: ActiveLectureEntity[] = JSON.parse(
+          await this.externalCache.get(CacheKeys.ActiveLectures, path.query),
+        );
+
+        if (matchedLectures && matchedLectures.length > 0) {
+          result = matchedLectures[0];
+        }
       }
     } catch (error) {
       await this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
