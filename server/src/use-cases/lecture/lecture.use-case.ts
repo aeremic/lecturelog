@@ -299,7 +299,7 @@ export class LectureUseCases {
    * @param attendKey Attendence key which contains user identifier and sent code that will be used for active lecture matching
    * @returns Matched active lecture entity if found
    */
-  async parseaAttendanceKeyToLecture(
+  async parseAttendanceKeyToLecture(
     attendKey: string,
   ): Promise<ActiveLectureEntity> {
     let result: ActiveLectureEntity;
@@ -314,6 +314,21 @@ export class LectureUseCases {
     } catch (error) {
       await this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
     }
+
+    return result;
+  }
+
+  /**
+   * Main method for lecture attending.
+   * @param attendKey Attendance key
+   * @param lecture Lecture to attend
+   * @returns true if attendance is allowed, otherwise false
+   */
+  async doLectureAttending(
+    attendKey: string,
+    lecture: ActiveLectureEntity,
+  ): Promise<boolean> {
+    let result = false;
 
     return result;
   }

@@ -160,19 +160,21 @@ export class MessagingGetaway {
   ) {
     try {
       if (keys) {
-        const rooms =
+        const lectures =
           await this.lectureUseCases.parseLectureKeysToLectureIdentities(keys);
 
-        for (let i = 0; i < rooms.length; i++) {
+        for (let i = 0; i < lectures.length; i++) {
           await this.lectureUseCases.removeLectureWork(
-            JSON.stringify(rooms[i]),
+            JSON.stringify(lectures[i]),
           );
-          await this.lectureUseCases.removeLecture(JSON.stringify(rooms[i]));
+          await this.lectureUseCases.removeLecture(JSON.stringify(lectures[i]));
 
           client.broadcast.emit(MessagingConstants.LecturesChangeMessage, {
-            lecturesChangeData: rooms[i],
+            lecturesChangeData: lectures[i],
           });
-          client.leave(JSON.stringify(rooms[i]));
+
+          const room = JSON.stringify(lectures[i]);
+          client.leave(room);
         }
       }
     } catch (error) {
@@ -197,13 +199,14 @@ export class MessagingGetaway {
     @ConnectedSocket() client: Socket,
   ) {
     try {
-      const lecture = await this.lectureUseCases.parseaAttendanceKeyToLecture(
+      const lecture = await this.lectureUseCases.parseAttendanceKeyToLecture(
         key,
       );
-      // let canJoin = this.lectureUseCases.doLectureAttending(key, lecture);
-      // if (canJoin) {
-      //   client.join(JSON.stringify(lecture));
-      // }
+
+      if (await this.lectureUseCases.doLectureAttending(key, lecture)) {
+        const room = JSON.stringify(lecture);
+        client.join(room);
+      }
     } catch (error) {
       this.loggerUseCases.log(
         ErrorConstants.MessagingGetawayError,
