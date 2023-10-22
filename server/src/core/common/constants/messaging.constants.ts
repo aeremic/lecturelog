@@ -8,6 +8,7 @@ export class MessagingConstants {
   public static StartRoomWorkMessage = 'startLectureWork';
   public static CancelRoomWorkMessage = 'cancelLectureWork';
   public static LecturesChangeMessage = 'lecturesChange';
+  public static LectureAttendeesChangeMessage = 'lectureAttendeesChange';
   public static LectureTimerEventMessage = 'lectureTimerEvent';
   public static LectureCodeEventMessage = 'lectureCodeEvent';
 }

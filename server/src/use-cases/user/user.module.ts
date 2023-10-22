@@ -15,18 +15,18 @@ import { StudentController } from 'src/controllers/student.controller';
 import { MailModule } from 'src/services/mailing/mail.module';
 import { EmailVerificationModule } from '../emailverification/email-verification.module';
 import { SubjectModule } from '../subject/subject.module';
-import { LectureModule } from '../lecture/lecture.module';
 import { BcryptModule } from 'src/services/cryptography/bcrypt.module';
 import { ParserModule } from 'src/services/csv/parser.module';
+import { LectureModule } from '../lecture/lecture.module';
 
 @Module({
   imports: [
     forwardRef(() => SubjectModule),
+    forwardRef(() => LectureModule),
     LoggerModule,
     MailModule,
     EmailVerificationModule,
     BcryptModule,
-    LectureModule,
     ParserModule,
     TypeOrmModule.forFeature([User, EmailVerification, StudentsSubjects]),
   ],

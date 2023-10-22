@@ -84,7 +84,7 @@ export const Content = () => {
     };
 
     onStartSession(sessionData);
-    navigate(`/professor/room?id=${subjectId}`);
+    navigate(`/professor/lecture?id=${subjectId}`);
   };
 
   const handleStopSession = (subjectId: number) => {
@@ -115,7 +115,7 @@ export const Content = () => {
 
   const handleSessionClick = (subject: IAssignedSubject) => {
     if (subject.userId === userId) {
-      navigate(`/professor/room?id=${subject.subjectId}`);
+      navigate(`/professor/lecture?id=${subject.subjectId}`);
     }
   };
 

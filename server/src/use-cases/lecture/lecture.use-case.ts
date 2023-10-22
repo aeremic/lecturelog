@@ -11,6 +11,8 @@ import { CacheKeys } from 'src/core/common/constants/cache.constants';
 import { ActiveLecturesEntity } from 'src/core/entities/active-lectures.entity';
 import { JPathQueryBuilder } from 'src/core/common/jpath-query.builder';
 import { ActiveLectureAttendee } from 'src/core/entities/active-lecture-attendee.entity';
+import { DoLectureAttendingDto } from 'src/core/dtos/do-lecture-attending.dto';
+import { ActiveLectureAttendeeDto } from 'src/core/dtos/responses/active-lecture-attendees.dto';
 
 @Injectable()
 export class LectureUseCases {
@@ -365,6 +367,28 @@ export class LectureUseCases {
     return result;
   }
 
+  async getActiveLectureAttendees(
+    subjectId: number,
+  ): Promise<ActiveLectureAttendeeDto[]> {
+    let result: ActiveLectureAttendee[] = [];
+    try {
+      const lecture =
+        await this.getMatchedActiveLecturesFromExternalCacheBySubjectId(
+          subjectId,
+        );
+
+      if (lecture && lecture.attendees && lecture.attendees.length > 0) {
+        const attendeeIds = lecture.attendees.map((item) => {
+          item.studentId;
+        });
+      }
+    } catch (error) {
+      await this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
+    }
+
+    return result;
+  }
+
   /**
    * Method for parsing attendance key to lecture entity.
    * @param attendKey Attendence key which contains user identifier and sent code that will be used for active lecture matching
@@ -394,10 +418,11 @@ export class LectureUseCases {
    * @param attendKey Attendance key
    * @returns true if attendance is allowed, otherwise false
    */
-  async doLectureAttending(attendKey: string): Promise<ActiveLectureIdentity> {
+  async doLectureAttending(
+    attendDto: DoLectureAttendingDto,
+  ): Promise<ActiveLectureIdentity> {
     let result: ActiveLectureIdentity = undefined;
 
-    const attendKeyParsed = JSON.parse(attendKey);
     const lecturesEntity: ActiveLecturesEntity = JSON.parse(
       await this.externalCache.get(CacheKeys.ActiveLectures, null),
     );
@@ -406,17 +431,17 @@ export class LectureUseCases {
       const lecture: ActiveLectureEntity = lecturesEntity.activeLectures.find(
         (lecture) =>
           lecture.state == ActiveLectureCodeState.generated &&
-          lecture.code == attendKeyParsed.code,
+          lecture.code == attendDto.code,
       );
 
       if (lecture) {
         const attendeeExist = lecture.attendees.find(
-          (item) => item.studentId == attendKeyParsed.studentId,
+          (item) => item.studentId == attendDto.studentId,
         );
 
         if (!attendeeExist) {
           const newAttendee: ActiveLectureAttendee = {
-            studentId: attendKeyParsed.studentId,
+            studentId: attendDto.studentId,
           };
           lecture.attendees.push(newAttendee);
 

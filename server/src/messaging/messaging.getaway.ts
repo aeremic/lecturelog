@@ -212,10 +212,19 @@ export class MessagingGetaway {
     @ConnectedSocket() client: Socket,
   ) {
     try {
-      const lecture = await this.lectureUseCases.doLectureAttending(key);
+      const attendKeyParsed = JSON.parse(key);
+      const lecture = await this.lectureUseCases.doLectureAttending(
+        attendKeyParsed,
+      );
       if (lecture) {
         const room = JSON.stringify(lecture);
         client.join(room);
+
+        this.server
+          .in(room)
+          .emit(MessagingConstants.LectureAttendeesChangeMessage, {
+            lectureAttendeeChangeData: attendKeyParsed.studentId,
+          });
       }
     } catch (error) {
       this.loggerUseCases.log(

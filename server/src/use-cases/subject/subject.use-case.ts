@@ -6,8 +6,6 @@ import { LoggerUseCases } from '../logger/logger.use-case';
 import { ErrorConstants } from 'src/core/common/constants/error.constant';
 import { SubjectsDto } from 'src/core/dtos/responses/subjects.dto';
 import { StudentsSubjectsUseCases } from '../students-subjects/students-subjects.use-case';
-import { LectureUseCases } from '../lecture/lecture.use-case';
-import { ActiveLectureIdentity } from 'src/core/entities/active-lecture-identity.entity';
 import { CreateUpdateSubjectRequestDto } from 'src/core/dtos/requests/create-update-subject-request.dto';
 import { CreateUpdateSubjectResponseDto } from '../../core/dtos/responses/create-update-subject-response.dto';
 
@@ -20,9 +18,6 @@ export class SubjectUseCases extends GenericUseCases<SubjectEntity> {
 
   @Inject(StudentsSubjectsUseCases)
   private studentsSubjectsUseCases: StudentsSubjectsUseCases;
-
-  @Inject(LectureUseCases)
-  private lectureUseCases: LectureUseCases;
 
   @Inject(LoggerUseCases)
   private loggerUseCases: LoggerUseCases;
@@ -160,10 +155,6 @@ export class SubjectUseCases extends GenericUseCases<SubjectEntity> {
     }
 
     return result;
-  }
-
-  async getActiveSubjects(): Promise<ActiveLectureIdentity[]> {
-    return this.lectureUseCases.getActiveLecturesFromExternalCache();
   }
 
   //#endregion

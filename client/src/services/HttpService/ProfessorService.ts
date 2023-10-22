@@ -27,22 +27,6 @@ export const getActiveAssignedSubjects = async (id: number) => {
   }
 };
 
-export const getCodeGeneratedState = async (sessionData: ISessionMetadata) => {
-  try {
-    return await post(`${URL}/getCodeStateByActiveLecture`, sessionData);
-  } catch (err) {
-    console.log(err); // TODO: Fix for PROD.
-  }
-};
-
-export const getCode = async (sessionData: ISessionMetadata) => {
-  try {
-    return await post(`${URL}/getCodeByActiveLecture`, sessionData);
-  } catch (err) {
-    console.log(err); // TODO: Fix for PROD.
-  }
-};
-
 export const uploadProfessors = async (data: any) => {
   try {
     return await post(

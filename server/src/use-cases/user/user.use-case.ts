@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { UserRepositoryAbstract } from 'src/core/abstracts/repositories/user.repository.abstract';
 import { UserEntity } from 'src/core/entities/user.entity';
 import { GenericUseCases } from '../generic.use-case';
@@ -19,10 +19,7 @@ import { RoleEnum } from 'src/core/common/enums/role.enum';
 import { AllUsersExceptAdminDto } from 'src/core/dtos/responses/all-users-except-admin.dto';
 import { AssignedSubjectDto } from 'src/core/dtos/responses/assigned-group.dto';
 import { SubjectUseCases } from '../subject/subject.use-case';
-import { ActiveLectureCodeState } from 'src/core/common/enums/code.enum';
-import { LectureUseCases } from '../lecture/lecture.use-case';
 import { AvailableGroupDto } from 'src/core/dtos/responses/available-group.dto';
-import { ActiveLectureIdentity } from 'src/core/entities/active-lecture-identity.entity';
 import { SendEmailVerificationDto } from '../../core/dtos/requests/send-email-verification.dto';
 import { CreateStudentRequestDto } from '../../core/dtos/requests/create-student-request.dto';
 import { CreateUpdateUserResponseDto } from 'src/core/dtos/responses/create-update-user-response.dto';
@@ -30,6 +27,7 @@ import { CsvUploadResultDto } from 'src/core/dtos/responses/csv-upload-result.dt
 import { CsvParseResult } from 'src/core/common/enums/csv-parse.enum';
 import { ParserService } from 'src/services/csv/parser.service';
 import { RegexPattern } from 'src/core/common/constants/regex.constant';
+import { LectureUseCases } from '../lecture/lecture.use-case';
 
 @Injectable()
 export class UserUseCases extends GenericUseCases<UserEntity> {
@@ -41,11 +39,11 @@ export class UserUseCases extends GenericUseCases<UserEntity> {
   @Inject(SubjectUseCases)
   private subjectUseCases: SubjectUseCases;
 
+  @Inject(forwardRef(() => LectureUseCases))
+  private lectureUseCase: LectureUseCases;
+
   @Inject(EmailVerificationUseCases)
   private emailVerificationUseCases: EmailVerificationUseCases;
-
-  @Inject(LectureUseCases)
-  private lectureUseCases: LectureUseCases;
 
   @Inject(MailService)
   private mailService: MailService;
@@ -401,7 +399,8 @@ export class UserUseCases extends GenericUseCases<UserEntity> {
         });
 
         if (result.length) {
-          const activeSubjects = await this.subjectUseCases.getActiveSubjects();
+          const activeSubjects =
+            await this.lectureUseCase.getActiveLecturesFromExternalCache();
           if (activeSubjects) {
             result = result.filter(
               (element) =>
@@ -446,7 +445,8 @@ export class UserUseCases extends GenericUseCases<UserEntity> {
         });
 
         if (result.length) {
-          const activeSubjects = await this.subjectUseCases.getActiveSubjects();
+          const activeSubjects =
+            await this.lectureUseCase.getActiveLecturesFromExternalCache();
           if (activeSubjects) {
             result = result.filter((element) =>
               activeSubjects
@@ -484,7 +484,8 @@ export class UserUseCases extends GenericUseCases<UserEntity> {
         });
 
         if (result.length) {
-          const activeSubjects = await this.subjectUseCases.getActiveSubjects();
+          const activeSubjects =
+            await this.lectureUseCase.getActiveLecturesFromExternalCache();
           if (activeSubjects) {
             result = result.filter((element) =>
               activeSubjects
@@ -507,20 +508,6 @@ export class UserUseCases extends GenericUseCases<UserEntity> {
     }
 
     return result;
-  }
-
-  async getCodeStateByActiveLecture(
-    activeLecture: ActiveLectureIdentity,
-  ): Promise<ActiveLectureCodeState> {
-    return await this.lectureUseCases.getCodeStateByActiveLecture(
-      activeLecture,
-    );
-  }
-
-  async getCodeByActiveLecture(
-    activeLecture: ActiveLectureIdentity,
-  ): Promise<string> {
-    return await this.lectureUseCases.getCodeByActiveLecture(activeLecture);
   }
 
   async uploadProfessors(

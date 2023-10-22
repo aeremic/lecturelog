@@ -1,7 +1,5 @@
 import {
-  Body,
   Controller,
-  Delete,
   FileTypeValidator,
   Get,
   Header,
@@ -11,9 +9,7 @@ import {
   ParseFilePipe,
   ParseIntPipe,
   Post,
-  Put,
   Query,
-  Req,
   Res,
   StreamableFile,
   UploadedFile,
@@ -25,7 +21,6 @@ import { AuthGuard } from '@nestjs/passport';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RoleGuard } from 'src/auth/guards/role.guard';
 import { AssignedSubjectDto } from 'src/core/dtos/responses/assigned-group.dto';
-import { ActiveLectureCodeState } from 'src/core/common/enums/code.enum';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CsvUploadResultDto } from 'src/core/dtos/responses/csv-upload-result.dto';
 import { Response } from 'express';
@@ -62,22 +57,6 @@ export class ProfessorController {
     @Param('id', ParseIntPipe) id: number,
   ): Promise<AssignedSubjectDto[]> {
     return this.userUseCases.getProfessorActiveAssignedSubjects(id);
-  }
-
-  @Roles('professor')
-  @UseGuards(RoleGuard)
-  @Post('/getCodeStateByActiveLecture')
-  getCodeStateBySubjectKey(
-    @Body() request: any,
-  ): Promise<ActiveLectureCodeState> {
-    return this.userUseCases.getCodeStateByActiveLecture(request);
-  }
-
-  @Roles('professor')
-  @UseGuards(RoleGuard)
-  @Post('/getCodeByActiveLecture')
-  getCodeByActiveLecture(@Body() request: any): Promise<string> {
-    return this.userUseCases.getCodeByActiveLecture(request);
   }
 
   @Roles('admin')

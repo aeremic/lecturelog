@@ -1,19 +1,16 @@
 import { Container, Grid, Typography } from "@mui/material";
 import { ManipulateSubject } from "./ManipulateSubject";
-import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import { AssignedStudents } from "./AssignedStudents";
 import useCurrentUserIdentifier from "../../../../hooks/UseCurrentUserIdentifier";
+import useQueryIdParameter from "../../../../hooks/UseQueryIdParameter";
 
 export const Content = () => {
   const { t } = useTranslation();
-  const [queryParameters] = useSearchParams();
 
   const userId = useCurrentUserIdentifier();
-
-  const subjectIdParam: string | null = queryParameters.get("id");
-  const subjectId = subjectIdParam != null ? parseInt(subjectIdParam) : -1;
+  const subjectId = useQueryIdParameter();
 
   return (
     <Container sx={{ mt: 4 }}>

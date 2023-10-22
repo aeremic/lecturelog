@@ -6,14 +6,12 @@ import { SubjectRepositoryAbstract } from 'src/core/abstracts/repositories/subje
 import { SubjectRepository } from 'src/infrastructure/data/repositories/subject.repository';
 import { LoggerModule } from '../logger/logger.module';
 import { UserModule } from '../user/user.module';
-import { LectureModule } from '../lecture/lecture.module';
 import { StudentsSubjectsModule } from '../students-subjects/students-subjects.module';
 import { StudentsSubjects, Subject } from 'src/infrastructure/data/models';
 
 @Module({
   imports: [
     forwardRef(() => UserModule),
-    LectureModule,
     LoggerModule,
     StudentsSubjectsModule,
     TypeOrmModule.forFeature([Subject, StudentsSubjects]),

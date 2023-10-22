@@ -9,7 +9,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { HttpStatusCode } from "axios";
 import { useState } from "react";
 import CheckIcon from "@mui/icons-material/Check";
@@ -17,6 +17,7 @@ import { sendEmailVerification } from "../../../services/HttpService/UsersServic
 import ConfirmationDialog from "../../Common/ConfirmationDialog";
 import { IContentProps } from "../../../models/Props/IContentProps";
 import { useTranslation } from "react-i18next";
+import useQueryIdParameter from "../../../hooks/UseQueryIdParameter";
 
 const Content: React.FC<IContentProps> = ({
   setOpenAlert,
@@ -24,11 +25,9 @@ const Content: React.FC<IContentProps> = ({
   setAlertType,
 }) => {
   const { t } = useTranslation();
-  const [queryParameters] = useSearchParams();
   const navigate = useNavigate();
 
-  const userIdParam: string | null = queryParameters.get("id");
-  const userId = userIdParam != null ? parseInt(userIdParam) : -1;
+  const userId = useQueryIdParameter();
 
   const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
 

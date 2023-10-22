@@ -124,5 +124,6 @@
     "Enter":"Enter",
     "Send":"Send",
     "LiveLecturePassInfo": "Enter a temporary access code provided by a professor to acquire access to corresponding lecture.",
-    "AccessCodeSent" : "Access code sent"
+    "AccessCodeSent" : "Access code sent",
+    "CurrentlyThereAreNoPresentStudents": "Currently there are no present students. Provide students with temporary access code to allow them to join the lecture."
 }

@@ -19,12 +19,7 @@ import {
   joinActiveSession,
   onStartLectureWork,
 } from "../../../../../services/MessagingService";
-import { useSearchParams } from "react-router-dom";
 import { HttpStatusCode } from "axios";
-import {
-  getCode,
-  getCodeGeneratedState,
-} from "../../../../../services/HttpService/ProfessorService";
 import { ISessionMetadata } from "../../../../../models/ISessionMetadata";
 import {
   MessagingEvent,
@@ -32,21 +27,24 @@ import {
 } from "../../../../../models/Enums";
 import { useTranslation } from "react-i18next";
 import useCurrentUserIdentifier from "../../../../../hooks/UseCurrentUserIdentifier";
+import useQueryIdParameter from "../../../../../hooks/UseQueryIdParameter";
+import {
+  getCode,
+  getCodeGeneratedState,
+} from "../../../../../services/HttpService/LectureService";
 
 const ProfessorCodeGeneration = () => {
   const { t } = useTranslation();
-  const [queryParameters] = useSearchParams();
 
   const userId = useCurrentUserIdentifier();
-
-  const subjectIdParam: string | null = queryParameters.get("id");
-  const subjectId = subjectIdParam != null ? parseInt(subjectIdParam) : -1;
+  const subjectId = useQueryIdParameter();
 
   const [currentCodeState, setCurrentCodeState] = useState<CodeGenerationState>(
     CodeGenerationState.notGenerated
   );
   const [code, setCode] = useState<string>();
-  // TODO: Refactor below method to use only one method for getting code state and code
+
+  // TODO: Optimization: refactor below method to use only one method for getting code state and code, mitigating Promise creation and reducing number of requests to the server.
   useEffect(() => {
     const sessionData: ISessionMetadata = {
       subjectId: subjectId,

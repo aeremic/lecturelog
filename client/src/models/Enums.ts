@@ -27,6 +27,7 @@ export enum MessagingEvent {
   LectureTimerEvent = "lectureTimerEvent",
   LectureCodeEvent = "lectureCodeEvent",
   LecturesChange = "lecturesChange",
+  LectureAttendeesChange = "lectureAttendeesChange",
 }
 
 export enum LectureTimerEventType {

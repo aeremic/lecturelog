@@ -5,7 +5,7 @@ import Header from "../../Common/Header";
 import ErrorComponent from "../../Common/ErrorComponent";
 import Content from "./Content";
 
-const ProfessorRoom = () => {
+const LectureRoom = () => {
   return (
     <ThemeProvider theme={theme}>
       <Header />
@@ -24,4 +24,4 @@ const ProfessorRoom = () => {
   );
 };
 
-export default ProfessorRoom;
+export default LectureRoom;
