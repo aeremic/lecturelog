@@ -22,14 +22,14 @@ import {
   getAssignedSubjects,
 } from "../../../../services/HttpService/ProfessorService";
 import { useTranslation } from "react-i18next";
-import { getCurrentUserId } from "../../../../services/HttpService/AuthService";
+import useCurrentUserIdentifier from "../../../../hooks/UseCurrentUserIdentifier";
 
 export const Content = () => {
   const { t } = useTranslation();
 
   const navigate = useNavigate();
 
-  const userId = getCurrentUserId();
+  const userId = useCurrentUserIdentifier();
 
   const [assignedSubjects, setAssignedSubjects] = useState<IAssignedSubject[]>(
     []

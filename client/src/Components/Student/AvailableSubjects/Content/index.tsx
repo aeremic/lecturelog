@@ -13,7 +13,6 @@ import {
   Typography,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import { getCurrentUserId } from "../../../../services/HttpService/AuthService";
 import React, { ChangeEvent, FormEvent, useState } from "react";
 import { IContentProps } from "../../../../models/Props/IContentProps";
 import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
@@ -21,6 +20,7 @@ import KeyIcon from "@mui/icons-material/Key";
 import TelegramIcon from "@mui/icons-material/Telegram";
 import { IAttendSessionMetadata } from "../../../../models/IAttendSessionMetadata";
 import { onAttendLecture } from "../../../../services/MessagingService";
+import useCurrentUserIdentifier from "../../../../hooks/UseCurrentUserIdentifier";
 
 export const Content: React.FC<IContentProps> = ({
   setOpenAlert,
@@ -29,7 +29,7 @@ export const Content: React.FC<IContentProps> = ({
 }) => {
   const { t } = useTranslation();
 
-  const userId = getCurrentUserId();
+  const userId = useCurrentUserIdentifier();
 
   const [code, setCode] = useState("");
 

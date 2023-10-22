@@ -31,13 +31,13 @@ import {
   LectureTimerEventType,
 } from "../../../../../models/Enums";
 import { useTranslation } from "react-i18next";
-import { getCurrentUserId } from "../../../../../services/HttpService/AuthService";
+import useCurrentUserIdentifier from "../../../../../hooks/UseCurrentUserIdentifier";
 
 const ProfessorCodeGeneration = () => {
   const { t } = useTranslation();
   const [queryParameters] = useSearchParams();
 
-  const userId = getCurrentUserId();
+  const userId = useCurrentUserIdentifier();
 
   const subjectIdParam: string | null = queryParameters.get("id");
   const subjectId = subjectIdParam != null ? parseInt(subjectIdParam) : -1;
