@@ -29,7 +29,7 @@ export const getActiveAssignedSubjects = async (id: number) => {
 
 export const getCodeGeneratedState = async (sessionData: ISessionMetadata) => {
   try {
-    return await post(`${URL}/getCodeEventByActiveLecture`, sessionData);
+    return await post(`${URL}/getCodeStateByActiveLecture`, sessionData);
   } catch (err) {
     console.log(err); // TODO: Fix for PROD.
   }

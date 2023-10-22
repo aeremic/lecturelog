@@ -19,7 +19,7 @@ import { RoleEnum } from 'src/core/common/enums/role.enum';
 import { AllUsersExceptAdminDto } from 'src/core/dtos/responses/all-users-except-admin.dto';
 import { AssignedSubjectDto } from 'src/core/dtos/responses/assigned-group.dto';
 import { SubjectUseCases } from '../subject/subject.use-case';
-import { CodeEnum } from 'src/core/common/enums/code.enum';
+import { ActiveLectureCodeState } from 'src/core/common/enums/code.enum';
 import { LectureUseCases } from '../lecture/lecture.use-case';
 import { AvailableGroupDto } from 'src/core/dtos/responses/available-group.dto';
 import { ActiveLectureIdentity } from 'src/core/entities/active-lecture-identity.entity';
@@ -509,10 +509,10 @@ export class UserUseCases extends GenericUseCases<UserEntity> {
     return result;
   }
 
-  async getCodeEventByActiveLecture(
+  async getCodeStateByActiveLecture(
     activeLecture: ActiveLectureIdentity,
-  ): Promise<CodeEnum> {
-    return await this.lectureUseCases.getCodeEventByActiveLecture(
+  ): Promise<ActiveLectureCodeState> {
+    return await this.lectureUseCases.getCodeStateByActiveLecture(
       activeLecture,
     );
   }

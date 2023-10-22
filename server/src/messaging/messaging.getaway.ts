@@ -188,6 +188,19 @@ export class MessagingGetaway {
   }
 
   /**
+   * Trigger lecture work
+   * @param room Room as a string
+   * @param client Main object for interacting with a client, provided by Socket.IO
+   */
+  @SubscribeMessage(MessagingConstants.StartRoomWorkMessage)
+  startRoomWork(
+    @MessageBody() room: string,
+    @ConnectedSocket() client: Socket,
+  ) {
+    this.lectureUseCases.doLectureWork(room);
+  }
+
+  /**
    * Attend existing room
    * @param key Key as a string
    * @param client Main object for interacting with a client, provided by Socket.IO
@@ -199,11 +212,8 @@ export class MessagingGetaway {
     @ConnectedSocket() client: Socket,
   ) {
     try {
-      const lecture = await this.lectureUseCases.parseAttendanceKeyToLecture(
-        key,
-      );
-
-      if (await this.lectureUseCases.doLectureAttending(key, lecture)) {
+      const lecture = await this.lectureUseCases.doLectureAttending(key);
+      if (lecture) {
         const room = JSON.stringify(lecture);
         client.join(room);
       }
@@ -218,19 +228,6 @@ export class MessagingGetaway {
   }
 
   /**
-   * Trigger lecture work
-   * @param room Room as a string
-   * @param client Main object for interacting with a client, provided by Socket.IO
-   */
-  @SubscribeMessage(MessagingConstants.StartRoomWorkMessage)
-  startRoomWork(
-    @MessageBody() room: string,
-    @ConnectedSocket() client: Socket,
-  ) {
-    this.lectureUseCases.doLectureWork(room);
-  }
-
-  /**
    * Cancell lecture work
    * @param room Room as a string
    * @param client Main object for interacting with a client, provided by Socket.IO
@@ -240,7 +237,7 @@ export class MessagingGetaway {
     @MessageBody() room: string,
     @ConnectedSocket() client: Socket,
   ) {
-    this.lectureUseCases.removeLectureWork(room);
+    this.lectureUseCases.stopLectureWork(room);
   }
 
   /**

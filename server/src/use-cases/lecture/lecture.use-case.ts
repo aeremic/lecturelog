@@ -2,7 +2,7 @@ import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { MessagingGetaway } from 'src/messaging/messaging.getaway';
 import { LoggerUseCases } from '../logger/logger.use-case';
 import { TimerEnum } from 'src/core/common/enums/timer.enum';
-import { CodeEnum } from 'src/core/common/enums/code.enum';
+import { ActiveLectureCodeState } from 'src/core/common/enums/code.enum';
 import { Encoding } from 'src/core/common/encoding';
 import { ActiveLectureEntity } from 'src/core/entities/active-lecture.entity';
 import { ActiveLectureIdentity } from 'src/core/entities/active-lecture-identity.entity';
@@ -10,6 +10,7 @@ import { ExternalCacheSevice } from 'src/services/external-cache/external-cache.
 import { CacheKeys } from 'src/core/common/constants/cache.constants';
 import { ActiveLecturesEntity } from 'src/core/entities/active-lectures.entity';
 import { JPathQueryBuilder } from 'src/core/common/jpath-query.builder';
+import { ActiveLectureAttendee } from 'src/core/entities/active-lecture-attendee.entity';
 
 @Injectable()
 export class LectureUseCases {
@@ -127,20 +128,20 @@ export class LectureUseCases {
   }
 
   /**
-   * Save active lecture work to external cache
+   * Start lecture work by changing state of existing lecture if found, or by adding a new lecture
    * @param lectureKey Identifier as a string
-   * @param code
-   * @param timerId
+   * @param state Code state
+   * @param code Generated code
+   * @param timerId NodeJS.Timer identifier
    */
-  async saveLectureWork(lectureKey: string, code: string, timerId: number) {
+  async startLectureWork(
+    lectureKey: string,
+    state: ActiveLectureCodeState,
+    code: string,
+    timerId: number,
+  ) {
     try {
       const lectureIdentity: ActiveLectureIdentity = JSON.parse(lectureKey);
-
-      const lecture: ActiveLectureEntity = {
-        subjectId: lectureIdentity.subjectId,
-        code: code,
-        timerId: timerId,
-      };
 
       let lecturesEntity: ActiveLecturesEntity = JSON.parse(
         await this.externalCache.get(CacheKeys.ActiveLectures, null),
@@ -151,9 +152,76 @@ export class LectureUseCases {
         lecturesEntity.activeLectures = [];
       }
 
-      lecturesEntity.activeLectures.push(lecture);
+      const lectureForStarting: ActiveLectureEntity =
+        lecturesEntity.activeLectures.find(
+          (element: ActiveLectureEntity) =>
+            element.subjectId == lectureIdentity.subjectId,
+        );
+
+      if (lectureForStarting) {
+        lectureForStarting.state = ActiveLectureCodeState.generated;
+        lectureForStarting.code = code;
+        lectureForStarting.timerId = timerId;
+      } else {
+        const lectureForAdding: ActiveLectureEntity = {
+          subjectId: lectureIdentity.subjectId,
+          state: state,
+          code: code,
+          timerId: timerId,
+          attendees: [],
+        };
+
+        lecturesEntity.activeLectures.push(lectureForAdding);
+      }
 
       await this.externalCache.set(CacheKeys.ActiveLectures, lecturesEntity);
+    } catch (error) {
+      await this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
+    }
+  }
+
+  /**
+   * Stops lecture work by changing it's state
+   * @param lectureKey
+   */
+  async stopLectureWork(lectureKey: string) {
+    try {
+      const lectureIdentity: ActiveLectureIdentity = JSON.parse(lectureKey);
+
+      const lecturesEntity: ActiveLecturesEntity = JSON.parse(
+        await this.externalCache.get(CacheKeys.ActiveLectures, null),
+      );
+
+      if (lecturesEntity && lecturesEntity.activeLectures.length > 0) {
+        const lectureForStopping: ActiveLectureEntity =
+          lecturesEntity.activeLectures.find(
+            (element: ActiveLectureEntity) =>
+              element.subjectId == lectureIdentity.subjectId,
+          );
+
+        if (lectureForStopping) {
+          if (lectureForStopping.timerId) {
+            clearInterval(lectureForStopping.timerId);
+            lectureForStopping.timerId = null;
+          }
+
+          lectureForStopping.state = ActiveLectureCodeState.notGenerated;
+          lectureForStopping.code = '';
+          await this.externalCache.set(
+            CacheKeys.ActiveLectures,
+            lecturesEntity,
+          );
+        }
+      }
+
+      this.messagingGetaway.sendCodeEventToRoom(
+        JSON.stringify(lectureIdentity),
+        ActiveLectureCodeState.notGenerated,
+      );
+      this.messagingGetaway.sendTimerEventToRoom(
+        JSON.stringify(lectureIdentity),
+        TimerEnum.stop,
+      );
     } catch (error) {
       await this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
     }
@@ -172,15 +240,15 @@ export class LectureUseCases {
       );
 
       if (lecturesEntity && lecturesEntity.activeLectures.length > 0) {
-        const lectureForRemoval: ActiveLectureEntity =
+        const lectureForStopping: ActiveLectureEntity =
           lecturesEntity.activeLectures.find(
             (element: ActiveLectureEntity) =>
               element.subjectId == lectureIdentity.subjectId,
           );
 
-        if (lectureForRemoval) {
-          if (lectureForRemoval.timerId) {
-            clearInterval(lectureForRemoval.timerId);
+        if (lectureForStopping) {
+          if (lectureForStopping.timerId) {
+            clearInterval(lectureForStopping.timerId);
           }
         }
 
@@ -194,7 +262,7 @@ export class LectureUseCases {
 
       this.messagingGetaway.sendCodeEventToRoom(
         JSON.stringify(lectureIdentity),
-        CodeEnum.notGenerated,
+        ActiveLectureCodeState.notGenerated,
       );
       this.messagingGetaway.sendTimerEventToRoom(
         JSON.stringify(lectureIdentity),
@@ -211,13 +279,13 @@ export class LectureUseCases {
    */
   async doLectureWork(lectureKey: string) {
     try {
-      await this.removeLectureWork(lectureKey);
+      await this.stopLectureWork(lectureKey);
 
       const code = Encoding.generateRandomCode();
       this.messagingGetaway.sendTimerEventToRoom(lectureKey, TimerEnum.start);
       this.messagingGetaway.sendCodeEventToRoom(
         lectureKey,
-        CodeEnum.generated,
+        ActiveLectureCodeState.generated,
         code,
       );
 
@@ -231,27 +299,31 @@ export class LectureUseCases {
           );
           counter--;
         } else if (counter == 0) {
-          this.removeLectureWork(lectureKey);
+          this.stopLectureWork(lectureKey);
           counter--;
         }
       }, 1000);
 
-      await this.saveLectureWork(lectureKey, code, timer[Symbol.toPrimitive]());
+      await this.startLectureWork(
+        lectureKey,
+        ActiveLectureCodeState.generated,
+        code,
+        timer[Symbol.toPrimitive](),
+      );
     } catch (error) {
       await this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
     }
   }
 
-  // TODO: Key change
   /**
-   * Get last code event by given active lecture entity
+   * Get last code state by given active lecture entity
    * @param activeLecture Active lecture for matching code event
-   * @returns Promise<CodeEnum>
+   * @returns Promise<ActiveLectureCodeState>
    */
-  async getCodeEventByActiveLecture(
+  async getCodeStateByActiveLecture(
     activeLecture: ActiveLectureIdentity,
-  ): Promise<CodeEnum> {
-    let result: CodeEnum = CodeEnum.notGenerated;
+  ): Promise<ActiveLectureCodeState> {
+    let result: ActiveLectureCodeState = ActiveLectureCodeState.notGenerated;
     try {
       const lecture =
         await this.getMatchedActiveLecturesFromExternalCacheBySubjectId(
@@ -259,7 +331,7 @@ export class LectureUseCases {
         );
 
       if (lecture) {
-        result = CodeEnum.generated;
+        result = lecture.state;
       }
     } catch (error) {
       await this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
@@ -268,7 +340,6 @@ export class LectureUseCases {
     return result;
   }
 
-  // TODO: Key change
   /**
    * Get last code by given active lecture entity
    * @param activeLecture Active lecture identifier for matching code
@@ -284,7 +355,7 @@ export class LectureUseCases {
           activeLecture.subjectId,
         );
 
-      if (lecture) {
+      if (lecture && lecture.state == ActiveLectureCodeState.generated) {
         result = lecture.code;
       }
     } catch (error) {
@@ -319,16 +390,45 @@ export class LectureUseCases {
   }
 
   /**
-   * Main method for lecture attending.
+   * Main method for lecture attending. Gets active lecture by attendKey code and then checks if attendKey studentId doesn't exists in the list of attendees for that specific active lecture. If student id is not found, that id will be added to the list of active lecture attendees.
    * @param attendKey Attendance key
-   * @param lecture Lecture to attend
    * @returns true if attendance is allowed, otherwise false
    */
-  async doLectureAttending(
-    attendKey: string,
-    lecture: ActiveLectureEntity,
-  ): Promise<boolean> {
-    let result = false;
+  async doLectureAttending(attendKey: string): Promise<ActiveLectureIdentity> {
+    let result: ActiveLectureIdentity = undefined;
+
+    const attendKeyParsed = JSON.parse(attendKey);
+    const lecturesEntity: ActiveLecturesEntity = JSON.parse(
+      await this.externalCache.get(CacheKeys.ActiveLectures, null),
+    );
+
+    if (lecturesEntity && lecturesEntity.activeLectures.length > 0) {
+      const lecture: ActiveLectureEntity = lecturesEntity.activeLectures.find(
+        (lecture) =>
+          lecture.state == ActiveLectureCodeState.generated &&
+          lecture.code == attendKeyParsed.code,
+      );
+
+      if (lecture) {
+        const attendeeExist = lecture.attendees.find(
+          (item) => item.studentId == attendKeyParsed.studentId,
+        );
+
+        if (!attendeeExist) {
+          const newAttendee: ActiveLectureAttendee = {
+            studentId: attendKeyParsed.studentId,
+          };
+          lecture.attendees.push(newAttendee);
+
+          await this.externalCache.set(
+            CacheKeys.ActiveLectures,
+            lecturesEntity,
+          );
+
+          result = { subjectId: lecture.subjectId };
+        }
+      }
+    }
 
     return result;
   }

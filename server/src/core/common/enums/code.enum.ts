@@ -1,5 +1,4 @@
-export enum CodeEnum {
+export enum ActiveLectureCodeState {
   notGenerated,
   generated,
-  canceled,
 }

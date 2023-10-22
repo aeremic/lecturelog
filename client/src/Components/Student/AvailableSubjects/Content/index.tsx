@@ -42,16 +42,22 @@ export const Content: React.FC<IContentProps> = ({
   const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
 
-    const attendSessionMetadata: IAttendSessionMetadata = {
-      studentId: userId,
-      code: code,
-    };
+    if (userId != -1 && code != "") {
+      const attendSessionMetadata: IAttendSessionMetadata = {
+        studentId: userId,
+        code: code,
+      };
 
-    onAttendLecture(attendSessionMetadata);
+      onAttendLecture(attendSessionMetadata);
 
-    setAlertType("success");
-    setAlertMessage(t("AccessCodeSent"));
-    setOpenAlert(true);
+      setAlertType("success");
+      setAlertMessage(t("AccessCodeSent"));
+      setOpenAlert(true);
+    } else {
+      setAlertType("error");
+      setAlertMessage(t("SomethingWentWrong"));
+      setOpenAlert(true);
+    }
   };
 
   return (

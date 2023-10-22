@@ -25,7 +25,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RoleGuard } from 'src/auth/guards/role.guard';
 import { AssignedSubjectDto } from 'src/core/dtos/responses/assigned-group.dto';
-import { CodeEnum } from 'src/core/common/enums/code.enum';
+import { ActiveLectureCodeState } from 'src/core/common/enums/code.enum';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CsvUploadResultDto } from 'src/core/dtos/responses/csv-upload-result.dto';
 import { Response } from 'express';
@@ -66,9 +66,11 @@ export class ProfessorController {
 
   @Roles('professor')
   @UseGuards(RoleGuard)
-  @Post('/getCodeEventByActiveLecture')
-  getCodeEventBySubjectKey(@Body() request: any): Promise<CodeEnum> {
-    return this.userUseCases.getCodeEventByActiveLecture(request);
+  @Post('/getCodeStateByActiveLecture')
+  getCodeStateBySubjectKey(
+    @Body() request: any,
+  ): Promise<ActiveLectureCodeState> {
+    return this.userUseCases.getCodeStateByActiveLecture(request);
   }
 
   @Roles('professor')
