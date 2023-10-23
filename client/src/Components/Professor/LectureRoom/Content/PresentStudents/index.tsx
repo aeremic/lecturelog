@@ -64,7 +64,6 @@ const PresentStudents = () => {
                 email: res.data.email,
               },
             ]);
-            console.log(res);
           }
         });
       }

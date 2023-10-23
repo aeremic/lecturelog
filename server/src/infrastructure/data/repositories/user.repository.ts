@@ -1,6 +1,6 @@
 import { UserRepositoryAbstract } from 'src/core/abstracts/repositories/user.repository.abstract';
 import { UserEntity } from 'src/core/entities';
-import { Like, Repository } from 'typeorm';
+import { In, Like, Repository } from 'typeorm';
 import { UserMapper } from '../mappers/user.mapper';
 import { User } from '../models/user.model';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -110,6 +110,14 @@ export class UserRepository implements UserRepositoryAbstract {
         { role: UserMapper.getType(RoleEnum.student) },
       ],
       order: { email: 'ASC' },
+    });
+
+    return UserMapper.ToEntities(result);
+  }
+
+  async getByIds(ids: number[]): Promise<UserEntity[]> {
+    const result = await this.userModelRepository.find({
+      where: { id: In(ids) },
     });
 
     return UserMapper.ToEntities(result);

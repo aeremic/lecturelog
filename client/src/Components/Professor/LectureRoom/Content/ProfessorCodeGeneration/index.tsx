@@ -16,7 +16,6 @@ import {
   dispose,
   listening,
   onCancelLectureWork,
-  joinActiveSession,
   onStartLectureWork,
 } from "../../../../../services/MessagingService";
 import { HttpStatusCode } from "axios";
@@ -68,7 +67,6 @@ const ProfessorCodeGeneration = () => {
 
     initCodeGeneratedState();
     initCode();
-    joinActiveSession(sessionData);
   }, [currentCodeState, code, subjectId, userId]);
 
   const [timer, setTimer] = useState<string>("");

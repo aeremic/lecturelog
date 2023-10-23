@@ -23,4 +23,6 @@ export abstract class UserRepositoryAbstract extends GenericRepositoryAbstract<U
   abstract getStudentsCount(): Promise<number>;
 
   abstract getAllExceptAdmin(): Promise<UserEntity[]>;
+
+  abstract getByIds(ids: number[]): Promise<UserEntity[]>;
 }

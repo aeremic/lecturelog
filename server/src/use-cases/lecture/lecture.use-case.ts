@@ -13,6 +13,8 @@ import { JPathQueryBuilder } from 'src/core/common/jpath-query.builder';
 import { ActiveLectureAttendee } from 'src/core/entities/active-lecture-attendee.entity';
 import { DoLectureAttendingDto } from 'src/core/dtos/do-lecture-attending.dto';
 import { ActiveLectureAttendeeDto } from 'src/core/dtos/responses/active-lecture-attendees.dto';
+import { UserUseCases } from '../user/user.use-case';
+import { UserEntity } from 'src/core/entities';
 
 @Injectable()
 export class LectureUseCases {
@@ -20,6 +22,9 @@ export class LectureUseCases {
 
   @Inject(forwardRef(() => MessagingGetaway))
   private messagingGetaway: MessagingGetaway;
+
+  @Inject(forwardRef(() => UserUseCases))
+  private userUseCase: UserUseCases;
 
   @Inject(LoggerUseCases)
   private loggerUseCases: LoggerUseCases;
@@ -370,17 +375,33 @@ export class LectureUseCases {
   async getActiveLectureAttendees(
     subjectId: number,
   ): Promise<ActiveLectureAttendeeDto[]> {
-    let result: ActiveLectureAttendee[] = [];
+    const result: ActiveLectureAttendeeDto[] = [];
     try {
-      const lecture =
+      const lecture: ActiveLectureEntity =
         await this.getMatchedActiveLecturesFromExternalCacheBySubjectId(
           subjectId,
         );
 
       if (lecture && lecture.attendees && lecture.attendees.length > 0) {
-        const attendeeIds = lecture.attendees.map((item) => {
-          item.studentId;
+        const attendeeIds: number[] = lecture.attendees.map((item) => {
+          return item.studentId;
         });
+
+        const attendees: UserEntity[] = await this.userUseCase.getByIds(
+          attendeeIds,
+        );
+
+        if (attendeeIds.length > 0) {
+          for (let i = 0; i < attendees.length; i++) {
+            result.push({
+              id: attendees[i].id,
+              email: attendees[i].email,
+              firstname: attendees[i].firstname,
+              index: attendees[i].index,
+              year: attendees[i].year,
+            });
+          }
+        }
       }
     } catch (error) {
       await this.loggerUseCases.logWithoutCode(error?.message, error?.stack);

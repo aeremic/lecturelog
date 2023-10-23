@@ -669,6 +669,21 @@ export class UserUseCases extends GenericUseCases<UserEntity> {
     return uploadResult;
   }
 
+  async getByIds(ids: number[]): Promise<UserEntity[]> {
+    let result: UserEntity[] = [];
+    try {
+      result = await this.userRepository.getByIds(ids);
+    } catch (error) {
+      await this.loggerUseCases.log(
+        ErrorConstants.GetMethodError,
+        error?.message,
+        error?.stack,
+      );
+    }
+
+    return result;
+  }
+
   //#endregion
 
   //#region Private methods

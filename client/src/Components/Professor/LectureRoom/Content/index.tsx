@@ -3,14 +3,26 @@ import ProfessorCodeGeneration from "./ProfessorCodeGeneration";
 import PresentStudents from "./PresentStudents";
 import LiveTvIcon from "@mui/icons-material/LiveTv";
 import { useEffect } from "react";
-import { connect } from "../../../../services/MessagingService";
+import {
+  connect,
+  joinActiveSession,
+} from "../../../../services/MessagingService";
 import { useTranslation } from "react-i18next";
+import useQueryIdParameter from "../../../../hooks/UseQueryIdParameter";
+import { ISessionMetadata } from "../../../../models/ISessionMetadata";
 
 const Content = () => {
   const { t } = useTranslation();
 
+  const subjectId = useQueryIdParameter();
+
   useEffect(() => {
+    const sessionData: ISessionMetadata = {
+      subjectId: subjectId,
+    };
+
     connect();
+    joinActiveSession(sessionData);
   });
 
   return (
