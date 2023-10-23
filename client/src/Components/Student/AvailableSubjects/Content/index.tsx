@@ -49,6 +49,7 @@ export const Content: React.FC<IContentProps> = ({
       };
 
       onAttendLecture(attendSessionMetadata);
+      setCode("");
 
       setAlertType("success");
       setAlertMessage(t("AccessCodeSent"));
@@ -91,6 +92,7 @@ export const Content: React.FC<IContentProps> = ({
                   <TextField
                     label={t("PleaseEnterLiveLectureAccessCode")}
                     onChange={handleCodeChange}
+                    value={code}
                     variant="outlined"
                     type="password"
                     sx={{ mt: 0.8 }}
