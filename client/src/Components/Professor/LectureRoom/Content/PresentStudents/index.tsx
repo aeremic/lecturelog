@@ -59,8 +59,8 @@ const PresentStudents = () => {
         const newPresentStudentId = parseInt(value.lectureAttendeeChangeData);
         await getUser(newPresentStudentId).then((res: any) => {
           if (res && res.status === HttpStatusCode.Ok && res.data) {
-            setPresentStudents([
-              ...presentStudents,
+            setPresentStudents((prevState) => [
+              ...prevState,
               {
                 id: res.data.id,
                 firstname: res.data.firstname,
@@ -79,7 +79,7 @@ const PresentStudents = () => {
     return () => {
       dispose(MessagingEvent.LectureAttendeesChange, onLectureAttendeesChange);
     };
-  }, []);
+  });
 
   return (
     <Card sx={{ mt: 1 }}>
