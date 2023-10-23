@@ -1,7 +1,7 @@
 export interface IPresentStudent {
   id: number;
-  email: string;
   firstname: string;
+  lastname: string;
   index: number;
   year: number;
 }

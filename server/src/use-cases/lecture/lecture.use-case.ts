@@ -395,8 +395,8 @@ export class LectureUseCases {
           for (let i = 0; i < attendees.length; i++) {
             result.push({
               id: attendees[i].id,
-              email: attendees[i].email,
               firstname: attendees[i].firstname,
+              lastname: attendees[i].lastname,
               index: attendees[i].index,
               year: attendees[i].year,
             });

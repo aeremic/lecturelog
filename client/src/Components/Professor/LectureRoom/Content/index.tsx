@@ -1,5 +1,4 @@
 import { Container, Grid, Typography } from "@mui/material";
-import ProfessorCodeGeneration from "./ProfessorCodeGeneration";
 import PresentStudents from "./PresentStudents";
 import LiveTvIcon from "@mui/icons-material/LiveTv";
 import { useEffect } from "react";
@@ -10,6 +9,7 @@ import {
 import { useTranslation } from "react-i18next";
 import useQueryIdParameter from "../../../../hooks/UseQueryIdParameter";
 import { ISessionMetadata } from "../../../../models/ISessionMetadata";
+import CodeGeneration from "./CodeGeneration";
 
 const Content = () => {
   const { t } = useTranslation();
@@ -33,7 +33,7 @@ const Content = () => {
       </Typography>
       <Grid container spacing={2} sx={{ mt: 2 }}>
         <Grid item xs={6} sx={{ minWidth: 350 }}>
-          <ProfessorCodeGeneration />
+          <CodeGeneration />
         </Grid>
         <Grid item xs={6} sx={{ minWidth: 350 }}>
           <PresentStudents />

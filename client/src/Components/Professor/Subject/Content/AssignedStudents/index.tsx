@@ -17,7 +17,7 @@ import { IAssignedStudentsProps } from "../../../../../models/Props/IAssignedStu
 import { useTranslation } from "react-i18next";
 import ContactPageIcon from "@mui/icons-material/ContactPage";
 import PersonIcon from "@mui/icons-material/Person";
-import BlockIcon from "@mui/icons-material/Block";
+import DeleteIcon from "@mui/icons-material/Delete";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import DownloadIcon from "@mui/icons-material/Download";
 import StarIcon from "@mui/icons-material/Star";
@@ -60,11 +60,11 @@ export const AssignedStudents: React.FC<IAssignedStudentsProps> = ({
               </Button>
               <Button
                 variant="contained"
-                color="warning"
+                color="error"
                 size="medium"
                 sx={{ mb: 1 }}
               >
-                <BlockIcon sx={{ mr: 0.5 }} /> {t("ResetAllPresencePoints")}
+                <DeleteIcon sx={{ mr: 0.5 }} /> {t("ResetAllPresencePoints")}
               </Button>
             </Stack>
             <TableContainer component={Paper} sx={{ mt: 1 }}>
@@ -132,8 +132,8 @@ export const AssignedStudents: React.FC<IAssignedStudentsProps> = ({
                     <TableCell align="center">Lastnamelastname</TableCell>
                     <TableCell align="center">3.2</TableCell>
                     <TableCell align="center">
-                      <Button variant="contained" color="warning" size="medium">
-                        <BlockIcon />
+                      <Button variant="contained" color="error" size="medium">
+                        <DeleteIcon />
                       </Button>
                     </TableCell>
                   </TableRow>

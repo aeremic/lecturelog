@@ -32,7 +32,7 @@ import {
   getCodeGeneratedState,
 } from "../../../../../services/HttpService/LectureService";
 
-const ProfessorCodeGeneration = () => {
+const CodeGeneration = () => {
   const { t } = useTranslation();
 
   const userId = useCurrentUserIdentifier();
@@ -206,4 +206,4 @@ const ProfessorCodeGeneration = () => {
   );
 };
 
-export default ProfessorCodeGeneration;
+export default CodeGeneration;

@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import TextFieldsIcon from "@mui/icons-material/TextFields";
 import StopCircleIcon from "@mui/icons-material/StopCircle";
-import PauseIcon from "@mui/icons-material/Pause";
+import StopIcon from "@mui/icons-material/Stop";
 import { IAssignedSubject } from "../../../../../models/IAssignedSubject";
 import { IActiveSubjectsProps } from "../../../../../models/Props/IActiveSubjectsProps";
 import { useTranslation } from "react-i18next";
@@ -48,7 +48,7 @@ const ActiveSubjects: React.FC<IActiveSubjectsProps> = ({
               >
                 {
                   // @ts-ignore
-                  <PauseIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                  <StopIcon fontSize="xs" sx={{ mr: 0.5 }} />
                 }
                 {t("EndAllLiveLectures")}
               </Button>
@@ -102,7 +102,7 @@ const ActiveSubjects: React.FC<IActiveSubjectsProps> = ({
                           size="medium"
                           disabled={subject.userId != userId}
                         >
-                          <PauseIcon />
+                          <StopIcon />
                         </Button>
                       </TableCell>
                     </TableRow>

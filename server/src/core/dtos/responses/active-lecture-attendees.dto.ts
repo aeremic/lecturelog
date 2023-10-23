@@ -1,7 +1,7 @@
 export class ActiveLectureAttendeeDto {
   id: number;
-  email: string;
   firstname: string;
+  lastname: string;
   index: number;
   year: number;
 }
