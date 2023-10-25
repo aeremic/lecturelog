@@ -1,5 +1,6 @@
+import { IRemovePresentStudentModel } from "../../models/IRemovePresentStudentModel";
 import { ISessionMetadata } from "../../models/ISessionMetadata";
-import { getById, post } from "./HttpServiceBase";
+import { getById, post, remove } from "./HttpServiceBase";
 
 const URL = "/lecture";
 
@@ -22,6 +23,16 @@ export const getCode = async (sessionData: ISessionMetadata) => {
 export const getCurrentlyPresentStudents = async (id: number) => {
   try {
     return await getById(`${URL}/getActiveLectureAttendees`, id);
+  } catch (err) {
+    console.log(err); // TODO: Fix for PROD.
+  }
+};
+
+export const removePresentStudent = async (
+  removePesentStudentModel: IRemovePresentStudentModel
+) => {
+  try {
+    return await post(`${URL}/removePresentStudent`, removePesentStudentModel);
   } catch (err) {
     console.log(err); // TODO: Fix for PROD.
   }
