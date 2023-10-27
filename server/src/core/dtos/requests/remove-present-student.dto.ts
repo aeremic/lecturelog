@@ -1,6 +1,6 @@
 import { IsNumber } from 'class-validator';
 
-export class RemovePresentStudentDto {
+export class RemoveLectureAttendeeDto {
   @IsNumber()
   public subjectId: number;
 
