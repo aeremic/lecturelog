@@ -7,14 +7,20 @@ import { Content } from "./Content";
 import { useEffect, useState } from "react";
 import { Alert, AlertColor, Snackbar } from "@mui/material";
 import { connect } from "../../../services/MessagingService";
+import useCurrentUserRole from "../../../hooks/UseCurrentUserRole";
+import { RoleEnum } from "../../../models/Enums";
 
 const AvailableSubjects = () => {
+  const userRole = useCurrentUserRole();
+
   const [openAlert, setOpenAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState<AlertColor>();
 
   useEffect(() => {
-    connect();
+    if (userRole == RoleEnum.Student) {
+      connect();
+    }
   });
 
   const handleCloseAlert = (
@@ -31,11 +37,18 @@ const AvailableSubjects = () => {
     <ThemeProvider theme={theme}>
       <Header />
       <ErrorBoundary fallback={<ErrorComponent />}>
-        <Content
-          setOpenAlert={setOpenAlert}
-          setAlertMessage={setAlertMessage}
-          setAlertType={setAlertType}
-        />
+        {userRole == RoleEnum.Student ? (
+          <>
+            <Content
+              setOpenAlert={setOpenAlert}
+              setAlertMessage={setAlertMessage}
+              setAlertType={setAlertType}
+            />
+          </>
+        ) : (
+          <></>
+        )}
+
         <Snackbar
           open={openAlert}
           autoHideDuration={6000}

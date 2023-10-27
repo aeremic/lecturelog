@@ -1,3 +1,4 @@
+import { ILogin } from "../../models/ILogin";
 import {
   getFromLocalStorage,
   removeFromLocalStorage,
@@ -6,11 +7,6 @@ import {
 import { post } from "./HttpServiceBase";
 
 const URL = "/auth";
-
-interface ILogin {
-  email: string;
-  password: string;
-}
 
 export const login = async (data: ILogin) => {
   try {

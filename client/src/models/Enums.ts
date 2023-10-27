@@ -3,6 +3,7 @@ export enum RoleEnum {
   Professor = "professor",
   Student = "student",
   Admin = "admin",
+  Invalid = "invalid",
 }
 
 export enum CodeGenerationState {
