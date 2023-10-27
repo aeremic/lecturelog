@@ -155,7 +155,7 @@ const PresentStudents = () => {
         if (
           res &&
           res.status &&
-          res.status === HttpStatusCode.Ok &&
+          res.status === HttpStatusCode.Created &&
           res.data > 0
         ) {
           setAlertType("success");
@@ -295,10 +295,8 @@ const PresentStudents = () => {
         id="stop-session-menu"
         keepMounted
         open={stopSessionDialogOpen}
-        title={t("Ending lecture and dismissing all points")}
-        content={t(
-          "This action will end current lecture and dismiss all gathered points for this live session. Are you sure you want to continue?"
-        )}
+        title={t("EndingLectureAndDismissingAllPoints")}
+        content={t("EndingLectureAction")}
         negativeAction={t("Cancel")}
         positiveAction={t("Yes")}
         value={-1}
@@ -308,10 +306,8 @@ const PresentStudents = () => {
         id="remove-present-student-menu"
         keepMounted
         open={removePresentStudentDialogOpen}
-        title={t("Removing student from the lecture")}
-        content={t(
-          "This action will remove selected student from the current live lecture and dismiss his points. Are you sure you want to continue?"
-        )}
+        title={t("RemovingStudentFromTheLecture")}
+        content={t("RemovingStudentAction")}
         negativeAction={t("Cancel")}
         positiveAction={t("Yes")}
         value={removePresentStudentIdValue}

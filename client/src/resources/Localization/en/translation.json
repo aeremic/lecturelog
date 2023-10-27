@@ -125,5 +125,11 @@
     "Send":"Send",
     "LiveLecturePassInfo": "Enter a temporary access code provided by a professor to acquire access to corresponding lecture.",
     "AccessCodeSent" : "Access code sent",
-    "CurrentlyThereAreNoPresentStudents": "Currently there are no present students. Provide students with temporary access code to allow them to join the lecture."
+    "CurrentlyThereAreNoPresentStudents": "Currently there are no present students. Provide students with temporary access code to allow them to join the lecture.",
+    "EndingLectureAndDismissingAllPoints":"Ending lecture and dismissing all points",
+    "EndingLectureAction":"This action will end current lecture and dismiss all gathered points for this live session. Are you sure you want to continue?",
+    "RemovingStudentFromTheLecture":"Removing student from the lecture",
+    "RemovingStudentAction":"This action will remove selected student from the current live lecture and dismiss his points. Are you sure you want to continue?",
+    "EndingAllLectures":"Ending all lectures without saving points",
+    "EndingAllLecturesAction":"This action will end all current lectures and dismiss all gathered points. Are you sure you want to continue?"
 }

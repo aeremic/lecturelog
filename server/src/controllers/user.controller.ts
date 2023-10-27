@@ -2,18 +2,12 @@ import {
   Body,
   Controller,
   Delete,
-  FileTypeValidator,
   Get,
   Inject,
-  MaxFileSizeValidator,
   Param,
-  ParseFilePipe,
   ParseIntPipe,
   Post,
-  Put,
-  UploadedFile,
   UseGuards,
-  UseInterceptors,
 } from '@nestjs/common';
 import { UserUseCases } from 'src/use-cases';
 import { UserEntity } from '../core/entities/user.entity';
@@ -23,7 +17,6 @@ import { RoleGuard } from 'src/auth/guards/role.guard';
 import { EmailRegistrationDto } from 'src/core/dtos';
 import { SendEmailVerificationDto } from 'src/core/dtos/requests/send-email-verification.dto';
 import { CreateUpdateUserResponseDto } from 'src/core/dtos/responses/create-update-user-response.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('api/user')
 export class UserController {

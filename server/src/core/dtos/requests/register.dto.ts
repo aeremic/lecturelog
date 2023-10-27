@@ -1,5 +1,5 @@
-import { IsEmail, IsNotEmpty, IsNumber, IsString } from "class-validator";
-import { RoleEnum } from "../../common/enums/role.enum";
+import { IsEmail, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { RoleEnum } from '../../common/enums/role.enum';
 
 export class RegisterDto {
   @IsString()
@@ -20,5 +20,5 @@ export class RegisterDto {
 
   @IsString()
   @IsNotEmpty()
-  public role: RoleEnum
+  public role: RoleEnum;
 }

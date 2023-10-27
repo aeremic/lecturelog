@@ -15,6 +15,7 @@ import { DoLectureAttendingDto } from 'src/core/dtos/do-lecture-attending.dto';
 import { ActiveLectureAttendeeDto } from 'src/core/dtos/responses/active-lecture-attendees.dto';
 import { UserUseCases } from '../user/user.use-case';
 import { UserEntity } from 'src/core/entities';
+import { RemovePresentStudentDto } from '../../core/dtos/requests/remove-present-student.dto';
 
 @Injectable()
 export class LectureUseCases {
@@ -401,6 +402,48 @@ export class LectureUseCases {
               year: attendees[i].year,
             });
           }
+        }
+      }
+    } catch (error) {
+      await this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
+    }
+
+    return result;
+  }
+
+  /**
+   * Method for removing given present student
+   * @param removePresentStudentDto Data transfer object containing required subject and student identifiers
+   * @returns Identifier of the removed student
+   */
+  async removePresentStudent(
+    removePresentStudentDto: RemovePresentStudentDto,
+  ): Promise<number> {
+    let result = 0;
+    try {
+      const lecturesEntity: ActiveLecturesEntity = JSON.parse(
+        await this.externalCache.get(CacheKeys.ActiveLectures, null),
+      );
+
+      if (lecturesEntity && lecturesEntity.activeLectures.length > 0) {
+        const lectureForChanging: ActiveLectureEntity =
+          lecturesEntity.activeLectures.find(
+            (element: ActiveLectureEntity) =>
+              element.subjectId == removePresentStudentDto.subjectId,
+          );
+
+        if (lectureForChanging) {
+          lectureForChanging.attendees = lectureForChanging.attendees.filter(
+            (item: ActiveLectureAttendee) =>
+              item.studentId != removePresentStudentDto.studentId,
+          );
+
+          await this.externalCache.set(
+            CacheKeys.ActiveLectures,
+            lecturesEntity,
+          );
+
+          result = removePresentStudentDto.studentId;
         }
       }
     } catch (error) {

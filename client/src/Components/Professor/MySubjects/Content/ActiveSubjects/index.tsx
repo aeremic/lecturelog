@@ -159,10 +159,8 @@ const ActiveSubjects: React.FC<IActiveSubjectsProps> = ({
         id="stop-all-session-menu"
         keepMounted
         open={stopAllSessionDialogOpen}
-        title={t("Ending all lectures without saving points")}
-        content={t(
-          "This action will end all current lectures and dismiss all gathered points. Are you sure you want to continue?"
-        )}
+        title={t("EndingAllLectures")}
+        content={t("EndingAllLecturesAction")}
         negativeAction={t("Cancel")}
         positiveAction={t("Yes")}
         value={-1}
@@ -172,10 +170,8 @@ const ActiveSubjects: React.FC<IActiveSubjectsProps> = ({
         id="stop-sessions-menu"
         keepMounted
         open={stopSessionDialogOpen}
-        title={t("Ending lecture without saving points")}
-        content={t(
-          "This action will end lecture and dismiss gathered points. Are you sure you want to continue?"
-        )}
+        title={t("EndingLectureAndDismissingAllPoints")}
+        content={t("EndingLectureAction")}
         negativeAction={t("Cancel")}
         positiveAction={t("Yes")}
         value={stopSessionSubjectIdValue}

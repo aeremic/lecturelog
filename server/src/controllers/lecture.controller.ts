@@ -44,4 +44,11 @@ export class LectureController {
   ): Promise<any> {
     return this.lectureUseCases.getActiveLectureAttendees(id);
   }
+
+  @Roles('professor')
+  @UseGuards(RoleGuard)
+  @Post('/removePresentStudent')
+  removePresentStudent(@Body() request: any): Promise<number> {
+    return this.lectureUseCases.removePresentStudent(request);
+  }
 }
