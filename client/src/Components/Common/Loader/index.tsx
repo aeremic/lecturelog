@@ -1,11 +1,15 @@
-import React from "react";
+import ReactLoading from "react-loading";
 
-interface ILoaderProps {
-  height?: string;
-}
-
-const Loader = ({ height }: ILoaderProps) => {
-  return <></>;
-};
+const Loader = ({
+  type,
+  color,
+  height,
+  width,
+}: {
+  type: any;
+  color: string;
+  height: number;
+  width: number;
+}) => <ReactLoading type={type} color={color} height={height} width={width} />;
 
 export default Loader;

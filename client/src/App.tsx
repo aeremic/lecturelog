@@ -1,6 +1,5 @@
 import React, { Suspense } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Loader from "./components/Common/Loader";
 import Login from "./components/Login";
 import Users from "./components/Admin/Users";
 import EmailRegistration from "./components/EmailRegistration";
@@ -13,11 +12,11 @@ import Subject from "./components/Professor/Subject";
 import AvailableSubjects from "./components/Student/AvailableSubjects";
 import { PrivateRoute } from "./components/Common/PrivateRoute";
 import { RoleEnum } from "./models/Enums";
-import Loading from "./components/Common/Loading";
+import LoadingComponent from "./components/Common/LoadingComponent";
 
 const App = () => {
   return (
-    <React.Suspense fallback={<Loader />}>
+    <React.Suspense fallback={<LoadingComponent />}>
       <BrowserRouter>
         <Routes>
           /**Login flow routes */
@@ -34,7 +33,7 @@ const App = () => {
           <Route
             path="/user/profile"
             element={
-              <Suspense fallback={<Loading />}>
+              <Suspense fallback={<LoadingComponent />}>
                 <PrivateRoute
                   roles={[RoleEnum.Admin, RoleEnum.Professor, RoleEnum.Student]}
                 >
@@ -47,7 +46,7 @@ const App = () => {
           <Route
             path="/admin/users"
             element={
-              <Suspense fallback={<Loading />}>
+              <Suspense fallback={<LoadingComponent />}>
                 <PrivateRoute roles={[RoleEnum.Admin]}>
                   <Users />
                 </PrivateRoute>
@@ -58,7 +57,7 @@ const App = () => {
           <Route
             path="/professor/mysubjects"
             element={
-              <Suspense fallback={<Loading />}>
+              <Suspense fallback={<LoadingComponent />}>
                 <PrivateRoute roles={[RoleEnum.Professor]}>
                   <MySubjects />
                 </PrivateRoute>
@@ -68,7 +67,7 @@ const App = () => {
           <Route
             path="/professor/subject"
             element={
-              <Suspense fallback={<Loading />}>
+              <Suspense fallback={<LoadingComponent />}>
                 <PrivateRoute roles={[RoleEnum.Professor]}>
                   <Subject />
                 </PrivateRoute>
@@ -78,7 +77,7 @@ const App = () => {
           <Route
             path="/professor/lecture"
             element={
-              <Suspense fallback={<Loading />}>
+              <Suspense fallback={<LoadingComponent />}>
                 <PrivateRoute roles={[RoleEnum.Professor]}>
                   <LectureRoom />
                 </PrivateRoute>
@@ -89,7 +88,7 @@ const App = () => {
           <Route
             path="/student/home"
             element={
-              <Suspense fallback={<Loading />}>
+              <Suspense fallback={<LoadingComponent />}>
                 <PrivateRoute roles={[RoleEnum.Student]}>
                   <AvailableSubjects />
                 </PrivateRoute>
