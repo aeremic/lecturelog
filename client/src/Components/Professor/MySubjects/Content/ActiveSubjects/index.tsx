@@ -19,6 +19,8 @@ import StopIcon from "@mui/icons-material/Stop";
 import { IAssignedSubject } from "../../../../../models/IAssignedSubject";
 import { IActiveSubjectsProps } from "../../../../../models/Props/IActiveSubjectsProps";
 import { useTranslation } from "react-i18next";
+import { useState } from "react";
+import ConfirmationDialog from "../../../../Common/ConfirmationDialog";
 
 const ActiveSubjects: React.FC<IActiveSubjectsProps> = ({
   userId,
@@ -31,6 +33,44 @@ const ActiveSubjects: React.FC<IActiveSubjectsProps> = ({
 
   const subjects: IAssignedSubject[] = subjectsProp;
 
+  const [stopAllSessionDialogOpen, setStopAllSessionDialogOpen] =
+    useState(false);
+
+  const [stopSessionDialogOpen, setStopSessionDialogOpen] = useState(false);
+  const [stopSessionSubjectIdValue, setStopSessionSubjectIdValue] =
+    useState(-1);
+
+  const handleStopAllSessionClick = () => {
+    setStopAllSessionDialogOpen(true);
+  };
+
+  const handleStopAllSessionDialogClose = async (
+    dialogResponseValue?: boolean
+  ) => {
+    setStopAllSessionDialogOpen(false);
+
+    if (dialogResponseValue) {
+      handleStopAllSession();
+    }
+  };
+
+  const handleStopSessionClick = (subjectId: number) => {
+    setStopSessionSubjectIdValue(subjectId);
+    setStopSessionDialogOpen(true);
+  };
+
+  const handleStopSessionDialogClose = async (
+    dialogResponseValue?: boolean
+  ) => {
+    setStopSessionDialogOpen(false);
+
+    if (dialogResponseValue) {
+      handleStopSession(stopSessionSubjectIdValue);
+    }
+
+    setStopSessionSubjectIdValue(-1);
+  };
+
   return (
     <>
       {subjects.length > 0 ? (
@@ -40,7 +80,7 @@ const ActiveSubjects: React.FC<IActiveSubjectsProps> = ({
             <Divider sx={{ mb: 2 }} />
             <Stack direction="row">
               <Button
-                onClick={handleStopAllSession}
+                onClick={handleStopAllSessionClick}
                 variant="contained"
                 color="error"
                 size="medium"
@@ -95,7 +135,7 @@ const ActiveSubjects: React.FC<IActiveSubjectsProps> = ({
                         <Button
                           onClick={(e) => {
                             e.stopPropagation();
-                            handleStopSession(subject.subjectId);
+                            handleStopSessionClick(subject.subjectId);
                           }}
                           variant="contained"
                           color="error"
@@ -115,6 +155,32 @@ const ActiveSubjects: React.FC<IActiveSubjectsProps> = ({
       ) : (
         <></>
       )}
+      <ConfirmationDialog
+        id="stop-all-session-menu"
+        keepMounted
+        open={stopAllSessionDialogOpen}
+        title={t("Ending all lectures without saving points")}
+        content={t(
+          "This action will end all current lectures and dismiss all gathered points. Are you sure you want to continue?"
+        )}
+        negativeAction={t("Cancel")}
+        positiveAction={t("Yes")}
+        value={-1}
+        onClose={handleStopAllSessionDialogClose}
+      />
+      <ConfirmationDialog
+        id="stop-sessions-menu"
+        keepMounted
+        open={stopSessionDialogOpen}
+        title={t("Ending lecture without saving points")}
+        content={t(
+          "This action will end lecture and dismiss gathered points. Are you sure you want to continue?"
+        )}
+        negativeAction={t("Cancel")}
+        positiveAction={t("Yes")}
+        value={stopSessionSubjectIdValue}
+        onClose={handleStopSessionDialogClose}
+      />
     </>
   );
 };

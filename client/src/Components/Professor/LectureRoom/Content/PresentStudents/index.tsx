@@ -113,12 +113,6 @@ const PresentStudents = () => {
   });
 
   const handleStopSessionClick = () => {
-    // setDialogTitle(t("Ending lecture and dismissing all points"));
-    // setDialogContent(
-    //   t(
-    //     "This action will end current live lecture and dismiss all gathered presence points. Are you sure you want to continue?"
-    //   )
-    // );
     setStopSessionDialogOpen(true);
   };
 
