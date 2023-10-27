@@ -42,11 +42,13 @@ import ConfirmationDialog from "../../../../Common/ConfirmationDialog";
 import { IRemovePresentStudentModel } from "../../../../../models/IRemovePresentStudentModel";
 import { ISessionMetadata } from "../../../../../models/ISessionMetadata";
 import { useNavigate } from "react-router-dom";
+import useCurrentUserIdentifier from "../../../../../hooks/UseCurrentUserIdentifier";
 
 const PresentStudents = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
+  const userId = useCurrentUserIdentifier();
   const subjectId = useQueryIdParameter();
 
   const [presentStudents, setPresentStudents] = useState<IPresentStudent[]>([]);
@@ -123,6 +125,7 @@ const PresentStudents = () => {
 
     if (dialogResponseValue) {
       const sessionData: ISessionMetadata = {
+        userId: userId,
         subjectId: subjectId,
       };
 

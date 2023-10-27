@@ -64,7 +64,7 @@ export const Content = () => {
   useEffect(() => {
     connect();
     const sessionsData: ISessionMetadata[] = activeSubjects.map((item) => {
-      return { subjectId: item.subjectId };
+      return { subjectId: item.subjectId, userId: item.userId };
     });
     joinActiveSessions(sessionsData);
 
@@ -80,6 +80,7 @@ export const Content = () => {
 
   const handleStartSession = (subjectId: number) => {
     const sessionData: ISessionMetadata = {
+      userId: userId,
       subjectId: subjectId,
     };
 
@@ -89,6 +90,7 @@ export const Content = () => {
 
   const handleStopSession = (subjectId: number) => {
     const sessionData: ISessionMetadata = {
+      userId: userId,
       subjectId: subjectId,
     };
 
@@ -98,7 +100,7 @@ export const Content = () => {
 
   const handleStopAllSession = () => {
     const sessionsData: ISessionMetadata[] = activeSubjects.map((item) => {
-      return { subjectId: item.subjectId };
+      return { subjectId: item.subjectId, userId: item.userId };
     });
 
     onStopAllSessions(sessionsData);

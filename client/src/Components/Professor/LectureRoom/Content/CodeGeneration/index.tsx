@@ -46,6 +46,7 @@ const CodeGeneration = () => {
   // TODO: Optimization: refactor below method to use only one method for getting code state and code, mitigating Promise creation and reducing number of requests to the server.
   useEffect(() => {
     const sessionData: ISessionMetadata = {
+      userId: userId,
       subjectId: subjectId,
     };
 
@@ -74,7 +75,10 @@ const CodeGeneration = () => {
     function onTimerEvent(value: any) {
       if (value && value.session) {
         const sessionData: ISessionMetadata = JSON.parse(value.session);
-        if (sessionData.subjectId === subjectId) {
+        if (
+          sessionData.userId === userId &&
+          sessionData.subjectId === subjectId
+        ) {
           if (value.lectureTimerEventType === LectureTimerEventType.Tick) {
             setTimer(value.lectureTimerCount);
           } else if (
@@ -90,7 +94,10 @@ const CodeGeneration = () => {
     function onCodeEvent(value: any) {
       if (value && value.session) {
         const sessionData: ISessionMetadata = JSON.parse(value.session);
-        if (sessionData.subjectId === subjectId) {
+        if (
+          sessionData.userId === userId &&
+          sessionData.subjectId === subjectId
+        ) {
           setCode(value.lectureCodeValue);
           setCurrentCodeState(value.lectureCodeEventType);
         }
@@ -106,6 +113,7 @@ const CodeGeneration = () => {
 
   const handleGenerateCodeClick = () => {
     const sessionData: ISessionMetadata = {
+      userId: userId,
       subjectId: subjectId,
     };
 
@@ -114,6 +122,7 @@ const CodeGeneration = () => {
 
   const handleCancelGenerateCodeClick = () => {
     const sessionData: ISessionMetadata = {
+      userId: userId,
       subjectId: subjectId,
     };
 

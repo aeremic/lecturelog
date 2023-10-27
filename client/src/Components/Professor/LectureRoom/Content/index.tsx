@@ -10,14 +10,17 @@ import { useTranslation } from "react-i18next";
 import useQueryIdParameter from "../../../../hooks/UseQueryIdParameter";
 import { ISessionMetadata } from "../../../../models/ISessionMetadata";
 import CodeGeneration from "./CodeGeneration";
+import useCurrentUserIdentifier from "../../../../hooks/UseCurrentUserIdentifier";
 
 const Content = () => {
   const { t } = useTranslation();
 
+  const userId = useCurrentUserIdentifier();
   const subjectId = useQueryIdParameter();
 
   useEffect(() => {
     const sessionData: ISessionMetadata = {
+      userId: userId,
       subjectId: subjectId,
     };
 

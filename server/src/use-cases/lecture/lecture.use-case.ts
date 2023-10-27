@@ -81,6 +81,7 @@ export class LectureUseCases {
       if (lectureKeysParsed && lectureKeysParsed.length > 0) {
         lectureKeysParsed.forEach((parsedKey) => {
           const lecture: ActiveLectureIdentity = {
+            userId: parsedKey.userId,
             subjectId: parsedKey.subjectId,
           };
 
@@ -163,6 +164,7 @@ export class LectureUseCases {
       const lectureForStarting: ActiveLectureEntity =
         lecturesEntity.activeLectures.find(
           (element: ActiveLectureEntity) =>
+            element.userId == lectureIdentity.userId &&
             element.subjectId == lectureIdentity.subjectId,
         );
 
@@ -172,6 +174,7 @@ export class LectureUseCases {
         lectureForStarting.timerId = timerId;
       } else {
         const lectureForAdding: ActiveLectureEntity = {
+          userId: lectureIdentity.userId,
           subjectId: lectureIdentity.subjectId,
           state: state,
           code: code,
@@ -204,6 +207,7 @@ export class LectureUseCases {
         const lectureForStopping: ActiveLectureEntity =
           lecturesEntity.activeLectures.find(
             (element: ActiveLectureEntity) =>
+              element.userId == lectureIdentity.userId &&
               element.subjectId == lectureIdentity.subjectId,
           );
 
@@ -251,6 +255,7 @@ export class LectureUseCases {
         const lectureForStopping: ActiveLectureEntity =
           lecturesEntity.activeLectures.find(
             (element: ActiveLectureEntity) =>
+              element.userId == lectureIdentity.userId &&
               element.subjectId == lectureIdentity.subjectId,
           );
 
@@ -519,7 +524,11 @@ export class LectureUseCases {
             lecturesEntity,
           );
 
-          result = { subjectId: lecture.subjectId };
+          const lectureIdentity: ActiveLectureIdentity = {
+            userId: lecture.userId,
+            subjectId: lecture.subjectId,
+          };
+          result = lectureIdentity;
         }
       }
     }

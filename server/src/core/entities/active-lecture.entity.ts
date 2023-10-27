@@ -2,6 +2,7 @@ import { ActiveLectureCodeState } from '../common/enums/code.enum';
 import { ActiveLectureAttendee } from './active-lecture-attendee.entity';
 
 export class ActiveLectureEntity {
+  public userId: number;
   public subjectId: number;
   public state: ActiveLectureCodeState;
   public code: string;

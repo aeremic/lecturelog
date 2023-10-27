@@ -1,4 +1,3 @@
-import { ISessionMetadata } from "../../models/ISessionMetadata";
 import { get, getById, getFile, post } from "./HttpServiceBase";
 
 const URL = "/professor";
