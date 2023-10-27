@@ -1,33 +1,23 @@
-import React from "react";
-import { connect } from "react-redux";
-import { Route, Navigate } from "react-router-dom";
-import { AppState } from "../../../store/index";
+import { Fragment, ReactNode } from "react";
+import { Navigate } from "react-router-dom";
+import { RoleEnum } from "../../../models/Enums";
+import useCurrentUserRole from "../../../hooks/UseCurrentUserRole";
+import useCurrentUserIdentifier from "../../../hooks/UseCurrentUserIdentifier";
 
-interface IPrivateRouteProps {
-  auth?: boolean;
-  path: string;
-  children?: React.ReactNode;
-}
-
-const PrivateRoute = ({
-  auth,
-  path,
+export function PrivateRoute({
   children,
-  ...rest
-}: IPrivateRouteProps) => {
-  return (
-    <Route
-      {...rest}
-      path={path}
-      element={/*auth*/ true ? children : <Navigate to="/login" />}
-    />
-  );
-};
+  roles,
+}: {
+  children: ReactNode;
+  roles: Array<RoleEnum>;
+}) {
+  const userId = useCurrentUserIdentifier();
+  const userRole = useCurrentUserRole();
+  const canAccess = userId > 0 && roles.includes(userRole);
 
-const mapStateToProps = (state: AppState) => {
-  return {
-    auth: state.auth.isAuth,
-  };
-};
+  if (canAccess) {
+    return <Fragment>{children}</Fragment>;
+  }
 
-export default connect(mapStateToProps)(PrivateRoute);
+  return <Navigate to="/"></Navigate>;
+}
