@@ -47,8 +47,8 @@ export class LectureController {
 
   @Roles('professor')
   @UseGuards(RoleGuard)
-  @Post('/removePresentStudent')
-  removePresentStudent(@Body() request: any): Promise<number> {
-    return this.lectureUseCases.removePresentStudent(request);
+  @Post('/removeLectureAttendee')
+  removeLectureAttendee(@Body() request: any): Promise<number> {
+    return this.lectureUseCases.removeLectureAttendee(request);
   }
 }

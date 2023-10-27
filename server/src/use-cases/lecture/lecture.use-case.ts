@@ -15,7 +15,7 @@ import { DoLectureAttendingDto } from 'src/core/dtos/do-lecture-attending.dto';
 import { ActiveLectureAttendeeDto } from 'src/core/dtos/responses/active-lecture-attendees.dto';
 import { UserUseCases } from '../user/user.use-case';
 import { UserEntity } from 'src/core/entities';
-import { RemovePresentStudentDto } from '../../core/dtos/requests/remove-present-student.dto';
+import { RemoveLectureAttendeeDto } from '../../core/dtos/requests/remove-present-student.dto';
 
 @Injectable()
 export class LectureUseCases {
@@ -373,6 +373,11 @@ export class LectureUseCases {
     return result;
   }
 
+  /**
+   * Get all lecture attendees
+   * @param subjectId Identifier for lecture
+   * @returns Data transfer object of active lecture attendees
+   */
   async getActiveLectureAttendees(
     subjectId: number,
   ): Promise<ActiveLectureAttendeeDto[]> {
@@ -412,12 +417,12 @@ export class LectureUseCases {
   }
 
   /**
-   * Method for removing given present student
-   * @param removePresentStudentDto Data transfer object containing required subject and student identifiers
-   * @returns Identifier of the removed student
+   * Method for removing given lecture attendee
+   * @param removeLectureAttendeeDto Data transfer object containing required subject and attendee identifiers
+   * @returns Identifier of the removed attendee
    */
-  async removePresentStudent(
-    removePresentStudentDto: RemovePresentStudentDto,
+  async removeLectureAttendee(
+    removeLectureAttendeeDto: RemoveLectureAttendeeDto,
   ): Promise<number> {
     let result = 0;
     try {
@@ -429,13 +434,13 @@ export class LectureUseCases {
         const lectureForChanging: ActiveLectureEntity =
           lecturesEntity.activeLectures.find(
             (element: ActiveLectureEntity) =>
-              element.subjectId == removePresentStudentDto.subjectId,
+              element.subjectId == removeLectureAttendeeDto.subjectId,
           );
 
         if (lectureForChanging) {
           lectureForChanging.attendees = lectureForChanging.attendees.filter(
             (item: ActiveLectureAttendee) =>
-              item.studentId != removePresentStudentDto.studentId,
+              item.studentId != removeLectureAttendeeDto.studentId,
           );
 
           await this.externalCache.set(
@@ -443,7 +448,7 @@ export class LectureUseCases {
             lecturesEntity,
           );
 
-          result = removePresentStudentDto.studentId;
+          result = removeLectureAttendeeDto.studentId;
         }
       }
     } catch (error) {

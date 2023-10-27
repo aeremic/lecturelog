@@ -32,7 +32,7 @@ export const removePresentStudent = async (
   removePesentStudentModel: IRemovePresentStudentModel
 ) => {
   try {
-    return await post(`${URL}/removePresentStudent`, removePesentStudentModel);
+    return await post(`${URL}/removeLectureAttendee`, removePesentStudentModel);
   } catch (err) {
     console.log(err); // TODO: Fix for PROD.
   }
