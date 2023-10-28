@@ -1,26 +1,90 @@
 import { InjectRedis } from '@liaoliaots/nestjs-redis';
 import { Injectable } from '@nestjs/common';
-import Redis from 'ioredis';
 import { ExternalCacheSevice } from './external-cache.service';
 import { RedisCommands } from './redis.constant';
+import Redis from 'ioredis';
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const ReadWriteLock = require('rwlock');
 
 @Injectable()
 export class RedisService implements ExternalCacheSevice {
-  constructor(@InjectRedis() private readonly redis: Redis) {}
+  private rwLock = null;
+
+  constructor(@InjectRedis() private readonly redis: Redis) {
+    this.rwLock = new ReadWriteLock();
+  }
 
   get(id: string, path: string = undefined): Promise<any> {
-    if (path) {
-      return this.redis.call(RedisCommands.GET, id, path);
-    } else {
-      return this.redis.call(RedisCommands.GET, id);
-    }
+    let result = undefined;
+    const redisInstance = this.redis;
+
+    this.rwLock.readLock(function (release: () => void) {
+      if (path) {
+        result = redisInstance
+          .call(RedisCommands.GET, id, path)
+          .then((res: any) => {
+            release();
+            return res;
+          })
+          .catch(() => {
+            release();
+            return undefined;
+          });
+      } else {
+        result = redisInstance
+          .call(RedisCommands.GET, id)
+          .then((res: any) => {
+            release();
+            return res;
+          })
+          .catch(() => {
+            release();
+            return undefined;
+          });
+      }
+    });
+
+    return result;
   }
 
   set(id: string, object: any): Promise<any> {
-    return this.redis.call(RedisCommands.SET, id, '$', JSON.stringify(object));
+    let result = undefined;
+    const redisInstance = this.redis;
+
+    this.rwLock.writeLock(function (release: () => void) {
+      result = redisInstance
+        .call(RedisCommands.SET, id, '$', JSON.stringify(object))
+        .then((res: any) => {
+          release();
+          return res;
+        })
+        .catch(() => {
+          release();
+          return undefined;
+        });
+    });
+
+    return result;
   }
 
   delete(id: string): Promise<any> {
-    return this.redis.call(RedisCommands.DELETE, id);
+    let result = undefined;
+    const redisInstance = this.redis;
+
+    this.rwLock.writeLock(function (release: () => void) {
+      result = redisInstance
+        .call(RedisCommands.DELETE, id)
+        .then((res) => {
+          release();
+          return res;
+        })
+        .catch(() => {
+          release();
+          return undefined;
+        });
+    });
+
+    return result;
   }
 }
