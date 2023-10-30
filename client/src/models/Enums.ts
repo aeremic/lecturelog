@@ -17,6 +17,7 @@ export enum MessagingEnum {
   JoinActiveLecture = "joinActiveLecture",
   CreateLecture = "createLecture",
   EndLecture = "endLecture",
+  SaveLecture = "saveLecture",
   EndLectures = "endLectures",
   StartLectureWork = "startLectureWork",
   CancelLectureWork = "cancelLectureWork",

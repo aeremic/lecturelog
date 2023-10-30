@@ -31,6 +31,7 @@ import {
 import {
   dispose,
   listening,
+  onSaveSession,
   onStopSession,
 } from "../../../../../services/MessagingService";
 import { HttpStatusCode } from "axios";
@@ -62,6 +63,8 @@ const PresentStudents = () => {
     useState<boolean>(false);
 
   const [stopSessionDialogOpen, setStopSessionDialogOpen] = useState(false);
+
+  const [saveSessionDialogOpen, setSaveSessionDialogOpen] = useState(false);
 
   const [removePresentStudentDialogOpen, setRemovePresentStudentDialogOpen] =
     useState(false);
@@ -142,6 +145,28 @@ const PresentStudents = () => {
     }
   };
 
+  const handleSaveSessionClick = () => {
+    setSaveSessionDialogOpen(true);
+  };
+
+  const handleSaveSessionDialogClose = async (
+    dialogResponseValue?: boolean
+  ) => {
+    setSaveSessionDialogOpen(false);
+
+    if (dialogResponseValue) {
+      const sessionData: ISessionMetadata = {
+        userId: userId,
+        subjectId: subjectId,
+      };
+
+      onSaveSession(sessionData);
+      navigate(`/professor/mysubjects`, {
+        replace: true,
+      });
+    }
+  };
+
   const handleRemovePresentStudentClick = (studentId: number) => {
     setRemovePresentStudentIdValue(studentId);
     setRemovePresentStudentDialogOpen(true);
@@ -203,6 +228,7 @@ const PresentStudents = () => {
             <>
               <Stack direction="row">
                 <Button
+                  onClick={handleSaveSessionClick}
                   variant="contained"
                   color="success"
                   size="medium"
@@ -311,6 +337,17 @@ const PresentStudents = () => {
         positiveAction={t("Yes")}
         value={-1}
         onClose={handleStopSessionDialogClose}
+      />
+      <ConfirmationDialog
+        id="save-session-menu"
+        keepMounted
+        open={saveSessionDialogOpen}
+        title={t("SavingLectureAndPoints")}
+        content={t("SavingLectureAction")}
+        negativeAction={t("Cancel")}
+        positiveAction={t("Yes")}
+        value={-1}
+        onClose={handleSaveSessionDialogClose}
       />
       <ConfirmationDialog
         id="remove-present-student-menu"

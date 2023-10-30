@@ -131,5 +131,7 @@
     "RemovingStudentFromTheLecture":"Removing student from the lecture",
     "RemovingStudentAction":"This action will remove selected student from the current live lecture and dismiss his points. Are you sure you want to continue?",
     "EndingAllLectures":"Ending all lectures without saving points",
-    "EndingAllLecturesAction":"This action will end all current lectures and dismiss all gathered points. Are you sure you want to continue?"
+    "EndingAllLecturesAction":"This action will end all current lectures and dismiss all gathered points. Are you sure you want to continue?",
+    "SavingLectureAndPoints":"Saving lecture and points",
+    "SavingLectureAction":"This action will end current lecture and save all gathered points for this live session. Are you sure you want to continue?"
 }
