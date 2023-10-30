@@ -3,9 +3,16 @@ import { ThemeProvider } from "@mui/material/styles";
 import theme from "../../../styles";
 import Header from "../../Common/Header";
 import ErrorComponent from "../../Common/ErrorComponent";
-import Content from "./Content";
+import { Content } from "./Content";
+import { createContext } from "react";
+import { CodeGenerationState } from "../../../models/Enums";
 
-const LectureRoom = () => {
+export const CurrentCodeStateContext = createContext({
+  currentCodeState: CodeGenerationState.notGenerated,
+  setCurrentCodeState: (state: CodeGenerationState) => {},
+});
+
+export const LectureRoom = () => {
   return (
     <ThemeProvider theme={theme}>
       <Header />
@@ -23,5 +30,3 @@ const LectureRoom = () => {
     </ThemeProvider>
   );
 };
-
-export default LectureRoom;

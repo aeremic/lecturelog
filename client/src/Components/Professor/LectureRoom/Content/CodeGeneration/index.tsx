@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import PinIcon from "@mui/icons-material/Pin";
 import CloseIcon from "@mui/icons-material/Close";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CodeGenerationState } from "../../../../../models/Enums";
 import {
   dispose,
@@ -31,6 +31,7 @@ import {
   getCode,
   getCodeGeneratedState,
 } from "../../../../../services/HttpService/LectureService";
+import { CurrentCodeStateContext } from "../..";
 
 const CodeGeneration = () => {
   const { t } = useTranslation();
@@ -38,9 +39,10 @@ const CodeGeneration = () => {
   const userId = useCurrentUserIdentifier();
   const subjectId = useQueryIdParameter();
 
-  const [currentCodeState, setCurrentCodeState] = useState<CodeGenerationState>(
-    CodeGenerationState.notGenerated
+  const { currentCodeState, setCurrentCodeState } = useContext(
+    CurrentCodeStateContext
   );
+
   const [code, setCode] = useState<string>();
 
   // TODO: Optimization: refactor below method to use only one method for getting code state and code, mitigating Promise creation and reducing number of requests to the server.

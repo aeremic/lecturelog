@@ -23,8 +23,11 @@ import SaveIcon from "@mui/icons-material/Save";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 import StopIcon from "@mui/icons-material/Stop";
 import { useTranslation } from "react-i18next";
-import { useEffect, useState } from "react";
-import { MessagingEvent } from "../../../../../models/Enums";
+import { useContext, useEffect, useState } from "react";
+import {
+  CodeGenerationState,
+  MessagingEvent,
+} from "../../../../../models/Enums";
 import {
   dispose,
   listening,
@@ -43,6 +46,7 @@ import { IRemovePresentStudentModel } from "../../../../../models/IRemovePresent
 import { ISessionMetadata } from "../../../../../models/ISessionMetadata";
 import { useNavigate } from "react-router-dom";
 import useCurrentUserIdentifier from "../../../../../hooks/UseCurrentUserIdentifier";
+import { CurrentCodeStateContext } from "../..";
 
 const PresentStudents = () => {
   const navigate = useNavigate();
@@ -50,6 +54,8 @@ const PresentStudents = () => {
 
   const userId = useCurrentUserIdentifier();
   const subjectId = useQueryIdParameter();
+
+  const { currentCodeState } = useContext(CurrentCodeStateContext);
 
   const [presentStudents, setPresentStudents] = useState<IPresentStudent[]>([]);
   const [presentStudentsLoaded, setPresentStudentsLoaded] =
@@ -200,6 +206,7 @@ const PresentStudents = () => {
                   variant="contained"
                   color="success"
                   size="medium"
+                  disabled={currentCodeState == CodeGenerationState.generated}
                   sx={{ mb: 1, mr: 2 }}
                 >
                   <SaveIcon sx={{ mr: 0.5 }} />

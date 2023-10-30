@@ -5,7 +5,6 @@ import Users from "./components/Admin/Users";
 import EmailRegistration from "./components/EmailRegistration";
 import MySubjects from "./components/Professor/MySubjects";
 import Profile from "./components/User/Profile";
-import LectureRoom from "./components/Professor/LectureRoom";
 import Register from "./components/Register";
 import RegisterConfirmation from "./components/RegisterConfirmation";
 import Subject from "./components/Professor/Subject";
@@ -13,6 +12,7 @@ import AvailableSubjects from "./components/Student/AvailableSubjects";
 import { PrivateRoute } from "./components/Common/PrivateRoute";
 import { RoleEnum } from "./models/Enums";
 import LoadingComponent from "./components/Common/LoadingComponent";
+import { LectureRoom } from "./components/Professor/LectureRoom";
 
 const App = () => {
   return (

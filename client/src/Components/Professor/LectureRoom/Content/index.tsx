@@ -1,7 +1,7 @@
 import { Container, Grid, Typography } from "@mui/material";
 import PresentStudents from "./PresentStudents";
 import LiveTvIcon from "@mui/icons-material/LiveTv";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   connect,
   joinActiveSession,
@@ -12,10 +12,15 @@ import { ISessionMetadata } from "../../../../models/ISessionMetadata";
 import CodeGeneration from "./CodeGeneration";
 import useCurrentUserIdentifier from "../../../../hooks/UseCurrentUserIdentifier";
 import useCurrentUserRole from "../../../../hooks/UseCurrentUserRole";
-import { RoleEnum } from "../../../../models/Enums";
+import { CodeGenerationState, RoleEnum } from "../../../../models/Enums";
+import { CurrentCodeStateContext } from "..";
 
-const Content = () => {
+export const Content = () => {
   const { t } = useTranslation();
+
+  const [currentCodeState, setCurrentCodeState] = useState(
+    CodeGenerationState.notGenerated
+  );
 
   const userId = useCurrentUserIdentifier();
   const userRole = useCurrentUserRole();
@@ -36,7 +41,9 @@ const Content = () => {
   return (
     <Container sx={{ mt: 4 }}>
       {userRole == RoleEnum.Professor ? (
-        <>
+        <CurrentCodeStateContext.Provider
+          value={{ currentCodeState, setCurrentCodeState }}
+        >
           <Typography variant="h5">
             <LiveTvIcon fontSize="small" sx={{ mr: 0.5 }} />
             {t("LiveLecture")}
@@ -49,12 +56,10 @@ const Content = () => {
               <PresentStudents />
             </Grid>
           </Grid>
-        </>
+        </CurrentCodeStateContext.Provider>
       ) : (
         <></>
       )}
     </Container>
   );
 };
-
-export default Content;
