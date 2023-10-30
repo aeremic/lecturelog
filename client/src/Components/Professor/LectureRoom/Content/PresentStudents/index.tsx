@@ -309,6 +309,10 @@ const PresentStudents = () => {
                               variant="contained"
                               color="error"
                               size="medium"
+                              disabled={
+                                currentCodeState ==
+                                CodeGenerationState.generated
+                              }
                             >
                               <DeleteIcon />
                             </Button>
