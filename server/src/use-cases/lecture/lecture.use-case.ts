@@ -340,6 +340,11 @@ export class LectureUseCases {
     }
   }
 
+  /**
+   * Method for saving lecture work
+   * @param lectureKey
+   * @returns true if lecture work is successfully saved, otherwise false
+   */
   async saveLectureWork(lectureKey: string): Promise<boolean> {
     let result = false;
 

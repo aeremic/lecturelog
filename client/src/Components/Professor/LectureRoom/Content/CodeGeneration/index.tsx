@@ -175,7 +175,7 @@ const CodeGeneration = () => {
                             justifyContent="center"
                             alignItems="center"
                           >
-                            <Typography variant="h4">{code}</Typography>
+                            <Typography variant="h1">{code}</Typography>
                           </Box>
                           <Divider />
                           <Box
