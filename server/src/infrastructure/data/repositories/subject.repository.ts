@@ -53,6 +53,7 @@ export class SubjectRepository implements SubjectRepositoryAbstract {
     return result;
   }
 
+  // TODO: PROD - Remove printSql statements
   async getSubject(id: number): Promise<SubjectEntity> {
     const result = await this.subjectModelRepository
       .createQueryBuilder('subject')
@@ -73,6 +74,7 @@ export class SubjectRepository implements SubjectRepositoryAbstract {
     });
   }
 
+  // TODO: PROD - Remove printSql statements
   async getSubjectsByProfessorId(id: number): Promise<SubjectEntity[]> {
     const result = await this.subjectModelRepository
       .createQueryBuilder('subject')
@@ -84,6 +86,7 @@ export class SubjectRepository implements SubjectRepositoryAbstract {
     return SubjectMapper.ToEntities(result);
   }
 
+  // TODO: PROD - Remove printSql statements
   async getSubjectsByStudentId(id: number): Promise<SubjectEntity[]> {
     const result = await this.subjectModelRepository
       .createQueryBuilder('subject')

@@ -8,7 +8,9 @@ export class SubjectMapper {
     const subjectEntity: SubjectEntity = {
       id: subjectModel?.id,
       name: subjectModel?.name,
-      pointsPerPresence: subjectModel?.pointsPerPresence,
+      pointsPerPresence: Number.parseFloat(
+        subjectModel?.pointsPerPresence?.toString(),
+      ),
       professor: UserMapper.ToEntity(subjectModel?.professor),
       studentsSubjects: StudentsSubjectsMapper.ToEntities(
         subjectModel?.studentsSubjects,
@@ -33,7 +35,9 @@ export class SubjectMapper {
     const subjectModel: Subject = {
       id: subjectEntity?.id,
       name: subjectEntity?.name,
-      pointsPerPresence: subjectEntity?.pointsPerPresence,
+      pointsPerPresence: Number.parseFloat(
+        subjectEntity?.pointsPerPresence?.toString(),
+      ),
       professor: UserMapper.ToModel(subjectEntity?.professor),
       studentsSubjects: StudentsSubjectsMapper.ToModels(
         subjectEntity?.studentsSubjects,

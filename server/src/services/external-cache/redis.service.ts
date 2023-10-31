@@ -19,31 +19,33 @@ export class RedisService implements ExternalCacheSevice {
     let result = undefined;
     const redisInstance = this.redis;
 
-    this.rwLock.readLock(function (release: () => void) {
-      if (path) {
-        result = redisInstance
-          .call(RedisCommands.GET, id, path)
-          .then((res: any) => {
-            release();
-            return res;
-          })
-          .catch(() => {
-            release();
-            return undefined;
-          });
-      } else {
-        result = redisInstance
-          .call(RedisCommands.GET, id)
-          .then((res: any) => {
-            release();
-            return res;
-          })
-          .catch(() => {
-            release();
-            return undefined;
-          });
-      }
-    });
+    if (id) {
+      this.rwLock.readLock(function (release: () => void) {
+        if (path) {
+          result = redisInstance
+            .call(RedisCommands.GET, id, path)
+            .then((res: any) => {
+              release();
+              return res;
+            })
+            .catch(() => {
+              release();
+              return undefined;
+            });
+        } else {
+          result = redisInstance
+            .call(RedisCommands.GET, id)
+            .then((res: any) => {
+              release();
+              return res;
+            })
+            .catch(() => {
+              release();
+              return undefined;
+            });
+        }
+      });
+    }
 
     return result;
   }
@@ -52,18 +54,20 @@ export class RedisService implements ExternalCacheSevice {
     let result = undefined;
     const redisInstance = this.redis;
 
-    this.rwLock.writeLock(function (release: () => void) {
-      result = redisInstance
-        .call(RedisCommands.SET, id, '$', JSON.stringify(object))
-        .then((res: any) => {
-          release();
-          return res;
-        })
-        .catch(() => {
-          release();
-          return undefined;
-        });
-    });
+    if (id) {
+      this.rwLock.writeLock(function (release: () => void) {
+        result = redisInstance
+          .call(RedisCommands.SET, id, '$', JSON.stringify(object))
+          .then((res: any) => {
+            release();
+            return res;
+          })
+          .catch(() => {
+            release();
+            return undefined;
+          });
+      });
+    }
 
     return result;
   }
@@ -72,18 +76,20 @@ export class RedisService implements ExternalCacheSevice {
     let result = undefined;
     const redisInstance = this.redis;
 
-    this.rwLock.writeLock(function (release: () => void) {
-      result = redisInstance
-        .call(RedisCommands.DELETE, id)
-        .then((res) => {
-          release();
-          return res;
-        })
-        .catch(() => {
-          release();
-          return undefined;
-        });
-    });
+    if (id) {
+      this.rwLock.writeLock(function (release: () => void) {
+        result = redisInstance
+          .call(RedisCommands.DELETE, id)
+          .then((res) => {
+            release();
+            return res;
+          })
+          .catch(() => {
+            release();
+            return undefined;
+          });
+      });
+    }
 
     return result;
   }

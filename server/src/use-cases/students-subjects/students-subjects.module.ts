@@ -7,14 +7,14 @@ import { StudentsSubjectsRepositoryAbstract } from 'src/core/abstracts/repositor
 import { StudentsSubjectsRepository } from 'src/infrastructure/data/repositories/students-subjects.repository';
 
 @Module({
-    imports: [LoggerModule, TypeOrmModule.forFeature([StudentsSubjects])],
-    providers: [
-        StudentsSubjectsUseCases,
-        {
-            provide: StudentsSubjectsRepositoryAbstract,
-            useClass: StudentsSubjectsRepository
-        }
-    ],
-    exports: [StudentsSubjectsUseCases]
+  imports: [LoggerModule, TypeOrmModule.forFeature([StudentsSubjects])],
+  providers: [
+    StudentsSubjectsUseCases,
+    {
+      provide: StudentsSubjectsRepositoryAbstract,
+      useClass: StudentsSubjectsRepository,
+    },
+  ],
+  exports: [StudentsSubjectsUseCases],
 })
-export class StudentsSubjectsModule { }
+export class StudentsSubjectsModule {}

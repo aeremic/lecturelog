@@ -9,9 +9,11 @@ export class StudentsSubjectsMapper {
   ): StudentsSubjectsEntity {
     const studentsSubjectsEntity: StudentsSubjectsEntity = {
       id: studentsSubjectsModel?.id,
-      sumOfPresencePoints: studentsSubjectsModel?.sumOfPresencePoints,
-      student: UserMapper.ToEntity(studentsSubjectsModel?.student),
-      subject: SubjectMapper.ToEntity(studentsSubjectsModel?.subject),
+      sumOfPresencePoints: Number.parseFloat(
+        studentsSubjectsModel?.sumOfPresencePoints?.toString(),
+      ),
+      studentId: studentsSubjectsModel.studentId,
+      subjectId: studentsSubjectsModel?.subjectId,
     };
 
     return studentsSubjectsEntity;
@@ -37,11 +39,13 @@ export class StudentsSubjectsMapper {
   ): StudentsSubjects {
     const studentsSubjects: StudentsSubjects = {
       id: studentsSubjectsEntity?.id,
-      sumOfPresencePoints: studentsSubjectsEntity?.sumOfPresencePoints,
-      student: UserMapper.ToModel(studentsSubjectsEntity?.student),
-      studentId: studentsSubjectsEntity?.student?.id,
-      subjectId: studentsSubjectsEntity?.subject?.id,
+      sumOfPresencePoints: Number.parseFloat(
+        studentsSubjectsEntity?.sumOfPresencePoints?.toString(),
+      ),
+      studentId: studentsSubjectsEntity?.studentId,
+      subjectId: studentsSubjectsEntity?.subjectId,
 
+      student: undefined,
       subject: undefined,
     };
 

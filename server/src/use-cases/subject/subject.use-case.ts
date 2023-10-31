@@ -85,7 +85,10 @@ export class SubjectUseCases extends GenericUseCases<SubjectEntity> {
         const subjectEntity: SubjectEntity = {
           id: createUpdateSubjectRequestDto.id,
           name: createUpdateSubjectRequestDto.name,
-          pointsPerPresence: createUpdateSubjectRequestDto.pointsPerPresence,
+          pointsPerPresence:
+            createUpdateSubjectRequestDto.pointsPerPresence >= 0
+              ? createUpdateSubjectRequestDto.pointsPerPresence
+              : 0,
           professor: professor,
         };
 

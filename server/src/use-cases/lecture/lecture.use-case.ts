@@ -14,8 +14,14 @@ import { ActiveLectureAttendee } from 'src/core/entities/active-lecture-attendee
 import { DoLectureAttendingDto } from 'src/core/dtos/do-lecture-attending.dto';
 import { ActiveLectureAttendeeDto } from 'src/core/dtos/responses/active-lecture-attendees.dto';
 import { UserUseCases } from '../user/user.use-case';
-import { UserEntity } from 'src/core/entities';
+import {
+  StudentsSubjectsEntity,
+  SubjectEntity,
+  UserEntity,
+} from 'src/core/entities';
 import { RemoveLectureAttendeeDto } from '../../core/dtos/requests/remove-present-student.dto';
+import { SubjectUseCases } from '../subject/subject.use-case';
+import { StudentsSubjectsUseCases } from '../students-subjects/students-subjects.use-case';
 
 @Injectable()
 export class LectureUseCases {
@@ -26,6 +32,12 @@ export class LectureUseCases {
 
   @Inject(forwardRef(() => UserUseCases))
   private userUseCase: UserUseCases;
+
+  @Inject(SubjectUseCases)
+  private subjectUseCase: SubjectUseCases;
+
+  @Inject(StudentsSubjectsUseCases)
+  private studentsSubjectsUseCases: StudentsSubjectsUseCases;
 
   @Inject(LoggerUseCases)
   private loggerUseCases: LoggerUseCases;
@@ -328,7 +340,67 @@ export class LectureUseCases {
     }
   }
 
-  async saveLectureWork(lectureKey: string): Promise<boolean> {}
+  async saveLectureWork(lectureKey: string): Promise<boolean> {
+    let result = false;
+
+    try {
+      const lectureIdentity: ActiveLectureIdentity = JSON.parse(lectureKey);
+
+      const lecturesEntity: ActiveLecturesEntity = JSON.parse(
+        await this.externalCache.get(CacheKeys.ActiveLectures, null),
+      );
+
+      if (lecturesEntity && lecturesEntity.activeLectures.length > 0) {
+        const lectureForSaving: ActiveLectureEntity =
+          lecturesEntity.activeLectures.find(
+            (element: ActiveLectureEntity) =>
+              element.userId == lectureIdentity.userId &&
+              element.subjectId == lectureIdentity.subjectId,
+          );
+
+        if (lectureForSaving && lectureForSaving.attendees.length > 0) {
+          const subject: SubjectEntity = await this.subjectUseCase.getById(
+            lectureForSaving.subjectId,
+          );
+
+          if (subject) {
+            for (let i = 0; i < lectureForSaving.attendees.length; i++) {
+              let studentsSubjectsEntity: StudentsSubjectsEntity =
+                await this.studentsSubjectsUseCases.getBySubjectIdAndStudentId(
+                  subject.id,
+                  lectureForSaving.attendees[i].studentId,
+                );
+
+              if (studentsSubjectsEntity) {
+                studentsSubjectsEntity.sumOfPresencePoints +=
+                  subject.pointsPerPresence;
+              } else {
+                studentsSubjectsEntity = new StudentsSubjectsEntity();
+                studentsSubjectsEntity.subjectId = subject.id;
+                studentsSubjectsEntity.studentId =
+                  lectureForSaving.attendees[i].studentId;
+                studentsSubjectsEntity.sumOfPresencePoints =
+                  subject.pointsPerPresence;
+              }
+
+              const createOrUpdateResult =
+                await this.studentsSubjectsUseCases.createOrUpdate(
+                  studentsSubjectsEntity,
+                );
+
+              if (createOrUpdateResult && createOrUpdateResult.id > 0) {
+                result = true;
+              }
+            }
+          }
+        }
+      }
+    } catch (error) {
+      await this.loggerUseCases.logWithoutCode(error?.message, error?.stack);
+    }
+
+    return result;
+  }
 
   /**
    * Get last code state by given active lecture entity
