@@ -6,6 +6,7 @@ export class MessagingConstants {
   public static EndRoomsMessage = 'endLectures';
   public static AttendRoomMessage = 'attendActiveLecture';
   public static StartRoomWorkMessage = 'startLectureWork';
+  public static SaveRoomWorkMessage = 'saveLectureWork';
   public static CancelRoomWorkMessage = 'cancelLectureWork';
   public static LecturesChangeMessage = 'lecturesChange';
   public static LectureAttendeesChangeMessage = 'lectureAttendeesChange';

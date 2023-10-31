@@ -79,17 +79,10 @@ export class MessagingGetaway {
     @MessageBody() room: string,
     @ConnectedSocket() client: Socket,
   ) {
-    try {
-      if (room) {
-        client.join(room);
-      }
-    } catch (error) {
-      this.loggerUseCases.log(
-        ErrorConstants.MessagingGetawayError,
-        error?.message,
-        error?.stack,
-      );
+    if (room) {
+      client.join(room);
     }
+
     return undefined;
   }
 
@@ -101,20 +94,13 @@ export class MessagingGetaway {
    */
   @SubscribeMessage(MessagingConstants.CreateRoomMessage)
   createRoom(@MessageBody() room: string, @ConnectedSocket() client: Socket) {
-    try {
-      this.lectureUseCases.saveLecture(room);
+    this.lectureUseCases.saveLecture(room);
 
-      client.join(room);
-      client.broadcast.emit(MessagingConstants.LecturesChangeMessage, {
-        lecturesChangeData: room,
-      });
-    } catch (error) {
-      this.loggerUseCases.log(
-        ErrorConstants.MessagingGetawayError,
-        error?.message,
-        error?.stack,
-      );
-    }
+    client.join(room);
+    client.broadcast.emit(MessagingConstants.LecturesChangeMessage, {
+      lecturesChangeData: room,
+    });
+
     return undefined;
   }
 
@@ -129,21 +115,14 @@ export class MessagingGetaway {
     @MessageBody() room: string,
     @ConnectedSocket() client: Socket,
   ) {
-    try {
-      await this.lectureUseCases.removeLectureWork(room);
-      await this.lectureUseCases.removeLecture(room);
+    await this.lectureUseCases.removeLectureWork(room);
+    await this.lectureUseCases.removeLecture(room);
 
-      client.broadcast.emit(MessagingConstants.LecturesChangeMessage, {
-        lecturesChangeData: room,
-      });
-      client.leave(room);
-    } catch (error) {
-      this.loggerUseCases.log(
-        ErrorConstants.MessagingGetawayError,
-        error?.message,
-        error?.stack,
-      );
-    }
+    client.broadcast.emit(MessagingConstants.LecturesChangeMessage, {
+      lecturesChangeData: room,
+    });
+    client.leave(room);
+
     return undefined;
   }
 
@@ -198,6 +177,31 @@ export class MessagingGetaway {
     @ConnectedSocket() client: Socket,
   ) {
     this.lectureUseCases.doLectureWork(room);
+  }
+
+  /**
+   * Save lecture work
+   * @param room Room as a string
+   * @param client Main object for interacting with a client, provided by Socket.IO
+   */
+  @SubscribeMessage(MessagingConstants.SaveRoomWorkMessage)
+  async saveRoomWork(
+    @MessageBody() room: string,
+    @ConnectedSocket() client: Socket,
+  ) {
+    const saveWorkResult: boolean = await this.lectureUseCases.saveLectureWork(
+      room,
+    );
+
+    if (saveWorkResult) {
+      await this.lectureUseCases.removeLectureWork(room);
+      await this.lectureUseCases.removeLecture(room);
+
+      client.broadcast.emit(MessagingConstants.LecturesChangeMessage, {
+        lecturesChangeData: room,
+      });
+      client.leave(room);
+    }
   }
 
   /**
@@ -256,19 +260,12 @@ export class MessagingGetaway {
    * @returns undefined
    */
   sendCodeEventToRoom(room: string, codeEvent: number, code: string = null) {
-    try {
-      this.server.in(room).emit(MessagingConstants.LectureCodeEventMessage, {
-        session: room,
-        lectureCodeEventType: codeEvent,
-        lectureCodeValue: code ?? '',
-      });
-    } catch (error) {
-      this.loggerUseCases.log(
-        ErrorConstants.MessagingGetawayError,
-        error?.message,
-        error?.stack,
-      );
-    }
+    this.server.in(room).emit(MessagingConstants.LectureCodeEventMessage, {
+      session: room,
+      lectureCodeEventType: codeEvent,
+      lectureCodeValue: code ?? '',
+    });
+
     return undefined;
   }
 
@@ -283,19 +280,12 @@ export class MessagingGetaway {
     timerEvent: string,
     counter: number = null,
   ) {
-    try {
-      this.server.in(room).emit(MessagingConstants.LectureTimerEventMessage, {
-        session: room,
-        lectureTimerEventType: timerEvent,
-        lectureTimerCount: counter ?? -1,
-      });
-    } catch (error) {
-      this.loggerUseCases.log(
-        ErrorConstants.MessagingGetawayError,
-        error?.message,
-        error?.stack,
-      );
-    }
+    this.server.in(room).emit(MessagingConstants.LectureTimerEventMessage, {
+      session: room,
+      lectureTimerEventType: timerEvent,
+      lectureTimerCount: counter ?? -1,
+    });
+
     return undefined;
   }
 }

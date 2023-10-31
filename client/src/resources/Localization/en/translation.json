@@ -98,7 +98,7 @@
     "AvailableSubjects": "Subjects",
     "NonActiveSubjects": "No live lectures",
     "NonActiveSubjectsDescription":   "There aren't any lectures that are currently active for you.",
-    "AccessCodeGeneration": "Access Code Generation",
+    "AccessCodeGeneration": "Access Code",
     "PleaseGenerateAccessCodeForStudentsToEnter":   "Please generate access code for students to enter",
     "GenerateAccessCode": "GENERATE ACCESS CODE",
     "CurrentlyPresentStudents": "Currently Present Students",

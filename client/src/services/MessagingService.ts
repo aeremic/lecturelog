@@ -74,7 +74,7 @@ export const onStopSession = (data: ISessionMetadata) => {
 
 export const onSaveSession = (data: ISessionMetadata) => {
   try {
-    socket.emit(MessagingEnum.EndLecture, JSON.stringify(data));
+    socket.emit(MessagingEnum.SaveLectureWork, JSON.stringify(data));
   } catch (err) {
     console.log(err);
   }

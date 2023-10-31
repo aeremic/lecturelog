@@ -328,6 +328,8 @@ export class LectureUseCases {
     }
   }
 
+  async saveLectureWork(lectureKey: string): Promise<boolean> {}
+
   /**
    * Get last code state by given active lecture entity
    * @param activeLecture Active lecture for matching code event
