@@ -14,6 +14,8 @@ export class StudentsSubjectsMapper {
       ),
       studentId: studentsSubjectsModel.studentId,
       subjectId: studentsSubjectsModel?.subjectId,
+
+      student: UserMapper.ToEntity(studentsSubjectsModel?.student),
     };
 
     return studentsSubjectsEntity;

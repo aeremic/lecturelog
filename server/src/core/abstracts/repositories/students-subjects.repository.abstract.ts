@@ -8,4 +8,6 @@ export abstract class StudentsSubjectsRepositoryAbstract extends GenericReposito
     subjectId: number,
     studentId: number,
   ): Promise<StudentsSubjectsEntity>;
+
+  abstract getBySubjectId(subjectId: number): Promise<StudentsSubjectsEntity[]>;
 }

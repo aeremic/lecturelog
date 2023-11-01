@@ -52,4 +52,18 @@ export class StudentsSubjectsRepository
 
     return StudentsSubjectsMapper.ToEntity(result);
   }
+
+  // TODO: PROD - Remove printSql statements
+  async getBySubjectId(subjectId: number) {
+    const result = await this.studentsSubjectsRepository
+      .createQueryBuilder('students_subjects')
+      .innerJoinAndSelect('students_subjects.student', 'student')
+      .where('students_subjects.subjectId = :subjectId', {
+        subjectId: subjectId,
+      })
+      .printSql()
+      .getMany();
+
+    return StudentsSubjectsMapper.ToEntities(result);
+  }
 }

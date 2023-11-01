@@ -20,7 +20,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       migrationsTableName: 'typeorm_migrations',
       logging: true,
       autoLoadEntities: true,
-      synchronize: true
+      synchronize: true,
     };
   }
 }
