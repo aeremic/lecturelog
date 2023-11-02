@@ -1,10 +1,12 @@
 import {
   Alert,
+  AlertColor,
   Button,
   Card,
   CardContent,
   Divider,
   Paper,
+  Snackbar,
   Stack,
   Table,
   TableBody,
@@ -26,7 +28,13 @@ import { SubjectManipulationType } from "../../../../../models/Enums";
 import { useEffect, useState } from "react";
 import { HttpStatusCode } from "axios";
 import { IAssignedStudents } from "../../../../../models/IAssignedStudents";
-import { getCurrentlyAssignedStudents } from "../../../../../services/HttpService/StudentsSubjectsService";
+import {
+  getCurrentlyAssignedStudents,
+  removeAllAssignedStudents,
+  removeAssignedStudent,
+} from "../../../../../services/HttpService/StudentsSubjectsService";
+import ConfirmationDialog from "../../../../Common/ConfirmationDialog";
+import { IRemoveAssignedStudentModel } from "../../../../../models/IRemoveAssignedStudentModel";
 
 export const AssignedStudents: React.FC<IAssignedStudentsProps> = ({
   userIdProp,
@@ -37,11 +45,30 @@ export const AssignedStudents: React.FC<IAssignedStudentsProps> = ({
 
   const { t } = useTranslation();
 
+  const manipulationType =
+    subjectId === -1
+      ? SubjectManipulationType.creating
+      : SubjectManipulationType.updating;
+
   const [assignedStudents, setAssignedStudents] = useState<IAssignedStudents[]>(
     []
   );
   const [assignedStudentsLoaded, setAssignedStudentsLoaded] =
     useState<boolean>(false);
+
+  const [
+    removeAllAssignedStudentsDialogOpen,
+    setRemoveAllAssignedStudentsDialogOpen,
+  ] = useState(false);
+
+  const [removeAssignedStudentDialogOpen, setRemoveAssignedStudentDialogOpen] =
+    useState(false);
+  const [removeAssignedStudentIdValue, setRemoveAssignedStudentIdValue] =
+    useState(-1);
+
+  const [openAlert, setOpenAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertType, setAlertType] = useState<AlertColor>();
 
   useEffect(() => {
     const fetchAssignedStudents = async (subjectId: number) => {
@@ -56,10 +83,88 @@ export const AssignedStudents: React.FC<IAssignedStudentsProps> = ({
     fetchAssignedStudents(subjectId);
   }, [assignedStudentsLoaded, userId, subjectId]);
 
-  const manipulationType =
-    subjectId === -1
-      ? SubjectManipulationType.creating
-      : SubjectManipulationType.updating;
+  const handleRemoveAllAssignedStudentsClick = () => {
+    setRemoveAllAssignedStudentsDialogOpen(true);
+  };
+
+  const handleRemoveAllAssignedStudentsDialogClose = async (
+    dialogResponseValue?: boolean
+  ) => {
+    setRemoveAllAssignedStudentsDialogOpen(false);
+
+    if (dialogResponseValue) {
+      let res: any = null;
+      res = await removeAllAssignedStudents(subjectId);
+
+      if (
+        res &&
+        res.status &&
+        res.status === HttpStatusCode.Ok &&
+        res.data > 0
+      ) {
+        setAlertType("success");
+        setAlertMessage(t("UserSuccessfullyRemoved"));
+        setOpenAlert(true);
+
+        setAssignedStudentsLoaded(false);
+      } else {
+        setAlertType("error");
+        setAlertMessage(t("AlertFailureMessage"));
+        setOpenAlert(true);
+      }
+    }
+  };
+
+  const handleRemoveAssignedStudentClick = (studentId: number) => {
+    setRemoveAssignedStudentIdValue(studentId);
+    setRemoveAssignedStudentDialogOpen(true);
+  };
+
+  const handleRemoveAssignedStudentDialogClose = async (
+    dialogResponseValue?: boolean
+  ) => {
+    setRemoveAssignedStudentDialogOpen(false);
+
+    if (dialogResponseValue) {
+      let res: any = null;
+      if (removeAssignedStudentIdValue > 0) {
+        const modelToPost: IRemoveAssignedStudentModel = {
+          subjectId: subjectId,
+          studentId: removeAssignedStudentIdValue,
+        };
+        res = await removeAssignedStudent(modelToPost);
+
+        if (
+          res &&
+          res.status &&
+          res.status === HttpStatusCode.Created &&
+          res.data > 0
+        ) {
+          setAlertType("success");
+          setAlertMessage(t("UserSuccessfullyRemoved"));
+          setOpenAlert(true);
+
+          setAssignedStudentsLoaded(false);
+        } else {
+          setAlertType("error");
+          setAlertMessage(t("AlertFailureMessage"));
+          setOpenAlert(true);
+        }
+      }
+    }
+
+    setRemoveAssignedStudentIdValue(-1);
+  };
+
+  const handleCloseAlert = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenAlert(false);
+  };
 
   return (
     <Card sx={{ mt: 1, minHeight: 200 }}>
@@ -85,12 +190,15 @@ export const AssignedStudents: React.FC<IAssignedStudentsProps> = ({
                     <DownloadIcon />
                   </Button>
                   <Button
+                    onClick={() => {
+                      handleRemoveAllAssignedStudentsClick();
+                    }}
                     variant="contained"
                     color="error"
                     size="medium"
                     sx={{ mb: 1 }}
                   >
-                    <DeleteIcon sx={{ mr: 0.5 }} />{" "}
+                    <DeleteIcon sx={{ mr: 0.5 }} />
                     {t("ResetAllPresencePoints")}
                   </Button>
                 </Stack>
@@ -170,6 +278,9 @@ export const AssignedStudents: React.FC<IAssignedStudentsProps> = ({
                             </TableCell>
                             <TableCell align="center">
                               <Button
+                                onClick={() => {
+                                  handleRemoveAssignedStudentClick(student.id);
+                                }}
                                 variant="contained"
                                 color="error"
                                 size="medium"
@@ -191,6 +302,41 @@ export const AssignedStudents: React.FC<IAssignedStudentsProps> = ({
             )}
           </>
         )}
+        <ConfirmationDialog
+          id="remove-all-assigned-students-menu"
+          keepMounted
+          open={removeAllAssignedStudentsDialogOpen}
+          title={t("RemovingAssignedStudentsFromTheSubject")}
+          content={t("RemovingAssignedStudentsAction")}
+          negativeAction={t("Cancel")}
+          positiveAction={t("Yes")}
+          value={-1}
+          onClose={handleRemoveAllAssignedStudentsDialogClose}
+        />
+        <ConfirmationDialog
+          id="remove-assigned-student-menu"
+          keepMounted
+          open={removeAssignedStudentDialogOpen}
+          title={t("RemovingAssignedStudentFromTheSubject")}
+          content={t("RemovingAssignedStudentAction")}
+          negativeAction={t("Cancel")}
+          positiveAction={t("Yes")}
+          value={removeAssignedStudentIdValue}
+          onClose={handleRemoveAssignedStudentDialogClose}
+        />
+        <Snackbar
+          open={openAlert}
+          autoHideDuration={6000}
+          onClose={handleCloseAlert}
+        >
+          <Alert
+            onClose={handleCloseAlert}
+            severity={alertType}
+            sx={{ width: "100%" }}
+          >
+            {alertMessage}
+          </Alert>
+        </Snackbar>
       </CardContent>
     </Card>
   );

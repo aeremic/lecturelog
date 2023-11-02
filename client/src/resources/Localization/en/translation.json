@@ -134,5 +134,9 @@
     "EndingAllLecturesAction":"This action will end all current lectures and dismiss all gathered points. Are you sure you want to continue?",
     "SavingLectureAndPoints":"Saving lecture and points",
     "SavingLectureAction":"This action will end current lecture and save all gathered points for this live session. Are you sure you want to continue?",
-    "CurrentlyThereAreNoAssignedStudents":"Currently there are no assigned students. Students will automatically appear here after their first lecture attending."
+    "CurrentlyThereAreNoAssignedStudents":"Currently there are no assigned students. Students will automatically appear here after their first lecture attending.",
+    "RemovingAssignedStudentsFromTheSubject":"Removing assigned students from the subject",
+    "RemovingAssignedStudentsAction": "This action will end remove all currenlty assigned students to this subject. Are you sure you want to continue?",
+    "RemovingAssignedStudentFromTheSubject":"Removing assigned student from the subject",
+    "RemovingAssignedStudentAction": "This action will remove student assigned to this subject. Are you sure you want to continue?"
 }

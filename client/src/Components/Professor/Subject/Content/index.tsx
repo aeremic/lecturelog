@@ -2,9 +2,9 @@ import { Container, Grid, Typography } from "@mui/material";
 import { ManipulateSubject } from "./ManipulateSubject";
 import { useTranslation } from "react-i18next";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
-import { AssignedStudents } from "./AssignedStudents";
 import useCurrentUserIdentifier from "../../../../hooks/UseCurrentUserIdentifier";
 import useQueryIdParameter from "../../../../hooks/UseQueryIdParameter";
+import { AssignedStudents } from "./AssignedStudents";
 
 export const Content = () => {
   const { t } = useTranslation();
