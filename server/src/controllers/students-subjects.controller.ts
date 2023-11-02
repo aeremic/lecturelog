@@ -1,9 +1,12 @@
 import {
+  Body,
   Controller,
+  Delete,
   Get,
   Inject,
   Param,
   ParseIntPipe,
+  Post,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
@@ -26,4 +29,18 @@ export class StudentsSubjectsController {
   ): Promise<GetAssignedStudentsDto[]> {
     return this.studentsSubjectsUseCases.getAssignedStudents(subjectId);
   }
+
+  @Roles('professor')
+  @UseGuards(RoleGuard)
+  @Post('/removeAssignedStudent')
+  removeAssignedStudent(@Body() request: any): Promise<boolean> {
+    return this.studentsSubjectsUseCases.removeAssignedStudent(request);
+  }
+
+  // @Roles('professor')
+  // @UseGuards(RoleGuard)
+  // @Delete(':id')
+  // delete(@Param('id', ParseIntPipe) id: number): Promise<number> {
+  //   return this.studentsSubjectsUseCases.delete(id);
+  // }
 }

@@ -96,12 +96,7 @@ export const AssignedStudents: React.FC<IAssignedStudentsProps> = ({
       let res: any = null;
       res = await removeAllAssignedStudents(subjectId);
 
-      if (
-        res &&
-        res.status &&
-        res.status === HttpStatusCode.Ok &&
-        res.data > 0
-      ) {
+      if (res && res.status && res.status === HttpStatusCode.Ok && res.data) {
         setAlertType("success");
         setAlertMessage(t("UserSuccessfullyRemoved"));
         setOpenAlert(true);
@@ -116,6 +111,7 @@ export const AssignedStudents: React.FC<IAssignedStudentsProps> = ({
   };
 
   const handleRemoveAssignedStudentClick = (studentId: number) => {
+    debugger;
     setRemoveAssignedStudentIdValue(studentId);
     setRemoveAssignedStudentDialogOpen(true);
   };
@@ -138,7 +134,7 @@ export const AssignedStudents: React.FC<IAssignedStudentsProps> = ({
           res &&
           res.status &&
           res.status === HttpStatusCode.Created &&
-          res.data > 0
+          res.data
         ) {
           setAlertType("success");
           setAlertMessage(t("UserSuccessfullyRemoved"));

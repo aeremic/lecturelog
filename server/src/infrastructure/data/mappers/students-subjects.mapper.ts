@@ -1,5 +1,4 @@
 import { UserMapper } from './user.mapper';
-import { SubjectMapper } from './subject.mapper';
 import { StudentsSubjects } from '../models';
 import { StudentsSubjectsEntity } from 'src/core/entities/students-subjects.entity';
 
@@ -12,7 +11,7 @@ export class StudentsSubjectsMapper {
       sumOfPresencePoints: Number.parseFloat(
         studentsSubjectsModel?.sumOfPresencePoints?.toString(),
       ),
-      studentId: studentsSubjectsModel.studentId,
+      studentId: studentsSubjectsModel?.studentId,
       subjectId: studentsSubjectsModel?.subjectId,
 
       student: UserMapper.ToEntity(studentsSubjectsModel?.student),
