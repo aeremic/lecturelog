@@ -24,7 +24,7 @@ export class AuthService {
   ): Promise<UserEntity> {
     const user = new Promise<UserEntity>((resolve, reject) => {
       if (email && password) {
-        this.userUseCases.getByEmail(email).then((user) => {
+        this.userUseCases.getByEmail(email, true).then((user) => {
           if (this.userUseCases.isFound(user) && user.hash) {
             this.bcryptService
               .checkPasswordHash(password, user.hash)

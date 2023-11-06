@@ -6,7 +6,7 @@ import { GenericRepositoryAbstract } from './generic.repositoty.abstract';
 export abstract class UserRepositoryAbstract extends GenericRepositoryAbstract<UserEntity> {
   abstract getByFirstname(firstname: string): Promise<UserEntity>;
 
-  abstract getByEmail(email: string): Promise<UserEntity>;
+  abstract getByEmail(email: string, includeHash: boolean): Promise<UserEntity>;
 
   abstract getByEmailOrIndex(
     email: string,

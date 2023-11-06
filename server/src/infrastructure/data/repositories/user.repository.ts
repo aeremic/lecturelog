@@ -47,10 +47,10 @@ export class UserRepository implements UserRepositoryAbstract {
     return UserMapper.ToEntity(result);
   }
 
-  async getByEmail(email: string): Promise<UserEntity> {
+  async getByEmail(email: string, includeHash = false): Promise<UserEntity> {
     const result = await this.userModelRepository.findOneBy({ email: email });
 
-    return UserMapper.ToEntity(result);
+    return UserMapper.ToEntity(result, includeHash);
   }
 
   async getByEmailOrIndex(

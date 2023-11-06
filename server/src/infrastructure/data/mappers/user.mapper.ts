@@ -3,7 +3,7 @@ import { UserEntity } from '../../../core/entities/user.entity';
 import { User } from '../models/user.model';
 
 export class UserMapper {
-  public static ToEntity(userModel: User): UserEntity {
+  public static ToEntity(userModel: User, includeHash = false): UserEntity {
     const userEntity: UserEntity = {
       id: userModel?.id,
       firstname: userModel?.firstname,
@@ -11,7 +11,6 @@ export class UserMapper {
       email: userModel?.email,
       index: userModel?.index,
       year: userModel?.year,
-      hash: userModel?.hash,
       isActivated: userModel?.isActivated,
       role: RoleEnum.invalid,
     };
@@ -19,6 +18,8 @@ export class UserMapper {
     userEntity.role = userEntity.id
       ? this.getRoleEnum(userModel?.role)
       : RoleEnum.invalid;
+
+    userEntity.hash = includeHash ? userModel?.hash : undefined;
 
     return userEntity;
   }

@@ -112,11 +112,11 @@ export class UserUseCases extends GenericUseCases<UserEntity> {
     return result;
   }
 
-  async getByEmail(email: string): Promise<UserEntity> {
+  async getByEmail(email: string, includeHash = false): Promise<UserEntity> {
     let result: UserEntity | PromiseLike<UserEntity>;
     try {
       if (email) {
-        result = await this.userRepository.getByEmail(email);
+        result = await this.userRepository.getByEmail(email, includeHash);
       }
     } catch (error) {
       await this.loggerUseCases.log(
@@ -133,7 +133,7 @@ export class UserUseCases extends GenericUseCases<UserEntity> {
     let result: UserEntity | PromiseLike<UserEntity>;
     try {
       if (userEntity.email) {
-        result = await this.userRepository.getByEmail(userEntity.email);
+        result = await this.userRepository.getByEmail(userEntity.email, false);
       }
     } catch (error) {
       await this.loggerUseCases.log(
@@ -684,17 +684,15 @@ export class UserUseCases extends GenericUseCases<UserEntity> {
     return result;
   }
 
-  //#endregion
+  async getAdmin(userEntity: UserEntity): Promise<UserEntity> {
+    return await this.getByUserEmail(userEntity);
+  }
 
-  //#region Private methods
+  async getProfessor(userEntity: UserEntity): Promise<UserEntity> {
+    return await this.getByUserEmail(userEntity);
+  }
 
-  private getAdmin = async (userEntity: UserEntity): Promise<UserEntity> =>
-    this.getByUserEmail(userEntity);
-
-  private getProfessor = async (userEntity: UserEntity): Promise<UserEntity> =>
-    this.getByUserEmail(userEntity);
-
-  private getStudent = async (userEntity: UserEntity): Promise<UserEntity> => {
+  async getStudent(userEntity: UserEntity): Promise<UserEntity> {
     let result: UserEntity | PromiseLike<UserEntity>;
     try {
       if (userEntity.email && userEntity.index && userEntity.year) {
@@ -713,27 +711,24 @@ export class UserUseCases extends GenericUseCases<UserEntity> {
     }
 
     return result;
-  };
-
-  private async getUser(
-    userEntity: UserEntity,
-    getUserFunc: (userEntity: UserEntity) => Promise<UserEntity>,
-  ): Promise<UserEntity> {
-    return await getUserFunc(userEntity);
   }
 
-  private async checkIfUserExist(userEntity: UserEntity): Promise<boolean> {
+  async checkIfUserExist(userEntity: UserEntity): Promise<boolean> {
     let userInDb: UserEntity = null;
     if (userEntity.role === RoleEnum.student) {
-      userInDb = await this.getUser(userEntity, this.getStudent);
+      userInDb = await this.getStudent(userEntity);
     } else if (userEntity.role === RoleEnum.professor) {
-      userInDb = await this.getUser(userEntity, this.getProfessor);
+      userInDb = await this.getProfessor(userEntity);
     } else if (userEntity.role === RoleEnum.admin) {
-      userInDb = await this.getUser(userEntity, this.getAdmin);
+      userInDb = await this.getAdmin(userEntity);
     }
 
     return this.isFound(userInDb);
   }
+
+  //#endregion
+
+  //#region Private methods
 
   private async generateAndSendEmailVerificationCode(userEntity: UserEntity) {
     if (this.isFound(userEntity) && !userEntity.isActivated) {
