@@ -37,10 +37,12 @@ export class StudentsSubjectsController {
     return this.studentsSubjectsUseCases.removeAssignedStudent(request);
   }
 
-  // @Roles('professor')
-  // @UseGuards(RoleGuard)
-  // @Delete(':id')
-  // delete(@Param('id', ParseIntPipe) id: number): Promise<number> {
-  //   return this.studentsSubjectsUseCases.delete(id);
-  // }
+  @Roles('professor')
+  @UseGuards(RoleGuard)
+  @Delete('/removeAllAssignedStudents/:id')
+  removeAllAssignedStudents(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<boolean> {
+    return this.studentsSubjectsUseCases.removeAllAssignedStudents(id);
+  }
 }

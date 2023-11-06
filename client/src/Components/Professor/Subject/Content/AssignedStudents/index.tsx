@@ -111,7 +111,6 @@ export const AssignedStudents: React.FC<IAssignedStudentsProps> = ({
   };
 
   const handleRemoveAssignedStudentClick = (studentId: number) => {
-    debugger;
     setRemoveAssignedStudentIdValue(studentId);
     setRemoveAssignedStudentDialogOpen(true);
   };

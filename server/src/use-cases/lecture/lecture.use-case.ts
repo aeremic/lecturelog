@@ -376,7 +376,7 @@ export class LectureUseCases {
                   lectureForSaving.attendees[i].studentId,
                 );
 
-              if (studentsSubjectsEntity) {
+              if (studentsSubjectsEntity && studentsSubjectsEntity.id > 0) {
                 studentsSubjectsEntity.sumOfPresencePoints +=
                   subject.pointsPerPresence;
               } else {

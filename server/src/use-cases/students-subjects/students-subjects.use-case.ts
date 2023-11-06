@@ -116,5 +116,40 @@ export class StudentsSubjectsUseCases extends GenericUseCases<StudentsSubjectsEn
     return result;
   }
 
+  async removeAllAssignedStudents(subjectId: number): Promise<boolean> {
+    let result = false;
+    try {
+      if (subjectId > 0) {
+        const getBySubjectIdResult =
+          await this.studentsSubjectsRepository.getBySubjectId(subjectId);
+
+        if (getBySubjectIdResult && getBySubjectIdResult.length > 0) {
+          let numberOfDeleted = 0;
+          for (let i = 0; i < getBySubjectIdResult.length; i++) {
+            const deleteResult = await this.studentsSubjectsRepository.delete(
+              getBySubjectIdResult[i].id,
+            );
+
+            if (deleteResult > 0) {
+              numberOfDeleted++;
+            }
+          }
+
+          if (getBySubjectIdResult.length === numberOfDeleted) {
+            result = true;
+          }
+        }
+      }
+    } catch (error) {
+      this.loggerUseCases.log(
+        ErrorConstants.GetMethodError,
+        error?.message,
+        error?.stack,
+      );
+    }
+
+    return result;
+  }
+
   //#endregion
 }
