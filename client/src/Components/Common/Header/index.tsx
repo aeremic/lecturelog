@@ -14,6 +14,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { useTranslation } from "react-i18next";
 import { logout } from "../../../services/HttpService/AuthService";
 import { useNavigate } from "react-router-dom";
+import { disconnect } from "../../../services/MessagingService";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -22,6 +23,8 @@ const Header = () => {
 
   const handleLogoutClick = () => {
     logout();
+    disconnect();
+
     navigate("/", { replace: true });
   };
 
