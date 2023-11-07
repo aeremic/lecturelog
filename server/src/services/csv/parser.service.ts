@@ -34,4 +34,10 @@ export class ParserService {
 
     return parser.parse([]);
   }
+
+  async generateFile(header: string[], data: any): Promise<any> {
+    const parser = new Parser({ fields: header });
+
+    return parser.parse(data);
+  }
 }

@@ -1,5 +1,5 @@
 import { IRemoveAssignedStudentModel } from "../../models/IRemoveAssignedStudentModel";
-import { getById, post, remove } from "./HttpServiceBase";
+import { getById, getFileById, post, remove } from "./HttpServiceBase";
 
 const URL = "/studentssubjects";
 
@@ -24,6 +24,14 @@ export const removeAssignedStudent = async (
 export const removeAllAssignedStudents = async (subjectId: number) => {
   try {
     return await remove(`${URL}/removeAllAssignedStudents`, subjectId);
+  } catch (err) {
+    console.log(err); // TODO: Fix for PROD.
+  }
+};
+
+export const downloadAssignedStudents = async (subjectId: number) => {
+  try {
+    return await getFileById(`${URL}/downloadAssignedStudents`, subjectId);
   } catch (err) {
     console.log(err); // TODO: Fix for PROD.
   }

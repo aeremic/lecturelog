@@ -57,6 +57,7 @@ export class StudentsSubjectsRepository
   async getBySubjectId(subjectId: number) {
     const result = await this.studentsSubjectsRepository
       .createQueryBuilder('students_subjects')
+      .innerJoinAndSelect('students_subjects.subject', 'subject')
       .innerJoinAndSelect('students_subjects.student', 'student')
       .where('students_subjects.subjectId = :subjectId', {
         subjectId: subjectId,

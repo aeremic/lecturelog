@@ -1,3 +1,4 @@
+import { SubjectEntity } from './subject.entity';
 import { UserEntity } from './user.entity';
 
 export class StudentsSubjectsEntity {
@@ -5,5 +6,7 @@ export class StudentsSubjectsEntity {
   public sumOfPresencePoints: number;
   public subjectId: number;
   public studentId: number;
+
+  public subject: SubjectEntity;
   public student: UserEntity;
 }

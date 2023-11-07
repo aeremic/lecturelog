@@ -588,6 +588,7 @@ export class UserUseCases extends GenericUseCases<UserEntity> {
         'firstname',
         'lastname',
       ]);
+
       return Buffer.from(template, 'utf-8');
     } catch (error) {
       await this.loggerUseCases.log(
@@ -595,6 +596,7 @@ export class UserUseCases extends GenericUseCases<UserEntity> {
         error?.message,
         error?.stack,
       );
+
       return Buffer.from([].toString(), 'utf-8');
     }
   }

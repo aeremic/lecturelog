@@ -1,6 +1,7 @@
 import { UserMapper } from './user.mapper';
 import { StudentsSubjects } from '../models';
 import { StudentsSubjectsEntity } from 'src/core/entities/students-subjects.entity';
+import { SubjectMapper } from './subject.mapper';
 
 export class StudentsSubjectsMapper {
   public static ToEntity(
@@ -14,6 +15,7 @@ export class StudentsSubjectsMapper {
       studentId: studentsSubjectsModel?.studentId,
       subjectId: studentsSubjectsModel?.subjectId,
 
+      subject: SubjectMapper.ToEntity(studentsSubjectsModel?.subject),
       student: UserMapper.ToEntity(studentsSubjectsModel?.student),
     };
 

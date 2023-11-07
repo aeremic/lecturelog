@@ -29,12 +29,14 @@ import { useEffect, useState } from "react";
 import { HttpStatusCode } from "axios";
 import { IAssignedStudents } from "../../../../../models/IAssignedStudents";
 import {
+  downloadAssignedStudents,
   getCurrentlyAssignedStudents,
   removeAllAssignedStudents,
   removeAssignedStudent,
 } from "../../../../../services/HttpService/StudentsSubjectsService";
 import ConfirmationDialog from "../../../../Common/ConfirmationDialog";
 import { IRemoveAssignedStudentModel } from "../../../../../models/IRemoveAssignedStudentModel";
+import fileDownload from "js-file-download";
 
 export const AssignedStudents: React.FC<IAssignedStudentsProps> = ({
   userIdProp,
@@ -82,6 +84,14 @@ export const AssignedStudents: React.FC<IAssignedStudentsProps> = ({
 
     fetchAssignedStudents(subjectId);
   }, [assignedStudentsLoaded, userId, subjectId]);
+
+  const handleDownloadAssignedStudentsClick = async () => {
+    const res: any = await downloadAssignedStudents(subjectId);
+    if (res && res.status == HttpStatusCode.Ok && res.data) {
+      const currentDate = new Date().toLocaleString();
+      fileDownload(res.data, `${subjectId}-${currentDate}.csv`);
+    }
+  };
 
   const handleRemoveAllAssignedStudentsClick = () => {
     setRemoveAllAssignedStudentsDialogOpen(true);
@@ -176,10 +186,12 @@ export const AssignedStudents: React.FC<IAssignedStudentsProps> = ({
               <>
                 <Stack direction="row">
                   <Button
+                    onClick={() => {
+                      handleDownloadAssignedStudentsClick();
+                    }}
                     variant="contained"
                     color="success"
                     size="medium"
-                    disabled
                     sx={{ mb: 1, mr: 2 }}
                   >
                     <DownloadIcon />
@@ -256,7 +268,6 @@ export const AssignedStudents: React.FC<IAssignedStudentsProps> = ({
                           <TableRow
                             sx={{
                               "&:last-child td, &:last-child th": { border: 0 },
-                              cursor: "pointer",
                             }}
                           >
                             <TableCell key={idx} align="center">

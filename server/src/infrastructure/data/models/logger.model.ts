@@ -1,19 +1,24 @@
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Logger {
-    @PrimaryGeneratedColumn()
-    public id: number;
+  @PrimaryGeneratedColumn()
+  public id: number;
 
-    @Column({ type: 'int' })
-    public code: number
+  @Column({ type: 'int' })
+  public code: number;
 
-    @Column({ type: 'varchar', length: 380, nullable: true })
-    public description?: string;
+  @Column({ type: 'varchar', length: 380, nullable: true })
+  public description?: string;
 
-    @Column({ type: 'text', nullable: true })
-    public stackTrace?: string;
+  @Column({ type: 'text', nullable: true })
+  public stackTrace?: string;
 
-    @CreateDateColumn()
-    public dateLogged: Date
+  @CreateDateColumn()
+  public dateLogged: Date;
 }

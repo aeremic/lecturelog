@@ -22,6 +22,20 @@ export const getFile = async (endpoint: string, useAuthHeader = true) => {
   return axios.get(URL, { headers: header, responseType: "blob" });
 };
 
+export const getFileById = async (
+  endpoint: string,
+  id: number,
+  useAuthHeader = true
+) => {
+  const header = { Authorization: "" };
+  if (useAuthHeader) {
+    header.Authorization = AuthHeader();
+  }
+
+  const URL: string = API + endpoint;
+  return axios.get(`${URL}/${id}`, { headers: header, responseType: "blob" });
+};
+
 export const getById = async (
   endpoint: string,
   id: number,

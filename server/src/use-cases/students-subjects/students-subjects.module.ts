@@ -7,10 +7,12 @@ import { StudentsSubjectsRepositoryAbstract } from 'src/core/abstracts/repositor
 import { StudentsSubjectsRepository } from 'src/infrastructure/data/repositories/students-subjects.repository';
 import { StudentsSubjectsController } from 'src/controllers/students-subjects.controller';
 import { UserModule } from '../user/user.module';
+import { ParserModule } from 'src/services/csv/parser.module';
 
 @Module({
   imports: [
     forwardRef(() => UserModule),
+    ParserModule,
     LoggerModule,
     TypeOrmModule.forFeature([StudentsSubjects]),
   ],

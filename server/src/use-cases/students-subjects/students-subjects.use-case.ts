@@ -6,6 +6,7 @@ import { StudentsSubjectsEntity } from 'src/core/entities/students-subjects.enti
 import { ErrorConstants } from 'src/core/common/constants/error.constant';
 import { GetAssignedStudentsDto } from 'src/core/dtos/responses/get-assigned-students.dto';
 import { RemoveAssignedStudentDto } from '../../core/dtos/requests/remove-assigned-student.dto';
+import { ParserService } from 'src/services/csv/parser.service';
 
 @Injectable()
 export class StudentsSubjectsUseCases extends GenericUseCases<StudentsSubjectsEntity> {
@@ -13,6 +14,9 @@ export class StudentsSubjectsUseCases extends GenericUseCases<StudentsSubjectsEn
 
   @Inject(StudentsSubjectsRepositoryAbstract)
   private studentsSubjectsRepository: StudentsSubjectsRepositoryAbstract;
+
+  @Inject(ParserService)
+  private parserService: ParserService;
 
   @Inject(LoggerUseCases)
   private loggerUseCases: LoggerUseCases;
@@ -149,6 +153,38 @@ export class StudentsSubjectsUseCases extends GenericUseCases<StudentsSubjectsEn
     }
 
     return result;
+  }
+
+  async downloadAssignedStudents(subjectId: number): Promise<Buffer> {
+    try {
+      const header = ['index', 'firstname', 'lastname', 'points_per_presence'];
+      const data = [];
+      const getBySubjectIdResult =
+        await this.studentsSubjectsRepository.getBySubjectId(subjectId);
+
+      if (getBySubjectIdResult && getBySubjectIdResult.length > 0) {
+        for (let i = 0; i < getBySubjectIdResult.length; i++) {
+          data.push({
+            index: `${getBySubjectIdResult[i].student?.index}/${getBySubjectIdResult[i].student?.year}`,
+            firstname: getBySubjectIdResult[i].student?.firstname,
+            lastname: getBySubjectIdResult[i].student?.lastname,
+            points_per_presence: getBySubjectIdResult[i].sumOfPresencePoints,
+          });
+        }
+      }
+
+      const file = await this.parserService.generateFile(header, data);
+
+      return Buffer.from(file, 'utf-8');
+    } catch (error) {
+      await this.loggerUseCases.log(
+        ErrorConstants.PostMethodError,
+        error?.message,
+        error?.stack,
+      );
+
+      return Buffer.from([].toString(), 'utf-8');
+    }
   }
 
   //#endregion

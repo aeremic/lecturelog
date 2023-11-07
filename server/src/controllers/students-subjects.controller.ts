@@ -3,10 +3,13 @@ import {
   Controller,
   Delete,
   Get,
+  Header,
   Inject,
   Param,
   ParseIntPipe,
   Post,
+  Res,
+  StreamableFile,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
@@ -44,5 +47,20 @@ export class StudentsSubjectsController {
     @Param('id', ParseIntPipe) id: number,
   ): Promise<boolean> {
     return this.studentsSubjectsUseCases.removeAllAssignedStudents(id);
+  }
+
+  @Roles('professor')
+  @UseGuards(RoleGuard)
+  @Get('/downloadAssignedStudents/:id')
+  @Header('Content-Type', 'text/csv')
+  @Header('Content-Disposition', 'attachment; filename=assigned_students.csv')
+  async downloadAssignedStudents(
+    @Param('id', ParseIntPipe) id: number,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<StreamableFile> {
+    const file = await this.studentsSubjectsUseCases.downloadAssignedStudents(
+      id,
+    );
+    return new StreamableFile(file);
   }
 }
