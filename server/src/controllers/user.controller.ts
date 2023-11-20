@@ -85,4 +85,11 @@ export class UserController {
   getAllExceptAdmin() {
     return this.userUseCases.getAllExceptAdmin();
   }
+
+  @Roles('admin', 'professor', 'student')
+  @UseGuards(AuthGuard('jwt'), RoleGuard)
+  @Post('/updateUser')
+  updateUser(@Body() userEntity: any): Promise<CreateUpdateUserResponseDto> {
+    return this.userUseCases.updateUser(userEntity);
+  }
 }

@@ -25,13 +25,16 @@ import ContactPageIcon from "@mui/icons-material/ContactPage";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { useTranslation } from "react-i18next";
 import useCurrentUserIdentifier from "../../../../hooks/UseCurrentUserIdentifier";
-import { IEditProfileFormInput } from "../../../../models/FormInputs/IEditProfileFormInput";
+import { IUpdateUser } from "../../../../models/IUpdateUser";
 import { getCurrentUserData } from "../../../../services/HttpService/AuthService";
 import { RoleEnum } from "../../../../models/Enums";
-import { getUser } from "../../../../services/HttpService/UsersService";
+import {
+  getUser,
+  updateUser,
+} from "../../../../services/HttpService/UsersService";
 import ConfirmationDialog from "../../../Common/ConfirmationDialog";
 
-const userInitialState: IEditProfileFormInput = {
+const userInitialState: IUpdateUser = {
   id: 0,
   firstname: "",
   lastname: "",
@@ -46,7 +49,7 @@ const Content = () => {
   const userId = useCurrentUserIdentifier();
   const userData = getCurrentUserData();
 
-  const [user, setUser] = useState<IEditProfileFormInput>(userInitialState);
+  const [user, setUser] = useState<IUpdateUser>(userInitialState);
 
   const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
 
@@ -63,8 +66,8 @@ const Content = () => {
             id: res.data.id,
             firstname: res.data.firstname,
             lastname: res.data.lastname,
-            index: res.data.index ?? -1,
-            year: res.data.year ?? -1,
+            index: res.data.index,
+            year: res.data.year,
           });
         } else {
           setAlertType("error");
@@ -125,9 +128,19 @@ const Content = () => {
 
   const handleRemoveDialogClose = async (newValue?: any) => {
     setConfirmationDialogOpen(false);
-    debugger;
     if (newValue) {
-      const res: any = undefined; //await editUser(user);
+      if (userData.role !== RoleEnum.Student) {
+        setUser({
+          id: user.id,
+          firstname: user.firstname,
+          lastname: user.lastname,
+          index: null,
+          year: null,
+        });
+      }
+
+      debugger;
+      const res: any = await updateUser(user);
       if (res) {
         if (
           res.status &&
@@ -140,9 +153,9 @@ const Content = () => {
             setAlertMessage(res.data.errorMessage);
             setOpenAlert(true);
           } else if (res.data.id > 0) {
-            navigate(`/`, {
-              replace: false,
-            });
+            setAlertType("success");
+            setAlertMessage(t("AlertSuccessfullMessage"));
+            setOpenAlert(true);
           }
         }
       } else {

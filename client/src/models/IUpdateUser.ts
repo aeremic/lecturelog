@@ -1,6 +1,4 @@
-import { RoleEnum } from "./Enums";
-
-export interface IEditStudent {
+export interface IUpdateUser {
   id: number;
   firstname: string;
   lastname: string;

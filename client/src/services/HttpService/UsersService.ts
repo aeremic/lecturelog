@@ -1,7 +1,7 @@
 import { IEmailRegistration } from "../../models/IEmailRegistration";
+import { IUpdateUser } from "../../models/IUpdateUser";
 import { IUser } from "../../models/IUser";
 import { get, getById, post, remove } from "./HttpServiceBase";
-import { RoleEnum } from "../../models/Enums";
 
 const URL = "/user";
 
@@ -56,6 +56,14 @@ export const removeUser = async (id: number) => {
 export const getAllExceptAdmin = async () => {
   try {
     return await get(`${URL}/getAllExceptAdmin`);
+  } catch (err) {
+    console.log(err); // TODO: Fix for PROD.
+  }
+};
+
+export const updateUser = async (data: IUpdateUser) => {
+  try {
+    return await post(`${URL}/updateUser`, data);
   } catch (err) {
     console.log(err); // TODO: Fix for PROD.
   }

@@ -325,7 +325,7 @@ export class UserUseCases extends GenericUseCases<UserEntity> {
       }
 
       let isEmailChanged: boolean;
-      if (userEntity.email !== userInDb.email) {
+      if (userEntity.email && userEntity.email !== userInDb.email) {
         if (this.isFound(await this.getByEmail(userEntity.email))) {
           result.errorMessage = ErrorMessageConstants.UserExists;
           return result;
@@ -342,6 +342,10 @@ export class UserUseCases extends GenericUseCases<UserEntity> {
       } else {
         userEntity.isActivated = userInDb.isActivated;
         isEmailChanged = false;
+      }
+
+      if (!userEntity.role) {
+        userEntity.role = userInDb.role;
       }
 
       await this.createOrUpdate(userEntity);
@@ -524,7 +528,7 @@ export class UserUseCases extends GenericUseCases<UserEntity> {
         file,
       );
       for (let i = 0; i < data.length; i++) {
-        if (data[i] && data[i].id != undefined) {
+        if (data[i] && data[i].id != undefined && data[i].email != '') {
           const dataId = Number(data[i].id);
           if (Number.isNaN(dataId)) {
             uploadResult.errors.push(
