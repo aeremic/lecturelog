@@ -41,7 +41,6 @@ const Menu = () => {
                   component={Link}
                   to={{
                     pathname: `/user/profile`,
-                    search: `?id=${userData.id}`,
                   }}
                 >
                   <ListItemIcon>
@@ -61,7 +60,6 @@ const Menu = () => {
                   component={Link}
                   to={{
                     pathname: `/professor/mysubjects`,
-                    search: `?id=${userData.id}`,
                   }}
                 >
                   <ListItemIcon>
@@ -76,7 +74,6 @@ const Menu = () => {
                   component={Link}
                   to={{
                     pathname: `/user/profile`,
-                    search: `?id=${userData.id}`,
                   }}
                 >
                   <ListItemIcon>
@@ -96,7 +93,6 @@ const Menu = () => {
                   component={Link}
                   to={{
                     pathname: `/student/home`,
-                    search: `?id=${userData.id}`,
                   }}
                 >
                   <ListItemIcon>
@@ -111,7 +107,6 @@ const Menu = () => {
                   component={Link}
                   to={{
                     pathname: `/user/profile`,
-                    search: `?id=${userData.id}`,
                   }}
                 >
                   <ListItemIcon>

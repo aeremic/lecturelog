@@ -30,7 +30,7 @@ export class UserController {
     return this.userUseCases.get();
   }
 
-  @Roles('admin', 'professor')
+  @Roles('admin', 'professor', 'student')
   @UseGuards(AuthGuard('jwt'), RoleGuard)
   @Get('/getById/:id')
   getById(@Param('id', ParseIntPipe) id: number): Promise<UserEntity> {

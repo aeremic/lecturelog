@@ -139,5 +139,6 @@
     "RemovingAssignedStudentsAction": "This action will end remove all currenlty assigned students to this subject. Are you sure you want to continue?",
     "RemovingAssignedStudentFromTheSubject":"Removing assigned student from the subject",
     "RemovingAssignedStudentAction": "This action will remove student assigned to this subject. Are you sure you want to continue?",
-    "NewAccountSuccess": "New account was successfully registered. Check your email inbox and follow the link that we sent you to activate this account."
+    "NewAccountSuccess": "New account was successfully registered. Check your email inbox and follow the link that we sent you to activate this account.",
+    "Profile":"Profile"
 }

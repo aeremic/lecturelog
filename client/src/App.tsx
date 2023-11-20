@@ -20,7 +20,7 @@ const App = () => {
       <BrowserRouter>
         <Routes>
           /**Login flow routes */
-          <Route path="/" element={<Login />} /> /**TODO: Temporary*/
+          <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />
           <Route path="/emailregistration" element={<EmailRegistration />} />
           /**Register flow routes */
@@ -95,9 +95,6 @@ const App = () => {
               </Suspense>
             }
           />
-          {/* <PrivateRoute path="/">
-            <Main />
-          </PrivateRoute> */}
         </Routes>
       </BrowserRouter>
     </React.Suspense>
