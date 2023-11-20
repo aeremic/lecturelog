@@ -139,7 +139,6 @@ const Content = () => {
         });
       }
 
-      debugger;
       const res: any = await updateUser(user);
       if (res) {
         if (
