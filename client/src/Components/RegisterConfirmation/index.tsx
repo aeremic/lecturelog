@@ -23,7 +23,6 @@ const RegisterConfirmation = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Header />
       <ErrorBoundary fallback={<ErrorComponent />}>
         <Content
           setOpenAlert={setOpenAlert}
