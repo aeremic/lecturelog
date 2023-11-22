@@ -65,6 +65,19 @@ export class UserRepository implements UserRepositoryAbstract {
     return UserMapper.ToEntity(result);
   }
 
+  async getByIndex(
+    index: number,
+    year: number,
+    includeHash = false,
+  ): Promise<UserEntity> {
+    const result = await this.userModelRepository.findOneBy({
+      index: index,
+      year: year,
+    });
+
+    return UserMapper.ToEntity(result, includeHash);
+  }
+
   async getProfessors(size: number, skip: number): Promise<UserEntity[]> {
     const result = await this.userModelRepository.find({
       where: { role: UserMapper.getType(RoleEnum.professor) },

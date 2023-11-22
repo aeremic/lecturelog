@@ -146,6 +146,27 @@ export class UserUseCases extends GenericUseCases<UserEntity> {
     return result;
   }
 
+  async getByIndex(
+    index: number,
+    year: number,
+    includeHash = false,
+  ): Promise<UserEntity> {
+    let result: UserEntity | PromiseLike<UserEntity>;
+    try {
+      if (index && year) {
+        result = await this.userRepository.getByIndex(index, year, includeHash);
+      }
+    } catch (error) {
+      await this.loggerUseCases.log(
+        ErrorConstants.GetMethodError,
+        error?.message,
+        error?.stack,
+      );
+    }
+
+    return result;
+  }
+
   async getProfessors(page: number, size: number): Promise<ProfessorsDto> {
     let result: ProfessorsDto | PromiseLike<ProfessorsDto>;
     let professors: UserEntity[] | PromiseLike<UserEntity[]>;
@@ -342,6 +363,15 @@ export class UserUseCases extends GenericUseCases<UserEntity> {
       } else {
         userEntity.isActivated = userInDb.isActivated;
         isEmailChanged = false;
+      }
+
+      if (userEntity.index && userEntity.year) {
+        if (
+          this.isFound(await this.getByIndex(userEntity.index, userEntity.year))
+        ) {
+          result.errorMessage = ErrorMessageConstants.UserExists;
+          return result;
+        }
       }
 
       if (!userEntity.role) {

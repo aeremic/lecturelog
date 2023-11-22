@@ -14,6 +14,12 @@ export abstract class UserRepositoryAbstract extends GenericRepositoryAbstract<U
     year: number,
   ): Promise<UserEntity>;
 
+  abstract getByIndex(
+    index: number,
+    year: number,
+    includeHash: boolean,
+  ): Promise<UserEntity>;
+
   abstract getProfessors(size: number, skip: number): Promise<UserEntity[]>;
 
   abstract getProfessorsCount(): Promise<number>;

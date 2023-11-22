@@ -275,6 +275,13 @@ const Content = () => {
                     size="medium"
                     type="submit"
                     color="success"
+                    disabled={
+                      user.firstname === "" ||
+                      user.lastname === "" ||
+                      (userData.role === RoleEnum.Student &&
+                        ((user.index && user.index <= 0) ||
+                          (user.year && user.year <= 0)))
+                    }
                   >
                     {
                       // @ts-ignore
