@@ -44,7 +44,7 @@ const Content = () => {
     const res: any = await emailRegistration(data);
     if (res && res.status && res.status === HttpStatusCode.Created) {
       if (res.data) {
-        navigate(`/login?success=${res.data}`, { replace: true });
+        navigate(`/login?registration-success=${res.data}`, { replace: true });
       } else {
         setAlertType("error");
         setAlertMessage(t("ActivationFailed"));

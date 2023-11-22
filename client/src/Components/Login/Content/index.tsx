@@ -37,7 +37,10 @@ const Content = () => {
   const { t } = useTranslation();
 
   const emailRegistrationSuccess: boolean =
-    queryParameters.get("success") == "true";
+    queryParameters.get("registration-success") == "true";
+
+  const passwordChangeSuccess: boolean =
+    queryParameters.get("change-success") == "true";
 
   const navigate = useNavigate();
   const {
@@ -129,6 +132,13 @@ const Content = () => {
             {emailRegistrationSuccess ? (
               <Alert severity="success" sx={{ width: 270 }}>
                 {t("EmailRegistrationSuccess")}
+              </Alert>
+            ) : (
+              <></>
+            )}
+            {passwordChangeSuccess ? (
+              <Alert severity="success" sx={{ width: 270 }}>
+                {t("PasswordChangeSuccess")}
               </Alert>
             ) : (
               <></>

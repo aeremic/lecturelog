@@ -165,6 +165,12 @@ const Content = () => {
     }
   };
 
+  const handleChangePasswordClick = () => {
+    navigate(`/user/password-change`, {
+      replace: false,
+    });
+  };
+
   const handleCloseAlert = (
     event?: React.SyntheticEvent | Event,
     reason?: string
@@ -272,7 +278,7 @@ const Content = () => {
                 <FormGroup sx={{ mt: 2 }}>
                   <Button
                     variant="contained"
-                    size="medium"
+                    size="large"
                     type="submit"
                     color="success"
                     disabled={
@@ -291,12 +297,17 @@ const Content = () => {
                   </Button>
                 </FormGroup>
                 <FormGroup sx={{ mt: 1 }}>
-                  <Button variant="contained" size="medium" color="warning">
+                  <Button
+                    variant="contained"
+                    size="large"
+                    color="warning"
+                    onClick={handleChangePasswordClick}
+                  >
                     {
                       // @ts-ignore
                       <PasswordIcon fontSize="xs" sx={{ mr: 0.5 }} />
                     }
-                    <Typography>{t("Change password")}</Typography>
+                    <Typography>{t("ChangePassword")}</Typography>
                   </Button>
                 </FormGroup>
               </form>

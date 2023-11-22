@@ -13,6 +13,7 @@ import { PrivateRoute } from "./components/Common/PrivateRoute";
 import { RoleEnum } from "./models/Enums";
 import LoadingComponent from "./components/Common/LoadingComponent";
 import { LectureRoom } from "./components/Professor/LectureRoom";
+import PasswordChange from "./components/User/PasswordChange";
 
 const App = () => {
   return (
@@ -38,6 +39,18 @@ const App = () => {
                   roles={[RoleEnum.Admin, RoleEnum.Professor, RoleEnum.Student]}
                 >
                   <Profile />
+                </PrivateRoute>
+              </Suspense>
+            }
+          />
+          <Route
+            path="/user/password-change"
+            element={
+              <Suspense fallback={<LoadingComponent />}>
+                <PrivateRoute
+                  roles={[RoleEnum.Admin, RoleEnum.Professor, RoleEnum.Student]}
+                >
+                  <PasswordChange />
                 </PrivateRoute>
               </Suspense>
             }

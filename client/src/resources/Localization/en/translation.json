@@ -65,7 +65,6 @@
     "RegisterHere": "Register here!",
     "NewAccountAddedSuccessfull": "New Account Added",
     "EmailRegistrationSuccess":   "Account successfully activated. Please log in with your new password.",
-    
     "NewAccounSuccess":   "New account has been successfully added. We sended you an email with an instructions on how to proceed with a registration, please check it.",
     "ActivationFailed": "Activation failed",
     "DidntReceiveAnEmail": "Didn't receive an email?",
@@ -140,5 +139,13 @@
     "RemovingAssignedStudentFromTheSubject":"Removing assigned student from the subject",
     "RemovingAssignedStudentAction": "This action will remove student assigned to this subject. Are you sure you want to continue?",
     "NewAccountSuccess": "New account was successfully registered. Check your email inbox and follow the link that we sent you to activate this account.",
-    "Profile":"Profile"
+    "Profile":"Profile",
+    "Save":"Save",
+    "ChangePassword":"Change password",
+    "PasswordChangeSuccess": "Your password is successfully changed. Please log in with your new password.",
+    "CurrentPassword": "Current Password",
+    "NewPassword":"New Password",
+    "PleaseEnterYourCurrentPassword":"Please enter your current password",
+    "PleaseEnterYourNewPassword":"Please enter your new password",
+    "PleaseRepeatYourNewPassword":"Please repeat your new password"
 }
