@@ -347,7 +347,11 @@ export class UserUseCases extends GenericUseCases<UserEntity> {
 
       let isEmailChanged: boolean;
       if (userEntity.email && userEntity.email !== userInDb.email) {
-        if (this.isFound(await this.getByEmail(userEntity.email))) {
+        const getByEmailResult = await this.getByEmail(userEntity.email);
+        if (
+          this.isFound(getByEmailResult) &&
+          userEntity.id !== getByEmailResult.id
+        ) {
           result.errorMessage = ErrorMessageConstants.UserExists;
           return result;
         }
@@ -365,9 +369,17 @@ export class UserUseCases extends GenericUseCases<UserEntity> {
         isEmailChanged = false;
       }
 
-      if (userEntity.index && userEntity.year) {
+      if (
+        (userEntity.index && userEntity.index !== userInDb.index) ||
+        (userEntity.year && userEntity.year !== userInDb.year)
+      ) {
+        const getByIndexResult = await this.getByIndex(
+          userEntity.index,
+          userEntity.year,
+        );
         if (
-          this.isFound(await this.getByIndex(userEntity.index, userEntity.year))
+          this.isFound(getByIndexResult) &&
+          userInDb.id !== getByIndexResult.id
         ) {
           result.errorMessage = ErrorMessageConstants.UserExists;
           return result;
