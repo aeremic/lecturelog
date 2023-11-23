@@ -31,4 +31,6 @@ export abstract class UserRepositoryAbstract extends GenericRepositoryAbstract<U
   abstract getAllExceptAdmin(): Promise<UserEntity[]>;
 
   abstract getByIds(ids: number[]): Promise<UserEntity[]>;
+
+  abstract getByIdWithHash(id: number): Promise<UserEntity>;
 }

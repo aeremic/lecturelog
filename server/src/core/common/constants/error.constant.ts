@@ -10,6 +10,10 @@ export class ErrorMessageConstants {
   public static UserDoesntExists = "User doesn't exists";
   public static EmailNotValid = 'Email is not valid';
   public static PropertiesNotValid = 'Invalid user data';
+  public static NewAndRepeatedPasswordsNotValid =
+    "New and repeated passwords don't match";
+  public static PasswordNotValid = 'Current password not valid';
+  public static InternalError = 'Internal error';
 }
 
 export class CsvParseErrorConstants {

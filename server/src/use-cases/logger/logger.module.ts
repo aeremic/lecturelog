@@ -6,14 +6,14 @@ import { LoggerRepositoryAbstract } from 'src/core/abstracts/repositories/logger
 import { LoggerRepository } from 'src/infrastructure/data/repositories/logger.repository';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Logger])],
-    providers: [
-        LoggerUseCases,
-        {
-            provide: LoggerRepositoryAbstract,
-            useClass: LoggerRepository
-        }
-    ],
-    exports: [LoggerUseCases]
+  imports: [TypeOrmModule.forFeature([Logger])],
+  providers: [
+    LoggerUseCases,
+    {
+      provide: LoggerRepositoryAbstract,
+      useClass: LoggerRepository,
+    },
+  ],
+  exports: [LoggerUseCases],
 })
-export class LoggerModule { }
+export class LoggerModule {}

@@ -135,4 +135,10 @@ export class UserRepository implements UserRepositoryAbstract {
 
     return UserMapper.ToEntities(result);
   }
+
+  async getByIdWithHash(id: number): Promise<UserEntity> {
+    const result = await this.userModelRepository.findOneBy({ id: id });
+
+    return UserMapper.ToEntity(result, true);
+  }
 }

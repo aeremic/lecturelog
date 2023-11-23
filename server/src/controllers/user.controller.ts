@@ -14,7 +14,10 @@ import { UserEntity } from '../core/entities/user.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RoleGuard } from 'src/auth/guards/role.guard';
-import { EmailRegistrationDto } from 'src/core/dtos';
+import {
+  EmailRegistrationDto,
+  UpdateUserPasswordResponseDto,
+} from 'src/core/dtos';
 import { SendEmailVerificationDto } from 'src/core/dtos/requests/send-email-verification.dto';
 import { CreateUpdateUserResponseDto } from 'src/core/dtos/responses/create-update-user-response.dto';
 
@@ -91,5 +94,14 @@ export class UserController {
   @Post('/updateUser')
   updateUser(@Body() userEntity: any): Promise<CreateUpdateUserResponseDto> {
     return this.userUseCases.updateUser(userEntity);
+  }
+
+  @Roles('admin', 'professor', 'student')
+  @UseGuards(AuthGuard('jwt'), RoleGuard)
+  @Post('/updateUserPassword')
+  updateUserPassword(
+    @Body() request: any,
+  ): Promise<UpdateUserPasswordResponseDto> {
+    return this.userUseCases.updateUserPassword(request);
   }
 }

@@ -12,7 +12,11 @@ import { ProfessorsDto } from 'src/core/dtos/responses/professors.dto';
 import { BcryptService, MailService } from 'src/services';
 import { Encoding } from 'src/core/common/encoding';
 import { EmailVerificationUseCases } from '../emailverification/email-verification.use-case';
-import { EmailRegistrationDto } from 'src/core/dtos';
+import {
+  EmailRegistrationDto,
+  UpdateUserPasswordRequestDto,
+  UpdateUserPasswordResponseDto,
+} from 'src/core/dtos';
 import { ConfigService } from '@nestjs/config';
 import { StudentsDto } from 'src/core/dtos/responses/students.dto';
 import { RoleEnum } from 'src/core/common/enums/role.enum';
@@ -772,6 +776,63 @@ export class UserUseCases extends GenericUseCases<UserEntity> {
     }
 
     return this.isFound(userInDb);
+  }
+
+  async getByIdWithHash(id: number): Promise<UserEntity> {
+    return this.userRepository.getByIdWithHash(id);
+  }
+
+  async updateUserPassword(
+    request: UpdateUserPasswordRequestDto,
+  ): Promise<UpdateUserPasswordResponseDto> {
+    const result = new UpdateUserPasswordResponseDto();
+    try {
+      if (request) {
+        if (request.newPassword !== request.repeatPassword) {
+          result.errorMessage =
+            ErrorMessageConstants.NewAndRepeatedPasswordsNotValid;
+          return result;
+        }
+
+        const userInDb = await this.getByIdWithHash(request.id);
+        if (!this.isFound(userInDb) || !userInDb.hash) {
+          result.errorMessage = ErrorMessageConstants.UserDoesntExists;
+          return result;
+        }
+
+        const bcryptResult = await this.bcryptService.checkPasswordHash(
+          request.currentPassword,
+          userInDb.hash,
+        );
+
+        if (!bcryptResult) {
+          result.errorMessage = ErrorMessageConstants.PasswordNotValid;
+          return result;
+        }
+
+        const hashedPassword: any = await this.bcryptService.createUserPassword(
+          request.newPassword,
+          request.repeatPassword,
+        );
+
+        if (hashedPassword) {
+          userInDb.hash = hashedPassword;
+
+          await this.createOrUpdate(userInDb);
+          result.id = userInDb.id;
+        }
+      }
+    } catch (error) {
+      await this.loggerUseCases.log(
+        ErrorConstants.PostMethodError,
+        error?.message,
+        error?.stack,
+      );
+
+      result.errorMessage = ErrorMessageConstants.InternalError;
+    }
+
+    return result;
   }
 
   //#endregion

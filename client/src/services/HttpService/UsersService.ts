@@ -1,5 +1,6 @@
 import { IEmailRegistration } from "../../models/IEmailRegistration";
 import { IUpdateUser } from "../../models/IUpdateUser";
+import { IUpdateUserPassword } from "../../models/IUpdateUserPassword";
 import { IUser } from "../../models/IUser";
 import { get, getById, post, remove } from "./HttpServiceBase";
 
@@ -64,6 +65,14 @@ export const getAllExceptAdmin = async () => {
 export const updateUser = async (data: IUpdateUser) => {
   try {
     return await post(`${URL}/updateUser`, data);
+  } catch (err) {
+    console.log(err); // TODO: Fix for PROD.
+  }
+};
+
+export const updateUserPassword = async (data: IUpdateUserPassword) => {
+  try {
+    return await post(`${URL}/updateUserPassword`, data);
   } catch (err) {
     console.log(err); // TODO: Fix for PROD.
   }

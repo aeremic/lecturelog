@@ -24,9 +24,11 @@ import CheckIcon from "@mui/icons-material/Check";
 import { useTranslation } from "react-i18next";
 import useCurrentUserIdentifier from "../../../../hooks/UseCurrentUserIdentifier";
 import ConfirmationDialog from "../../../Common/ConfirmationDialog";
-import { IPasswordChange } from "../../../../models/IPasswordChange";
+import { IUpdateUserPassword } from "../../../../models/IUpdateUserPassword";
+import { IPasswordChangeFormInput } from "../../../../models/FormInputs/IPasswordChangeFormInput";
+import { updateUserPassword } from "../../../../services/HttpService/UsersService";
 
-const passwordChangeInitialState: IPasswordChange = {
+const passwordChangeInitialState: IPasswordChangeFormInput = {
   currentPassword: "",
   newPassword: "",
   repeatPassword: "",
@@ -38,9 +40,8 @@ const Content = () => {
 
   const userId = useCurrentUserIdentifier();
 
-  const [passwordChange, setPasswordChange] = useState<IPasswordChange>(
-    passwordChangeInitialState
-  );
+  const [passwordChange, setPasswordChange] =
+    useState<IPasswordChangeFormInput>(passwordChangeInitialState);
 
   const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
 
@@ -80,8 +81,15 @@ const Content = () => {
 
   const handleRemoveDialogClose = async (newValue?: any) => {
     setConfirmationDialogOpen(false);
-    if (newValue) {
-      const res: any = await updateUserPassword(passwordChange);
+    if (userId > 0 && newValue) {
+      const modelToPost: IUpdateUserPassword = {
+        id: userId,
+        currentPassword: passwordChange.currentPassword,
+        newPassword: passwordChange.newPassword,
+        repeatPassword: passwordChange.repeatPassword,
+      };
+
+      const res: any = await updateUserPassword(modelToPost);
       if (res) {
         if (
           res.status &&
@@ -215,7 +223,7 @@ const Content = () => {
             id="edit-user-confirmation-menu"
             keepMounted
             open={confirmationDialogOpen}
-            title={t("EditUser")}
+            title={t("ChangePassword")}
             content={t("AreYouSure")}
             negativeAction={t("Cancel")}
             positiveAction={t("Yes")}
