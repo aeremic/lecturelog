@@ -14,6 +14,8 @@ import { RoleEnum } from "./models/Enums";
 import LoadingComponent from "./components/Common/LoadingComponent";
 import { LectureRoom } from "./components/Professor/LectureRoom";
 import PasswordChange from "./components/User/PasswordChange";
+import ForgotPassword from "./components/ForgotPassword";
+import PasswordResetConfirmation from "./components/PasswordResetConfirmation";
 
 const App = () => {
   return (
@@ -24,6 +26,11 @@ const App = () => {
           <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />
           <Route path="/emailregistration" element={<EmailRegistration />} />
+          <Route path="/forgotpassword" element={<ForgotPassword />} />
+          <Route
+            path="/passwordresetconfirmation"
+            element={<PasswordResetConfirmation />}
+          />
           /**Register flow routes */
           <Route path="/register" element={<Register />} />
           <Route

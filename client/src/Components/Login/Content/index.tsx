@@ -93,6 +93,12 @@ const Content = () => {
     });
   };
 
+  const handleForgotPasswordClick = () => {
+    navigate("/forgotpassword", {
+      replace: false,
+    });
+  };
+
   const handleCloseAlert = (
     event?: React.SyntheticEvent | Event,
     reason?: string
@@ -194,6 +200,14 @@ const Content = () => {
                     <Typography>{t("LogIn")}</Typography>
                   </Button>
                 </FormGroup>
+                <Stack direction={"row"} sx={{ mt: 0.4 }}>
+                  <Typography variant="body2" sx={{ mt: 0.4 }}>
+                    {t("ForgotPassword")}
+                  </Typography>
+                  <Button size="small" onClick={handleForgotPasswordClick}>
+                    <Typography variant="body2">{t("ClickHere")}</Typography>
+                  </Button>
+                </Stack>
               </form>
             </FormControl>
           </Container>

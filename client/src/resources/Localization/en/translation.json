@@ -146,6 +146,9 @@
     "CurrentPassword": "Current Password",
     "NewPassword":"New Password",
     "PleaseEnterYourCurrentPassword":"Please enter your current password",
-    "PleaseEnterYourNewPassword":"Please enter your new password",
-    "PleaseRepeatYourNewPassword":"Please repeat your new password"
+    "ForgotPassword":"Forgot password?",
+    "SendResetPasswordEmail":"Send Reset Password Email",
+    "ResetPassword":"Reset Password",
+    "ResetPasswordEmailSent":"Reseting Password",
+    "ResetPasswordEmailSuccess":"Email for reseting your password was sent successfully. Check your email inbox and follow the link that we sent you to continue with reseting your password."
 }
