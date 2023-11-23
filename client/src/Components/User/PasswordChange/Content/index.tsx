@@ -27,6 +27,7 @@ import ConfirmationDialog from "../../../Common/ConfirmationDialog";
 import { IUpdateUserPassword } from "../../../../models/IUpdateUserPassword";
 import { IPasswordChangeFormInput } from "../../../../models/FormInputs/IPasswordChangeFormInput";
 import { updateUserPassword } from "../../../../services/HttpService/UsersService";
+import { logout } from "../../../../services/HttpService/AuthService";
 
 const passwordChangeInitialState: IPasswordChangeFormInput = {
   currentPassword: "",
@@ -102,6 +103,7 @@ const Content = () => {
             setAlertMessage(res.data.errorMessage);
             setOpenAlert(true);
           } else if (res.data.id > 0) {
+            logout();
             navigate(`/login?change-success=${true}`, { replace: true });
           }
         }
