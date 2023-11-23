@@ -10,6 +10,7 @@ import {
   FormControl,
   FormGroup,
   FormLabel,
+  Skeleton,
   Snackbar,
   Stack,
   TextField,
@@ -204,38 +205,46 @@ const Content = () => {
             <Divider sx={{ m: 2 }} />
             <FormControl fullWidth sx={{ width: 300 }}>
               <form onSubmit={handleSubmit}>
-                <FormGroup sx={{ mt: 2 }}>
-                  <FormLabel>
-                    {
-                      // @ts-ignore
-                      <PersonIcon fontSize="xs" sx={{ mr: 0.5 }} />
-                    }
-                    {t("FirstName")}
-                  </FormLabel>
-                  <TextField
-                    variant="outlined"
-                    type="text"
-                    value={user.firstname}
-                    onChange={handleFirstnameChange}
-                    sx={{ mt: 0.8 }}
-                  ></TextField>
-                </FormGroup>
-                <FormGroup sx={{ mt: 2 }}>
-                  <FormLabel>
-                    {
-                      // @ts-ignore
-                      <PersonIcon fontSize="xs" sx={{ mr: 0.5 }} />
-                    }
-                    {t("LastName")}
-                  </FormLabel>
-                  <TextField
-                    variant="outlined"
-                    type="text"
-                    value={user.lastname}
-                    onChange={handleLastnameChange}
-                    sx={{ mt: 0.8 }}
-                  ></TextField>
-                </FormGroup>
+                {user.id > 0 ? (
+                  <FormGroup sx={{ mt: 2 }}>
+                    <FormLabel>
+                      {
+                        // @ts-ignore
+                        <PersonIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                      }
+                      {t("FirstName")}
+                    </FormLabel>
+                    <TextField
+                      variant="outlined"
+                      type="text"
+                      value={user.firstname}
+                      onChange={handleFirstnameChange}
+                      sx={{ mt: 0.8 }}
+                    ></TextField>
+                  </FormGroup>
+                ) : (
+                  <Skeleton sx={{ mt: 2.7 }} height={90} />
+                )}
+                {user.id > 0 ? (
+                  <FormGroup sx={{ mt: 2 }}>
+                    <FormLabel>
+                      {
+                        // @ts-ignore
+                        <PersonIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                      }
+                      {t("LastName")}
+                    </FormLabel>
+                    <TextField
+                      variant="outlined"
+                      type="text"
+                      value={user.lastname}
+                      onChange={handleLastnameChange}
+                      sx={{ mt: 0.8 }}
+                    ></TextField>
+                  </FormGroup>
+                ) : (
+                  <Skeleton sx={{ mt: 2.7 }} height={90} />
+                )}
                 {userData.role == RoleEnum.Student ? (
                   <Stack direction="row">
                     <FormGroup sx={{ mt: 2, mr: 2 }}>

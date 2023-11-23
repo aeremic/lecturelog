@@ -1,4 +1,4 @@
-import { Container, Grid, Typography } from "@mui/material";
+import { Container, Grid, Skeleton, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { IAssignedSubject } from "../../../../models/IAssignedSubject";
 import { useNavigate } from "react-router-dom";
@@ -36,7 +36,7 @@ export const Content = () => {
   );
   const [activeSubjects, setActiveSubjects] = useState<IAssignedSubject[]>([]);
 
-  const [SubjectsLoaded, setSubjectsLoaded] = useState<boolean>(false);
+  const [subjectsLoaded, setSubjectsLoaded] = useState<boolean>(false);
 
   const [lecturesChangeEvents, setLecturesChangeEvents] = useState([]);
   useEffect(() => {
@@ -59,7 +59,7 @@ export const Content = () => {
     };
 
     fetchData();
-  }, [userId, SubjectsLoaded, lecturesChangeEvents]);
+  }, [userId, subjectsLoaded, lecturesChangeEvents]);
 
   useEffect(() => {
     connect();
@@ -129,21 +129,29 @@ export const Content = () => {
       </Typography>
       <Grid container spacing={2} sx={{ mt: 2 }}>
         <Grid item xs={6} sx={{ minWidth: 350 }}>
-          <AssignedSubject
-            subjectsProp={assignedSubjects}
-            handleStartSession={handleStartSession}
-            handleSubjectClick={handleSubjectClick}
-            handleAddSubjectDialogClick={handleAddSubjectDialogClick}
-          />
+          {subjectsLoaded ? (
+            <AssignedSubject
+              subjectsProp={assignedSubjects}
+              handleStartSession={handleStartSession}
+              handleSubjectClick={handleSubjectClick}
+              handleAddSubjectDialogClick={handleAddSubjectDialogClick}
+            />
+          ) : (
+            <Skeleton height={300} />
+          )}
         </Grid>
         <Grid item xs={6} sx={{ minWidth: 350 }}>
-          <ActiveSubjects
-            userId={userId}
-            subjectsProp={activeSubjects}
-            handleStopSession={handleStopSession}
-            handleStopAllSession={handleStopAllSession}
-            handleSessionClick={handleSessionClick}
-          />
+          {subjectsLoaded ? (
+            <ActiveSubjects
+              userId={userId}
+              subjectsProp={activeSubjects}
+              handleStopSession={handleStopSession}
+              handleStopAllSession={handleStopAllSession}
+              handleSessionClick={handleSessionClick}
+            />
+          ) : (
+            <Skeleton height={300} />
+          )}
         </Grid>
       </Grid>
     </Container>
