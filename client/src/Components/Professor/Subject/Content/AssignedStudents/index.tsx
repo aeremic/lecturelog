@@ -6,6 +6,7 @@ import {
   CardContent,
   Divider,
   Paper,
+  Skeleton,
   Snackbar,
   Stack,
   Table,
@@ -182,129 +183,148 @@ export const AssignedStudents: React.FC<IAssignedStudentsProps> = ({
           </>
         ) : (
           <>
-            {assignedStudentsLoaded && assignedStudents.length > 0 ? (
+            {assignedStudentsLoaded ? (
               <>
-                <Stack direction="row">
-                  <Button
-                    onClick={() => {
-                      handleDownloadAssignedStudentsClick();
-                    }}
-                    variant="contained"
-                    color="success"
-                    size="medium"
-                    sx={{ mb: 1, mr: 2 }}
-                  >
-                    <DownloadIcon />
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      handleRemoveAllAssignedStudentsClick();
-                    }}
-                    variant="contained"
-                    color="error"
-                    size="medium"
-                    sx={{ mb: 1 }}
-                  >
-                    <DeleteIcon sx={{ mr: 0.5 }} />
-                    {t("ResetAllPresencePoints")}
-                  </Button>
-                </Stack>
-                <TableContainer component={Paper} sx={{ mt: 1 }}>
-                  <Table sx={{ minWidth: 300 }} size="small">
-                    <TableHead>
-                      <TableRow
-                        sx={{
-                          "& th": {
-                            backgroundColor: "secondary.light",
-                            color: "secondary.contrastText",
-                          },
+                {assignedStudents.length > 0 ? (
+                  <>
+                    <Stack direction="row">
+                      <Button
+                        onClick={() => {
+                          handleDownloadAssignedStudentsClick();
                         }}
+                        variant="contained"
+                        color="success"
+                        size="medium"
+                        sx={{ mb: 1, mr: 2 }}
                       >
-                        <TableCell align="center">
-                          {
-                            // @ts-ignore
-                            <ContactPageIcon
-                              fontSize="xs"
-                              sx={{ mt: 1, mr: 0.5 }}
-                            />
-                          }
-                          {t("Index")}
-                        </TableCell>
-                        <TableCell align="center">
-                          {
-                            // @ts-ignore
-                            <PersonIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
-                          }
-                          {t("FirstName")}
-                        </TableCell>
-                        <TableCell align="center">
-                          {
-                            // @ts-ignore
-                            <PersonIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
-                          }
-                          {t("LastName")}
-                        </TableCell>
-                        <TableCell align="center">
-                          {
-                            // @ts-ignore
-                            <StarIcon fontSize="xs" sx={{ mt: 1, mr: 0.5 }} />
-                          }
-                          {t("PointsPerPresence")}
-                        </TableCell>
-                        <TableCell align="center" colSpan={2}>
-                          {
-                            // @ts-ignore
-                            <BorderColorIcon
-                              fontSize="xs"
-                              sx={{ mt: 1, mr: 0.5 }}
-                            />
-                          }
-                        </TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {assignedStudents.map((student, idx) => {
-                        return (
+                        <DownloadIcon />
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          handleRemoveAllAssignedStudentsClick();
+                        }}
+                        variant="contained"
+                        color="error"
+                        size="medium"
+                        sx={{ mb: 1 }}
+                      >
+                        <DeleteIcon sx={{ mr: 0.5 }} />
+                        {t("ResetAllPresencePoints")}
+                      </Button>
+                    </Stack>
+                    <TableContainer component={Paper} sx={{ mt: 1 }}>
+                      <Table sx={{ minWidth: 300 }} size="small">
+                        <TableHead>
                           <TableRow
                             sx={{
-                              "&:last-child td, &:last-child th": { border: 0 },
+                              "& th": {
+                                backgroundColor: "secondary.light",
+                                color: "secondary.contrastText",
+                              },
                             }}
                           >
-                            <TableCell key={idx} align="center">
-                              {student.index}/{student.year}
+                            <TableCell align="center">
+                              {
+                                // @ts-ignore
+                                <ContactPageIcon
+                                  fontSize="xs"
+                                  sx={{ mt: 1, mr: 0.5 }}
+                                />
+                              }
+                              {t("Index")}
                             </TableCell>
                             <TableCell align="center">
-                              {student.firstname}
+                              {
+                                // @ts-ignore
+                                <PersonIcon
+                                  fontSize="xs"
+                                  sx={{ mt: 1, mr: 0.5 }}
+                                />
+                              }
+                              {t("FirstName")}
                             </TableCell>
                             <TableCell align="center">
-                              {student.lastname}
+                              {
+                                // @ts-ignore
+                                <PersonIcon
+                                  fontSize="xs"
+                                  sx={{ mt: 1, mr: 0.5 }}
+                                />
+                              }
+                              {t("LastName")}
                             </TableCell>
                             <TableCell align="center">
-                              {student.sumOfPresencePoints}
+                              {
+                                // @ts-ignore
+                                <StarIcon
+                                  fontSize="xs"
+                                  sx={{ mt: 1, mr: 0.5 }}
+                                />
+                              }
+                              {t("PointsPerPresence")}
                             </TableCell>
-                            <TableCell align="center">
-                              <Button
-                                onClick={() => {
-                                  handleRemoveAssignedStudentClick(student.id);
-                                }}
-                                variant="contained"
-                                color="error"
-                                size="medium"
-                              >
-                                <DeleteIcon />
-                              </Button>
+                            <TableCell align="center" colSpan={2}>
+                              {
+                                // @ts-ignore
+                                <BorderColorIcon
+                                  fontSize="xs"
+                                  sx={{ mt: 1, mr: 0.5 }}
+                                />
+                              }
                             </TableCell>
                           </TableRow>
-                        );
-                      })}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
+                        </TableHead>
+                        <TableBody>
+                          {assignedStudents.map((student, idx) => {
+                            return (
+                              <TableRow
+                                sx={{
+                                  "&:last-child td, &:last-child th": {
+                                    border: 0,
+                                  },
+                                }}
+                              >
+                                <TableCell key={idx} align="center">
+                                  {student.index}/{student.year}
+                                </TableCell>
+                                <TableCell align="center">
+                                  {student.firstname}
+                                </TableCell>
+                                <TableCell align="center">
+                                  {student.lastname}
+                                </TableCell>
+                                <TableCell align="center">
+                                  {student.sumOfPresencePoints}
+                                </TableCell>
+                                <TableCell align="center">
+                                  <Button
+                                    onClick={() => {
+                                      handleRemoveAssignedStudentClick(
+                                        student.id
+                                      );
+                                    }}
+                                    variant="contained"
+                                    color="error"
+                                    size="medium"
+                                  >
+                                    <DeleteIcon />
+                                  </Button>
+                                </TableCell>
+                              </TableRow>
+                            );
+                          })}
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  </>
+                ) : (
+                  <Alert severity="info">
+                    {t("CurrentlyThereAreNoAssignedStudents")}
+                  </Alert>
+                )}
               </>
             ) : (
-              <Alert severity="info">
-                {t("CurrentlyThereAreNoAssignedStudents")}
-              </Alert>
+              <Skeleton height={150} />
             )}
           </>
         )}
