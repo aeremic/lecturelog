@@ -53,7 +53,7 @@ export class MailService {
       template: templatePath,
       context: {
         firstname: firstname,
-        url: baseUrl + `/password-reset?id=${id}`,
+        url: baseUrl + `/passwordreset?id=${id}`,
         code: code,
       },
     });

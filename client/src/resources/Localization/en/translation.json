@@ -60,7 +60,7 @@
     "PleaseEnterYourNewPassword": "Please enter your new password",
     "PleaseRepeatYourNewPassword": "Please repeat your new password",
     "Register": "Register",
-    "EmailRegistrationSubtitle":   "Please enter your temporary code to activate this account",
+    "EmailRegistrationSubtitle": "Please enter your temporary code to activate this account",
     "WrongCredentials": "Wrong credentials",
     "DontHaveAnAccount": "Don't have an account?",
     "RegisterHere": "Register here!",
@@ -151,5 +151,9 @@
     "SendResetPasswordEmail":"Send Reset Password Email",
     "ResetPassword":"Reset Password",
     "ResetPasswordEmailSent":"Reseting Password",
-    "ResetPasswordEmailSuccess":"Email for reseting your password was sent successfully. Check your email inbox and follow the link that we sent you to continue with reseting your password."
+    "ResetPasswordEmailSuccess":"Email for reseting your password was sent successfully. Check your email inbox and follow the link that we sent you to continue with reseting your password.",
+    "PasswordReset": "Password Reset",
+    "PasswordResetSubtitle":"Please enter your temporary code and new password",
+    "Reset":"Reset",
+    "PasswordResetFailed":"Something went wrong with reseting your password"
 }

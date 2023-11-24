@@ -16,6 +16,7 @@ import { LectureRoom } from "./components/Professor/LectureRoom";
 import PasswordChange from "./components/User/PasswordChange";
 import ForgotPassword from "./components/ForgotPassword";
 import PasswordResetEmailConfirmation from "./components/PasswordResetEmailConfirmation";
+import PasswordReset from "./components/PasswordReset/index";
 
 const App = () => {
   return (
@@ -31,6 +32,7 @@ const App = () => {
             path="/passwordresetemailconfirmation"
             element={<PasswordResetEmailConfirmation />}
           />
+          <Route path="/passwordreset" element={<PasswordReset />} />
           /**Register flow routes */
           <Route path="/register" element={<Register />} />
           <Route

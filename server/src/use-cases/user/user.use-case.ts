@@ -36,6 +36,8 @@ import { SendPasswordResetEmailRequestDto } from 'src/core/dtos/requests/send-pa
 import { SendPasswordResetEmailResponseDto } from 'src/core/dtos/responses/send-password-reset-email.dto';
 import { ResetPasswordUseCases } from '../reset-password/reset-password.use-case';
 import { ResetPasswordEntity } from 'src/core/entities/reset-password.entity';
+import { ResetPasswordRequestDto } from 'src/core/dtos/requests/reset-password.dto';
+import { ResetPasswordResponseDto } from 'src/core/dtos/responses/reset-password.dto';
 
 @Injectable()
 export class UserUseCases extends GenericUseCases<UserEntity> {
@@ -863,6 +865,60 @@ export class UserUseCases extends GenericUseCases<UserEntity> {
         error?.message,
         error?.stack,
       );
+    }
+
+    return result;
+  }
+
+  async resetPassword(
+    request: ResetPasswordRequestDto,
+  ): Promise<ResetPasswordResponseDto> {
+    const result = new ResetPasswordResponseDto();
+    try {
+      if (request) {
+        const resetPassword =
+          await this.resetPasswordUseCases.getLatestResetPasswordByUserId(
+            request.userId,
+            request.code,
+          );
+        if (this.resetPasswordUseCases.isFound(resetPassword)) {
+          const timeToRegister: number = this.config.get('REG_DURATION') ?? 60;
+          const expirationDate: Date = new Date(
+            resetPassword.sentOn.setMinutes(
+              resetPassword.sentOn.getMinutes() + timeToRegister,
+            ),
+          );
+          const currentDate: Date = new Date(Date.now());
+
+          if (currentDate <= expirationDate) {
+            const userInDb = await this.getById(request.userId);
+            if (this.isFound(userInDb) && userInDb.isActivated) {
+              const hashedPassword: any =
+                await this.bcryptService.createUserPassword(
+                  request.password,
+                  request.repeatedPassword,
+                );
+
+              if (hashedPassword) {
+                userInDb.hash = hashedPassword;
+
+                const createOrUpdateResult = await this.createOrUpdate(
+                  userInDb,
+                );
+                result.id = createOrUpdateResult.id;
+              }
+            }
+          }
+        }
+      }
+    } catch (error) {
+      await this.loggerUseCases.log(
+        ErrorConstants.PostMethodError,
+        error?.message,
+        error?.stack,
+      );
+
+      result.errorMessage = ErrorMessageConstants.InternalError;
     }
 
     return result;

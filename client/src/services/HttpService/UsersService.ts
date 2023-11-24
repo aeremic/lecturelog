@@ -1,5 +1,6 @@
-import { IEmailRegistration } from "../../models/IEmailRegistration";
+import { IEmailRegistrationFormInput } from "../../models/FormInputs/IEmailRegistrationFormInput";
 import { IForgotPassword } from "../../models/IForgotPassword";
+import { IPasswordReset } from "../../models/IPasswordReset";
 import { IUpdateUser } from "../../models/IUpdateUser";
 import { IUpdateUserPassword } from "../../models/IUpdateUserPassword";
 import { IUser } from "../../models/IUser";
@@ -39,7 +40,7 @@ export const sendEmailVerification = async (userId: number) => {
   }
 };
 
-export const emailRegistration = async (data: IEmailRegistration) => {
+export const emailRegistration = async (data: IEmailRegistrationFormInput) => {
   try {
     return await post(`${URL}/emailRegistration`, data);
   } catch (err) {
@@ -82,6 +83,14 @@ export const updateUserPassword = async (data: IUpdateUserPassword) => {
 export const sendPasswordResetEmail = async (data: IForgotPassword) => {
   try {
     return await post(`${URL}/sendPasswordResetEmail`, data);
+  } catch (err) {
+    console.log(err); // TODO: Fix for PROD.
+  }
+};
+
+export const passwordReset = async (data: IPasswordReset) => {
+  try {
+    return await post(`${URL}/resetPassword`, data);
   } catch (err) {
     console.log(err); // TODO: Fix for PROD.
   }

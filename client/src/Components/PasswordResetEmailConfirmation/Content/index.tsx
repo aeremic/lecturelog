@@ -8,14 +8,9 @@ import {
   Typography,
 } from "@mui/material";
 import CheckIcon from "@mui/icons-material/Check";
-import { IContentProps } from "../../../models/Props/IContentProps";
 import { useTranslation } from "react-i18next";
 
-const Content: React.FC<IContentProps> = ({
-  setOpenAlert,
-  setAlertMessage,
-  setAlertType,
-}) => {
+const Content = () => {
   const { t } = useTranslation();
 
   return (

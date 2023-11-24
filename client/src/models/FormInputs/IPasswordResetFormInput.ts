@@ -1,4 +1,4 @@
-export interface IEmailRegistration {
+export interface IPasswordResetFormInput {
   userId: number;
   code: string;
   password: string;

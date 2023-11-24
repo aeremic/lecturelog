@@ -14,14 +14,15 @@ import {
 import { HttpStatusCode } from "axios";
 import { useForm } from "react-hook-form";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { IEmailRegistrationFormInput } from "../../../models/FormInputs/IEmailRegistrationFormInput";
 import { useState } from "react";
 import PasswordIcon from "@mui/icons-material/Password";
 import VpnKeyIcon from "@mui/icons-material/VpnKey";
 import EmailIcon from "@mui/icons-material/Email";
 import LoginIcon from "@mui/icons-material/Login";
-import { emailRegistration } from "../../../services/HttpService/UsersService";
 import { useTranslation } from "react-i18next";
+import { IPasswordResetFormInput } from "../../../models/FormInputs/IPasswordResetFormInput";
+import { IPasswordReset } from "../../../models/IPasswordReset";
+import { passwordReset } from "../../../services/HttpService/UsersService";
 
 const Content = () => {
   const navigate = useNavigate();
@@ -31,23 +32,34 @@ const Content = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<IEmailRegistrationFormInput>();
+  } = useForm<IPasswordResetFormInput>();
 
   const [openAlert, setOpenAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState<AlertColor>();
 
-  const onSubmit = async (data: IEmailRegistrationFormInput) => {
+  const onSubmit = async (data: IPasswordResetFormInput) => {
     const userId: string | null = queryParameters.get("id");
-    data.userId = userId != null ? parseInt(userId) : -1;
 
-    const res: any = await emailRegistration(data);
-    if (res && res.status && res.status === HttpStatusCode.Created) {
-      if (res.data) {
-        navigate(`/login?registration-success=${res.data}`, { replace: true });
+    const modelToPost: IPasswordReset = {
+      userId: userId != null ? parseInt(userId) : -1,
+      code: data.code,
+      password: data.password,
+      repeatedPassword: data.password,
+    };
+
+    const res: any = await passwordReset(modelToPost);
+    if (
+      res &&
+      res.status &&
+      res.status === HttpStatusCode.Created &&
+      res.data
+    ) {
+      if (res.data.id > 0) {
+        navigate(`/login?change-success=${true}`, { replace: true });
       } else {
         setAlertType("error");
-        setAlertMessage(t("ActivationFailed"));
+        setAlertMessage(t("PasswordResetFailed"));
         setOpenAlert(true);
       }
     } else {
@@ -72,11 +84,11 @@ const Content = () => {
       <Container component="main">
         <Typography component="h1" variant="h5">
           <EmailIcon fontSize="small" sx={{ mr: 0.5 }} />
-          {t("RegistrationWithEmail")}
+          {t("PasswordReset")}
         </Typography>
         <Divider sx={{ m: 2 }} />
         <Typography variant="body1" sx={{ width: 270 }}>
-          {t("EmailRegistrationSubtitle")}
+          {t("PasswordResetSubtitle")}
         </Typography>
         <FormControl fullWidth sx={{ width: 300 }}>
           <form onSubmit={handleSubmit(onSubmit)}>
@@ -134,7 +146,7 @@ const Content = () => {
                   // @ts-ignore
                   <LoginIcon fontSize="xs" sx={{ mr: 0.5 }} />
                 }
-                {t("Register")}
+                {t("Reset")}
               </Button>
             </FormGroup>
           </form>
