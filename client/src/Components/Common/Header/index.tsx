@@ -47,7 +47,7 @@ const Header = () => {
           >
             <Logo widthProp={30} heightProp={30} />
             <Typography variant="subtitle2" component="div">
-              {t("BolognApp")}
+              {t("LectureLog")}
             </Typography>
           </Stack>
           <Button color="inherit" onClick={handleLogoutClick}>

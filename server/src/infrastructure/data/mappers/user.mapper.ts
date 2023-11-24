@@ -54,6 +54,7 @@ export class UserMapper {
       subject: undefined,
       studentsSubjects: undefined,
       emailVerifications: undefined,
+      resetPasswords: undefined,
     };
 
     return userModel;

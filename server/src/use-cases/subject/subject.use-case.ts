@@ -6,7 +6,7 @@ import { LoggerUseCases } from '../logger/logger.use-case';
 import { ErrorConstants } from 'src/core/common/constants/error.constant';
 import { SubjectsDto } from 'src/core/dtos/responses/subjects.dto';
 import { StudentsSubjectsUseCases } from '../students-subjects/students-subjects.use-case';
-import { CreateUpdateSubjectRequestDto } from 'src/core/dtos/requests/create-update-subject-request.dto';
+import { CreateUpdateSubjectRequestDto } from 'src/core/dtos/requests/create-update-subject.dto';
 import { CreateUpdateSubjectResponseDto } from '../../core/dtos/responses/create-update-subject-response.dto';
 
 @Injectable()

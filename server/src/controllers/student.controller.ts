@@ -21,7 +21,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { RoleGuard } from 'src/auth/guards/role.guard';
 import { AvailableGroupDto } from 'src/core/dtos/responses/available-group.dto';
-import { CreateStudentRequestDto } from 'src/core/dtos/requests/create-student-request.dto';
+import { CreateStudentRequestDto } from 'src/core/dtos/requests/create-student.dto';
 import { CreateUpdateUserResponseDto } from 'src/core/dtos/responses/create-update-user-response.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CsvUploadResultDto } from 'src/core/dtos/responses/csv-upload-result.dto';

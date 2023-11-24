@@ -5,7 +5,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import ErrorComponent from "../Common/ErrorComponent";
 import { useState } from "react";
 
-const PasswordResetConfirmation = () => {
+const PasswordResetEmailConfirmation = () => {
   const [openAlert, setOpenAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState<AlertColor>();
@@ -46,4 +46,4 @@ const PasswordResetConfirmation = () => {
   );
 };
 
-export default PasswordResetConfirmation;
+export default PasswordResetEmailConfirmation;

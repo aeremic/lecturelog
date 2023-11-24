@@ -18,6 +18,7 @@ import { SubjectModule } from '../subject/subject.module';
 import { BcryptModule } from 'src/services/cryptography/bcrypt.module';
 import { ParserModule } from 'src/services/csv/parser.module';
 import { LectureModule } from '../lecture/lecture.module';
+import { ResetPasswordModule } from '../reset-password/reset-password.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { LectureModule } from '../lecture/lecture.module';
     LoggerModule,
     MailModule,
     EmailVerificationModule,
+    ResetPasswordModule,
     BcryptModule,
     ParserModule,
     TypeOrmModule.forFeature([User, EmailVerification, StudentsSubjects]),

@@ -20,8 +20,8 @@ export class MailService {
   ) {
     const baseUrl = this.config.get('APP_URL');
 
-    const templatePath = LocalizationEn.templatePath;
-    const subject = LocalizationEn.emailSubject;
+    const templatePath = LocalizationEn.registrationTemplatePath;
+    const subject = LocalizationEn.registrationEmailSubject;
 
     await this.mailerService.sendMail({
       to: email,
@@ -30,6 +30,30 @@ export class MailService {
       context: {
         firstname: firstname,
         url: baseUrl + `/emailregistration?id=${id}`,
+        code: code,
+      },
+    });
+  }
+
+  // TODO: Create resource file.
+  async sendResetPasswordMail(
+    id: number,
+    email: string,
+    firstname: string,
+    code: string,
+  ) {
+    const baseUrl = this.config.get('APP_URL');
+
+    const templatePath = LocalizationEn.passwordResetTemplatePath;
+    const subject = LocalizationEn.passwordResetEmailSubject;
+
+    await this.mailerService.sendMail({
+      to: email,
+      subject: subject,
+      template: templatePath,
+      context: {
+        firstname: firstname,
+        url: baseUrl + `/password-reset?id=${id}`,
         code: code,
       },
     });

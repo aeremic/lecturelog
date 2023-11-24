@@ -26,6 +26,7 @@ import useCurrentUserIdentifier from "../../../hooks/UseCurrentUserIdentifier";
 import { IForgotPasswordFormInput } from "../../../models/FormInputs/IForgotPasswordFormInput";
 import ConfirmationDialog from "../../Common/ConfirmationDialog";
 import { IForgotPassword } from "../../../models/IForgotPassword";
+import { sendPasswordResetEmail } from "../../../services/HttpService/UsersService";
 
 const forgotPasswordInitialState: IForgotPasswordFormInput = {
   email: "",
@@ -60,7 +61,7 @@ const Content = () => {
 
   const handleRemoveDialogClose = async (newValue?: any) => {
     setConfirmationDialogOpen(false);
-    if (userId > 0 && newValue) {
+    if (newValue) {
       const modelToPost: IForgotPassword = {
         email: forgotPassword.email,
       };
@@ -73,7 +74,7 @@ const Content = () => {
         res.data &&
         res.data.id > 0
       ) {
-        navigate(`/passwordresetconfirmation?id=${res.data.id}`, {
+        navigate(`/passwordresetemailconfirmation`, {
           replace: false,
         });
       } else {
@@ -160,7 +161,7 @@ const Content = () => {
             content={t("AreYouSure")}
             negativeAction={t("Cancel")}
             positiveAction={t("Yes")}
-            value={userId}
+            value={1}
             onClose={handleRemoveDialogClose}
           />
           <Snackbar

@@ -15,7 +15,7 @@ import LoadingComponent from "./components/Common/LoadingComponent";
 import { LectureRoom } from "./components/Professor/LectureRoom";
 import PasswordChange from "./components/User/PasswordChange";
 import ForgotPassword from "./components/ForgotPassword";
-import PasswordResetConfirmation from "./components/PasswordResetConfirmation";
+import PasswordResetEmailConfirmation from "./components/PasswordResetEmailConfirmation";
 
 const App = () => {
   return (
@@ -28,8 +28,8 @@ const App = () => {
           <Route path="/emailregistration" element={<EmailRegistration />} />
           <Route path="/forgotpassword" element={<ForgotPassword />} />
           <Route
-            path="/passwordresetconfirmation"
-            element={<PasswordResetConfirmation />}
+            path="/passwordresetemailconfirmation"
+            element={<PasswordResetEmailConfirmation />}
           />
           /**Register flow routes */
           <Route path="/register" element={<Register />} />
@@ -51,7 +51,7 @@ const App = () => {
             }
           />
           <Route
-            path="/user/password-change"
+            path="/user/passwordchange"
             element={
               <Suspense fallback={<LoadingComponent />}>
                 <PrivateRoute

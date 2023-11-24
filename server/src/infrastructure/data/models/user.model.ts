@@ -2,6 +2,7 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { EmailVerification } from './emailverification.model';
 import { Subject } from './subject.model';
 import { StudentsSubjects } from './students-subjects.model';
+import { ResetPassword } from './reset-password.model';
 
 @Entity()
 export class User {
@@ -30,14 +31,27 @@ export class User {
   public isActivated: boolean;
 
   @Column({ type: 'smallint' })
-  public role: number
+  public role: number;
 
-  @OneToMany(() => StudentsSubjects, studentsSubjects => studentsSubjects.student, { nullable: true })
+  @OneToMany(
+    () => StudentsSubjects,
+    (studentsSubjects) => studentsSubjects.student,
+    { nullable: true },
+  )
   public studentsSubjects!: StudentsSubjects[];
 
-  @OneToMany(() => Subject, subject => subject.professor, { nullable: true })
+  @OneToMany(() => Subject, (subject) => subject.professor, { nullable: true })
   public subject!: Subject[];
 
-  @OneToMany(() => EmailVerification, emailVerification => emailVerification.user, { nullable: true })
+  @OneToMany(
+    () => EmailVerification,
+    (emailVerification) => emailVerification.user,
+    { nullable: true },
+  )
   public emailVerifications!: EmailVerification[];
+
+  @OneToMany(() => ResetPassword, (resetPassword) => resetPassword.user, {
+    nullable: true,
+  })
+  public resetPasswords!: ResetPassword[];
 }

@@ -127,7 +127,7 @@ const Content = () => {
             >
               <Logo widthProp={75} heightProp={75} />
               <Typography variant="h4" component="div">
-                {t("BolognApp")}
+                {t("LectureLog")}
               </Typography>
             </Stack>
             <Typography component="h1" variant="h5">

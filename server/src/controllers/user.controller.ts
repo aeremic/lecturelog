@@ -20,6 +20,7 @@ import {
 } from 'src/core/dtos';
 import { SendEmailVerificationDto } from 'src/core/dtos/requests/send-email-verification.dto';
 import { CreateUpdateUserResponseDto } from 'src/core/dtos/responses/create-update-user-response.dto';
+import { SendPasswordResetEmailResponseDto } from 'src/core/dtos/responses/send-password-reset-email.dto';
 
 @Controller('api/user')
 export class UserController {
@@ -103,5 +104,12 @@ export class UserController {
     @Body() request: any,
   ): Promise<UpdateUserPasswordResponseDto> {
     return this.userUseCases.updateUserPassword(request);
+  }
+
+  @Post('/sendPasswordResetEmail')
+  sendPasswordResetEmail(
+    @Body() request: any,
+  ): Promise<SendPasswordResetEmailResponseDto> {
+    return this.userUseCases.sendPasswordResetEmail(request);
   }
 }

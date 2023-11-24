@@ -1,4 +1,6 @@
 export class LocalizationEn {
-    public static emailSubject: string = "BolognApp - New Registration";
-    public static templatePath: string = "./utils/templates/registration";
+  public static registrationEmailSubject = 'LectureLog - New Registration';
+  public static registrationTemplatePath = './utils/templates/registration';
+  public static passwordResetEmailSubject = 'LectureLog - Password Reset';
+  public static passwordResetTemplatePath = './utils/templates/password-reset';
 }

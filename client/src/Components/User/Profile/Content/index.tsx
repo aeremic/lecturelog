@@ -167,7 +167,7 @@ const Content = () => {
   };
 
   const handleChangePasswordClick = () => {
-    navigate(`/user/password-change`, {
+    navigate(`/user/passwordchange`, {
       replace: false,
     });
   };

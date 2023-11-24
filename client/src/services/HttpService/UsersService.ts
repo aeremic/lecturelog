@@ -1,4 +1,5 @@
 import { IEmailRegistration } from "../../models/IEmailRegistration";
+import { IForgotPassword } from "../../models/IForgotPassword";
 import { IUpdateUser } from "../../models/IUpdateUser";
 import { IUpdateUserPassword } from "../../models/IUpdateUserPassword";
 import { IUser } from "../../models/IUser";
@@ -73,6 +74,14 @@ export const updateUser = async (data: IUpdateUser) => {
 export const updateUserPassword = async (data: IUpdateUserPassword) => {
   try {
     return await post(`${URL}/updateUserPassword`, data);
+  } catch (err) {
+    console.log(err); // TODO: Fix for PROD.
+  }
+};
+
+export const sendPasswordResetEmail = async (data: IForgotPassword) => {
+  try {
+    return await post(`${URL}/sendPasswordResetEmail`, data);
   } catch (err) {
     console.log(err); // TODO: Fix for PROD.
   }

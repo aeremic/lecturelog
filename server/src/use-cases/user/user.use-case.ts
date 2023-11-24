@@ -25,13 +25,17 @@ import { AssignedSubjectDto } from 'src/core/dtos/responses/assigned-group.dto';
 import { SubjectUseCases } from '../subject/subject.use-case';
 import { AvailableGroupDto } from 'src/core/dtos/responses/available-group.dto';
 import { SendEmailVerificationDto } from '../../core/dtos/requests/send-email-verification.dto';
-import { CreateStudentRequestDto } from '../../core/dtos/requests/create-student-request.dto';
+import { CreateStudentRequestDto } from '../../core/dtos/requests/create-student.dto';
 import { CreateUpdateUserResponseDto } from 'src/core/dtos/responses/create-update-user-response.dto';
 import { CsvUploadResultDto } from 'src/core/dtos/responses/csv-upload-result.dto';
 import { CsvParseResult } from 'src/core/common/enums/csv-parse.enum';
 import { ParserService } from 'src/services/csv/parser.service';
 import { RegexPattern } from 'src/core/common/constants/regex.constant';
 import { LectureUseCases } from '../lecture/lecture.use-case';
+import { SendPasswordResetEmailRequestDto } from 'src/core/dtos/requests/send-password-reset-email.dto';
+import { SendPasswordResetEmailResponseDto } from 'src/core/dtos/responses/send-password-reset-email.dto';
+import { ResetPasswordUseCases } from '../reset-password/reset-password.use-case';
+import { ResetPasswordEntity } from 'src/core/entities/reset-password.entity';
 
 @Injectable()
 export class UserUseCases extends GenericUseCases<UserEntity> {
@@ -48,6 +52,9 @@ export class UserUseCases extends GenericUseCases<UserEntity> {
 
   @Inject(EmailVerificationUseCases)
   private emailVerificationUseCases: EmailVerificationUseCases;
+
+  @Inject(ResetPasswordUseCases)
+  private resetPasswordUseCases: ResetPasswordUseCases;
 
   @Inject(MailService)
   private mailService: MailService;
@@ -835,6 +842,32 @@ export class UserUseCases extends GenericUseCases<UserEntity> {
     return result;
   }
 
+  async sendPasswordResetEmail(
+    request: SendPasswordResetEmailRequestDto,
+  ): Promise<SendPasswordResetEmailResponseDto> {
+    const result = new SendPasswordResetEmailResponseDto();
+    try {
+      if (request && request.email) {
+        const userInDb = await this.getByEmail(request.email);
+        const resetPasswordInDb = await this.generateAndSendResetPasswordEmail(
+          userInDb,
+        );
+
+        if (resetPasswordInDb && resetPasswordInDb.id) {
+          result.id = resetPasswordInDb.id;
+        }
+      }
+    } catch (error) {
+      await this.loggerUseCases.log(
+        ErrorConstants.PostMethodError,
+        error?.message,
+        error?.stack,
+      );
+    }
+
+    return result;
+  }
+
   //#endregion
 
   //#region Private methods
@@ -854,6 +887,33 @@ export class UserUseCases extends GenericUseCases<UserEntity> {
         userEntity.email,
         code,
       );
+    }
+  }
+
+  private async generateAndSendResetPasswordEmail(
+    userEntity: UserEntity,
+  ): Promise<ResetPasswordEntity> {
+    if (this.isFound(userEntity) && userEntity.isActivated) {
+      const code = Encoding.generateRandomPassword();
+
+      // TODO: Remove comment for PROD
+      await this.mailService.sendResetPasswordMail(
+        userEntity.id,
+        userEntity.email,
+        userEntity.firstname,
+        code,
+      );
+
+      await this.resetPasswordUseCases.invalidPreviousResetPassword(
+        userEntity.email,
+      );
+      return await this.resetPasswordUseCases.createResetPassword(
+        userEntity.id,
+        userEntity.email,
+        code,
+      );
+    } else {
+      return undefined;
     }
   }
 
