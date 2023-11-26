@@ -5,7 +5,7 @@ import { ISessionMetadata } from "../models/ISessionMetadata";
 import { IAttendSessionMetadata } from "../models/IAttendSessionMetadata";
 
 export const socket = io(BASE_URL, {
-  autoConnect: false,
+  autoConnect: true,
   transports: ["websocket"],
 });
 

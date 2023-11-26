@@ -33,7 +33,6 @@ export const Content = () => {
         subjectId: subjectId,
       };
 
-      connect();
       joinActiveSession(sessionData);
     }
   });
