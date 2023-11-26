@@ -5,6 +5,7 @@ import {
   CardContent,
   Divider,
   LinearProgress,
+  Skeleton,
   Stack,
   Typography,
 } from "@mui/material";
@@ -161,54 +162,70 @@ const CodeGeneration = () => {
             </>
           ) : (
             <>
-              <Box display="flex" justifyContent="center" alignItems="center">
-                <Typography>{t("StudentsShouldEnterBelowCode")}</Typography>
-              </Box>
-              <Box display="flex" justifyContent="center" alignItems="center">
-                {timer && code && (
-                  <Card>
-                    <CardContent>
-                      <Stack direction="column" spacing={2}>
-                        <>
-                          <Box
-                            display="flex"
-                            justifyContent="center"
-                            alignItems="center"
-                          >
-                            <Typography variant="h1">{code}</Typography>
-                          </Box>
-                          <Divider />
-                          <Box
-                            display="flex"
-                            justifyContent="center"
-                            alignItems="center"
-                          >
-                            <Typography>
-                              {t("TimeRemaining")}
-                              {`${timer}s`}
-                            </Typography>
-                          </Box>
-                          <LinearProgress color="success" />
-                        </>
-                      </Stack>
-                    </CardContent>
-                  </Card>
-                )}
-              </Box>
-              <Box display="flex" justifyContent="center" alignItems="center">
-                <Button
-                  onClick={handleCancelGenerateCodeClick}
-                  variant="contained"
-                  color="error"
-                  size="medium"
-                >
-                  {
-                    // @ts-ignore
-                    <CloseIcon fontSize="xs" sx={{ mr: 0.5 }} />
-                  }
-                  {t("Cancel")}
-                </Button>
-              </Box>
+              {timer && code ? (
+                <>
+                  <Box
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                  >
+                    <Typography>{t("StudentsShouldEnterBelowCode")}</Typography>
+                  </Box>
+                  <Box
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                  >
+                    <Card>
+                      <CardContent>
+                        <Stack direction="column" spacing={2}>
+                          <>
+                            <Box
+                              display="flex"
+                              justifyContent="center"
+                              alignItems="center"
+                            >
+                              <Typography variant="h1">{code}</Typography>
+                            </Box>
+                            <Divider />
+                            <Box
+                              display="flex"
+                              justifyContent="center"
+                              alignItems="center"
+                            >
+                              <Typography>
+                                {t("TimeRemaining")}
+                                {`${timer}s`}
+                              </Typography>
+                            </Box>
+                            <LinearProgress color="success" />
+                          </>
+                        </Stack>
+                      </CardContent>
+                    </Card>
+                  </Box>
+                  <Box
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                  >
+                    <Button
+                      onClick={handleCancelGenerateCodeClick}
+                      variant="contained"
+                      color="error"
+                      size="medium"
+                    >
+                      {
+                        // @ts-ignore
+                        <CloseIcon fontSize="xs" sx={{ mr: 0.5 }} />
+                      }
+                      {t("Cancel")}
+                    </Button>
+                  </Box>
+                </>
+              ) : (
+                <Skeleton height={95} />
+              )}
             </>
           )}
         </Stack>
