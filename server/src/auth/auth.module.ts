@@ -7,15 +7,23 @@ import { LocalStrategy } from './strategies/local.strategy';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { BcryptModule } from 'src/services/cryptography/bcrypt.module';
+import { ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
     BcryptModule,
     UserModule,
     PassportModule,
-    JwtModule.register({
-      secret: 'ZXJlbWl4',
-      signOptions: { expiresIn: '1h' },
+    JwtModule.registerAsync({
+      useFactory: (config: ConfigService) => {
+        return {
+          secret: config.get<string>('JWT_SECRET'),
+          signOptions: {
+            expiresIn: config.get<string>('JWT_EXPIRATION_TIME'),
+          },
+        };
+      },
+      inject: [ConfigService],
     }),
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy],
