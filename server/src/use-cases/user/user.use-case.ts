@@ -38,6 +38,7 @@ import { ResetPasswordUseCases } from '../reset-password/reset-password.use-case
 import { ResetPasswordEntity } from 'src/core/entities/reset-password.entity';
 import { ResetPasswordRequestDto } from 'src/core/dtos/requests/reset-password.dto';
 import { ResetPasswordResponseDto } from 'src/core/dtos/responses/reset-password.dto';
+import { GetUserDataDto } from 'src/core/dtos/responses/get-user-data.dto';
 
 @Injectable()
 export class UserUseCases extends GenericUseCases<UserEntity> {
@@ -919,6 +920,27 @@ export class UserUseCases extends GenericUseCases<UserEntity> {
       );
 
       result.errorMessage = ErrorMessageConstants.InternalError;
+    }
+
+    return result;
+  }
+
+  async getUserData(id: number): Promise<GetUserDataDto> {
+    let result: GetUserDataDto = undefined;
+    try {
+      const userInDb = await this.getById(id);
+      if (this.isFound(userInDb)) {
+        result = {
+          firstname: userInDb.firstname,
+          lastname: userInDb.lastname,
+        };
+      }
+    } catch (error) {
+      await this.loggerUseCases.log(
+        ErrorConstants.GetMethodError,
+        error?.message,
+        error?.stack,
+      );
     }
 
     return result;

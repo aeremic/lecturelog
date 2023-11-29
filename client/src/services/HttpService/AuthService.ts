@@ -24,9 +24,10 @@ export const login = async (data: ILogin) => {
 
 export const logout = () => {
   removeFromLocalStorage("accessToken");
+  removeFromLocalStorage("userData");
 };
 
-export const getCurrentUserData = () => {
+export const getAccessTokenData = () => {
   const token = getFromLocalStorage("accessToken");
   let parsedToken = undefined;
   if (token) {
@@ -34,6 +35,14 @@ export const getCurrentUserData = () => {
   }
 
   return parsedToken != undefined ? parseJwt(parsedToken) : undefined;
+};
+
+export const setUserData = (data: any) => {
+  setToLocalStorage("userData", JSON.stringify(data));
+};
+
+export const getUserData = () => {
+  return getFromLocalStorage("userData");
 };
 
 const parseJwt = (token: string) => {

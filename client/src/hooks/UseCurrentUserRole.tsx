@@ -1,9 +1,9 @@
 import { RoleEnum } from "../models/Enums";
-import { getCurrentUserData } from "../services/HttpService/AuthService";
+import { getAccessTokenData } from "../services/HttpService/AuthService";
 
 const useCurrentUserRole = (): RoleEnum => {
   let currentUserRole = RoleEnum.Invalid;
-  const userData = getCurrentUserData();
+  const userData = getAccessTokenData();
 
   if (userData && userData.id) {
     currentUserRole = userData.role;

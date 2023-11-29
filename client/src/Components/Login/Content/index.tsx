@@ -26,11 +26,14 @@ import LockOpenIcon from "@mui/icons-material/LockOpen";
 import { RoleEnum } from "../../../models/Enums";
 import { ILoginFormInput } from "../../../models/FormInputs/ILoginFormInput";
 import {
-  getCurrentUserData,
+  getAccessTokenData,
   login,
+  setUserData,
 } from "../../../services/HttpService/AuthService";
 import { useTranslation } from "react-i18next";
 import Logo from "../../Common/Logo";
+import { getUserData } from "../../../services/HttpService/UsersService";
+import { IUserData } from "../../../models/IUserData";
 
 const Content = () => {
   const [queryParameters] = useSearchParams();
@@ -53,12 +56,31 @@ const Content = () => {
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState<AlertColor>();
 
+  const initUserData = async (id: number) => {
+    const userDataRes: any = await getUserData(id);
+    if (
+      userDataRes &&
+      userDataRes.status &&
+      userDataRes.status === HttpStatusCode.Ok &&
+      userDataRes.data
+    ) {
+      const modelToSet: IUserData = {
+        firstname: userDataRes.data.firstname,
+        lastname: userDataRes.data.lastname,
+      };
+
+      setUserData(modelToSet);
+    }
+  };
+
   const onSubmit = async (data: ILoginFormInput) => {
     const res: any = await login(data);
     if (res) {
       if (res.status && res.status === HttpStatusCode.Created) {
-        const userData = getCurrentUserData();
+        const userData = getAccessTokenData();
         if (userData && userData.id) {
+          await initUserData(userData.id);
+
           switch (userData.role) {
             case RoleEnum.Admin:
               navigate("/admin/users", { replace: true });

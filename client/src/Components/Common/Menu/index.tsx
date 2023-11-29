@@ -6,6 +6,7 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Typography,
 } from "@mui/material";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import PersonIcon from "@mui/icons-material/Person";
@@ -13,19 +14,34 @@ import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import HomeIcon from "@mui/icons-material/Home";
 import { Link } from "react-router-dom";
 import { RoleEnum } from "../../../models/Enums";
-import { getCurrentUserData } from "../../../services/HttpService/AuthService";
+import { getAccessTokenData } from "../../../services/HttpService/AuthService";
 import { useTranslation } from "react-i18next";
+import useCurrentUserData from "../../../hooks/UseCurrentUserData";
 
 const Menu = () => {
   const { t } = useTranslation();
 
-  // TODO: Hide menu when logged off.
-  const userData = getCurrentUserData();
+  const accessTokenData = getAccessTokenData();
+  const userData = useCurrentUserData();
+
   return (
     <Box role="presentation" sx={{ minWidth: 280 }}>
-      {userData.id != undefined ? (
+      {accessTokenData.id != undefined ? (
         <List>
-          {userData.role == RoleEnum.Admin ? (
+          <ListItem>
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              sx={{ m: 2 }}
+            >
+              <Typography variant="h5">
+                {t("Hi")} {userData != undefined ? userData.firstname : ""}
+              </Typography>
+            </Box>
+          </ListItem>
+          <Divider />
+          {accessTokenData.role == RoleEnum.Admin ? (
             <>
               <ListItem>
                 <ListItemButton component={Link} to="/admin/users">
@@ -53,7 +69,7 @@ const Menu = () => {
           ) : (
             <></>
           )}
-          {userData.role == RoleEnum.Professor ? (
+          {accessTokenData.role == RoleEnum.Professor ? (
             <>
               <ListItem>
                 <ListItemButton
@@ -86,7 +102,7 @@ const Menu = () => {
           ) : (
             <></>
           )}
-          {userData.role == RoleEnum.Student ? (
+          {accessTokenData.role == RoleEnum.Student ? (
             <>
               <ListItem>
                 <ListItemButton

@@ -95,3 +95,11 @@ export const passwordReset = async (data: IPasswordReset) => {
     console.log(err); // TODO: Fix for PROD.
   }
 };
+
+export const getUserData = async (id: number) => {
+  try {
+    return await getById(`${URL}/getUserData`, id);
+  } catch (err) {
+    console.log(err); // TODO: Fix for PROD.
+  }
+};

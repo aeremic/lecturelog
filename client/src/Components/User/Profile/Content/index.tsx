@@ -27,7 +27,7 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { useTranslation } from "react-i18next";
 import useCurrentUserIdentifier from "../../../../hooks/UseCurrentUserIdentifier";
 import { IUpdateUser } from "../../../../models/IUpdateUser";
-import { getCurrentUserData } from "../../../../services/HttpService/AuthService";
+import { getAccessTokenData } from "../../../../services/HttpService/AuthService";
 import { RoleEnum } from "../../../../models/Enums";
 import {
   getUser,
@@ -48,7 +48,7 @@ const Content = () => {
   const navigate = useNavigate();
 
   const userId = useCurrentUserIdentifier();
-  const userData = getCurrentUserData();
+  const userData = getAccessTokenData();
 
   const [user, setUser] = useState<IUpdateUser>(userInitialState);
 

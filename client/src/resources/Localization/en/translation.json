@@ -155,5 +155,6 @@
     "PasswordReset": "Password Reset",
     "PasswordResetSubtitle":"Please enter your temporary code and new password",
     "Reset":"Reset",
-    "PasswordResetFailed":"Something went wrong with reseting your password"
+    "PasswordResetFailed":"Something went wrong with reseting your password",
+    "Hi":"Hi"
 }

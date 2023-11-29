@@ -22,6 +22,7 @@ import { SendEmailVerificationDto } from 'src/core/dtos/requests/send-email-veri
 import { CreateUpdateUserResponseDto } from 'src/core/dtos/responses/create-update-user-response.dto';
 import { SendPasswordResetEmailResponseDto } from 'src/core/dtos/responses/send-password-reset-email.dto';
 import { ResetPasswordResponseDto } from 'src/core/dtos/responses/reset-password.dto';
+import { GetUserDataDto } from 'src/core/dtos/responses/get-user-data.dto';
 
 @Controller('api/user')
 export class UserController {
@@ -117,5 +118,12 @@ export class UserController {
   @Post('/resetPassword')
   resetPassword(@Body() request: any): Promise<ResetPasswordResponseDto> {
     return this.userUseCases.resetPassword(request);
+  }
+
+  @Roles('admin', 'professor', 'student')
+  @UseGuards(AuthGuard('jwt'), RoleGuard)
+  @Get('/getUserData/:id')
+  getUserData(@Param('id', ParseIntPipe) id: number): Promise<GetUserDataDto> {
+    return this.userUseCases.getUserData(id);
   }
 }
