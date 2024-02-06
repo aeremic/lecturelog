@@ -2,7 +2,7 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ResetPasswordEntity } from 'src/core/entities/reset-password.entity';
 import { ResetPassword } from '../models/reset-password.model';
-import { ResetPasswordRepositoryAbstract } from 'src/core/abstracts/repositories/reset-password.repository.abstract copy';
+import { ResetPasswordRepositoryAbstract } from 'src/core/abstracts/repositories/reset-password.repository.abstract';
 import { ResetPasswordMapper } from '../mappers/reset-password.mapper';
 
 export class ResetPasswordRepository

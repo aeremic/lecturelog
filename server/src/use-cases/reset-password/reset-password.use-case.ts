@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { LoggerUseCases } from '../logger/logger.use-case';
 import { GenericUseCases } from '../generic.use-case';
-import { ResetPasswordRepositoryAbstract } from 'src/core/abstracts/repositories/reset-password.repository.abstract copy';
+import { ResetPasswordRepositoryAbstract } from 'src/core/abstracts/repositories/reset-password.repository.abstract';
 import { ResetPasswordEntity } from 'src/core/entities/reset-password.entity';
 
 @Injectable()
