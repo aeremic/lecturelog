@@ -567,7 +567,7 @@ export class LectureUseCases {
   }
 
   /**
-   * Main method for lecture attending. Gets active lecture by attendKey code and then checks if attendKey studentId doesn't exists in the list of attendees for that specific active lecture. If student id is not found, that id will be added to the list of active lecture attendees.
+   * Main method for lecture attending. Gets active lecture by attendKey code and then checks if attendKey doesn't exists in the list of attendees for that specific active lecture. If student id is not found, that id will be added to the list of active lecture attendees.
    * @param attendKey Attendance key
    * @returns true if attendance is allowed, otherwise false
    */
